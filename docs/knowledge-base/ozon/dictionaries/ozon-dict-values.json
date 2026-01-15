@@ -1,0 +1,638 @@
+{
+  "gender": [
+    {
+      "id": 22880,
+      "value": "Мужской",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 22881,
+      "value": "Женский",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 22882,
+      "value": "Девочки",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 22883,
+      "value": "Мальчики",
+      "info": "",
+      "picture": ""
+    }
+  ],
+  "size": [
+    {
+      "id": 39245,
+      "value": "13.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39246,
+      "value": "14",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39247,
+      "value": "14.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39248,
+      "value": "15",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39249,
+      "value": "15.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39250,
+      "value": "15.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39251,
+      "value": "16",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39252,
+      "value": "16.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39253,
+      "value": "16.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39254,
+      "value": "16.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39255,
+      "value": "17",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39256,
+      "value": "17.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39257,
+      "value": "17.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39258,
+      "value": "17.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39259,
+      "value": "18",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39260,
+      "value": "18.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39261,
+      "value": "18.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39262,
+      "value": "18.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39263,
+      "value": "19",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39264,
+      "value": "19.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39265,
+      "value": "19.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39266,
+      "value": "19.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39267,
+      "value": "20",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39268,
+      "value": "20.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39269,
+      "value": "20.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39270,
+      "value": "21",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39271,
+      "value": "21.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39272,
+      "value": "21.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39273,
+      "value": "22",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39274,
+      "value": "22.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39275,
+      "value": "23",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39276,
+      "value": "23.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39277,
+      "value": "24",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39278,
+      "value": "24.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39279,
+      "value": "40",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39280,
+      "value": "43",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39281,
+      "value": "45",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39282,
+      "value": "50",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39283,
+      "value": "55",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39284,
+      "value": "60",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39285,
+      "value": "65",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39286,
+      "value": "70",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39287,
+      "value": "75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39288,
+      "value": "80",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39289,
+      "value": "90",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 39290,
+      "value": "Безразмерный",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 286466499,
+      "value": "14.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 367018792,
+      "value": "15.25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 408782764,
+      "value": "63",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 408782765,
+      "value": "68",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970583556,
+      "value": "38",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970583557,
+      "value": "42",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970616277,
+      "value": "39",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970616671,
+      "value": "26",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970616672,
+      "value": "27",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970616673,
+      "value": "28",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970626137,
+      "value": "37",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970626138,
+      "value": "41",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970626139,
+      "value": "44",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970661231,
+      "value": "36",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970667830,
+      "value": "21.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970667831,
+      "value": "20.75",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670753,
+      "value": "54",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670754,
+      "value": "52",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670755,
+      "value": "44.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670756,
+      "value": "77",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670757,
+      "value": "51",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670758,
+      "value": "48",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670759,
+      "value": "36.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670760,
+      "value": "92",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670761,
+      "value": "61",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670762,
+      "value": "42.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670763,
+      "value": "53",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670764,
+      "value": "100",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670765,
+      "value": "40.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670766,
+      "value": "47",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670767,
+      "value": "46",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970670768,
+      "value": "140",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970676498,
+      "value": "25.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970683708,
+      "value": "40-50",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970688748,
+      "value": "32",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970690066,
+      "value": "150",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970690067,
+      "value": "120",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970693090,
+      "value": "35",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970712724,
+      "value": "13",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742246,
+      "value": "41.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742247,
+      "value": "56",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742248,
+      "value": "78",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742249,
+      "value": "91.5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742282,
+      "value": "85",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742283,
+      "value": "58",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742284,
+      "value": "82",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742285,
+      "value": "73",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742286,
+      "value": "49",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970742287,
+      "value": "25",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970746151,
+      "value": "17-21",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970746152,
+      "value": "16-20",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970746164,
+      "value": "17-20",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970748234,
+      "value": "17-20,5",
+      "info": "",
+      "picture": ""
+    },
+    {
+      "id": 970806134,
+      "value": "17-19",
+      "info": "",
+      "picture": ""
+    }
+  ],
+  "type": [
+    {
+      "id": 87458883,
+      "value": "Браслет",
+      "info": "",
+      "picture": ""
+    }
+  ]
+}

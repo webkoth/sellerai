@@ -1,0 +1,166 @@
+{
+  "total_categories": 32,
+  "total_endpoints": 239,
+  "categories": [
+    {
+      "name": "Атрибуты и характеристики Ozon",
+      "slug": "attributes",
+      "endpoints_count": 4
+    },
+    {
+      "name": "Загрузка и обновление товаров",
+      "slug": "products-import",
+      "endpoints_count": 22
+    },
+    {
+      "name": "Штрихкоды товаров",
+      "slug": "barcodes",
+      "endpoints_count": 2
+    },
+    {
+      "name": "Цены и остатки товаров",
+      "slug": "prices-stocks",
+      "endpoints_count": 8
+    },
+    {
+      "name": "Акции",
+      "slug": "promotions",
+      "endpoints_count": 12
+    },
+    {
+      "name": "Стратегии ценообразования",
+      "slug": "pricing-strategy",
+      "endpoints_count": 12
+    },
+    {
+      "name": "Сертификаты брендов",
+      "slug": "brand-certificates",
+      "endpoints_count": 1
+    },
+    {
+      "name": "Сертификаты качества",
+      "slug": "quality-certificates",
+      "endpoints_count": 14
+    },
+    {
+      "name": "Склады",
+      "slug": "warehouses",
+      "endpoints_count": 2
+    },
+    {
+      "name": "Обработка заказов FBS и rFBS",
+      "slug": "orders-fbs-rfbs",
+      "endpoints_count": 21
+    },
+    {
+      "name": "Полигоны",
+      "slug": "polygons",
+      "endpoints_count": 2
+    },
+    {
+      "name": "Доставка FBO",
+      "slug": "delivery-fbo",
+      "endpoints_count": 13
+    },
+    {
+      "name": "Управление кодами маркировки и сборкой заказов для FBS/rFBS",
+      "slug": "marks-assembly",
+      "endpoints_count": 6
+    },
+    {
+      "name": "Доставка FBS",
+      "slug": "delivery-fbs",
+      "endpoints_count": 13
+    },
+    {
+      "name": "Доставка rFBS",
+      "slug": "delivery-rfbs",
+      "endpoints_count": 8
+    },
+    {
+      "name": "Пропуски",
+      "slug": "passes",
+      "endpoints_count": 7
+    },
+    {
+      "name": "Возвраты товаров FBO и FBS",
+      "slug": "returns-fbo-fbs",
+      "endpoints_count": 1
+    },
+    {
+      "name": "Возвраты товаров rFBS",
+      "slug": "returns-rfbs",
+      "endpoints_count": 7
+    },
+    {
+      "name": "Возвратные отгрузки",
+      "slug": "return-shipments",
+      "endpoints_count": 8
+    },
+    {
+      "name": "Отмены заказов",
+      "slug": "cancellations",
+      "endpoints_count": 4
+    },
+    {
+      "name": "Чаты с покупателями",
+      "slug": "chats",
+      "endpoints_count": 6
+    },
+    {
+      "name": "Накладные",
+      "slug": "invoices",
+      "endpoints_count": 4
+    },
+    {
+      "name": "Отчёты",
+      "slug": "reports",
+      "endpoints_count": 8
+    },
+    {
+      "name": "Аналитические отчёты",
+      "slug": "analytics-reports",
+      "endpoints_count": 3
+    },
+    {
+      "name": "Финансовые отчёты",
+      "slug": "finance-reports",
+      "endpoints_count": 3
+    },
+    {
+      "name": "Рейтинг продавца",
+      "slug": "seller-rating",
+      "endpoints_count": 2
+    },
+    {
+      "name": "β Прочие методы",
+      "slug": "beta-methods",
+      "endpoints_count": 13
+    },
+    {
+      "name": "β Заявки на поставку FBO",
+      "slug": "fbo-supply-requests",
+      "endpoints_count": 7
+    },
+    {
+      "name": "β Работа с квантами",
+      "slug": "quants",
+      "endpoints_count": 6
+    },
+    {
+      "name": "β Работа с грузоместами",
+      "slug": "cargoes",
+      "endpoints_count": 5
+    },
+    {
+      "name": "β Работа с отзывами",
+      "slug": "reviews",
+      "endpoints_count": 7
+    },
+    {
+      "name": "β Работа с вопросами и ответами",
+      "slug": "questions-answers",
+      "endpoints_count": 8
+    }
+  ]
+}

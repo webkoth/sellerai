@@ -1,0 +1,35 @@
+# ===== КЛИЕНТСКИЕ ДАННЫЕ =====
+.env
+.env.local
+.env.*.local
+
+# Локальные настройки Claude
+.claude/settings.local.json
+.claude/*.local.json
+.claude/*.local.md
+
+# ===== СБОРКА И ЗАВИСИМОСТИ =====
+node_modules/
+dist/
+*.tsbuildinfo
+
+# ===== ЛОГИ И КЭШ =====
+logs/
+*.log
+.cache/
+
+# ===== ДАННЫЕ КЛИЕНТА =====
+/data/exports/
+/data/cache/
+/data/snapshots/
+/courses/
+
+# ===== СИСТЕМНЫЕ =====
+.DS_Store
+.venv/
+__pycache__/
+.playwright-mcp/
+
+# ===== IDE =====
+.idea/
+.vscode/

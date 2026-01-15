@@ -1,0 +1,456 @@
+import { z } from 'zod';
+import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
+import { cacheProduct, getAllCachedProducts } from '../db/postgres.js';
+import { logRead } from '../utils/logger.js';
+import { horizontalBars, formatNumber, formatRub, BarItem } from '../utils/visualize.js';
+
+// Input schema for wb_get_inventory
+export const GetInventoryInputSchema = z.object({
+  minQuantity: z.number().optional().default(1).describe('Minimum stock quantity to include'),
+  mode: z.enum(['all', 'fbo', 'fbs']).optional().default('all').describe('Mode: all (cards+prices), fbo (WB warehouses), fbs (seller warehouses)'),
+  warehouseId: z.string().optional().describe('Warehouse ID for FBS mode'),
+  useCache: z.boolean().optional().default(true).describe('Use cached data if available'),
+  cacheTTL: z.number().optional().default(15).describe('Cache TTL in minutes'),
+});
+
+export type GetInventoryInput = z.infer<typeof GetInventoryInputSchema>;
+
+// Product interface
+interface WBProduct {
+  nmId: number;
+  vendorCode: string;
+  subjectName?: string;
+  brand?: string;
+  title?: string;
+  price?: number;
+  discount?: number;
+  promoCode?: number;
+  stockFbo?: number;
+  stockFbs?: number;
+  warehouses?: Array<{ name: string; quantity: number }>;
+}
+
+// Fetch helper
+async function fetchWB<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...createWBHeaders(),
+      ...options?.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`WB API Error ${response.status}: ${text}`);
+  }
+
+  if (response.status === 204) {
+    return {} as T;
+  }
+
+  return response.json() as Promise<T>;
+}
+
+/**
+ * Get all product cards using Content API
+ */
+async function getCards(limit = 100): Promise<WBProduct[]> {
+  const url = `${WB_API_URLS.content}/content/v2/get/cards/list`;
+  const allCards: WBProduct[] = [];
+
+  let cursor: Record<string, unknown> = { limit };
+
+  while (true) {
+    const result = await fetchWB<{
+      cards?: Array<{
+        nmID: number;
+        vendorCode: string;
+        subjectName?: string;
+        brand?: string;
+        title?: string;
+      }>;
+      cursor?: {
+        total: number;
+        updatedAt?: string;
+        nmID?: number;
+      };
+    }>(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        settings: {
+          cursor,
+          filter: { withPhoto: -1 },
+        },
+      }),
+    });
+
+    const cards = result.cards || [];
+    if (cards.length === 0) break;
+
+    for (const card of cards) {
+      allCards.push({
+        nmId: card.nmID,
+        vendorCode: card.vendorCode,
+        subjectName: card.subjectName,
+        brand: card.brand,
+        title: card.title,
+      });
+    }
+
+    const total = result.cursor?.total || 0;
+    if (total < limit) break;
+
+    cursor = {
+      limit,
+      updatedAt: result.cursor?.updatedAt,
+      nmID: result.cursor?.nmID,
+    };
+  }
+
+  return allCards;
+}
+
+/**
+ * Get prices for products
+ */
+async function getPrices(): Promise<Map<number, { price: number; discount: number; promoCode: number }>> {
+  const prices = new Map<number, { price: number; discount: number; promoCode: number }>();
+  let offset = 0;
+  const limit = 1000;
+
+  while (true) {
+    let url = `${WB_API_URLS.prices}/api/v2/list/goods/filter?limit=${limit}&offset=${offset}`;
+
+    const result = await fetchWB<{
+      data?: {
+        listGoods?: Array<{
+          nmID: number;
+          sizes: Array<{
+            price: number;
+            discountedPrice: number;
+            techSizeName?: string;
+          }>;
+          discount?: number;
+          promoCode?: number;
+        }>;
+      };
+    }>(url);
+
+    const goods = result.data?.listGoods || [];
+    if (goods.length === 0) break;
+
+    for (const item of goods) {
+      const size = item.sizes?.[0];
+      if (size) {
+        prices.set(item.nmID, {
+          price: size.price,
+          discount: item.discount || 0,
+          promoCode: item.promoCode || 0,
+        });
+      }
+    }
+
+    if (goods.length < limit) break;
+    offset += limit;
+  }
+
+  return prices;
+}
+
+/**
+ * Get stocks from WB warehouses (FBO)
+ */
+async function getStocksFBO(): Promise<Map<number, { total: number; warehouses: Array<{ name: string; quantity: number }> }>> {
+  const stocks = new Map<number, { total: number; warehouses: Array<{ name: string; quantity: number }> }>();
+  const dateFrom = '2019-01-01';
+  let url = `${WB_API_URLS.statistics}/api/v1/supplier/stocks?dateFrom=${dateFrom}`;
+
+  while (true) {
+    const result = await fetchWB<Array<{
+      nmId: number;
+      warehouseName: string;
+      quantity: number;
+      lastChangeDate?: string;
+    }>>(url);
+
+    if (!result || result.length === 0) break;
+
+    for (const item of result) {
+      const existing = stocks.get(item.nmId) || { total: 0, warehouses: [] };
+      existing.total += item.quantity;
+      existing.warehouses.push({
+        name: item.warehouseName,
+        quantity: item.quantity,
+      });
+      stocks.set(item.nmId, existing);
+    }
+
+    // Pagination for large datasets
+    if (result.length >= 60000) {
+      const lastDate = result[result.length - 1].lastChangeDate;
+      if (lastDate) {
+        url = `${WB_API_URLS.statistics}/api/v1/supplier/stocks?dateFrom=${lastDate}`;
+        continue;
+      }
+    }
+    break;
+  }
+
+  return stocks;
+}
+
+/**
+ * Get seller warehouses (for FBS)
+ */
+async function getSellerWarehouses(): Promise<Array<{ id: number; name: string }>> {
+  const url = `${WB_API_URLS.marketplace}/api/v3/warehouses`;
+
+  const result = await fetchWB<Array<{
+    id?: number;
+    ID?: number;
+    name: string;
+  }>>(url);
+
+  return (result || []).map((w) => ({
+    id: w.id || w.ID || 0,
+    name: w.name,
+  }));
+}
+
+/**
+ * Get stocks from seller warehouses (FBS)
+ * Uses POST /api/v3/stocks/{warehouseId}
+ */
+async function getStocksFBS(skus: string[]): Promise<Map<string, number>> {
+  const stocks = new Map<string, number>();
+
+  if (skus.length === 0) return stocks;
+
+  // Get seller warehouses
+  const warehouses = await getSellerWarehouses();
+  if (warehouses.length === 0) {
+    console.log('No seller warehouses found');
+    return stocks;
+  }
+
+  // Get stocks from each warehouse
+  for (const warehouse of warehouses) {
+    if (!warehouse.id) continue;
+
+    const url = `${WB_API_URLS.marketplace}/api/v3/stocks/${warehouse.id}`;
+
+    // Split SKUs into batches of 1000
+    for (let i = 0; i < skus.length; i += 1000) {
+      const batch = skus.slice(i, i + 1000);
+
+      try {
+        const result = await fetchWB<{
+          stocks?: Array<{
+            sku: string;
+            amount: number;
+          }>;
+        }>(url, {
+          method: 'POST',
+          body: JSON.stringify({ skus: batch }),
+        });
+
+        for (const item of result.stocks || []) {
+          const existing = stocks.get(item.sku) || 0;
+          stocks.set(item.sku, existing + item.amount);
+        }
+      } catch (error) {
+        console.error(`Error fetching FBS stocks for warehouse ${warehouse.id}:`, error);
+      }
+    }
+  }
+
+  return stocks;
+}
+
+/**
+ * Main inventory tool handler
+ */
+export async function getInventory(input: GetInventoryInput): Promise<{
+  products: WBProduct[];
+  total: number;
+  source: 'cache' | 'api';
+  syncedAt: string;
+}> {
+  const { minQuantity, mode, useCache, cacheTTL } = input;
+
+  // Try cache first
+  if (useCache) {
+    const cached = await getAllCachedProducts('wb', cacheTTL);
+    if (cached.length > 0) {
+      const products = cached
+        .filter((p) => {
+          const stock = ((p.stock_fbo as number) || 0) + ((p.stock_fbs as number) || 0);
+          return stock >= minQuantity;
+        })
+        .map((p) => ({
+          nmId: parseInt(p.nm_id as string),
+          vendorCode: (p.sku as string) || '',
+          subjectName: p.category as string,
+          brand: p.brand as string,
+          title: p.name as string,
+          price: p.price as number,
+          discount: p.discount_percent as number,
+          stockFbo: p.stock_fbo as number,
+          stockFbs: p.stock_fbs as number,
+        }));
+
+      await logRead('wb_get_inventory', 'inventory', input, { count: products.length, source: 'cache' });
+
+      return {
+        products,
+        total: products.length,
+        source: 'cache',
+        syncedAt: new Date().toISOString(),
+      };
+    }
+  }
+
+  // Fetch from API
+  const cards = await getCards();
+  const prices = await getPrices();
+
+  // Get stocks based on mode
+  let stocksFbo = new Map<number, { total: number; warehouses: Array<{ name: string; quantity: number }> }>();
+  let stocksFbs = new Map<string, number>();
+
+  if (mode === 'fbo') {
+    stocksFbo = await getStocksFBO();
+  } else if (mode === 'fbs') {
+    // Get FBS stocks by SKU
+    const skus = cards.map((c) => c.vendorCode);
+    stocksFbs = await getStocksFBS(skus);
+  }
+
+  // Combine data
+  const products: WBProduct[] = [];
+
+  for (const card of cards) {
+    const priceData = prices.get(card.nmId);
+    const stockFboData = stocksFbo.get(card.nmId);
+    const stockFbsData = stocksFbs.get(card.vendorCode) || 0;
+
+    const product: WBProduct = {
+      ...card,
+      price: priceData?.price,
+      discount: priceData?.discount,
+      promoCode: priceData?.promoCode,
+      stockFbo: stockFboData?.total || 0,
+      stockFbs: stockFbsData,
+      warehouses: stockFboData?.warehouses,
+    };
+
+    // Filter by minimum quantity based on mode
+    let totalStock = 0;
+    if (mode === 'fbo') {
+      totalStock = product.stockFbo || 0;
+    } else if (mode === 'fbs') {
+      totalStock = product.stockFbs || 0;
+    } else {
+      totalStock = (product.stockFbo || 0) + (product.stockFbs || 0);
+    }
+
+    if (mode === 'all' || totalStock >= minQuantity) {
+      products.push(product);
+
+      // Cache product
+      await cacheProduct({
+        marketplace: 'wb',
+        nmId: card.nmId.toString(),
+        sku: card.vendorCode,
+        name: card.title || card.subjectName,
+        brand: card.brand,
+        category: card.subjectName,
+        price: priceData?.price,
+        discountPercent: priceData?.discount,
+        stockFbo: stockFboData?.total || 0,
+        stockFbs: stockFbsData,
+        rawData: product as unknown as Record<string, unknown>,
+      });
+    }
+  }
+
+  await logRead('wb_get_inventory', 'inventory', input, { count: products.length, source: 'api' });
+
+  return {
+    products,
+    total: products.length,
+    source: 'api',
+    syncedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Format inventory as markdown with visual charts
+ */
+export function formatInventoryAsMarkdown(products: WBProduct[]): string {
+  if (products.length === 0) {
+    return 'Товары не найдены';
+  }
+
+  const lines: string[] = [];
+
+  // Aggregate by warehouse
+  const warehouseMap = new Map<string, number>();
+  let totalFbo = 0;
+  let totalFbs = 0;
+
+  for (const p of products) {
+    totalFbo += p.stockFbo || 0;
+    totalFbs += p.stockFbs || 0;
+
+    if (p.warehouses) {
+      for (const w of p.warehouses) {
+        const current = warehouseMap.get(w.name) || 0;
+        warehouseMap.set(w.name, current + w.quantity);
+      }
+    }
+  }
+
+  // Warehouse distribution chart
+  if (warehouseMap.size > 0) {
+    lines.push('## Остатки по складам\n');
+
+    const warehouseItems: BarItem[] = Array.from(warehouseMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([name, value]) => ({ label: name, value }));
+
+    lines.push('```');
+    lines.push(horizontalBars(warehouseItems, 25));
+    lines.push('```');
+    lines.push('');
+  }
+
+  // Summary
+  lines.push('## Сводка\n');
+  lines.push(`- **FBO (склады WB):** ${formatNumber(totalFbo)} шт`);
+  lines.push(`- **FBS (ваши склады):** ${formatNumber(totalFbs)} шт`);
+  lines.push(`- **Всего товаров:** ${formatNumber(products.length)}`);
+  lines.push('');
+
+  // Product table
+  lines.push('## Детализация\n');
+  lines.push('| nmId | Артикул | Название | Цена | Скидка | FBO | FBS |');
+  lines.push('|------|---------|----------|------|--------|-----|-----|');
+
+  for (const p of products.slice(0, 50)) {
+    const name = (p.title || p.subjectName || '').substring(0, 25);
+    const price = p.price ? formatRub(p.price) : '-';
+    const discount = p.discount ? `${p.discount}%` : '-';
+    const fbo = p.stockFbo || 0;
+    const fbs = p.stockFbs || 0;
+    lines.push(`| ${p.nmId} | ${p.vendorCode} | ${name} | ${price} | ${discount} | ${fbo} | ${fbs} |`);
+  }
+
+  if (products.length > 50) {
+    lines.push(`\n*... и ещё ${products.length - 50} товаров*`);
+  }
+
+  return lines.join('\n');
+}

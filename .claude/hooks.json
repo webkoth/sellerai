@@ -1,0 +1,34 @@
+{
+  "hooks": [
+    {
+      "event": "SessionStart",
+      "command": "npx ts-node scripts/hooks/check-api-tokens.ts",
+      "once": true
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "mcp__wb-mcp__wb_update_price",
+      "command": "npx ts-node scripts/hooks/validate-price-change.ts"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "mcp__ozon-mcp__ozon_update_price",
+      "command": "npx ts-node scripts/hooks/validate-price-change.ts"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "mcp__wb-mcp__wb_update_*",
+      "command": "npx ts-node scripts/hooks/log-operation.ts"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "mcp__ozon-mcp__ozon_update_*",
+      "command": "npx ts-node scripts/hooks/log-operation.ts"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "mcp__ym-mcp__ym_update_*",
+      "command": "npx ts-node scripts/hooks/log-operation.ts"
+    }
+  ]
+}
