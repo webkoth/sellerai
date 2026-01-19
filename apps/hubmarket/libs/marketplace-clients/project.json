@@ -1,0 +1,18 @@
+{
+  "name": "marketplace-clients",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/marketplace-clients/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/marketplace-clients",
+        "main": "libs/marketplace-clients/src/index.ts",
+        "tsConfig": "libs/marketplace-clients/tsconfig.json"
+      }
+    }
+  },
+  "tags": []
+}

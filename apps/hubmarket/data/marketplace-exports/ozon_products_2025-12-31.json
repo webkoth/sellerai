@@ -1,0 +1,655 @@
+{
+  "marketplace": "ozon",
+  "exportedAt": "2025-12-31T10:05:24.898Z",
+  "totalProducts": 72,
+  "products": [
+    {
+      "product_id": 1725413783,
+      "offer_id": "826250392",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038090,
+      "offer_id": "JW-NB-AGT-M-0086",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038091,
+      "offer_id": "35032037",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038092,
+      "offer_id": "875674563622",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038094,
+      "offer_id": "4535657887",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038095,
+      "offer_id": "387527657846",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038098,
+      "offer_id": "77776543",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038099,
+      "offer_id": "554432987",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038100,
+      "offer_id": "JW-NB-AGT-M-0047",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038101,
+      "offer_id": "957384759763",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038102,
+      "offer_id": "76875674543",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038105,
+      "offer_id": "JW-NB-AGT-M-0073",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038107,
+      "offer_id": "JW-NB-AGT-M-0041",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038112,
+      "offer_id": "JW-NB-AGT-M-0018",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038114,
+      "offer_id": "8887765432",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038115,
+      "offer_id": "JW-NB-AGT-M-0058",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038116,
+      "offer_id": "3287432938653",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038120,
+      "offer_id": "8937298579634",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038121,
+      "offer_id": "JW-NB-AGT-M-0061",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038124,
+      "offer_id": "8797686858325",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038127,
+      "offer_id": "38279546586365",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038128,
+      "offer_id": "8765432345555",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038130,
+      "offer_id": "888765432",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038131,
+      "offer_id": "567567542342",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038132,
+      "offer_id": "97876575454",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038133,
+      "offer_id": "JW-NB-AGT-M-0095",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038134,
+      "offer_id": "9458398674",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038136,
+      "offer_id": "94379874",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038138,
+      "offer_id": "98877665437",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038139,
+      "offer_id": "999987654",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038142,
+      "offer_id": "9878765445421",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038143,
+      "offer_id": "872395643876",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038146,
+      "offer_id": "9998765443",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038147,
+      "offer_id": "8767865543",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038148,
+      "offer_id": "778674542",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038149,
+      "offer_id": "55557789097654",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038150,
+      "offer_id": "098876674",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038151,
+      "offer_id": "8787778778654",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038154,
+      "offer_id": "JW-NB-AGT-M-0062",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038156,
+      "offer_id": "76665545444",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038159,
+      "offer_id": "6363638900098",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038161,
+      "offer_id": "79358476457846",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038163,
+      "offer_id": "9057404375",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038164,
+      "offer_id": "77776665432",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038165,
+      "offer_id": "8923735874658746",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038167,
+      "offer_id": "88373654562782",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038168,
+      "offer_id": "8767756552",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038169,
+      "offer_id": "JW-NB-AGT-M-0112",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038172,
+      "offer_id": "JW-NB-AGT-M-0028",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038173,
+      "offer_id": "39865823476587365",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038174,
+      "offer_id": "89375298356",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038175,
+      "offer_id": "787787787654",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038178,
+      "offer_id": "88876212345678",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038179,
+      "offer_id": "7777665443",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038181,
+      "offer_id": "535353567849040",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038182,
+      "offer_id": "876543222",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038183,
+      "offer_id": "03985097",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038184,
+      "offer_id": "908908786865375",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038185,
+      "offer_id": "9999876432",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038188,
+      "offer_id": "584348679",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038190,
+      "offer_id": "JW-NB-AGT-M-0035",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038191,
+      "offer_id": "8978785664",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038192,
+      "offer_id": "33333787564",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038195,
+      "offer_id": "9345896543",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038197,
+      "offer_id": "JW-NB-AGT-M-0097",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038200,
+      "offer_id": "8473569426888",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038204,
+      "offer_id": "6565542",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038205,
+      "offer_id": "8347556786673",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038208,
+      "offer_id": "JW-NB-AGT-M-0048",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038209,
+      "offer_id": "JW-NB-AGT-M-0022",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038211,
+      "offer_id": "87876532",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": true,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    },
+    {
+      "product_id": 3320038212,
+      "offer_id": "8759236456221",
+      "has_fbo_stocks": false,
+      "has_fbs_stocks": false,
+      "archived": false,
+      "is_discounted": false,
+      "quants": []
+    }
+  ]
+}
