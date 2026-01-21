@@ -28,55 +28,56 @@ export interface BalanceData {
   updatedAt: string;
 }
 
+// API возвращает поля в snake_case
 export interface PaymentData {
-  realizationReportId: number;
-  dateFrom: string;
-  dateTo: string;
-  createDate: string;
-  supplierContractCode: string;
-  rrdId: number;
-  giId: number;
-  subjectName: string;
-  nmId: number;
-  brandName: string;
-  saName: string;
-  tsName: string;
+  realizationreport_id: number;
+  date_from: string;
+  date_to: string;
+  create_dt: string;
+  suppliercontract_code: string | null;
+  rrd_id: number;
+  gi_id: number;
+  subject_name: string;
+  nm_id: number;
+  brand_name: string;
+  sa_name: string;
+  ts_name: string;
   barcode: string;
-  docTypeName: string;
+  doc_type_name: string;
   quantity: number;
-  retailPrice: number;
-  retailAmount: number;
-  salePercent: number;
-  commissionPercent: number;
-  officeName: string;
-  supplierOperName: string;
-  orderDate: string;
-  saleDate: string;
-  shkId: number;
-  retailPriceWithDiscount: number;
-  deliveryAmount: number;
-  returnAmount: number;
-  deliveryRub: number;
-  giBoxTypeName: string;
-  productDiscount: number;
-  supplierPromo: number;
-  rid: number;
-  ppvzSppPrc: number;
-  ppvzKvwPrcBase: number;
-  ppvzKvwPrc: number;
-  ppvzSalesCommission: number;
-  ppvzForPay: number;
-  ppvzReward: number;
-  ppvzVw: number;
-  ppvzVwNds: number;
-  ppvzOfficeId: number;
-  ppvzOfficeName: string;
-  ppvzSupplierId: number;
-  ppvzSupplierName: string;
-  ppvzInn: string;
-  declarationNumber: string;
-  stickerId: string;
-  bonusTypeName?: string;
+  retail_price: number;
+  retail_amount: number;
+  sale_percent: number;
+  commission_percent: number;
+  office_name: string;
+  supplier_oper_name: string;
+  order_dt: string;
+  sale_dt: string;
+  rr_dt: string;
+  shk_id: number;
+  retail_price_withdisc_rub: number;
+  delivery_amount: number;
+  return_amount: number;
+  delivery_rub: number;
+  gi_box_type_name: string;
+  product_discount_for_report: number;
+  supplier_promo: number;
+  ppvz_spp_prc: number;
+  ppvz_kvw_prc_base: number;
+  ppvz_kvw_prc: number;
+  ppvz_sales_commission: number;
+  ppvz_for_pay: number;
+  ppvz_reward: number;
+  ppvz_vw: number;
+  ppvz_vw_nds: number;
+  ppvz_office_id: number;
+  ppvz_office_name: string;
+  ppvz_supplier_id: number;
+  ppvz_supplier_name: string;
+  ppvz_inn: string;
+  declaration_number: string;
+  bonus_type_name?: string;
+  sticker_id: string;
   srid: string;
 }
 
@@ -182,14 +183,14 @@ export async function getPayments(input: GetPaymentsInput): Promise<{
 
   const payments = result || [];
 
-  // Рассчитываем сводку
+  // Рассчитываем сводку (API возвращает поля в snake_case)
   const summary: PaymentsSummary = {
     totalRecords: payments.length,
-    totalForPay: payments.reduce((sum, p) => sum + (p.ppvzForPay || 0), 0),
-    totalRetailAmount: payments.reduce((sum, p) => sum + (p.retailAmount || 0), 0),
-    totalCommission: payments.reduce((sum, p) => sum + (p.ppvzSalesCommission || 0), 0),
-    totalDelivery: payments.reduce((sum, p) => sum + (p.deliveryRub || 0), 0),
-    totalReturns: payments.reduce((sum, p) => sum + (p.returnAmount || 0), 0),
+    totalForPay: payments.reduce((sum, p) => sum + (p.ppvz_for_pay || 0), 0),
+    totalRetailAmount: payments.reduce((sum, p) => sum + (p.retail_amount || 0), 0),
+    totalCommission: payments.reduce((sum, p) => sum + (p.ppvz_sales_commission || 0), 0),
+    totalDelivery: payments.reduce((sum, p) => sum + (p.delivery_rub || 0), 0),
+    totalReturns: payments.reduce((sum, p) => sum + (p.return_amount || 0), 0),
     periodFrom: dateFrom,
     periodTo: dateTo || new Date().toISOString().split('T')[0],
   };
@@ -251,12 +252,12 @@ export function formatPaymentsAsMarkdown(
   ];
 
   if (payments.length > 0) {
-    // Группируем по отчётам
+    // Группируем по отчётам (API возвращает поля в snake_case)
     const reportGroups = new Map<number, PaymentData[]>();
     for (const p of payments) {
-      const existing = reportGroups.get(p.realizationReportId) || [];
+      const existing = reportGroups.get(p.realizationreport_id) || [];
       existing.push(p);
-      reportGroups.set(p.realizationReportId, existing);
+      reportGroups.set(p.realizationreport_id, existing);
     }
 
     lines.push('### Отчёты о реализации');
@@ -266,20 +267,20 @@ export function formatPaymentsAsMarkdown(
 
     for (const [reportId, items] of reportGroups) {
       const first = items[0];
-      const forPay = items.reduce((sum, p) => sum + (p.ppvzForPay || 0), 0);
-      const period = `${first.dateFrom?.split('T')[0] || '-'} — ${first.dateTo?.split('T')[0] || '-'}`;
+      const forPay = items.reduce((sum, p) => sum + (p.ppvz_for_pay || 0), 0);
+      const period = `${first.date_from?.split('T')[0] || '-'} — ${first.date_to?.split('T')[0] || '-'}`;
       lines.push(`| ${reportId} | ${period} | ${items.length} | ${forPay.toLocaleString('ru-RU')} ₽ |`);
     }
 
     lines.push('');
 
     // Топ товаров по выручке
-    const productSums = new Map<number, { name: string; amount: number; forPay: number }>();
+    const productSums = new Map<number, { name: string; article: string; amount: number; forPay: number }>();
     for (const p of payments) {
-      const existing = productSums.get(p.nmId) || { name: p.subjectName, amount: 0, forPay: 0 };
-      existing.amount += p.retailAmount || 0;
-      existing.forPay += p.ppvzForPay || 0;
-      productSums.set(p.nmId, existing);
+      const existing = productSums.get(p.nm_id) || { name: p.subject_name || '', article: p.sa_name || '', amount: 0, forPay: 0 };
+      existing.amount += p.retail_amount || 0;
+      existing.forPay += p.ppvz_for_pay || 0;
+      productSums.set(p.nm_id, existing);
     }
 
     const topProducts = Array.from(productSums.entries())
@@ -289,12 +290,15 @@ export function formatPaymentsAsMarkdown(
     if (topProducts.length > 0) {
       lines.push('### Топ-10 товаров по выплатам');
       lines.push('');
-      lines.push('| nmId | Название | Розница | К перечислению |');
-      lines.push('|------|----------|---------|----------------|');
+      lines.push('| nmId | Артикул | Название | Розница | К перечислению |');
+      lines.push('|------|---------|----------|---------|----------------|');
 
       for (const [nmId, data] of topProducts) {
-        const name = data.name.length > 30 ? data.name.substring(0, 27) + '...' : data.name;
-        lines.push(`| ${nmId} | ${name} | ${data.amount.toLocaleString('ru-RU')} ₽ | ${data.forPay.toLocaleString('ru-RU')} ₽ |`);
+        const articleStr = data.article || '';
+        const article = articleStr.length > 20 ? articleStr.substring(0, 17) + '...' : articleStr;
+        const nameStr = data.name || '';
+        const name = nameStr.length > 25 ? nameStr.substring(0, 22) + '...' : nameStr;
+        lines.push(`| ${nmId} | ${article} | ${name} | ${data.amount.toLocaleString('ru-RU')} ₽ | ${data.forPay.toLocaleString('ru-RU')} ₽ |`);
       }
     }
   }

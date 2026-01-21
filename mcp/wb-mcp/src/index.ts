@@ -41,6 +41,11 @@ import {
   formatOrdersAsMarkdown,
 } from './tools/orders.js';
 import {
+  GetSalesInputSchema,
+  getSales,
+  formatSalesAsMarkdown,
+} from './tools/sales.js';
+import {
   GetWarehousesInputSchema,
   getWarehouses,
   formatWarehousesAsMarkdown,
@@ -89,6 +94,12 @@ import {
   formatBalanceAsMarkdown,
   formatPaymentsAsMarkdown,
 } from './tools/finance.js';
+import {
+  GetRealizationReportInputSchema,
+  getRealizationReport,
+  formatRealizationReportAsMarkdown,
+  formatCostPriceTableAsMarkdown,
+} from './tools/realization.js';
 import {
   GetSuppliesInputSchema,
   GetSupplyInputSchema,
@@ -384,6 +395,37 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: 'wb_get_sales',
+      description:
+        'Получить продажи и возвраты Wildberries. ' +
+        'Возвращает список продаж с суммами, товарами и сводку по выручке. ' +
+        'Данные хранятся 90 дней. Используйте для анализа проданных товаров.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          dateFrom: {
+            type: 'string',
+            description: 'Дата начала (YYYY-MM-DD). Обязательный параметр.',
+          },
+          dateTo: {
+            type: 'string',
+            description: 'Дата конца (YYYY-MM-DD). Если не указана, получаем все до сегодня.',
+          },
+          flag: {
+            type: 'number',
+            description: '0 = изменения с даты, 1 = все продажи за конкретную дату',
+            default: 0,
+          },
+          limit: {
+            type: 'number',
+            description: 'Максимальное количество записей',
+            default: 100000,
+          },
+        },
+        required: ['dateFrom'],
+      },
+    },
+    {
       name: 'wb_get_warehouses',
       description:
         'Получить список складов Wildberries (FBO) и ваших складов (FBS).',
@@ -650,6 +692,32 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: 'number',
             description: 'Максимальное количество записей',
             default: 100,
+          },
+        },
+        required: ['dateFrom'],
+      },
+    },
+    {
+      name: 'wb_get_realization_report',
+      description:
+        'Получить полный отчёт о реализации Wildberries с пагинацией. ' +
+        'Возвращает все продажи и возвраты с группировкой по товарам. ' +
+        'Данные доступны с 29 января 2024. Используйте для анализа себестоимости.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          dateFrom: {
+            type: 'string',
+            description: 'Дата начала (YYYY-MM-DD). Данные доступны с 2024-01-29.',
+          },
+          dateTo: {
+            type: 'string',
+            description: 'Дата конца (YYYY-MM-DD). Если не указана, получаем до сегодня.',
+          },
+          limit: {
+            type: 'number',
+            description: 'Максимальное количество записей',
+            default: 100000,
           },
         },
         required: ['dateFrom'],
@@ -936,6 +1004,25 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
+      case 'wb_get_sales': {
+        const input = GetSalesInputSchema.parse(args || {});
+        const result = await getSales(input);
+        const markdown = formatSalesAsMarkdown(result.sales, result.summary);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: markdown,
+            },
+          ],
+          structuredContent: {
+            summary: result.summary,
+            sales: result.sales.slice(0, 50),
+          },
+        };
+      }
+
       case 'wb_get_warehouses': {
         const input = GetWarehousesInputSchema.parse(args || {});
         const result = await getWarehouses(input);
@@ -1161,6 +1248,26 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           structuredContent: {
             summary: result.summary,
             payments: result.payments.slice(0, 50),
+          },
+        };
+      }
+
+      case 'wb_get_realization_report': {
+        const input = GetRealizationReportInputSchema.parse(args || {});
+        const result = await getRealizationReport(input);
+        const markdown = formatRealizationReportAsMarkdown(result.products, result.summary);
+        const costTable = formatCostPriceTableAsMarkdown(result.products);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: markdown + '\n\n---\n\n' + costTable,
+            },
+          ],
+          structuredContent: {
+            summary: result.summary,
+            products: result.products,
           },
         };
       }
