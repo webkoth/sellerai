@@ -61,6 +61,16 @@ skill-name/
     └── assets/           - Files used in output (templates, icons, fonts, etc.)
 ```
 
+### Commands vs Skills — критическое различие
+
+| Тип | Путь | Активация | Использование |
+|-----|------|-----------|---------------|
+| **Command** | `.claude/commands/*.md` | Ручная: `/command-name` | Простые действия без контекста |
+| **Skill** | `.claude/skills/name/SKILL.md` | Автоматическая по контексту + ручная | Доменные знания, workflows, bundled resources |
+
+**⚠️ Частая ошибка:** Создание скилла как команды (один .md файл в commands/).
+Скилл ВСЕГДА создаётся как директория со структурой `skills/имя-скилла/SKILL.md`.
+
 #### SKILL.md (required)
 
 Every SKILL.md consists of:
