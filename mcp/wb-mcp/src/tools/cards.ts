@@ -207,6 +207,9 @@ export async function getCards(input: GetCardsInput): Promise<{
 /**
  * Update product card content
  * Uses Read-Modify-Write strategy to avoid data loss
+ *
+ * ВАЖНО: WB API игнорирует фильтр nmIds, поэтому загружаем все карточки
+ * и фильтруем локально по nmId
  */
 export async function updateCard(input: UpdateCardInput): Promise<{
   success: boolean;
@@ -215,18 +218,23 @@ export async function updateCard(input: UpdateCardInput): Promise<{
 }> {
   const { nmId, ...updates } = input;
 
-  // 1. Get existing card
+  // 1. Get ALL cards (WB API ignores nmIds filter!)
+  // Загружаем все карточки с большим лимитом
   const existing = await getCards({
-    nmIds: [nmId],
-    limit: 1,
-    withPhoto: true // We need full data
+    limit: 10000, // Загружаем все карточки
+    withPhoto: false // -1 = все карточки, не только с фото
   });
 
   if (existing.cards.length === 0) {
-    throw new Error(`Карточка с nmId ${nmId} не найдена`);
+    throw new Error(`Карточки не найдены в аккаунте`);
   }
 
-  const card = existing.cards[0];
+  // Find the exact card by nmId (local filter since WB API ignores nmIds)
+  const card = existing.cards.find(c => c.nmId === nmId);
+
+  if (!card) {
+    throw new Error(`Карточка с nmId ${nmId} не найдена среди ${existing.cards.length} карточек. Проверьте правильность nmId.`);
+  }
 
   // 2. Prepare update payload
   // Merge updates into existing data
