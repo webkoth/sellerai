@@ -116,6 +116,19 @@ import {
   formatSuppliesAsMarkdown,
   formatSupplyDetailsAsMarkdown,
 } from './tools/supplies.js';
+import {
+  GetDocumentsListInputSchema,
+  GetDocumentCategoriesInputSchema,
+  DownloadDocumentInputSchema,
+  GetNPDReportInputSchema,
+  getDocumentsList,
+  getDocumentCategories,
+  downloadDocument,
+  getNPDReport,
+  formatDocumentsAsMarkdown,
+  formatCategoriesAsMarkdown,
+  formatNPDReportAsMarkdown,
+} from './tools/documents.js';
 
 // Create server
 const server = new Server(
@@ -847,6 +860,95 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: ['supplyId'],
       },
     },
+    {
+      name: 'wb_get_documents',
+      description:
+        'Получить список финансовых документов из ЛК Wildberries. ' +
+        'Возвращает еженедельные отчёты, акты, счета-фактуры и другие документы. ' +
+        'Используйте для получения официальных финансовых отчётов для налогов.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          dateFrom: {
+            type: 'string',
+            description: 'Дата начала (YYYY-MM-DD)',
+          },
+          dateTo: {
+            type: 'string',
+            description: 'Дата конца (YYYY-MM-DD)',
+          },
+          category: {
+            type: 'string',
+            description: 'ID категории документа (опционально)',
+          },
+          limit: {
+            type: 'number',
+            description: 'Максимальное количество документов (до 50)',
+            default: 50,
+          },
+          offset: {
+            type: 'number',
+            description: 'Смещение для пагинации',
+            default: 0,
+          },
+        },
+      },
+    },
+    {
+      name: 'wb_get_document_categories',
+      description:
+        'Получить категории документов Wildberries. ' +
+        'Возвращает список категорий для фильтрации документов.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          locale: {
+            type: 'string',
+            description: 'Язык (ru, en, zh)',
+            default: 'ru',
+          },
+        },
+      },
+    },
+    {
+      name: 'wb_download_document',
+      description:
+        'Получить ссылку для скачивания документа Wildberries. ' +
+        'Возвращает URL для скачивания в указанном формате.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          serviceName: {
+            type: 'string',
+            description: 'ID документа (serviceName из wb_get_documents)',
+          },
+          extension: {
+            type: 'string',
+            description: 'Формат: xlsx, pdf, zip',
+            default: 'xlsx',
+          },
+        },
+        required: ['serviceName'],
+      },
+    },
+    {
+      name: 'wb_get_npd_report',
+      description:
+        'Рассчитать НПД (налог на профессиональный доход / самозанятый) за год на основе документов WB. ' +
+        'Скачивает "Еженедельные отчеты реализации" (физ.лица 4%) и "Уведомления о выкупе" (юр.лица 6%), ' +
+        'извлекает суммы и рассчитывает налог помесячно. ' +
+        'ВАЖНО: Процесс длительный из-за rate limit WB API (10 сек между запросами).',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'number',
+            description: 'Год для расчета НПД (например, 2025)',
+          },
+        },
+        required: ['year'],
+      },
+    },
   ],
 }));
 
@@ -1381,6 +1483,72 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             preview: result.preview,
             deleted: result.deleted,
           },
+        };
+      }
+
+      case 'wb_get_documents': {
+        const input = GetDocumentsListInputSchema.parse(args || {});
+        const result = await getDocumentsList(input);
+        const markdown = formatDocumentsAsMarkdown(result.documents, result.summary);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: markdown,
+            },
+          ],
+          structuredContent: {
+            summary: result.summary,
+            documents: result.documents,
+          },
+        };
+      }
+
+      case 'wb_get_document_categories': {
+        const input = GetDocumentCategoriesInputSchema.parse(args || {});
+        const result = await getDocumentCategories(input);
+        const markdown = formatCategoriesAsMarkdown(result.categories);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: markdown,
+            },
+          ],
+          structuredContent: result,
+        };
+      }
+
+      case 'wb_download_document': {
+        const input = DownloadDocumentInputSchema.parse(args || {});
+        const result = await downloadDocument(input);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: result.message,
+            },
+          ],
+          structuredContent: result,
+        };
+      }
+
+      case 'wb_get_npd_report': {
+        const input = GetNPDReportInputSchema.parse(args || {});
+        const report = await getNPDReport(input);
+        const markdown = formatNPDReportAsMarkdown(report);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: markdown,
+            },
+          ],
+          structuredContent: report,
         };
       }
 

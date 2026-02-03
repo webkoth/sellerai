@@ -92,6 +92,15 @@ import {
   formatPaymentsAsMarkdown,
 } from './tools/finance.js';
 
+import {
+  GetCategoriesInputSchema,
+  SearchCategoriesInputSchema,
+  getCategories,
+  searchCategories,
+  formatCategoriesAsMarkdown,
+  formatSearchResultsAsMarkdown,
+} from './tools/categories.js';
+
 // Create server
 const server = new Server(
   {
@@ -108,6 +117,48 @@ const server = new Server(
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
+    // Categories
+    {
+      name: 'ym_get_categories',
+      description:
+        'Получить дерево категорий Яндекс.Маркет (верхний уровень). ' +
+        'Для поиска конкретной категории используйте ym_search_categories.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          language: {
+            type: 'string',
+            enum: ['RU', 'EN'],
+            description: 'Язык (по умолчанию RU)',
+            default: 'RU',
+          },
+        },
+      },
+    },
+    {
+      name: 'ym_search_categories',
+      description:
+        'Поиск категории Яндекс.Маркет по названию. ' +
+        'Возвращает листовые категории (без подкатегорий) с ID и путём. ' +
+        'Используйте найденный ID в поле marketCategoryId при создании товара.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description: 'Поисковый запрос (например: "браслет", "метеорит", "ювелирные")',
+          },
+          language: {
+            type: 'string',
+            enum: ['RU', 'EN'],
+            description: 'Язык (по умолчанию RU)',
+            default: 'RU',
+          },
+        },
+        required: ['query'],
+      },
+    },
+
     // Campaigns
     {
       name: 'ym_get_campaigns',
@@ -198,6 +249,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
                 pictures: { type: 'array', items: { type: 'string' }, description: 'URL изображений' },
                 manufacturer: { type: 'string', description: 'Производитель' },
                 manufacturerCountries: { type: 'array', items: { type: 'string' }, description: 'Страны производства' },
+                marketCategoryId: { type: 'number', description: 'ID категории ЯМ (получить через ym_search_categories)' },
                 weightDimensions: {
                   type: 'object',
                   properties: {
@@ -576,6 +628,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
+      // Categories
+      case 'ym_get_categories': {
+        const input = GetCategoriesInputSchema.parse(args || {});
+        const result = await getCategories(input);
+        const markdown = formatCategoriesAsMarkdown(result.categories);
+
+        return {
+          content: [{ type: 'text', text: markdown }],
+          structuredContent: {
+            total: result.total,
+            categories: result.categories.slice(0, 30),
+          },
+        };
+      }
+
+      case 'ym_search_categories': {
+        const input = SearchCategoriesInputSchema.parse(args || {});
+        const result = await searchCategories(input);
+        const markdown = formatSearchResultsAsMarkdown(result.categories, input.query);
+
+        return {
+          content: [{ type: 'text', text: markdown }],
+          structuredContent: {
+            total: result.total,
+            categories: result.categories,
+          },
+        };
+      }
+
       // Campaigns
       case 'ym_get_campaigns': {
         const input = GetCampaignsInputSchema.parse(args || {});

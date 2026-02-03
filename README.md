@@ -42,28 +42,23 @@ claude
 
 ## Структура проекта
 
+Проект организован в соответствии с [ARCHITECTURE.md](docs/ARCHITECTURE.md):
+
 ```
-sellerai/
-├── .claude/
-│   ├── .mcp.json         # Конфигурация MCP серверов
-│   ├── settings.json     # Настройки Claude Code
-│   ├── hooks.json        # Автоматическая валидация
-│   ├── agents/           # Специализированные агенты (4)
-│   ├── commands/         # Slash-команды (17)
-│   ├── skills/           # Доменные знания (19)
-│   └── knowledge/        # База знаний по маркетплейсам
-├── mcp/
-│   ├── wb-mcp/           # MCP сервер Wildberries
-│   ├── ozon-mcp/         # MCP сервер Ozon
-│   └── ym-mcp/           # MCP сервер Яндекс.Маркет
-├── scripts/
-│   ├── setup.sh          # Скрипт установки
-│   └── hooks/            # TypeScript хуки
-├── docs/                 # Документация
-├── .env.example          # Шаблон переменных окружения
-├── CLAUDE.md             # Инструкции для Claude
+.
+├── .claude/                # Agent Config (Agents, Skills, Commands)
+│   ├── agents/             # Автономные агенты
+│   ├── skills/             # Доменные знания и legacy-scripts
+│   ├── commands/           # Slash-команды
+│   └── knowledge/          # База знаний (SSOT)
+├── mcp/                    # MCP Servers (интеграции)
+├── docs/                   # Документация
+├── config/                 # Конфигурационные файлы
+├── archive/                # Архив данных, отчетов и старых скриптов
 └── README.md
 ```
+
+> **Note:** Старые скрипты перемещены в `.claude/skills/legacy-scripts/`, а данные — в `archive/`.
 
 ## Модель использования
 

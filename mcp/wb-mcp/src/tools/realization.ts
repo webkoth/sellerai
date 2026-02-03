@@ -82,6 +82,8 @@ export interface ProductSummary {
   salesCount: number;
   returnsCount: number;
   totalRetailAmount: number;
+  totalReturnAmount: number;
+  netRetailAmount: number; // Чистая сумма (продажи - возвраты) для НПД
   totalForPay: number;
   totalCommission: number;
   totalDelivery: number;
@@ -94,6 +96,8 @@ export interface RealizationSummary {
   totalSales: number;
   totalReturns: number;
   totalRetailAmount: number;
+  totalReturnAmount: number;
+  netRetailAmount: number; // Чистая сумма (продажи - возвраты) для НПД
   totalForPay: number;
   totalCommission: number;
   totalDelivery: number;
@@ -231,6 +235,15 @@ export async function getRealizationReport(input: GetRealizationReportInput): Pr
   const products: ProductSummary[] = Array.from(productMap.values()).map(p => {
     const allItems = [...p.sales, ...p.returns];
     const salesOnly = p.sales;
+    const returnsOnly = p.returns;
+
+    // Сумма продаж
+    const salesAmount = salesOnly.reduce((sum, r) => sum + (r.retail_amount || 0), 0);
+    // Сумма возвратов (берём retail_amount или return_amount)
+    const returnAmount = returnsOnly.reduce((sum, r) => {
+      // Для возвратов API может использовать return_amount или retail_amount
+      return sum + (r.return_amount || r.retail_amount || 0);
+    }, 0);
 
     return {
       nmId: p.nmId,
@@ -238,8 +251,10 @@ export async function getRealizationReport(input: GetRealizationReportInput): Pr
       subjectName: p.subjectName,
       brandName: p.brandName,
       salesCount: salesOnly.length,
-      returnsCount: p.returns.length,
-      totalRetailAmount: salesOnly.reduce((sum, r) => sum + (r.retail_amount || 0), 0),
+      returnsCount: returnsOnly.length,
+      totalRetailAmount: salesAmount,
+      totalReturnAmount: returnAmount,
+      netRetailAmount: salesAmount - returnAmount, // Чистая сумма для НПД
       totalForPay: allItems.reduce((sum, r) => sum + (r.ppvz_for_pay || 0), 0),
       totalCommission: allItems.reduce((sum, r) => sum + (r.ppvz_sales_commission || 0), 0),
       totalDelivery: allItems.reduce((sum, r) => sum + (r.delivery_rub || 0), 0),
@@ -256,11 +271,18 @@ export async function getRealizationReport(input: GetRealizationReportInput): Pr
   const sales = records.filter(r => r.doc_type_name !== 'Возврат' && r.quantity >= 0 && !r.return_amount);
   const returns = records.filter(r => r.doc_type_name === 'Возврат' || r.quantity < 0 || r.return_amount > 0);
 
+  // Сумма продаж
+  const totalSalesAmount = sales.reduce((sum, r) => sum + (r.retail_amount || 0), 0);
+  // Сумма возвратов (берём return_amount или retail_amount)
+  const totalReturnAmount = returns.reduce((sum, r) => sum + (r.return_amount || r.retail_amount || 0), 0);
+
   const summary: RealizationSummary = {
     totalRecords: records.length,
     totalSales: sales.length,
     totalReturns: returns.length,
-    totalRetailAmount: sales.reduce((sum, r) => sum + (r.retail_amount || 0), 0),
+    totalRetailAmount: totalSalesAmount,
+    totalReturnAmount: totalReturnAmount,
+    netRetailAmount: totalSalesAmount - totalReturnAmount, // Чистая сумма для НПД
     totalForPay: records.reduce((sum, r) => sum + (r.ppvz_for_pay || 0), 0),
     totalCommission: records.reduce((sum, r) => sum + (r.ppvz_sales_commission || 0), 0),
     totalDelivery: records.reduce((sum, r) => sum + (r.delivery_rub || 0), 0),
@@ -301,9 +323,11 @@ export function formatRealizationReportAsMarkdown(
     '| Показатель | Значение |',
     '|------------|----------|',
     `| Всего записей | ${summary.totalRecords.toLocaleString('ru-RU')} |`,
-    `| Продажи | ${summary.totalSales.toLocaleString('ru-RU')} |`,
-    `| Возвраты | ${summary.totalReturns.toLocaleString('ru-RU')} |`,
-    `| Розничная сумма | ${summary.totalRetailAmount.toLocaleString('ru-RU')} ₽ |`,
+    `| Продажи (шт) | ${summary.totalSales.toLocaleString('ru-RU')} |`,
+    `| Возвраты (шт) | ${summary.totalReturns.toLocaleString('ru-RU')} |`,
+    `| Сумма продаж | ${summary.totalRetailAmount.toLocaleString('ru-RU')} ₽ |`,
+    `| Сумма возвратов | ${summary.totalReturnAmount.toLocaleString('ru-RU')} ₽ |`,
+    `| **Чистая сумма (для НПД)** | **${summary.netRetailAmount.toLocaleString('ru-RU')} ₽** |`,
     `| К перечислению | ${summary.totalForPay.toLocaleString('ru-RU')} ₽ |`,
     `| Комиссия WB | ${summary.totalCommission.toLocaleString('ru-RU')} ₽ |`,
     `| Логистика | ${summary.totalDelivery.toLocaleString('ru-RU')} ₽ |`,

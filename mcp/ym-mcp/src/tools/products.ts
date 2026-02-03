@@ -169,6 +169,7 @@ export const UpdateProductsInputSchema = z.object({
     pictures: z.array(z.string()).optional().describe('URL изображений'),
     manufacturer: z.string().optional().describe('Производитель'),
     manufacturerCountries: z.array(z.string()).optional().describe('Страны производства'),
+    marketCategoryId: z.number().optional().describe('ID категории Яндекс.Маркета (получить через ym_search_categories)'),
     weightDimensions: z.object({
       length: z.number().optional().describe('Длина в см'),
       width: z.number().optional().describe('Ширина в см'),
@@ -211,6 +212,7 @@ export async function updateProducts(input: UpdateProductsInput): Promise<{
       if (p.vendor) fields.push('бренд');
       if (p.pictures) fields.push(`фото (${p.pictures.length})`);
       if (p.weightDimensions) fields.push('габариты');
+      if ((p as { marketCategoryId?: number }).marketCategoryId) fields.push('категория');
 
       previewLines.push(`| ${p.offerId} | ${fields.join(', ') || '-'} |`);
     }
@@ -243,7 +245,13 @@ export async function updateProducts(input: UpdateProductsInput): Promise<{
     if (p.manufacturerCountries) offer.manufacturerCountries = p.manufacturerCountries;
     if (p.weightDimensions) offer.weightDimensions = p.weightDimensions;
 
-    return { offer };
+    const mapping: Record<string, unknown> = {};
+    const pWithCategory = p as { marketCategoryId?: number };
+    if (pWithCategory.marketCategoryId) {
+      mapping.marketCategoryId = pWithCategory.marketCategoryId;
+    }
+
+    return Object.keys(mapping).length > 0 ? { offer, mapping } : { offer };
   });
 
   const response = await apiRequest<{
