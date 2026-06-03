@@ -1,0 +1,470 @@
+[
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582523,
+    "offer_id": "JW-NB-AGT-M-0098",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582606,
+    "offer_id": "897976752231",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582493,
+    "offer_id": "94792834376487512",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582655,
+    "offer_id": "835694653692",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582682,
+    "offer_id": "83285636526",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582505,
+    "offer_id": "87494658726767861",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582638,
+    "offer_id": "3487564386799864",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582684,
+    "offer_id": "301984801481",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582640,
+    "offer_id": "89235856463594",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582668,
+    "offer_id": "097976675675454",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582595,
+    "offer_id": "97829723765327853",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582601,
+    "offer_id": "38259864653534",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582576,
+    "offer_id": "9863479136591751",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582651,
+    "offer_id": "03982907587",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582559,
+    "offer_id": "382467387253",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582553,
+    "offer_id": "JW-NB-AGT-M-0127",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582637,
+    "offer_id": "9830967956621",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582617,
+    "offer_id": "2374238759463943",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582649,
+    "offer_id": "94769469454626",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582620,
+    "offer_id": "387593625426359",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582622,
+    "offer_id": "8768757655223",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582625,
+    "offer_id": "6465363423312",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582585,
+    "offer_id": "403874694",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582688,
+    "offer_id": "786856646543532",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582560,
+    "offer_id": "7866556434221",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582626,
+    "offer_id": "375485732833861",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582633,
+    "offer_id": "8365796237657",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582540,
+    "offer_id": "8372985637486572",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582661,
+    "offer_id": "JW-NB-AGT-M-0033",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582599,
+    "offer_id": "868756534331",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582657,
+    "offer_id": "98327594659211",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582666,
+    "offer_id": "9887896545323",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582504,
+    "offer_id": "8759465974676",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582634,
+    "offer_id": "82759648631343",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582690,
+    "offer_id": "8397539865396",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582605,
+    "offer_id": "989898384276",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582533,
+    "offer_id": "847598374643526",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582659,
+    "offer_id": "949487674839",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_PASS_MODERATION",
+        "message": "Product is not moderated"
+      }
+    ]
+  },
+  {
+    "warehouse_id": 1020005003459950,
+    "product_id": 4265582539,
+    "offer_id": "987434342321",
+    "updated": false,
+    "errors": [
+      {
+        "code": "PRODUCT_IS_NOT_CREATED",
+        "message": "Product is not created"
+      }
+    ]
+  }
+]

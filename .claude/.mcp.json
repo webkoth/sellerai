@@ -21,6 +21,10 @@
         "DATABASE_URL": "postgresql://localhost:5432/sellerai"
       }
     },
+    "avito-mcp": {
+      "command": "node",
+      "args": ["mcp/avito-mcp/dist/index.js"]
+    },
     "firecrawl": {
       "command": "npx",
       "args": ["-y", "firecrawl-mcp"],

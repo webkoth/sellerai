@@ -1,0 +1,1809 @@
+{
+  "marketplace": "yandex_market",
+  "type": "commissions",
+  "fetched_at": "2026-02-18T15:03:39.122426",
+  "total": 12,
+  "note": "Тарифы рассчитаны через /tariffs/calculate для каждой категории (при цене 10000₽, вес 0.5кг)",
+  "tariffs_by_category": [
+    {
+      "categoryId": 62920723,
+      "categoryName": "Минералы интерьерные",
+      "offersCount": 28218,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4000.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "40.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 69119205,
+      "categoryName": "Шармы ювелирные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4000.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "40.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 66527866,
+      "categoryName": "Браслеты ювелирные",
+      "offersCount": 3320,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4350.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "43.50"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 67678046,
+      "categoryName": "Браслеты",
+      "offersCount": 2490,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4550.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "45.50"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 69118464,
+      "categoryName": "Подвески ювелирные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4250.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "42.50"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 64612532,
+      "categoryName": "Аромакулоны",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 1200.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "12.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 69273961,
+      "categoryName": "Часы ювелирные карманные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4350.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "43.50"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 64277833,
+      "categoryName": "Подвески декоративные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4700.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "47.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 62103092,
+      "categoryName": "Карты географические интерьерные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 3900.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "39.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 68739567,
+      "categoryName": "Иконки",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "45.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 68749551,
+      "categoryName": "Подвески",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4650.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "46.50"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "categoryId": 69264438,
+      "categoryName": "Кольца бижутерные",
+      "offersCount": 830,
+      "tariffs": [
+        {
+          "type": "FEE",
+          "amount": 4300.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "43.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "AGENCY_COMMISSION",
+          "amount": 0.12,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "0.12"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        },
+        {
+          "type": "PAYMENT_TRANSFER",
+          "amount": 180.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "1.80"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "frequency",
+              "value": "monthly"
+            }
+          ]
+        },
+        {
+          "type": "DELIVERY_TO_CUSTOMER",
+          "amount": 500.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "5.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "relative"
+            },
+            {
+              "name": "priceDependence",
+              "value": "HAS_PRICE"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            },
+            {
+              "name": "maxValue",
+              "value": "1000.00"
+            }
+          ]
+        },
+        {
+          "type": "MIDDLE_MILE",
+          "amount": 114.0,
+          "currency": "RUR",
+          "parameters": [
+            {
+              "name": "value",
+              "value": "114.00"
+            },
+            {
+              "name": "billingUnit",
+              "value": "item"
+            },
+            {
+              "name": "valueType",
+              "value": "absolute"
+            },
+            {
+              "name": "priceDependence",
+              "value": "NOT_DEPENDED"
+            },
+            {
+              "name": "priceFrom",
+              "value": "0.00"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

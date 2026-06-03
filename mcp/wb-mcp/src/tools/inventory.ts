@@ -19,6 +19,7 @@ export type GetInventoryInput = z.infer<typeof GetInventoryInputSchema>;
 interface WBProduct {
   nmId: number;
   vendorCode: string;
+  barcodes?: string[];
   subjectName?: string;
   brand?: string;
   title?: string;
@@ -69,6 +70,7 @@ async function getCards(limit = 100): Promise<WBProduct[]> {
         subjectName?: string;
         brand?: string;
         title?: string;
+        sizes?: Array<{ skus?: string[] }>;
       }>;
       cursor?: {
         total: number;
@@ -89,9 +91,14 @@ async function getCards(limit = 100): Promise<WBProduct[]> {
     if (cards.length === 0) break;
 
     for (const card of cards) {
+      const barcodes: string[] = [];
+      for (const s of card.sizes || []) {
+        for (const sku of s.skus || []) barcodes.push(sku);
+      }
       allCards.push({
         nmId: card.nmID,
         vendorCode: card.vendorCode,
+        barcodes,
         subjectName: card.subjectName,
         brand: card.brand,
         title: card.title,
@@ -219,13 +226,14 @@ async function getSellerWarehouses(): Promise<Array<{ id: number; name: string }
 }
 
 /**
- * Get stocks from seller warehouses (FBS)
- * Uses POST /api/v3/stocks/{warehouseId}
+ * Get stocks from seller warehouses (FBS).
+ * Uses POST /api/v3/stocks/{warehouseId} which expects barcodes (sizes[].skus[]), not vendorCode.
  */
-async function getStocksFBS(skus: string[]): Promise<Map<string, number>> {
+async function getStocksFBS(barcodes: string[]): Promise<Map<string, number>> {
   const stocks = new Map<string, number>();
 
-  if (skus.length === 0) return stocks;
+  if (barcodes.length === 0) return stocks;
+  const skus = barcodes;
 
   // Get seller warehouses
   const warehouses = await getSellerWarehouses();
@@ -319,12 +327,22 @@ export async function getInventory(input: GetInventoryInput): Promise<{
   let stocksFbo = new Map<number, { total: number; warehouses: Array<{ name: string; quantity: number }> }>();
   let stocksFbs = new Map<string, number>();
 
-  if (mode === 'fbo') {
+  // Build barcode -> nmId map (FBS API requires barcodes from sizes[].skus[], not vendorCode)
+  const barcodeToNmId = new Map<string, number>();
+  const nmIdToBarcodes = new Map<number, string[]>();
+  for (const card of cards) {
+    const barcodes = card.barcodes || [];
+    nmIdToBarcodes.set(card.nmId, barcodes);
+    for (const bc of barcodes) {
+      barcodeToNmId.set(bc, card.nmId);
+    }
+  }
+
+  if (mode === 'fbo' || mode === 'all') {
     stocksFbo = await getStocksFBO();
-  } else if (mode === 'fbs') {
-    // Get FBS stocks by SKU
-    const skus = cards.map((c) => c.vendorCode);
-    stocksFbs = await getStocksFBS(skus);
+  }
+  if (mode === 'fbs' || mode === 'all') {
+    stocksFbs = await getStocksFBS([...barcodeToNmId.keys()]);
   }
 
   // Combine data
@@ -333,7 +351,11 @@ export async function getInventory(input: GetInventoryInput): Promise<{
   for (const card of cards) {
     const priceData = prices.get(card.nmId);
     const stockFboData = stocksFbo.get(card.nmId);
-    const stockFbsData = stocksFbs.get(card.vendorCode) || 0;
+    // Sum FBS stock across all barcodes of this card
+    let stockFbsData = 0;
+    for (const bc of (nmIdToBarcodes.get(card.nmId) || [])) {
+      stockFbsData += stocksFbs.get(bc) || 0;
+    }
 
     const product: WBProduct = {
       ...card,
@@ -355,7 +377,7 @@ export async function getInventory(input: GetInventoryInput): Promise<{
       totalStock = (product.stockFbo || 0) + (product.stockFbs || 0);
     }
 
-    if (mode === 'all' || totalStock >= minQuantity) {
+    if (totalStock >= minQuantity) {
       products.push(product);
 
       // Cache product

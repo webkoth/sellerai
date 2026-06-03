@@ -16,6 +16,7 @@ export const GetReviewsInputSchema = z.object({
     .describe('Filter by SKU'),
   limit: z.number().optional().default(50)
     .describe('Maximum number of reviews to return'),
+    
 });
 
 export type GetReviewsInput = z.infer<typeof GetReviewsInputSchema>;

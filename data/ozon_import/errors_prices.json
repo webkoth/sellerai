@@ -1,0 +1,146 @@
+[
+  {
+    "product_id": 0,
+    "offer_id": "897976752231",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "94792834376487512",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "835694653692",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "83285636526",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "301984801481",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "382467387253",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "2374238759463943",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "786856646543532",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "JW-NB-AGT-M-0033",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "98327594659211",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "8397539865396",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "product_id": 0,
+    "offer_id": "949487674839",
+    "updated": false,
+    "errors": [
+      {
+        "code": "NOT_FOUND",
+        "message": "product not found"
+      }
+    ],
+    "warnings": []
+  }
+]

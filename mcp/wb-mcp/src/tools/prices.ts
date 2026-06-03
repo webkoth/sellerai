@@ -78,8 +78,13 @@ export async function getPrices(input: GetPricesInput): Promise<{
   const products: PriceData[] = [];
   let currentOffset = offset;
 
+  // WB goods/filter не фильтрует по nmID на сервере — отбор идёт на клиенте,
+  // поэтому страницу тянем целиком, иначе искомый nmID может не попасть в выборку
+  // при маленьком limit (баг: limit=1 находил только первый товар каталога).
+  const PAGE_SIZE = 1000;
+
   while (products.length < limit) {
-    const url = `${WB_API_URLS.prices}/api/v2/list/goods/filter?limit=${Math.min(1000, limit)}&offset=${currentOffset}`;
+    const url = `${WB_API_URLS.prices}/api/v2/list/goods/filter?limit=${PAGE_SIZE}&offset=${currentOffset}`;
 
     const result = await fetchWB<{
       data?: {
@@ -124,7 +129,7 @@ export async function getPrices(input: GetPricesInput): Promise<{
       if (products.length >= limit) break;
     }
 
-    if (goods.length < 1000) break;
+    if (goods.length < PAGE_SIZE) break;
     currentOffset += goods.length;
   }
 

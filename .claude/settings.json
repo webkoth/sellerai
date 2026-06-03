@@ -1,6 +1,4 @@
 {
-  "language": "russian",
-  "enabledPlugins": {
-    "canvas@claude-canvas": true
-  }
+  "enabledPlugins": {},
+  "language": "russian"
 }
