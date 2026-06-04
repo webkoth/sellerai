@@ -122,17 +122,20 @@ export async function getDocumentCategories(input: GetDocumentCategoriesInput): 
   const url = `${DOCUMENTS_API_URL}/api/v1/documents/categories?locale=${locale}`;
 
   interface CategoriesResponse {
-    data: Array<{
-      id: string;
-      name: string;
-    }>;
+    data?: {
+      categories?: Array<{
+        name: string;
+        title: string;
+      }>;
+    };
   }
 
   const result = await fetchDocumentsAPI<CategoriesResponse>(url);
 
-  const categories = (result.data || []).map(c => ({
-    id: c.id,
-    name: c.name,
+  // WB возвращает data.categories[{ name: слаг, title: отображаемое имя }]
+  const categories = (result.data?.categories || []).map(c => ({
+    id: c.name,
+    name: c.title,
   }));
 
   await logRead('wb_get_document_categories', 'documents', input, { count: categories.length });

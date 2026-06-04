@@ -50,7 +50,8 @@ interface StocksResponse {
       warehouseId: number;
       offers?: Array<{
         offerId: string;
-        items: StockItem[];
+        stocks?: StockItem[];
+        items?: StockItem[];
         updatedAt?: string;
       }>;
     }>;
@@ -113,9 +114,10 @@ export async function getStocks(input: GetStocksInput): Promise<{
       let defect = 0;
       let updatedAt = '';
 
-      for (const item of offer.items || []) {
-        if (item.type === 'FIT') {
-          available = item.count;
+      // YM отдаёт остатки в offer.stocks (типы AVAILABLE/FIT). Раньше читалось offer.items -> всегда 0.
+      for (const item of offer.stocks || offer.items || []) {
+        if (item.type === 'AVAILABLE' || item.type === 'FIT') {
+          available = Math.max(available, item.count);
         } else if (item.type === 'RESERVED') {
           reserved = item.count;
         } else if (item.type === 'DEFECT') {

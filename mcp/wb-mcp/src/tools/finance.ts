@@ -24,6 +24,7 @@ export type GetPaymentsInput = z.infer<typeof GetPaymentsInputSchema>;
 
 export interface BalanceData {
   balance: number;
+  forWithdraw: number;
   currency: string;
   updatedAt: string;
 }
@@ -123,33 +124,21 @@ async function fetchWB<T>(url: string, options?: RequestInit): Promise<T> {
 export async function getBalance(_input: GetBalanceInput): Promise<{
   balance: BalanceData;
 }> {
-  // Используем Common API для информации о продавце
-  const url = `${WB_API_URLS.common}/api/v1/seller/info`;
+  // Баланс счёта продавца — Finance API
+  // GET https://finance-api.wildberries.ru/api/v1/account/balance → { currency, current, for_withdraw }
+  const url = `${WB_API_URLS.finance}/api/v1/account/balance`;
 
-  interface SellerInfoResponse {
-    name: string;
-    sid: string;
-    tradeMark?: string;
-    countryId?: number;
-    currencyCode?: string;
-  }
-
-  const sellerInfo = await fetchWB<SellerInfoResponse>(url);
-
-  // Finance API для баланса (если доступен)
-  let balance = 0;
-  try {
-    const balanceUrl = `${WB_API_URLS.statistics}/api/v5/supplier/incomes?dateFrom=${new Date().toISOString().split('T')[0]}`;
-    const incomes = await fetchWB<Array<{ totalPrice: number }>>(balanceUrl);
-    balance = incomes.reduce((sum, i) => sum + (i.totalPrice || 0), 0);
-  } catch {
-    // Баланс недоступен через этот API
-  }
+  const data = await fetchWB<{
+    currency?: string;
+    current?: number;
+    for_withdraw?: number;
+  }>(url);
 
   const result = {
     balance: {
-      balance,
-      currency: sellerInfo.currencyCode || 'RUB',
+      balance: data.current ?? 0,
+      forWithdraw: data.for_withdraw ?? 0,
+      currency: data.currency || 'RUB',
       updatedAt: new Date().toISOString(),
     },
   };

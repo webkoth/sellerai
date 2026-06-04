@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
-import { cacheProduct } from '../db/postgres.js';
 import { logRead } from '../utils/logger.js';
 
 // Input schema for wb_get_cards
@@ -171,17 +170,6 @@ export async function getCards(input: GetCardsInput): Promise<{
       };
 
       allCards.push(cardData);
-
-      // Cache card data
-      await cacheProduct({
-        marketplace: 'wb',
-        nmId: card.nmID.toString(),
-        sku: card.vendorCode,
-        name: card.title,
-        brand: card.brand,
-        category: card.subjectName,
-        rawData: cardData as unknown as Record<string, unknown>,
-      });
 
       if (allCards.length >= limit) break;
     }

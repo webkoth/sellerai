@@ -1,6 +1,0 @@
-[
-  {
-    "batch": 1,
-    "error": "YM API 400 /businesses/191766894/offer-mappings/update: {\"errors\":[{\"code\":\"BAD_REQUEST\",\"message\":\"The request is too big: Maximum allowed request size must be less than 500 KB, but passed 549 KB\"}],\"status\":\"ERROR\"}"
-  }
-]

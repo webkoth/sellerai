@@ -137,7 +137,7 @@ export async function getSalesFunnel(input: GetSalesFunnelInput): Promise<{
     body.nmIDs = nmIds.slice(0, 20); // Max 20 nmIds per request
   }
 
-  const result = await fetchWB<{
+  let result: {
     data?: {
       cards?: Array<{
         nmID: number;
@@ -161,10 +161,21 @@ export async function getSalesFunnel(input: GetSalesFunnelInput): Promise<{
     };
     error?: boolean;
     errorText?: string;
-  }>(url, {
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  };
+
+  try {
+    result = await fetchWB<typeof result>(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  } catch (err) {
+    // nm-report требует подписку «Джем»; WB также периодически меняет путь этого метода.
+    throw new Error(
+      'Воронка продаж недоступна (WB Analytics nm-report). Метод требует подписку «Джем» в ЛК WB, ' +
+      'и WB периодически меняет путь этого эндпоинта — сверьтесь с dev.wildberries.ru. ' +
+      `Исходная ошибка: ${(err as Error).message}`
+    );
+  }
 
   if (result.error) {
     throw new Error(result.errorText || 'Analytics API error');

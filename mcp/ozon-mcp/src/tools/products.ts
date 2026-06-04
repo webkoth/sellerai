@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createOzonHeaders, OZON_API_URL } from '../utils/auth.js';
-import { cacheProduct, getAllCachedProducts } from '../db/postgres.js';
 import { logRead, logWriteWithPreview, logWriteConfirmed } from '../utils/logger.js';
 
 // Input schema for ozon_get_products
@@ -12,9 +11,7 @@ export const GetProductsInputSchema = z.object({
     .optional()
     .default('ALL')
     .describe('Product visibility filter'),
-  limit: z.number().optional().default(100).describe('Maximum number of products to return'),
-  useCache: z.boolean().optional().default(true).describe('Use cached data if available'),
-  cacheTTL: z.number().optional().default(15).describe('Cache TTL in minutes'),
+  limit: z.number().int().positive('limit должен быть больше 0').optional().default(100).describe('Maximum number of products to return'),
 });
 
 export type GetProductsInput = z.infer<typeof GetProductsInputSchema>;
@@ -254,51 +251,11 @@ export { _getProductInfo as getProductInfo };
 export async function getProducts(input: GetProductsInput): Promise<{
   products: OzonProduct[];
   total: number;
-  source: 'cache' | 'api';
+  source: 'api';
   syncedAt: string;
 }> {
-  const { useCache, cacheTTL } = input;
-
-  // Try cache first
-  if (useCache) {
-    const cached = await getAllCachedProducts('ozon', cacheTTL);
-    if (cached.length > 0) {
-      const products = cached.map((p) => ({
-        productId: parseInt(p.nm_id as string),
-        offerId: (p.sku as string) || '',
-        name: (p.name as string) || '',
-        barcode: p.barcode as string,
-        isFboVisible: true,
-        isFbsVisible: true,
-        archived: false,
-        isDiscounted: false,
-      }));
-
-      await logRead('ozon_get_products', 'products', input, { count: products.length, source: 'cache' });
-
-      return {
-        products,
-        total: products.length,
-        source: 'cache',
-        syncedAt: new Date().toISOString(),
-      };
-    }
-  }
-
   // Fetch from API
   const products = await getProductList(input);
-
-  // Cache products
-  for (const product of products) {
-    await cacheProduct({
-      marketplace: 'ozon',
-      productId: product.productId.toString(),
-      offerId: product.offerId,
-      name: product.name,
-      barcode: product.barcode,
-      rawData: product as unknown as Record<string, unknown>,
-    });
-  }
 
   await logRead('ozon_get_products', 'products', input, { count: products.length, source: 'api' });
 
@@ -505,18 +462,6 @@ export async function getProductInfoList(input: GetProductInfoInput): Promise<{
     colorImage: item.color_image,
     lastId: item.last_id,
   }));
-
-  // Cache products
-  for (const product of products) {
-    await cacheProduct({
-      marketplace: 'ozon',
-      productId: product.id.toString(),
-      offerId: product.offerId,
-      name: product.name,
-      barcode: product.barcode,
-      rawData: product as unknown as Record<string, unknown>,
-    });
-  }
 
   await logRead('ozon_get_product_info', 'products', input, { count: products.length });
 

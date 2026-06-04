@@ -9,12 +9,12 @@
 git clone <repo-url> my-store
 cd my-store
 
-# 2. Запустите установку
-chmod +x scripts/setup.sh
-./scripts/setup.sh
-
-# 3. Заполните API токены
+# 2. Скопируйте шаблон env и заполните токены
+cp .env.example .env
 nano .env
+
+# 3. Соберите MCP-серверы
+for s in wb ozon ym; do (cd "mcp/$s-mcp" && npm install && npm run build); done
 
 # 4. Запустите Claude Code
 claude
@@ -51,14 +51,14 @@ claude
 │   ├── skills/             # Доменные знания и legacy-scripts
 │   ├── commands/           # Slash-команды
 │   └── knowledge/          # База знаний (SSOT)
-├── mcp/                    # MCP Servers (интеграции)
-├── docs/                   # Документация
+├── mcp/                    # MCP Servers (wb / ozon / ym)
+├── docs/                   # Документация (+ api-reference)
 ├── config/                 # Конфигурационные файлы
-├── archive/                # Архив данных, отчетов и старых скриптов
+├── data/                   # Справочники (категории, комиссии), аудиты
 └── README.md
 ```
 
-> **Note:** Старые скрипты перемещены в `.claude/skills/legacy-scripts/`, а данные — в `archive/`.
+> **Note:** Legacy-скрипты лежат в `.claude/skills/legacy-scripts/`.
 
 ## Модель использования
 
@@ -99,15 +99,13 @@ claude
 ## Безопасность
 
 - API токены в `.env` (не версионируется)
-- Критичные операции требуют `confirm=true`
-- Все операции логируются в `logs/`
-- Hooks валидируют изменения цен
+- Критичные операции (изменение цен, остатков, ответы на отзывы) требуют `confirm=true`
+- Без `confirm=true` показывается preview изменений (БЫЛО → СТАЛО)
 
 ## Требования
 
 - Node.js 18+
 - Claude Code CLI
-- PostgreSQL (опционально)
 
 ## Лицензия
 

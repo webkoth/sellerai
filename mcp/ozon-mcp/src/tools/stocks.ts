@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createOzonHeaders, OZON_API_URL } from '../utils/auth.js';
-import { cacheProduct } from '../db/postgres.js';
 import { logRead, logWriteWithPreview, logWriteConfirmed, logError } from '../utils/logger.js';
 
 // Input schema for ozon_get_stocks
@@ -8,7 +7,7 @@ export const GetStocksInputSchema = z.object({
   offerIds: z.array(z.string()).optional().describe('Filter by seller offer_ids (SKUs)'),
   productIds: z.array(z.number()).optional().describe('Filter by Ozon product_ids'),
   visibility: z.enum(['ALL', 'VISIBLE', 'INVISIBLE', 'EMPTY_STOCK', 'NOT_MODERATED', 'MODERATED']).optional().default('ALL'),
-  limit: z.number().optional().default(100).describe('Maximum number of products to return'),
+  limit: z.number().int().positive('limit должен быть больше 0').optional().default(100).describe('Maximum number of products to return'),
 });
 
 export type GetStocksInput = z.infer<typeof GetStocksInputSchema>;
@@ -30,7 +29,7 @@ interface OzonStockData {
   productId: number;
   offerId: string;
   stocks: Array<{
-    type: 'fbo' | 'fbs';
+    type: string; // fbo | fbs | rfbs | ...
     present: number;
     reserved: number;
   }>;
@@ -77,7 +76,7 @@ export async function getStocks(input: GetStocksInput): Promise<{
   total: number;
 }> {
   const products: OzonStockData[] = [];
-  let lastId = '';
+  let cursor = '';
 
   while (products.length < input.limit) {
     const body: Record<string, unknown> = {
@@ -85,7 +84,7 @@ export async function getStocks(input: GetStocksInput): Promise<{
         visibility: input.visibility || 'ALL',
       },
       limit: Math.min(100, input.limit - products.length),
-      last_id: lastId || undefined,
+      cursor: cursor || undefined,
     };
 
     // Add offer_id filter if specified
@@ -98,49 +97,41 @@ export async function getStocks(input: GetStocksInput): Promise<{
       (body.filter as Record<string, unknown>).product_id = input.productIds;
     }
 
+    // Ozon v4: ответ — { items, total, cursor } (без обёртки result), пагинация через cursor
     const result = await fetchOzon<{
-      result: {
-        items: Array<{
-          product_id: number;
-          offer_id: string;
-          stocks: Array<{
-            type: 'fbo' | 'fbs';
-            present: number;
-            reserved: number;
-          }>;
+      items: Array<{
+        product_id: number;
+        offer_id: string;
+        stocks: Array<{
+          type: string; // fbo | fbs | rfbs
+          present: number;
+          reserved: number;
         }>;
-        total: number;
-        last_id: string;
-      };
+      }>;
+      total: number;
+      cursor: string;
     }>('/v4/product/info/stocks', body);
 
-    const items = result.result?.items || [];
+    const items = result.items || [];
     if (items.length === 0) break;
 
     for (const item of items) {
       const fboStock = item.stocks.find((s) => s.type === 'fbo');
       const fbsStock = item.stocks.find((s) => s.type === 'fbs');
+      const rfbsStock = item.stocks.find((s) => s.type === 'rfbs');
 
       products.push({
         productId: item.product_id,
         offerId: item.offer_id,
         stocks: item.stocks,
         totalFbo: fboStock?.present || 0,
-        totalFbs: fbsStock?.present || 0,
-      });
-
-      // Cache product with stock data
-      await cacheProduct({
-        marketplace: 'ozon',
-        productId: item.product_id.toString(),
-        offerId: item.offer_id,
-        stockFbo: fboStock?.present || 0,
-        stockFbs: fbsStock?.present || 0,
+        // FBS-остаток = склады продавца: fbs + rfbs (realFBS)
+        totalFbs: (fbsStock?.present || 0) + (rfbsStock?.present || 0),
       });
     }
 
-    lastId = result.result.last_id;
-    if (!lastId || items.length < 100) break;
+    cursor = result.cursor;
+    if (!cursor || items.length < 100) break;
   }
 
   await logRead('ozon_get_stocks', 'stocks', input, { count: products.length });
@@ -308,13 +299,6 @@ export async function updateStocks(
     for (const item of result.result || []) {
       if (item.updated) {
         updated++;
-        // Update cache
-        await cacheProduct({
-          marketplace: 'ozon',
-          productId: String(item.product_id),
-          offerId: item.offer_id,
-          stockFbs: stocks.find((s) => s.offerId === item.offer_id)?.stock || 0,
-        });
       } else {
         const errorMsg = item.errors?.map((e) => e.message).join(', ') || 'Unknown error';
         errors.push(`${item.offer_id}: ${errorMsg}`);

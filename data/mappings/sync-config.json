@@ -1,0 +1,21 @@
+{
+  "_meta": {
+    "description": "Конфиг /sync: рабочие склады площадок и параметры.",
+    "updated": "2026-06-04"
+  },
+  "ozon": {
+    "model": "FBS",
+    "fbs_warehouse_id": 1020005003459950,
+    "fbs_warehouse_name": "Краснодар",
+    "note": "Единственный рабочий FBS-склад. 1020002508545000 (rFBS, возвраты, отключён) и 1020005000589846 — НЕ использовать (status=disabled, отвергают остаток WAREHOUSE_WRONG_STATUS)."
+  },
+  "ym": {
+    "model": "FBS",
+    "campaign_id": 148697627,
+    "business_id": 191766894,
+    "warehouse_id": 1872191,
+    "warehouse_name": "Склад Краснодар",
+    "price_level": "business",
+    "note": "Кампания залочена на default price (LOCKED: Partner use only default price) -> цена ставится на бизнес-уровне /businesses/{id}/offer-prices/updates. Остаток: PUT /v2/campaigns/{id}/offers/stocks {skus:[{sku,warehouseId,items:[{count,type:FIT,updatedAt}]}]}. Скидка ЯМ должна быть 1-99% (иначе без discountBase)."
+  }
+}

@@ -4,7 +4,13 @@ import { logRead } from '../utils/logger.js';
 
 // Input schema for wb_get_products_in_stock
 export const GetProductsInStockInputSchema = z.object({
-  minQuantity: z.number().optional().default(1).describe('Минимальное количество на складе'),
+  minQuantity: z
+    .number()
+    .int('minQuantity должно быть целым числом')
+    .min(0, 'minQuantity не может быть отрицательным')
+    .optional()
+    .default(1)
+    .describe('Минимальное количество на складе'),
 });
 
 export type GetProductsInStockInput = z.infer<typeof GetProductsInStockInputSchema>;
@@ -134,8 +140,8 @@ async function getAllCards(): Promise<WBCardFull[]> {
 /**
  * Get prices for products
  */
-async function getPricesMap(): Promise<Map<number, { price: number; discount: number }>> {
-  const prices = new Map<number, { price: number; discount: number }>();
+async function getPricesMap(): Promise<Map<number, { price: number; discount: number; discountedPrice: number }>> {
+  const prices = new Map<number, { price: number; discount: number; discountedPrice: number }>();
   let offset = 0;
   const limit = 1000;
 
@@ -161,9 +167,12 @@ async function getPricesMap(): Promise<Map<number, { price: number; discount: nu
     for (const item of goods) {
       const size = item.sizes?.[0];
       if (size) {
+        const discount = item.discount || 0;
         prices.set(item.nmID, {
           price: size.price,
-          discount: item.discount || 0,
+          discount,
+          // WB отдаёт готовую цену со скидкой (discountedPrice); пересчёт — только fallback
+          discountedPrice: size.discountedPrice ?? Math.round(size.price * (1 - discount / 100)),
         });
       }
     }
@@ -287,7 +296,8 @@ export async function getProductsInStock(input: GetProductsInStockInput): Promis
         const priceData = prices.get(card.nmID);
         const price = priceData?.price || 0;
         const discount = priceData?.discount || 0;
-        const finalPrice = Math.round(price * (1 - discount / 100));
+        // WB отдаёт готовую цену со скидкой (discountedPrice); пересчёт — только fallback
+        const finalPrice = priceData?.discountedPrice ?? Math.round(price * (1 - discount / 100));
 
         productsInStock.push({
           nmId: card.nmID,
@@ -345,13 +355,13 @@ export function formatProductsInStockAsMarkdown(products: ProductInStock[]): str
   const lines = [
     `## 📦 Товары в наличии: ${products.length}`,
     '',
-    '| nmId | Артикул | Название | Цена | Скидка | Остаток |',
-    '|------|---------|----------|------|--------|---------|',
+    '| nmId | Артикул | Название | Цена | Скидка | Цена со скидкой | Остаток |',
+    '|------|---------|----------|------|--------|-----------------|---------|',
   ];
 
   for (const p of products.slice(0, 50)) {
     const name = (p.title || p.category || '').substring(0, 35);
-    lines.push(`| ${p.nmId} | ${p.vendorCode} | ${name} | ${p.price}₽ | ${p.discount}% | ${p.stock} шт |`);
+    lines.push(`| ${p.nmId} | ${p.vendorCode} | ${name} | ${p.price}₽ | ${p.discount}% | ${p.finalPrice}₽ | ${p.stock} шт |`);
   }
 
   if (products.length > 50) {

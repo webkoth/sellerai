@@ -6,7 +6,6 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 
-import { closePool } from './db/postgres.js';
 import {
   GetProductsInputSchema,
   GetProductInfoInputSchema,
@@ -114,16 +113,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: 'number',
             description: 'Максимальное количество товаров (по умолчанию 100)',
             default: 100,
-          },
-          useCache: {
-            type: 'boolean',
-            description: 'Использовать кэш если доступен',
-            default: true,
-          },
-          cacheTTL: {
-            type: 'number',
-            description: 'Время жизни кэша в минутах',
-            default: 15,
           },
         },
       },
@@ -918,15 +907,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 // Handle shutdown
-process.on('SIGINT', async () => {
-  await closePool();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  await closePool();
-  process.exit(0);
-});
+process.on('SIGINT', () => process.exit(0));
+process.on('SIGTERM', () => process.exit(0));
 
 // Start server
 async function main() {

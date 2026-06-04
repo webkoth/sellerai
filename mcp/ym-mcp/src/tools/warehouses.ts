@@ -114,11 +114,11 @@ export async function getQualityRating(input: GetQualityRatingInput): Promise<{
 }> {
   const businessId = input.businessId || parseInt(getBusinessId());
 
-  const body: Record<string, unknown> = {};
-
-  if (input.campaignIds?.length) {
-    body.campaignIds = input.campaignIds;
-  }
+  // API требует непустой campaignIds (1..50) — по умолчанию берём магазин из env
+  const campaignIds = input.campaignIds?.length
+    ? input.campaignIds
+    : [parseInt(getCampaignId())];
+  const body: Record<string, unknown> = { campaignIds };
 
   const response = await apiRequest<QualityResponse>(
     `/v2/businesses/${businessId}/ratings/quality`,

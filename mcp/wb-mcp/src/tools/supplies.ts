@@ -125,10 +125,8 @@ export async function getSupplies(input: GetSuppliesInput): Promise<{
 }> {
   const { limit, next } = input;
 
-  let url = `${WB_API_URLS.marketplace}/api/v3/supplies?limit=${limit}`;
-  if (next) {
-    url += `&next=${next}`;
-  }
+  // WB требует обязательный параметр next (0 — первая страница)
+  const url = `${WB_API_URLS.marketplace}/api/v3/supplies?limit=${limit}&next=${next ?? 0}`;
 
   const result = await fetchWB<{
     supplies: Array<{

@@ -67,18 +67,6 @@ export function getOzonCredentials(): OzonCredentials {
 }
 
 /**
- * Get database connection string
- */
-export function getDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL;
-  if (!url) {
-    // Default local PostgreSQL
-    return 'postgresql://localhost:5432/sellerai';
-  }
-  return url;
-}
-
-/**
  * Ozon API base URL
  * All Ozon Seller API endpoints use the same base URL
  */

@@ -1,5 +1,3 @@
-import { logOperation } from '../db/postgres.js';
-
 export type Marketplace = 'wb' | 'ozon' | 'ym';
 
 export interface LogParams {
@@ -15,95 +13,61 @@ export interface LogParams {
 }
 
 /**
- * Log a tool operation
+ * Log a tool operation.
+ *
+ * Ранее писало в Postgres (operations_log). БД выведена из проекта,
+ * поэтому read-логирование — no-op, а ошибки уходят в stderr (виден в логах MCP).
+ * Сигнатуры функций сохранены, чтобы не трогать места вызова в инструментах.
  */
-export async function log(params: LogParams): Promise<void> {
-  try {
-    await logOperation(params);
-  } catch (error) {
-    console.error('Failed to log operation:', error);
-  }
+export async function log(_params: LogParams): Promise<void> {
+  // no-op
 }
 
 /**
  * Log a successful read operation
  */
 export async function logRead(
-  toolName: string,
-  domain: string,
-  params?: Record<string, unknown>,
-  result?: Record<string, unknown>
+  _toolName: string,
+  _domain: string,
+  _params?: Record<string, unknown>,
+  _result?: Record<string, unknown>
 ): Promise<void> {
-  await log({
-    marketplace: 'wb',
-    domain,
-    action: 'read',
-    toolName,
-    params,
-    result,
-    success: true,
-  });
+  // no-op
 }
 
 /**
  * Log a write operation with preview
  */
 export async function logWriteWithPreview(
-  toolName: string,
-  domain: string,
-  params: Record<string, unknown>,
-  preview: Record<string, unknown>
+  _toolName: string,
+  _domain: string,
+  _params: Record<string, unknown>,
+  _preview: Record<string, unknown>
 ): Promise<void> {
-  await log({
-    marketplace: 'wb',
-    domain,
-    action: 'preview',
-    toolName,
-    params,
-    success: true,
-    previewShown: preview,
-  });
+  // no-op
 }
 
 /**
  * Log a confirmed write operation
  */
 export async function logWriteConfirmed(
-  toolName: string,
-  domain: string,
-  params: Record<string, unknown>,
-  result: Record<string, unknown>,
-  preview: Record<string, unknown>
+  _toolName: string,
+  _domain: string,
+  _params: Record<string, unknown>,
+  _result: Record<string, unknown>,
+  _preview: Record<string, unknown>
 ): Promise<void> {
-  await log({
-    marketplace: 'wb',
-    domain,
-    action: 'write',
-    toolName,
-    params,
-    result,
-    success: true,
-    confirmedBy: 'user',
-    previewShown: preview,
-  });
+  // no-op
 }
 
 /**
- * Log an error
+ * Log an error (to stderr — safe for stdio MCP transport)
  */
 export async function logError(
   toolName: string,
   domain: string,
-  params: Record<string, unknown>,
+  _params: Record<string, unknown>,
   error: Error
 ): Promise<void> {
-  await log({
-    marketplace: 'wb',
-    domain,
-    action: 'error',
-    toolName,
-    params,
-    result: { error: error.message },
-    success: false,
-  });
+  console.error(`[${domain}] ${toolName} failed: ${error.message}`);
 }

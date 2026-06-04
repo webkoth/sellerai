@@ -1,0 +1,216 @@
+{
+  "_meta": {
+    "source": "ozon /v1/description-category/attribute",
+    "generated": "2026-06-04"
+  },
+  "types": {
+    "Подвеска": {
+      "subj": "Подвески бижутерные + Обереги",
+      "ozon_category_id": 17027899,
+      "ozon_type_id": 87458901,
+      "total_attrs": 43,
+      "required_attrs": [
+        {
+          "id": 9048,
+          "name": "Название модели (для объединения в одну карточку)",
+          "dictionary_id": 0,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 8229,
+          "name": "Тип",
+          "dictionary_id": 1960,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 85,
+          "name": "Бренд",
+          "dictionary_id": 28732849,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 22232,
+          "name": "ТН ВЭД коды ЕАЭС",
+          "dictionary_id": 124412395,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9163,
+          "name": "Пол",
+          "dictionary_id": 320,
+          "type": "String",
+          "is_collection": true
+        }
+      ]
+    },
+    "Камень бижутерный": {
+      "subj": "Природные материалы",
+      "ozon_category_id": 17027899,
+      "ozon_type_id": 971038154,
+      "total_attrs": 35,
+      "required_attrs": [
+        {
+          "id": 8229,
+          "name": "Тип",
+          "dictionary_id": 1960,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 22232,
+          "name": "ТН ВЭД коды ЕАЭС",
+          "dictionary_id": 124412395,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 85,
+          "name": "Бренд",
+          "dictionary_id": 28732849,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9048,
+          "name": "Название модели (для объединения в одну карточку)",
+          "dictionary_id": 0,
+          "type": "String",
+          "is_collection": false
+        }
+      ]
+    },
+    "Браслет": {
+      "subj": "Браслеты",
+      "ozon_category_id": 17027899,
+      "ozon_type_id": 87458883,
+      "total_attrs": 45,
+      "required_attrs": [
+        {
+          "id": 9048,
+          "name": "Название модели (для объединения в одну карточку)",
+          "dictionary_id": 0,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 85,
+          "name": "Бренд",
+          "dictionary_id": 28732849,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 22232,
+          "name": "ТН ВЭД коды ЕАЭС",
+          "dictionary_id": 124412395,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 8229,
+          "name": "Тип",
+          "dictionary_id": 1960,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9163,
+          "name": "Пол",
+          "dictionary_id": 320,
+          "type": "String",
+          "is_collection": true
+        }
+      ]
+    },
+    "Кольцо": {
+      "subj": "Кольца",
+      "ozon_category_id": 17027899,
+      "ozon_type_id": 87458895,
+      "total_attrs": 43,
+      "required_attrs": [
+        {
+          "id": 9048,
+          "name": "Название модели (для объединения в одну карточку)",
+          "dictionary_id": 0,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 8229,
+          "name": "Тип",
+          "dictionary_id": 1960,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9163,
+          "name": "Пол",
+          "dictionary_id": 320,
+          "type": "String",
+          "is_collection": true
+        },
+        {
+          "id": 22232,
+          "name": "ТН ВЭД коды ЕАЭС",
+          "dictionary_id": 124412395,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 85,
+          "name": "Бренд",
+          "dictionary_id": 28732849,
+          "type": "String",
+          "is_collection": false
+        }
+      ]
+    },
+    "Часы наручные": {
+      "subj": "Часы наручные",
+      "ozon_category_id": 17027904,
+      "ozon_type_id": 91758,
+      "total_attrs": 47,
+      "required_attrs": [
+        {
+          "id": 22232,
+          "name": "ТН ВЭД коды ЕАЭС",
+          "dictionary_id": 124412395,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9048,
+          "name": "Название модели (для объединения в одну карточку)",
+          "dictionary_id": 0,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 8229,
+          "name": "Тип",
+          "dictionary_id": 1960,
+          "type": "String",
+          "is_collection": false
+        },
+        {
+          "id": 9163,
+          "name": "Пол",
+          "dictionary_id": 320,
+          "type": "String",
+          "is_collection": true
+        },
+        {
+          "id": 85,
+          "name": "Бренд",
+          "dictionary_id": 28732849,
+          "type": "String",
+          "is_collection": false
+        }
+      ]
+    }
+  }
+}

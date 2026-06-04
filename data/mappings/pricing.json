@@ -1,0 +1,45 @@
+{
+  "_meta": {
+    "description": "SSOT: модель ценообразования для /sync (WB мастер -> Ozon/ЯМ). Режим A — полное сохранение маржи по комиссиям.",
+    "master": "wildberries",
+    "mode": "preserve_margin",
+    "updated": "2026-06-03",
+    "formula": {
+      "k": "(1 - take_wb) / (1 - take_platform)",
+      "final_price": "round_nice( wb_finalPrice * k )",
+      "old_price": "round_nice( wb_basePrice * k )  // зачёркнутая, только если wb_basePrice > wb_finalPrice",
+      "note": "wb_finalPrice = discountedPrice (эталон), wb_basePrice = price до скидки. k считается из ставок ниже."
+    },
+    "assumptions": [
+      "Сравнение комиссия-к-комиссии (WB kgvpMarketplace FBS vs Ozon sales_percent_fbs vs ЯМ FEE+эквайринг/логистика).",
+      "Для уникального высокочекового товара фикс-сборы (114/500 руб) малы относительно %, поэтому k — константа на категорию.",
+      "Ставки: data/commissions/ (snapshot 18.02.2026) + Ozon sales_percent подтверждён на живых данных. При реконнекте MCP — пересчитать на свежих."
+    ]
+  },
+
+  "commission_rates": {
+    "wb":   { "unit": "fraction", "source": "wb_commissions.kgvpMarketplace (FBS)" },
+    "ozon": { "unit": "fraction", "source": "ozon_get_prices.commissions.sales_percent_fbs (live)", "model": "FBS" },
+    "ym":   { "unit": "fraction", "source": "ym_commissions.tariffs_by_category FEE + ~0.07 (payment+delivery+middle_mile)" }
+  },
+
+  "by_subject": {
+    "Подвески бижутерные": { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.535, "k_ozon": 1.447, "k_ym": 1.462 },
+    "Браслеты":            { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.525, "k_ozon": 1.447, "k_ym": 1.432 },
+    "Кольца":              { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.50,  "k_ozon": 1.447, "k_ym": 1.360 },
+    "Шармы-подвески":      { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.52,  "k_ozon": 1.447, "k_ym": 1.417, "estimate": "ym FEE шармов оценочно" },
+    "Серьги":              { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.52,  "k_ozon": 1.447, "k_ym": 1.417, "estimate": "ym FEE серёг оценочно" },
+    "Обереги":             { "take_wb": 0.32, "take_ozon": 0.53, "take_ym": 0.54,  "k_ozon": 1.447, "k_ym": 1.478, "note": "ЯМ: Амулеты и обереги; ставка ~Подвески декоративные 47%+7" },
+    "Природные материалы для творчества": { "take_wb": 0.33, "take_ozon": 0.53, "take_ym": 0.47, "k_ozon": 1.426, "k_ym": 1.264, "note": "ЯМ: Минералы интерьерные FEE 40%+7" },
+    "Часы наручные":       { "take_wb": null, "take_ozon": null, "take_ym": null, "k_ozon": null, "k_ym": null, "todo": "Комиссии категории Часы (Ozon 91758 / ЯМ 91259) — не бижутерия, уточнить при реконнекте MCP." }
+  },
+
+  "guardrails": {
+    "rounding": { "rule": "round_up_to", "step": 10, "comment": "округление вверх до 10 руб ('красивая' цена для высокого чека)" },
+    "ozon_min_price_factor": 0.95,
+    "old_price_only_if_discounted": true,
+    "no_negative_discount": true,
+    "max_markup_cap_pct": null,
+    "comment_max_cap": "Режим A: потолок наценки не задан (полное сохранение маржи). Можно включить позже для конкурентоспособности."
+  }
+}

@@ -1,16 +1,19 @@
 import { z } from 'zod';
 import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
-import { cacheProduct, getAllCachedProducts } from '../db/postgres.js';
 import { logRead } from '../utils/logger.js';
 import { horizontalBars, formatNumber, formatRub, BarItem } from '../utils/visualize.js';
 
 // Input schema for wb_get_inventory
 export const GetInventoryInputSchema = z.object({
-  minQuantity: z.number().optional().default(1).describe('Minimum stock quantity to include'),
+  minQuantity: z
+    .number()
+    .int('minQuantity должно быть целым числом')
+    .min(0, 'minQuantity не может быть отрицательным')
+    .optional()
+    .default(1)
+    .describe('Minimum stock quantity to include'),
   mode: z.enum(['all', 'fbo', 'fbs']).optional().default('all').describe('Mode: all (cards+prices), fbo (WB warehouses), fbs (seller warehouses)'),
   warehouseId: z.string().optional().describe('Warehouse ID for FBS mode'),
-  useCache: z.boolean().optional().default(true).describe('Use cached data if available'),
-  cacheTTL: z.number().optional().default(15).describe('Cache TTL in minutes'),
 });
 
 export type GetInventoryInput = z.infer<typeof GetInventoryInputSchema>;
@@ -25,6 +28,7 @@ interface WBProduct {
   title?: string;
   price?: number;
   discount?: number;
+  finalPrice?: number;
   promoCode?: number;
   stockFbo?: number;
   stockFbs?: number;
@@ -121,8 +125,8 @@ async function getCards(limit = 100): Promise<WBProduct[]> {
 /**
  * Get prices for products
  */
-async function getPrices(): Promise<Map<number, { price: number; discount: number; promoCode: number }>> {
-  const prices = new Map<number, { price: number; discount: number; promoCode: number }>();
+async function getPrices(): Promise<Map<number, { price: number; discount: number; discountedPrice: number; promoCode: number }>> {
+  const prices = new Map<number, { price: number; discount: number; discountedPrice: number; promoCode: number }>();
   let offset = 0;
   const limit = 1000;
 
@@ -150,9 +154,12 @@ async function getPrices(): Promise<Map<number, { price: number; discount: numbe
     for (const item of goods) {
       const size = item.sizes?.[0];
       if (size) {
+        const discount = item.discount || 0;
         prices.set(item.nmID, {
           price: size.price,
-          discount: item.discount || 0,
+          discount,
+          // WB отдаёт готовую цену со скидкой (discountedPrice); пересчёт — только fallback
+          discountedPrice: size.discountedPrice ?? Math.round(size.price * (1 - discount / 100)),
           promoCode: item.promoCode || 0,
         });
       }
@@ -282,42 +289,10 @@ async function getStocksFBS(barcodes: string[]): Promise<Map<string, number>> {
 export async function getInventory(input: GetInventoryInput): Promise<{
   products: WBProduct[];
   total: number;
-  source: 'cache' | 'api';
+  source: 'api';
   syncedAt: string;
 }> {
-  const { minQuantity, mode, useCache, cacheTTL } = input;
-
-  // Try cache first
-  if (useCache) {
-    const cached = await getAllCachedProducts('wb', cacheTTL);
-    if (cached.length > 0) {
-      const products = cached
-        .filter((p) => {
-          const stock = ((p.stock_fbo as number) || 0) + ((p.stock_fbs as number) || 0);
-          return stock >= minQuantity;
-        })
-        .map((p) => ({
-          nmId: parseInt(p.nm_id as string),
-          vendorCode: (p.sku as string) || '',
-          subjectName: p.category as string,
-          brand: p.brand as string,
-          title: p.name as string,
-          price: p.price as number,
-          discount: p.discount_percent as number,
-          stockFbo: p.stock_fbo as number,
-          stockFbs: p.stock_fbs as number,
-        }));
-
-      await logRead('wb_get_inventory', 'inventory', input, { count: products.length, source: 'cache' });
-
-      return {
-        products,
-        total: products.length,
-        source: 'cache',
-        syncedAt: new Date().toISOString(),
-      };
-    }
-  }
+  const { minQuantity, mode } = input;
 
   // Fetch from API
   const cards = await getCards();
@@ -361,6 +336,7 @@ export async function getInventory(input: GetInventoryInput): Promise<{
       ...card,
       price: priceData?.price,
       discount: priceData?.discount,
+      finalPrice: priceData?.discountedPrice,
       promoCode: priceData?.promoCode,
       stockFbo: stockFboData?.total || 0,
       stockFbs: stockFbsData,
@@ -379,21 +355,6 @@ export async function getInventory(input: GetInventoryInput): Promise<{
 
     if (totalStock >= minQuantity) {
       products.push(product);
-
-      // Cache product
-      await cacheProduct({
-        marketplace: 'wb',
-        nmId: card.nmId.toString(),
-        sku: card.vendorCode,
-        name: card.title || card.subjectName,
-        brand: card.brand,
-        category: card.subjectName,
-        price: priceData?.price,
-        discountPercent: priceData?.discount,
-        stockFbo: stockFboData?.total || 0,
-        stockFbs: stockFbsData,
-        rawData: product as unknown as Record<string, unknown>,
-      });
     }
   }
 
@@ -458,16 +419,17 @@ export function formatInventoryAsMarkdown(products: WBProduct[]): string {
 
   // Product table
   lines.push('## Детализация\n');
-  lines.push('| nmId | Артикул | Название | Цена | Скидка | FBO | FBS |');
-  lines.push('|------|---------|----------|------|--------|-----|-----|');
+  lines.push('| nmId | Артикул | Название | Цена | Скидка | Цена со скидкой | FBO | FBS |');
+  lines.push('|------|---------|----------|------|--------|-----------------|-----|-----|');
 
   for (const p of products.slice(0, 50)) {
     const name = (p.title || p.subjectName || '').substring(0, 25);
     const price = p.price ? formatRub(p.price) : '-';
     const discount = p.discount ? `${p.discount}%` : '-';
+    const finalPrice = p.finalPrice ? formatRub(p.finalPrice) : '-';
     const fbo = p.stockFbo || 0;
     const fbs = p.stockFbs || 0;
-    lines.push(`| ${p.nmId} | ${p.vendorCode} | ${name} | ${price} | ${discount} | ${fbo} | ${fbs} |`);
+    lines.push(`| ${p.nmId} | ${p.vendorCode} | ${name} | ${price} | ${discount} | ${finalPrice} | ${fbo} | ${fbs} |`);
   }
 
   if (products.length > 50) {

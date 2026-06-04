@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createOzonHeaders, OZON_API_URL } from '../utils/auth.js';
-import { logPriceChange, cacheProduct, getCachedProduct } from '../db/postgres.js';
 import { logRead, logWriteWithPreview, logWriteConfirmed, logError } from '../utils/logger.js';
 
 // Input schema for ozon_get_prices
@@ -8,7 +7,7 @@ export const GetPricesInputSchema = z.object({
   offerIds: z.array(z.string()).optional().describe('Filter by seller offer_ids (SKUs)'),
   productIds: z.array(z.number()).optional().describe('Filter by Ozon product_ids'),
   visibility: z.enum(['ALL', 'VISIBLE', 'INVISIBLE', 'EMPTY_STOCK', 'NOT_MODERATED', 'MODERATED']).optional().default('ALL'),
-  limit: z.number().optional().default(100).describe('Maximum number of products to return'),
+  limit: z.number().int().positive('limit должен быть больше 0').optional().default(100).describe('Maximum number of products to return'),
 });
 
 export type GetPricesInput = z.infer<typeof GetPricesInputSchema>;
@@ -25,20 +24,19 @@ export const UpdatePriceInputSchema = z.object({
 
 export type UpdatePriceInput = z.infer<typeof UpdatePriceInputSchema>;
 
-// Price data interface
+// Price data interface (Ozon v5 /product/info/prices)
 interface OzonPriceData {
   productId: number;
   offerId: string;
-  price: string;
-  oldPrice: string;
-  premiumPrice: string;
+  price: string;                 // текущая цена
+  oldPrice: string;              // зачёркнутая (старая) цена
+  marketingSellerPrice: string;  // цена с учётом акций продавца = цена со скидкой
+  minPrice: string;
   vat: string;
-  minOzonPrice?: string;
-  marketingPrice?: string;
-  marketingSellerPrice?: string;
+  currency: string;
   commissions?: {
-    salesPercent: number;
-    fboFulfillmentAmount: number;
+    salesPercentFbo: number;
+    salesPercentFbs: number;
   };
 }
 
@@ -70,7 +68,7 @@ export async function getPrices(input: GetPricesInput): Promise<{
   total: number;
 }> {
   const products: OzonPriceData[] = [];
-  let lastId = '';
+  let cursor = '';
 
   while (products.length < input.limit) {
     const body: Record<string, unknown> = {
@@ -78,7 +76,7 @@ export async function getPrices(input: GetPricesInput): Promise<{
         visibility: input.visibility || 'ALL',
       },
       limit: Math.min(100, input.limit - products.length),
-      last_id: lastId || undefined,
+      cursor: cursor || undefined,
     };
 
     // Add offer_id filter if specified
@@ -91,53 +89,50 @@ export async function getPrices(input: GetPricesInput): Promise<{
       (body.filter as Record<string, unknown>).product_id = input.productIds;
     }
 
+    // Ozon v5: ответ — { items, total, cursor } (без обёртки result); цены приходят числами
     const result = await fetchOzon<{
-      result: {
-        items: Array<{
-          product_id: number;
-          offer_id: string;
-          price: {
-            price: string;
-            old_price: string;
-            premium_price: string;
-            vat: string;
-            min_ozon_price: string;
-            marketing_price: string;
-            marketing_seller_price: string;
-          };
-          commissions: {
-            sales_percent: number;
-            fbo_fulfillment_amount: number;
-          };
-        }>;
-        total: number;
-        last_id: string;
-      };
+      items: Array<{
+        product_id: number;
+        offer_id: string;
+        price: {
+          price: number;
+          old_price: number;
+          marketing_seller_price: number;
+          min_price: number;
+          vat: number;
+          currency_code: string;
+        };
+        commissions: {
+          sales_percent_fbo: number;
+          sales_percent_fbs: number;
+        };
+      }>;
+      total: number;
+      cursor: string;
     }>('/v5/product/info/prices', body);
 
-    const items = result.result?.items || [];
+    const items = result.items || [];
     if (items.length === 0) break;
 
     for (const item of items) {
       products.push({
         productId: item.product_id,
         offerId: item.offer_id,
-        price: item.price.price,
-        oldPrice: item.price.old_price,
-        premiumPrice: item.price.premium_price,
-        vat: item.price.vat,
-        minOzonPrice: item.price.min_ozon_price,
-        marketingPrice: item.price.marketing_price,
-        marketingSellerPrice: item.price.marketing_seller_price,
+        price: String(item.price?.price ?? ''),
+        oldPrice: String(item.price?.old_price ?? ''),
+        marketingSellerPrice: String(item.price?.marketing_seller_price ?? ''),
+        minPrice: String(item.price?.min_price ?? ''),
+        vat: String(item.price?.vat ?? ''),
+        currency: item.price?.currency_code || 'RUB',
         commissions: {
-          salesPercent: item.commissions.sales_percent,
-          fboFulfillmentAmount: item.commissions.fbo_fulfillment_amount,
+          salesPercentFbo: item.commissions?.sales_percent_fbo ?? 0,
+          salesPercentFbs: item.commissions?.sales_percent_fbs ?? 0,
         },
       });
     }
 
-    lastId = result.result.last_id;
-    if (!lastId || items.length < 100) break;
+    cursor = result.cursor;
+    if (!cursor || items.length < 100) break;
   }
 
   await logRead('ozon_get_prices', 'prices', input, { count: products.length });
@@ -157,14 +152,14 @@ export function formatPricesAsMarkdown(products: OzonPriceData[]): string {
   }
 
   const lines = [
-    '| Product ID | Артикул | Цена | Старая цена | Premium | Комиссия |',
-    '|------------|---------|------|-------------|---------|----------|',
+    '| Product ID | Артикул | Цена | Старая цена | Цена со скидкой | Комиссия FBS |',
+    '|------------|---------|------|-------------|-----------------|--------------|',
   ];
 
   for (const p of products.slice(0, 50)) {
-    const commission = p.commissions ? `${(p.commissions.salesPercent * 100).toFixed(1)}%` : '-';
+    const commission = p.commissions ? `${p.commissions.salesPercentFbs}%` : '-';
     lines.push(
-      `| ${p.productId} | ${p.offerId} | ${p.price}₽ | ${p.oldPrice || '-'}₽ | ${p.premiumPrice || '-'}₽ | ${commission} |`
+      `| ${p.productId} | ${p.offerId} | ${p.price}₽ | ${p.oldPrice || '-'}₽ | ${p.marketingSellerPrice || '-'}₽ | ${commission} |`
     );
   }
 
@@ -221,19 +216,7 @@ function confirmed<T>(result: T): WriteOperationResult<T> {
 async function getCurrentPrice(offerId: string): Promise<{
   price: string;
   oldPrice: string;
-  productName?: string;
 } | null> {
-  // Try cache first
-  const cached = await getCachedProduct('ozon', offerId, 60);
-  if (cached && cached.price) {
-    return {
-      price: String(cached.price),
-      oldPrice: String(cached.price_discount || '0'),
-      productName: cached.name as string,
-    };
-  }
-
-  // Fetch from API
   const result = await getPrices({ offerIds: [offerId], limit: 1, visibility: 'ALL' });
   if (result.products.length > 0) {
     const product = result.products[0];
@@ -279,7 +262,6 @@ export async function updatePrice(
   if (!confirm) {
     const preview: PriceChangePreview = {
       offerId,
-      productName: current.productName,
       currentPrice: current.price,
       newPrice,
       currentOldPrice: current.oldPrice,
@@ -321,28 +303,8 @@ export async function updatePrice(
       throw new Error(`Failed to update price: ${errors}`);
     }
 
-    // Log successful change
-    await logPriceChange({
-      marketplace: 'ozon',
-      productId: offerId,
-      priceOld: parseFloat(current.price),
-      priceNew: parseFloat(newPrice),
-      changedBy: 'mcp',
-      reason: 'Manual price update via ozon_update_price',
-    });
-
-    // Update cache
-    await cacheProduct({
-      marketplace: 'ozon',
-      productId: String(updateResult.product_id),
-      offerId,
-      price: parseFloat(newPrice),
-      priceDiscount: newOldPrice ? parseFloat(newOldPrice) : undefined,
-    });
-
     const preview: PriceChangePreview = {
       offerId,
-      productName: current.productName,
       currentPrice: current.price,
       newPrice,
       currentOldPrice: current.oldPrice,

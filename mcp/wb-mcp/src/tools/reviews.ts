@@ -79,47 +79,50 @@ export async function getReviews(input: GetReviewsInput): Promise<{
 }> {
   const { nmId, isAnswered, take, skip, order } = input;
 
-  // Build query params
-  const params = new URLSearchParams({
-    take: take.toString(),
-    skip: skip.toString(),
-    order: order,
-  });
+  // WB feedbacks требует обязательный isAnswered. Если фильтр не задан —
+  // запрашиваем оба набора (с ответом и без) и объединяем.
+  type RawFeedback = {
+    id: string;
+    nmId: number;
+    productDetails?: { productName?: string };
+    userName: string;
+    text: string;
+    productValuation: number;
+    createdDate: string;
+    answer?: { text: string; createdDate: string };
+    photoLinks?: Array<{ fullSize: string }>;
+    pros?: string;
+    cons?: string;
+  };
 
-  if (nmId !== undefined) {
-    params.set('nmId', nmId.toString());
+  const flags = isAnswered === undefined ? [false, true] : [isAnswered];
+
+  let feedbacks: RawFeedback[] = [];
+  for (const flag of flags) {
+    const params = new URLSearchParams({
+      take: take.toString(),
+      skip: skip.toString(),
+      order,
+      isAnswered: flag.toString(),
+    });
+    if (nmId !== undefined) {
+      params.set('nmId', nmId.toString());
+    }
+
+    const url = `${WB_API_URLS.feedbacks}/api/v1/feedbacks?${params}`;
+    const result = await fetchWB<{ data?: { feedbacks?: RawFeedback[] } }>(url);
+    feedbacks = feedbacks.concat(result.data?.feedbacks || []);
   }
 
-  if (isAnswered !== undefined) {
-    params.set('isAnswered', isAnswered.toString());
+  // При объединённом запросе сортируем по дате и обрезаем до take
+  if (flags.length > 1) {
+    feedbacks.sort((a, b) =>
+      order === 'dateAsc'
+        ? new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
+        : new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime()
+    );
+    feedbacks = feedbacks.slice(0, take);
   }
-
-  const url = `${WB_API_URLS.feedbacks}/api/v1/feedbacks?${params}`;
-
-  const result = await fetchWB<{
-    data?: {
-      feedbacks?: Array<{
-        id: string;
-        nmId: number;
-        productDetails?: { productName?: string };
-        userName: string;
-        text: string;
-        productValuation: number;
-        createdDate: string;
-        answer?: {
-          text: string;
-          createdDate: string;
-        };
-        photoLinks?: Array<{ fullSize: string }>;
-        pros?: string;
-        cons?: string;
-      }>;
-      countUnanswered?: number;
-      countArchive?: number;
-    };
-  }>(url);
-
-  const feedbacks = result.data?.feedbacks || [];
 
   const reviews: ReviewData[] = feedbacks.map((f) => ({
     id: f.id,

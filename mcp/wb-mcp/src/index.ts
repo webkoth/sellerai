@@ -6,7 +6,6 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 
-import { closePool } from './db/postgres.js';
 import {
   GetInventoryInputSchema,
   getInventory,
@@ -75,12 +74,6 @@ import {
   formatSalesFunnelAsMarkdown,
   formatSellerInfoAsMarkdown,
 } from './tools/analytics.js';
-import {
-  DBQueryInputSchema,
-  executeQuery,
-  formatQueryResultAsMarkdown,
-  getAvailableTables,
-} from './tools/db.js';
 import {
   GetProductsInStockInputSchema,
   getProductsInStock,
@@ -164,16 +157,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             enum: ['all', 'fbo', 'fbs'],
             description: 'Режим: all (все товары), fbo (склады WB), fbs (склады продавца)',
             default: 'all',
-          },
-          useCache: {
-            type: 'boolean',
-            description: 'Использовать кэш если доступен',
-            default: true,
-          },
-          cacheTTL: {
-            type: 'number',
-            description: 'Время жизни кэша в минутах',
-            default: 15,
           },
         },
       },
@@ -631,31 +614,6 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       inputSchema: {
         type: 'object',
         properties: {},
-      },
-    },
-    {
-      name: 'db_query',
-      description:
-        'Выполнить SQL-запрос к локальной базе данных (только SELECT). ' +
-        'Доступны таблицы: products_cache, price_history, orders, reviews, campaigns, operations_log и views.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          sql: {
-            type: 'string',
-            description: 'SQL-запрос (только SELECT)',
-          },
-          params: {
-            type: 'array',
-            description: 'Параметры для prepared statement',
-          },
-          limit: {
-            type: 'number',
-            description: 'Максимальное количество строк',
-            default: 100,
-          },
-        },
-        required: ['sql'],
       },
     },
     {
@@ -1265,40 +1223,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case 'db_query': {
-        const input = DBQueryInputSchema.parse(args || {});
-
-        // Special case: show available tables
-        if (input.sql.toLowerCase().includes('show tables') || input.sql.toLowerCase().includes('help')) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: getAvailableTables(),
-              },
-            ],
-          };
-        }
-
-        const result = await executeQuery(input);
-        const markdown = formatQueryResultAsMarkdown(result.rows, result.columns, result.truncated);
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: markdown,
-            },
-          ],
-          structuredContent: {
-            rowCount: result.rowCount,
-            columns: result.columns,
-            truncated: result.truncated,
-            rows: result.rows.slice(0, 50),
-          },
-        };
-      }
-
       case 'wb_get_products_in_stock': {
         const input = GetProductsInStockInputSchema.parse(args || {});
         const result = await getProductsInStock(input);
@@ -1570,15 +1494,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 // Handle shutdown
-process.on('SIGINT', async () => {
-  await closePool();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  await closePool();
-  process.exit(0);
-});
+process.on('SIGINT', () => process.exit(0));
+process.on('SIGTERM', () => process.exit(0));
 
 // Start server
 async function main() {

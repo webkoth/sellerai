@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # SellerAI — Marketplace Workspace
 
-Рабочее пространство для управления продажами на маркетплейсах Wildberries, Ozon, Яндекс.Маркет и Авито.
+Рабочее пространство для управления продажами на маркетплейсах Wildberries, Ozon и Яндекс.Маркет.
 
 ## Команды разработки
 
@@ -25,50 +25,26 @@ cd mcp/ozon-mcp && npm run dev
 # Яндекс.Маркет MCP
 cd mcp/ym-mcp && npm run build
 cd mcp/ym-mcp && npm run dev
-
-# Авито MCP
-cd mcp/avito-mcp && npm run build
-cd mcp/avito-mcp && npm run dev
 ```
 
 **После изменений в MCP серверах:** пересобрать (`npm run build`) и перезапустить Claude Code.
-
-### Hooks (TypeScript)
-
-```bash
-# Hooks выполняются автоматически, но для отладки:
-npx ts-node scripts/hooks/check-api-tokens.ts    # Проверка токенов
-npx ts-node scripts/hooks/validate-price-change.ts  # Валидация цен
-npx ts-node scripts/hooks/log-operation.ts       # Логирование
-```
-
-### Парсер курсов (Python)
-
-```bash
-python3 scripts/parse_courses.py --file "courses/[курс]/[файл].pdf"
-```
 
 ## Архитектура
 
 ```
 .claude/
-├── skills/           # Доменные знания (17 skills) — активируются по контексту
-├── commands/         # Slash-команды (10 commands)
-├── agents/           # Специализированные агенты с prompt-based hooks
-├── hooks.json        # Конфигурация hooks (PreToolUse, PostToolUse, SessionStart)
+├── skills/           # Доменные знания (24 skills) — активируются по контексту
+├── commands/         # Slash-команды (19 commands)
+├── agents/           # Специализированные агенты (L1/L2)
+├── knowledge/        # Формулы и бенчмарки WB
 └── settings.json     # Настройки (language: russian)
 
 mcp/
 ├── wb-mcp/           # MCP сервер Wildberries
 ├── ozon-mcp/         # MCP сервер Ozon
-├── ym-mcp/           # MCP сервер Яндекс.Маркет
-└── avito-mcp/        # MCP сервер Авито
+└── ym-mcp/           # MCP сервер Яндекс.Маркет
 
-scripts/hooks/        # TypeScript hooks для валидации и логирования
-├── types.ts          # Типы для hooks input/output
-├── validate-price-change.ts  # PreToolUse: валидация изменения цен
-├── log-operation.ts  # PostToolUse: логирование в logs/operations.log
-└── check-api-tokens.ts       # SessionStart: проверка API токенов
+.mcp.json             # Конфиг MCP-серверов (wb / ozon / ym / firecrawl)
 ```
 
 ## Агенты — иерархия L1/L2
@@ -103,18 +79,6 @@ L2 ── ads-optimizer       — реклама, ROI, ДРР
 | `/audit [target] [period=30d]` | Запуск комплексного аудита через operations-director |
 | `/external-deal [article]` | Оценка КП от блогера через external-traffic-manager |
 
-## Hooks система
-
-Автоматическая валидация и логирование операций:
-
-| Hook | Event | Назначение |
-|------|-------|------------|
-| `check-api-tokens` | SessionStart | Проверка наличия API токенов при старте |
-| `validate-price-change` | PreToolUse | Валидация изменения цен (лимит скидки 70%) |
-| `log-operation` | PostToolUse | Логирование всех update_* операций |
-
-Логи операций: `logs/operations.log`
-
 ## Skills — пополнения Phase 1
 
 | Skill | Назначение | Кто использует |
@@ -123,24 +87,39 @@ L2 ── ads-optimizer       — реклама, ROI, ДРР
 | `external-traffic-economics` | CPV/CPO/безубыточность, бенчмарки по нишам, ТЗ на интеграцию | `external-traffic-manager` |
 | `blogger-vetting-checklist` | Проверка блогера на накрутку (5 мин / 30 мин) | `external-traffic-manager` |
 
-**Phase 2 (stubs):** `infographic-design-system`, `ai-visual-generation` — заготовки под будущих агентов.
-
 ## MCP инструменты
+
+> `(confirm)` — операция изменяет данные и требует `confirm=true`; без него возвращается preview (БЫЛО → СТАЛО).
 
 ### Wildberries (wb-mcp)
 
 | Инструмент | Описание |
 |------------|----------|
-| `wb_get_inventory` | Остатки FBO/FBS |
+| `wb_get_inventory` | Остатки FBO/FBS по товарам |
+| `wb_get_products_in_stock` | Товары с остатком > 0 (быстрый список) |
+| `wb_get_warehouses` | Склады продавца |
 | `wb_get_prices` | Цены и скидки |
+| `wb_update_price` | Изменить цену `(confirm)` |
 | `wb_get_cards` | Карточки товаров |
-| `wb_get_orders` | Заказы и выручка |
+| `wb_update_card` | Обновить карточку `(confirm)` |
+| `wb_get_orders` | Заказы |
+| `wb_get_sales` | Продажи (выкупы) |
+| `wb_get_sales_funnel` | Воронка продаж (требует подписку «Джем») |
 | `wb_get_reviews` | Отзывы |
-| `wb_reply_review` | Ответить на отзыв |
+| `wb_reply_review` | Ответить на отзыв `(confirm)` |
 | `wb_get_campaigns` | Рекламные кампании |
 | `wb_get_campaign_stats` | Статистика рекламы |
-| `wb_get_sales_funnel` | Воронка продаж (требует подписку "Джем") |
-| `wb_update_price` | Изменить цену (требует confirm=true) |
+| `wb_pause_campaign` | Пауза кампании `(confirm)` |
+| `wb_update_campaign_budget` | Бюджет кампании `(confirm)` |
+| `wb_update_campaign_cpm` | Ставка CPM `(confirm)` |
+| `wb_get_balance` | Баланс |
+| `wb_get_payments` | Выплаты |
+| `wb_get_realization_report` | Отчёт о реализации |
+| `wb_get_npd_report` | Отчёт для НПД (самозанятые) |
+| `wb_get_seller_info` | Профиль продавца |
+| `wb_get_supplies` / `wb_get_supply` | Поставки FBS (список / детали) |
+| `wb_create_supply` / `wb_add_to_supply` / `wb_close_supply` / `wb_delete_supply` | Управление поставкой FBS `(confirm)` |
+| `wb_get_documents` / `wb_get_document_categories` / `wb_download_document` | Документы |
 
 ### Ozon (ozon-mcp)
 
@@ -148,46 +127,39 @@ L2 ── ads-optimizer       — реклама, ROI, ДРР
 |------------|----------|
 | `ozon_get_products` | Список товаров |
 | `ozon_get_product_info` | Детальная информация |
+| `ozon_update_product` | Обновить товар `(confirm)` |
 | `ozon_get_prices` | Цены с комиссиями |
+| `ozon_update_price` | Изменить цену `(confirm)` |
 | `ozon_get_stocks` | Остатки FBO/FBS |
+| `ozon_update_stocks` | Обновить остатки `(confirm)` |
 | `ozon_get_orders` | Заказы |
-| `ozon_update_price` | Изменить цену (требует confirm=true) |
-| `ozon_update_stocks` | Обновить остатки (требует confirm=true) |
+| `ozon_get_reviews` | Отзывы |
+| `ozon_reply_review` | Ответить на отзыв `(confirm)` |
 | `ozon_import_products` | Импорт товаров |
+| `ozon_get_import_status` | Статус импорта |
 | `ozon_get_categories` | Дерево категорий |
 | `ozon_get_category_attributes` | Атрибуты категории |
+| `ozon_get_balance` | Баланс |
+| `ozon_get_transactions` | Транзакции (финансы) |
 
 ### Яндекс.Маркет (ym-mcp)
 
 | Инструмент | Описание |
 |------------|----------|
-| `ym_get_campaigns` | Список магазинов |
+| `ym_get_campaigns` / `ym_get_campaign` | Магазины (список / детали) |
 | `ym_get_products` | Товары |
+| `ym_update_products` | Обновить товары `(confirm)` |
 | `ym_get_stocks` | Остатки |
+| `ym_update_stocks` | Обновить остатки `(confirm)` |
 | `ym_get_prices` | Цены |
+| `ym_update_prices` | Изменить цены `(confirm)` |
 | `ym_get_orders` | Заказы |
 | `ym_get_reviews` | Отзывы |
+| `ym_reply_review` | Ответить на отзыв `(confirm)` |
 | `ym_get_quality_rating` | Индекс качества |
-| `ym_update_prices` | Изменить цены (требует confirm=true) |
-| `ym_update_stocks` | Обновить остатки (требует confirm=true) |
-| `ym_reply_review` | Ответить на отзыв (требует confirm=true) |
-
-### Авито (avito-mcp)
-
-| Инструмент | Описание |
-|------------|----------|
-| `avito_get_items` | Список объявлений |
-| `avito_get_item` | Детали объявления |
-| `avito_get_items_stats` | Статистика просмотров |
-| `avito_get_calls_stats` | Статистика звонков |
-| `avito_update_item_price` | Изменить цену (требует confirm=true) |
-| `avito_get_vas_prices` | Стоимость услуг продвижения |
-| `avito_apply_vas` | Применить VAS (требует confirm=true) |
-| `avito_get_promotions` | Активные продвижения |
-| `avito_set_promotion` | Настроить продвижение (требует confirm=true) |
-| `avito_get_reviews` | Отзывы продавца |
-| `avito_reply_review` | Ответить на отзыв (требует confirm=true) |
-| `avito_get_user_info` | Профиль и баланс |
+| `ym_get_categories` / `ym_search_categories` | Категории (дерево / поиск) |
+| `ym_get_warehouses` | Склады |
+| `ym_get_balance` / `ym_get_payments` | Финансы |
 
 ## Критичные операции
 
@@ -205,11 +177,10 @@ L2 ── ads-optimizer       — реклама, ROI, ДРР
 WB_API_TOKEN="..."           # ЛК WB: seller.wildberries.ru/api-integrations
 OZON_CLIENT_ID="..."         # ЛК Ozon: seller.ozon.ru/app/settings/api-keys
 OZON_API_TOKEN="..."
-YM_TOKEN="..."               # ЛК YM: partner.market.yandex.ru
+YM_API_TOKEN="..."           # ЛК YM: partner.market.yandex.ru
 YM_BUSINESS_ID="..."
 YM_CAMPAIGN_ID="..."
-AVITO_CLIENT_ID="..."        # developers.avito.ru (OAuth2)
-AVITO_CLIENT_SECRET="..."
+FIRECRAWL_API_KEY="..."      # firecrawl.dev — парсинг документации МП
 ```
 
 ## Стиль общения
@@ -282,4 +253,4 @@ AVITO_CLIENT_SECRET="..."
 
 - **Тарифы и услуги:** `docs/PRICING.md`
 - **Онбординг клиента:** `docs/ONBOARDING.md`
-- **Бизнес-план:** `.claude/plans/velvet-swimming-glacier.md`
+- **API-справочник:** `docs/api-reference/{wildberries,ozon,yandex-market}/`

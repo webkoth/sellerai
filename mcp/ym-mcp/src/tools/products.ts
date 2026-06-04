@@ -3,7 +3,7 @@
  */
 
 import { z } from 'zod';
-import { apiRequest, getCampaignId, getBusinessId, ApiResponse } from '../api/client.js';
+import { apiRequest, getBusinessId, ApiResponse } from '../api/client.js';
 
 // Input schemas
 export const GetProductsInputSchema = z.object({
@@ -82,21 +82,22 @@ export async function getProducts(input: GetProductsInput): Promise<{
   total: number;
   nextPageToken?: string;
 }> {
-  const campaignId = input.campaignId || parseInt(getCampaignId());
+  // Список товаров с полной информацией (название, категория, бренд) — на уровне
+  // бизнеса через offer-mappings. /v2/campaigns/{id}/offers возвращает только
+  // offerId+price (поле offers), без названий, поэтому используем business-эндпоинт.
+  const businessId = parseInt(getBusinessId());
 
-  const body: Record<string, unknown> = {
-    limit: input.limit || 100,
-    archived: input.archived || false,
-  };
-
+  // ЯМ offer-mappings: limit и page_token — в QUERY-параметрах, фильтры (archived) — в теле.
+  // Если класть page_token в тело, он игнорируется -> пагинация зацикливается на 1-й странице.
+  const params = new URLSearchParams({ limit: String(input.limit || 100) });
   if (input.pageToken) {
-    body.page_token = input.pageToken;
+    params.set('page_token', input.pageToken);
   }
 
   const response = await apiRequest<OffersResponse>(
-    `/v2/campaigns/${campaignId}/offers`,
+    `/v2/businesses/${businessId}/offer-mappings?${params.toString()}`,
     'POST',
-    body
+    { archived: input.archived || false }
   );
 
   const products = (response.result?.offerMappings || []).map((item) => ({

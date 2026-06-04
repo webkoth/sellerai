@@ -85,6 +85,7 @@ export function createPriceChangePreview(params: {
   newPrice: number;
   currentDiscount?: number;
   newDiscount?: number;
+  currentFinalPrice?: number;
   toolName: string;
 }): ConfirmationPreview {
   const changes: FieldChange[] = [];
@@ -99,11 +100,13 @@ export function createPriceChangePreview(params: {
     );
   }
 
-  // Calculate final price with discount
-  const oldFinalPrice = params.currentPrice * (1 - (params.currentDiscount || 0) / 100);
-  const newFinalPrice = params.newPrice * (1 - (params.newDiscount || 0) / 100);
+  // Цена со скидкой: для "БЫЛО" — фактическое значение от WB (если передано),
+  // для "СТАЛО" — проекция по новой скидке (точного discountedPrice ещё нет).
+  const oldFinalPrice =
+    params.currentFinalPrice ?? Math.round(params.currentPrice * (1 - (params.currentDiscount || 0) / 100));
+  const newFinalPrice = Math.round(params.newPrice * (1 - (params.newDiscount || 0) / 100));
   changes.push(
-    createFieldChange('finalPrice', Math.round(oldFinalPrice), Math.round(newFinalPrice), { unit: '₽' })
+    createFieldChange('finalPrice', Math.round(oldFinalPrice), newFinalPrice, { unit: '₽' })
   );
 
   return {

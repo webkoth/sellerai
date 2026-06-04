@@ -164,15 +164,43 @@ export async function getCampaigns(input: GetCampaignsInput): Promise<{
     }>;
   }>(url);
 
-  // Collect all campaign IDs
-  const campaignIds: number[] = [];
+  // Тип и статус кампании приходят на уровне группы count — строим список прямо из него.
+  const typeFilter: Record<string, number[]> = {
+    auction: [4, 5, 6],
+    auto: [8],
+    search: [6, 9],
+    catalog: [4, 9],
+    card: [5],
+  };
+  const statusFilter: Record<string, number[]> = {
+    active: [9],
+    paused: [11],
+    stopped: [7, 8],
+  };
+
+  let campaigns: CampaignData[] = [];
   for (const group of countResult.adverts || []) {
+    if (type !== 'all' && typeFilter[type] && !typeFilter[type].includes(group.type)) continue;
+    if (status !== 'all' && statusFilter[status] && !statusFilter[status].includes(group.status)) continue;
+
     for (const item of group.advert_list || []) {
-      campaignIds.push(item.advertId);
+      campaigns.push({
+        id: item.advertId,
+        name: '',
+        type: group.type.toString(),
+        typeName: CAMPAIGN_TYPES[group.type] || `Тип ${group.type}`,
+        status: group.status.toString(),
+        statusName: CAMPAIGN_STATUSES[group.status] || `Статус ${group.status}`,
+        createTime: '',
+        changeTime: item.changeTime,
+        nmIds: [],
+      });
+      if (campaigns.length >= limit) break;
     }
+    if (campaigns.length >= limit) break;
   }
 
-  if (campaignIds.length === 0) {
+  if (campaigns.length === 0) {
     return {
       campaigns: [],
       total: 0,
@@ -180,23 +208,17 @@ export async function getCampaigns(input: GetCampaignsInput): Promise<{
     };
   }
 
-  // Get campaign details in batches
-  const campaigns: CampaignData[] = [];
-  const batchSize = 50;
-
-  for (let i = 0; i < Math.min(campaignIds.length, limit); i += batchSize) {
-    const batch = campaignIds.slice(i, i + batchSize);
+  // Опциональное обогащение деталями (name, budget, даты, nmIds).
+  // WB периодически меняет этот эндпоинт; если он недоступен — отдаём данные из count.
+  try {
+    const ids = campaigns.map((c) => c.id);
     const detailsUrl = `${WB_API_URLS.advert}/adv/v1/promotion/adverts`;
-
     const details = await fetchWB<
       Array<{
         advertId: number;
-        name: string;
-        type: number;
-        status: number;
+        name?: string;
         dailyBudget?: number;
-        createTime: string;
-        changeTime: string;
+        createTime?: string;
         startTime?: string;
         endTime?: string;
         autoParams?: { nms?: number[] };
@@ -204,70 +226,35 @@ export async function getCampaigns(input: GetCampaignsInput): Promise<{
       }>
     >(detailsUrl, {
       method: 'POST',
-      body: JSON.stringify(batch),
+      body: JSON.stringify(ids),
     });
 
-    for (const c of details || []) {
-      const campaignType = c.type;
-      const campaignStatus = c.status;
-
-      // Filter by type
-      if (type !== 'all') {
-        const typeFilter: Record<string, number[]> = {
-          auction: [4, 5, 6],
-          auto: [8],
-          search: [6, 9],
-          catalog: [4, 9],
-          card: [5],
-        };
-        if (typeFilter[type] && !typeFilter[type].includes(campaignType)) {
-          continue;
-        }
-      }
-
-      // Filter by status
-      if (status !== 'all') {
-        const statusFilter: Record<string, number[]> = {
-          active: [9],
-          paused: [11],
-          stopped: [7, 8],
-        };
-        if (statusFilter[status] && !statusFilter[status].includes(campaignStatus)) {
-          continue;
-        }
-      }
-
-      // Get nmIds from params
+    const byId = new Map((details || []).map((d) => [d.advertId, d]));
+    campaigns = campaigns.map((c) => {
+      const d = byId.get(c.id);
+      if (!d) return c;
       let nmIds: number[] = [];
-      if (c.autoParams?.nms) {
-        nmIds = c.autoParams.nms;
-      } else if (c.unitedParams) {
-        for (const p of c.unitedParams) {
-          if (p.nms) {
-            nmIds = [...nmIds, ...p.nms];
-          }
+      if (d.autoParams?.nms) {
+        nmIds = d.autoParams.nms;
+      } else if (d.unitedParams) {
+        for (const p of d.unitedParams) {
+          if (p.nms) nmIds = [...nmIds, ...p.nms];
         }
       }
-
-      campaigns.push({
-        id: c.advertId,
-        name: c.name,
-        type: campaignType.toString(),
-        typeName: CAMPAIGN_TYPES[campaignType] || `Тип ${campaignType}`,
-        status: campaignStatus.toString(),
-        statusName: CAMPAIGN_STATUSES[campaignStatus] || `Статус ${campaignStatus}`,
-        dailyBudget: c.dailyBudget,
-        createTime: c.createTime,
-        changeTime: c.changeTime,
-        startTime: c.startTime,
-        endTime: c.endTime,
+      return {
+        ...c,
+        name: d.name || c.name,
+        dailyBudget: d.dailyBudget,
+        createTime: d.createTime || c.createTime,
+        startTime: d.startTime,
+        endTime: d.endTime,
         nmIds,
-      });
-
-      if (campaigns.length >= limit) break;
-    }
-
-    if (campaigns.length >= limit) break;
+      };
+    });
+  } catch (err) {
+    console.error(
+      `wb_get_campaigns: обогащение деталями недоступно (${(err as Error).message}). Возвращаю данные из promotion/count.`
+    );
   }
 
   // Calculate summary

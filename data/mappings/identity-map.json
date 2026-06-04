@@ -1,0 +1,7863 @@
+{
+  "_meta": {
+    "canonical_key": "barcode",
+    "master": "wildberries",
+    "generated": true
+  },
+  "summary": {
+    "wb_cards": 339,
+    "wb_barcodes": 372,
+    "ozon_offers": 109,
+    "ym_offers": 85,
+    "ozon": {
+      "linked_cards": 108,
+      "missing_cards": 231
+    },
+    "ym": {
+      "linked_barcodes": 85,
+      "missing_barcodes": 287
+    },
+    "extras": {
+      "ozon_not_in_wb": 1,
+      "ym_not_in_wb": 0
+    }
+  },
+  "cards": [
+    {
+      "nmId": 1068044235,
+      "vendorCode": "7839265936522",
+      "subjectName": "Обереги",
+      "title": "Амулет с бусиной Дзи из ливийского стекла",
+      "barcodes": [
+        "2051508626795"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051508626795",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1041264341,
+      "vendorCode": "87987392637",
+      "subjectName": "Обереги",
+      "title": "Мужской браслет с каменным метеоритом",
+      "barcodes": [
+        "2051343913708"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051343913708",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1001473240,
+      "vendorCode": "78687574342",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Campo del Cielo 8 гр.",
+      "barcodes": [
+        "2050926531506"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050926531506",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988553691,
+      "vendorCode": "897766452334",
+      "subjectName": "Обереги",
+      "title": "Резная фигурка из ливийского стекла",
+      "barcodes": [
+        "2050767010437"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050767010437",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 859550871,
+      "vendorCode": "94792834376487512",
+      "subjectName": "Обереги",
+      "title": "Небесный тигр - кулон из метеорита Алетай - 51,2 г",
+      "barcodes": [
+        "2049386057992"
+      ],
+      "ozon": {
+        "offer_id": "94792834376487512",
+        "product_id": 4265582493,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049386057992",
+          "ym": {
+            "offerId": "2049386057992",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826574563,
+      "vendorCode": "87494658726767861",
+      "subjectName": "Обереги",
+      "title": "Коллекционный экземпляр метеорит Царев 119 гр.",
+      "barcodes": [
+        "2049064836468"
+      ],
+      "ozon": {
+        "offer_id": "87494658726767861",
+        "product_id": 4265582505,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049064836468",
+          "ym": {
+            "offerId": "2049064836468",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 811302672,
+      "vendorCode": "83285636526",
+      "subjectName": "Обереги",
+      "title": "Подвеска мелонг из метеорита Муонионалуста 34,2 гр",
+      "barcodes": [
+        "2048847438523"
+      ],
+      "ozon": {
+        "offer_id": "83285636526",
+        "product_id": 4265582682,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048847438523",
+          "ym": {
+            "offerId": "2048847438523",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 796862816,
+      "vendorCode": "835694653692",
+      "subjectName": "Обереги",
+      "title": "Метеорит - коллекционная фигурка 77,3 гр.",
+      "barcodes": [
+        "2048713029541"
+      ],
+      "ozon": {
+        "offer_id": "835694653692",
+        "product_id": 4265582655,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048713029541",
+          "ym": {
+            "offerId": "2048713029541",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699172683,
+      "vendorCode": "8473569426888",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2047834505460"
+      ],
+      "ozon": {
+        "offer_id": "8473569426888",
+        "product_id": 3320038200,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047834505460",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 698914829,
+      "vendorCode": "4534564757667876",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2047832589226"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047832589226",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 691043622,
+      "vendorCode": "7777776543212",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2047767382039"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047767382039",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1068082857,
+      "vendorCode": "9998773636",
+      "subjectName": "Обереги",
+      "title": "Браслет с ливийским стеклом и старой бусиной Дзи",
+      "barcodes": [
+        "2051509192510"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051509192510",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1045721249,
+      "vendorCode": "999877665",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь 5,7 гр.",
+      "barcodes": [
+        "2051358739317"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051358739317",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1045694779,
+      "vendorCode": "8989888655",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь 5,3 гр.",
+      "barcodes": [
+        "2051358618025"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051358618025",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1045666207,
+      "vendorCode": "8989333635",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь 4,7 гр.",
+      "barcodes": [
+        "2051358508104"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051358508104",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1041907949,
+      "vendorCode": "8687554534434",
+      "subjectName": "Обереги",
+      "title": "Браслет с каменным метеоритом NWA",
+      "barcodes": [
+        "2051345237857"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051345237857",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1041103120,
+      "vendorCode": "985449537222",
+      "subjectName": "Обереги",
+      "title": "Браслет с Индошинитом",
+      "barcodes": [
+        "2051342634895"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2051342634895",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826793732,
+      "vendorCode": "89235856463594",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь - 31,1 гр. индивидуал",
+      "barcodes": [
+        "2049066534157"
+      ],
+      "ozon": {
+        "offer_id": "89235856463594",
+        "product_id": 4265582640,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049066534157",
+          "ym": {
+            "offerId": "2049066534157",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826579332,
+      "vendorCode": "8768757655223",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев - образец 33 гр.",
+      "barcodes": [
+        "2049064876730"
+      ],
+      "ozon": {
+        "offer_id": "8768757655223",
+        "product_id": 4265582622,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049064876730",
+          "ym": {
+            "offerId": "2049064876730",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 825166552,
+      "vendorCode": "82759648631343",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев, 15 гр.",
+      "barcodes": [
+        "2049052966054"
+      ],
+      "ozon": {
+        "offer_id": "82759648631343",
+        "product_id": 4265582634,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049052966054",
+          "ym": {
+            "offerId": "2049052966054",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820145017,
+      "vendorCode": "6465363423312",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец, метеорит Кампо Дель Сьело 2",
+      "barcodes": [
+        "2048927684536"
+      ],
+      "ozon": {
+        "offer_id": "6465363423312",
+        "product_id": 4265582625,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048927684536",
+          "ym": {
+            "offerId": "2048927684536",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820045170,
+      "vendorCode": "98327594659211",
+      "subjectName": "Обереги",
+      "title": "Метеорит Campo Del Cielo, образец 13,4 гр.",
+      "barcodes": [
+        "2048926885408"
+      ],
+      "ozon": {
+        "offer_id": "98327594659211",
+        "product_id": 4265582657,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048926885408",
+          "ym": {
+            "offerId": "2048926885408",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820027257,
+      "vendorCode": "9057043878",
+      "subjectName": "Обереги",
+      "title": "Метеорит осколок Кампо Дель Сьело - 7,5 гр.",
+      "barcodes": [
+        "2048926686692"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048926686692",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820016486,
+      "vendorCode": "94769469454626",
+      "subjectName": "Обереги",
+      "title": "Метеорит Кампо Дель Сьело, образец 23,2 гр.",
+      "barcodes": [
+        "2048926572377"
+      ],
+      "ozon": {
+        "offer_id": "94769469454626",
+        "product_id": 4265582649,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048926572377",
+          "ym": {
+            "offerId": "2048926572377",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699377047,
+      "vendorCode": "8347556786673",
+      "subjectName": "Обереги",
+      "title": "Тибетская бусина Дзи 20 глаз",
+      "barcodes": [
+        "2047835745018"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047835745018",
+          "ym": {
+            "offerId": "2047835745018",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699209236,
+      "vendorCode": "88876212345678",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит campo del Cielo",
+      "barcodes": [
+        "2047834755797"
+      ],
+      "ozon": {
+        "offer_id": "88876212345678",
+        "product_id": 3320038178,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047834755797",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 597048927,
+      "vendorCode": "8767865543",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Дронино - 19,4 гр.",
+      "barcodes": [
+        "2047095090323"
+      ],
+      "ozon": {
+        "offer_id": "8767865543",
+        "product_id": 3320038147,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047095090323",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988823746,
+      "vendorCode": "932453483757",
+      "subjectName": "Обереги",
+      "title": "Пи Яо резная фигурка из ливийского стекла",
+      "barcodes": [
+        "2050769384819"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050769384819",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988261734,
+      "vendorCode": "987896756453",
+      "subjectName": "Обереги",
+      "title": "Кулон Дракон из метеорита Алетай",
+      "barcodes": [
+        "2050761441312"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050761441312",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1002907466,
+      "vendorCode": "76874434533232",
+      "subjectName": "Обереги",
+      "title": "Подвеска-амулет из индошинита",
+      "barcodes": [
+        "2050945148358"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050945148358",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1002814727,
+      "vendorCode": "6567454343",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2050943817188"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050943817188",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710270178,
+      "vendorCode": "99998887655",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо Дель Сьело",
+      "barcodes": [
+        "2047929572643"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047929572643",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710259288,
+      "vendorCode": "8787778778654",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2047929431063"
+      ],
+      "ozon": {
+        "offer_id": "8787778778654",
+        "product_id": 3320038151,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047929431063",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710251303,
+      "vendorCode": "9999876432",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо Дель Сьело",
+      "barcodes": [
+        "2047929335064"
+      ],
+      "ozon": {
+        "offer_id": "9999876432",
+        "product_id": 3320038185,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047929335064",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 678735474,
+      "vendorCode": "872395643876",
+      "subjectName": "Подвески бижутерные",
+      "title": "Кулон из метеорита Алетай",
+      "barcodes": [
+        "2047668668362"
+      ],
+      "ozon": {
+        "offer_id": "872395643876",
+        "product_id": 3320038143,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047668668362",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 574242346,
+      "vendorCode": "765636277654",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из хотаньского нефрита Дзи 9 глаз",
+      "barcodes": [
+        "2046802232254"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046802232254",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541224102,
+      "vendorCode": "87878776554",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Сихотэ-Алинь",
+      "barcodes": [
+        "2046248739539"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046248739539",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 465707809,
+      "vendorCode": "9887766564",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2044825618147"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044825618147",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 452740509,
+      "vendorCode": "985043876",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска Бусина ДЗИ из натурального агата",
+      "barcodes": [
+        "2044607259353"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044607259353",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 446638621,
+      "vendorCode": "832793465",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2044477611336"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044477611336",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 329457590,
+      "vendorCode": "JW-NB-AGT-M-0078",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо дель Сьело",
+      "barcodes": [
+        "2042799809691"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042799809691",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 863787328,
+      "vendorCode": "9863479136591751",
+      "subjectName": "Обереги",
+      "title": "Коллекционная фигурка из каменного метеорита",
+      "barcodes": [
+        "2049427663021"
+      ],
+      "ozon": {
+        "offer_id": "9863479136591751",
+        "product_id": 4265582576,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049427663021",
+          "ym": {
+            "offerId": "2049427663021",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 1002804418,
+      "vendorCode": "98877767665543",
+      "subjectName": "Обереги",
+      "title": "Кампо Дель Сьело метеорит - коллекционный образец ",
+      "barcodes": [
+        "2050943700145"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050943700145",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 996711262,
+      "vendorCode": "34832547792",
+      "subjectName": "Обереги",
+      "title": "Кулон-амулет из метеорита Алетай",
+      "barcodes": [
+        "2050866743267"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050866743267",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 996336745,
+      "vendorCode": "483927596635743",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Царев индивидуальный экземпляр 169 гр.",
+      "barcodes": [
+        "2050860410158"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050860410158",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 996271114,
+      "vendorCode": "23522321414241",
+      "subjectName": "Обереги",
+      "title": "Кулон из Индошинита",
+      "barcodes": [
+        "2050859936980"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050859936980",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988560742,
+      "vendorCode": "98776654323131",
+      "subjectName": "Браслеты",
+      "title": "Браслет из Ливийского стекла высокого качества",
+      "barcodes": [
+        "2050767082885",
+        "2050767082878",
+        "2050783995282"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050767082885",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2050767082878",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2050783995282",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 989770544,
+      "vendorCode": "3652765874365876",
+      "subjectName": "Обереги",
+      "title": "Кулон из Индошинита",
+      "barcodes": [
+        "2050777145457"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050777145457",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 989737513,
+      "vendorCode": "23434324356",
+      "subjectName": "Обереги",
+      "title": "Бусина Дзи 9 глаз из метеорита Алетай",
+      "barcodes": [
+        "2050776784459"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050776784459",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988801724,
+      "vendorCode": "9890888766543",
+      "subjectName": "Обереги",
+      "title": "Бусина Дзи из метеорита Алетай",
+      "barcodes": [
+        "2050769090710"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050769090710",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988359699,
+      "vendorCode": "49283098493247",
+      "subjectName": "Обереги",
+      "title": "Бусина Дзи из метеорита Алетай",
+      "barcodes": [
+        "2050763339860"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050763339860",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 988315257,
+      "vendorCode": "9983472963937675",
+      "subjectName": "Обереги",
+      "title": "Кулон Лик Будды из метеорита Алетай",
+      "barcodes": [
+        "2050761847909"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2050761847909",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 305659270,
+      "vendorCode": "JW-NB-AGT-M-0081",
+      "subjectName": "Открытки",
+      "title": "Сертификат для Марины",
+      "barcodes": [
+        "2042327282309"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042327282309",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 866600178,
+      "vendorCode": "382467387253",
+      "subjectName": "Подвески бижутерные",
+      "title": "Крест с метеоритом",
+      "barcodes": [
+        "2049459905182"
+      ],
+      "ozon": {
+        "offer_id": "382467387253",
+        "product_id": 4265582559,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049459905182",
+          "ym": {
+            "offerId": "2049459905182",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 861562848,
+      "vendorCode": "375485732833861",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска и метеоритом Серичо",
+      "barcodes": [
+        "2049405433813"
+      ],
+      "ozon": {
+        "offer_id": "375485732833861",
+        "product_id": 4265582626,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049405433813",
+          "ym": {
+            "offerId": "2049405433813",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795184511,
+      "vendorCode": "989898384276",
+      "subjectName": "Подвески бижутерные",
+      "title": "Метеорит Campo del Cielo - 6,3 гр.",
+      "barcodes": [
+        "2048696587823"
+      ],
+      "ozon": {
+        "offer_id": "989898384276",
+        "product_id": 4265582605,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048696587823",
+          "ym": {
+            "offerId": "2048696587823",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 711978621,
+      "vendorCode": "64646467892",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2047946678113"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047946678113",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710291050,
+      "vendorCode": "65656565789",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2047929803976"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047929803976",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 676669459,
+      "vendorCode": "9887876785732",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Алетай",
+      "barcodes": [
+        "2047648361764"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047648361764",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 583848247,
+      "vendorCode": "8937298579634",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046947487083"
+      ],
+      "ozon": {
+        "offer_id": "8937298579634",
+        "product_id": 3320038120,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046947487083",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 548011281,
+      "vendorCode": "949487674839",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2046353955268"
+      ],
+      "ozon": {
+        "offer_id": "949487674839",
+        "product_id": 4265582659,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046353955268",
+          "ym": {
+            "offerId": "2046353955268",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378998906,
+      "vendorCode": "JW-NB-AGT-M-0101",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Серичо",
+      "barcodes": [
+        "2043467934868"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043467934868",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 288129588,
+      "vendorCode": "JW-NB-AGT-M-0031",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2041942946931"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041942946931",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 676688948,
+      "vendorCode": "39865823476587365",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска Непобедимое солнце с метеоритом",
+      "barcodes": [
+        "2047648560563"
+      ],
+      "ozon": {
+        "offer_id": "39865823476587365",
+        "product_id": 3320038173,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047648560563",
+          "ym": {
+            "offerId": "2047648560563",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 685257465,
+      "vendorCode": "8887765432",
+      "subjectName": "Подвески бижутерные",
+      "title": "Кулон Би-диск из метеорита Алетай",
+      "barcodes": [
+        "2047718076116"
+      ],
+      "ozon": {
+        "offer_id": "8887765432",
+        "product_id": 3320038114,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047718076116",
+          "ym": {
+            "offerId": "2047718076116",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 679811425,
+      "vendorCode": "932895946",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2047676912327"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047676912327",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 635576126,
+      "vendorCode": "75938646586",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска Шестиконечная звезда с метеоритом",
+      "barcodes": [
+        "2047426280997"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047426280997",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 584969395,
+      "vendorCode": "907496552",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046966626302"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046966626302",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 430736233,
+      "vendorCode": "545909054334",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2044230827721"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044230827721",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 288116175,
+      "vendorCode": "JW-NB-AGT-M-0029",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2041942767208"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041942767208",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 366261520,
+      "vendorCode": "JW-NB-AGT-M-0086",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино №1",
+      "barcodes": [
+        "2043296349116"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0086",
+        "product_id": 3320038090,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043296349116",
+          "ym": {
+            "offerId": "2043296349116",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516964535,
+      "vendorCode": "93257465",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2045712718469"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045712718469",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 446603584,
+      "vendorCode": "987875443",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2044477145138"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044477145138",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 365849126,
+      "vendorCode": "JW-NB-AGT-M-0083",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043289301459"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043289301459",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 347637872,
+      "vendorCode": "JW-NB-AGT-M-0063",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 5,5г - компактный образец",
+      "barcodes": [
+        "2043083972268"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043083972268",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 318621865,
+      "vendorCode": "JW-NB-AGT-M-0074",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2042610817485"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042610817485",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 801052463,
+      "vendorCode": "8372985637486572",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный фрагмент метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2048749709370"
+      ],
+      "ozon": {
+        "offer_id": "8372985637486572",
+        "product_id": 4265582540,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048749709370",
+          "ym": {
+            "offerId": "2048749709370",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 596997213,
+      "vendorCode": "89768756423",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Canyon Diablo коллекционный образей 12,4 ",
+      "barcodes": [
+        "2047094620750"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047094620750",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 542414965,
+      "vendorCode": "35032037",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Дронино 60,2 гр.",
+      "barcodes": [
+        "2046267500288"
+      ],
+      "ozon": {
+        "offer_id": "35032037",
+        "product_id": 3320038091,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046267500288",
+          "ym": {
+            "offerId": "2046267500288",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 526554159,
+      "vendorCode": "9345896543",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь №2",
+      "barcodes": [
+        "2045888021431"
+      ],
+      "ozon": {
+        "offer_id": "9345896543",
+        "product_id": 3320038195,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045888021431",
+          "ym": {
+            "offerId": "2045888021431",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516995980,
+      "vendorCode": "55557789097654",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2045713954507"
+      ],
+      "ozon": {
+        "offer_id": "55557789097654",
+        "product_id": 3320038149,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045713954507",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 347604738,
+      "vendorCode": "JW-NB-AGT-M-0064",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Сielo",
+      "barcodes": [
+        "2043083494197"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043083494197",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 318124238,
+      "vendorCode": "JW-NB-AGT-M-0058",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Каньон Дьябло - коллекционный образец: 15",
+      "barcodes": [
+        "2042602239370"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0058",
+        "product_id": 3320038115,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042602239370",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 270419874,
+      "vendorCode": "JW-NB-AGT-M-0022",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Осколок железного метеорита Сихоте-Алинь",
+      "barcodes": [
+        "2041456329848"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0022",
+        "product_id": 3320038209,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2041456329848",
+          "ym": {
+            "offerId": "2041456329848",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820036956,
+      "vendorCode": "387593625426359",
+      "subjectName": "Обереги",
+      "title": "Метеорит Кампо Дель Сьело, образец 23 гр.",
+      "barcodes": [
+        "2048926789140"
+      ],
+      "ozon": {
+        "offer_id": "387593625426359",
+        "product_id": 4265582620,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048926789140",
+          "ym": {
+            "offerId": "2048926789140",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817235298,
+      "vendorCode": "786856646543532",
+      "subjectName": "Обереги",
+      "title": "Метеорит Кампо дель Сьело - обрезец 23,2 гр.",
+      "barcodes": [
+        "2048908221040"
+      ],
+      "ozon": {
+        "offer_id": "786856646543532",
+        "product_id": 4265582688,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048908221040",
+          "ym": {
+            "offerId": "2048908221040",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817111827,
+      "vendorCode": "9798766755445534",
+      "subjectName": "Обереги",
+      "title": "Дронино метеорит осколок 7,1 гр.",
+      "barcodes": [
+        "2048907065812"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048907065812",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699217021,
+      "vendorCode": "3334556778990",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2047834799845"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047834799845",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 863699168,
+      "vendorCode": "8397539865396",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo Del Cielo 6,4 гр.",
+      "barcodes": [
+        "2049426649002"
+      ],
+      "ozon": {
+        "offer_id": "8397539865396",
+        "product_id": 4265582690,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049426649002",
+          "ym": {
+            "offerId": "2049426649002",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 863685769,
+      "vendorCode": "5782985926626",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо Дель Сьело 7,6 гр.",
+      "barcodes": [
+        "2049426516991"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2049426516991",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 863679106,
+      "vendorCode": "75298375946222",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо Дель Сьело 7,5 гр.",
+      "barcodes": [
+        "2049426480254"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2049426480254",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 861577726,
+      "vendorCode": "38259864653534",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Алетай",
+      "barcodes": [
+        "2049405532066"
+      ],
+      "ozon": {
+        "offer_id": "38259864653534",
+        "product_id": 4265582601,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049405532066",
+          "ym": {
+            "offerId": "2049405532066",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 859651570,
+      "vendorCode": "03982907587",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь - 55,7 гр.",
+      "barcodes": [
+        "2049387876936"
+      ],
+      "ozon": {
+        "offer_id": "03982907587",
+        "product_id": 4265582651,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049387876936",
+          "ym": {
+            "offerId": "2049387876936",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 859585573,
+      "vendorCode": "938787419862",
+      "subjectName": "Подвески бижутерные",
+      "title": "Кулон из метеорита Алетай -45,7 гр.",
+      "barcodes": [
+        "2049386746452"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2049386746452",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 859439289,
+      "vendorCode": "657654543343",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Серичо",
+      "barcodes": [
+        "2049384959342"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2049384959342",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 584965957,
+      "vendorCode": "87668553234",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo 6,8 гр.",
+      "barcodes": [
+        "2046966581618"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046966581618",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541309480,
+      "vendorCode": "75757566455434",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2046250570625"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046250570625",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505500840,
+      "vendorCode": "888887654",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2045523118861"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045523118861",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 451740430,
+      "vendorCode": "908589256",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2044586845004"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044586845004",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 430738268,
+      "vendorCode": "456789000",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с подлинным метеоритом CAMPO",
+      "barcodes": [
+        "2044230855762"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044230855762",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 412522006,
+      "vendorCode": "JW-NB-AGT-M-0133",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо дель Сьело",
+      "barcodes": [
+        "2043922658926"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043922658926",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391243444,
+      "vendorCode": "JW-NB-AGT-M-0126",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Сielo",
+      "barcodes": [
+        "2043682352393"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043682352393",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 386621737,
+      "vendorCode": "JW-NB-AGT-M-0109",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Муонионалуста",
+      "barcodes": [
+        "2043575065898"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043575065898",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378674958,
+      "vendorCode": "JW-NB-AGT-M-0098",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска мелонг из метеорита Алетай",
+      "barcodes": [
+        "2043465141060"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0098",
+        "product_id": 4265582523,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043465141060",
+          "ym": {
+            "offerId": "2043465141060",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 445351461,
+      "vendorCode": "567567542342",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный метеорит Сихотэ-Алинь 12г",
+      "barcodes": [
+        "2044461619959"
+      ],
+      "ozon": {
+        "offer_id": "567567542342",
+        "product_id": 3320038131,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044461619959",
+          "ym": {
+            "offerId": "2044461619959",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 691001605,
+      "vendorCode": "87765645343",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2047767053441"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047767053441",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516988052,
+      "vendorCode": "7777665443",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино №4",
+      "barcodes": [
+        "2045713660026"
+      ],
+      "ozon": {
+        "offer_id": "7777665443",
+        "product_id": 3320038179,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045713660026",
+          "ym": {
+            "offerId": "2045713660026",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516980889,
+      "vendorCode": "888776543",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2045713223238"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045713223238",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 412413756,
+      "vendorCode": "JW-NB-AGT-M-0131",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2043921373257"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043921373257",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374584531,
+      "vendorCode": "JW-NB-AGT-M-0095",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино №2",
+      "barcodes": [
+        "2043413991419"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0095",
+        "product_id": 3320038133,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043413991419",
+          "ym": {
+            "offerId": "2043413991419",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374531623,
+      "vendorCode": "JW-NB-AGT-M-0091",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043413678914"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413678914",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 333517271,
+      "vendorCode": "JW-NB-AGT-M-0061",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 52г - образец с корой плавле",
+      "barcodes": [
+        "2042868743543"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0061",
+        "product_id": 3320038121,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042868743543",
+          "ym": {
+            "offerId": "2042868743543",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 309514535,
+      "vendorCode": "JW-NB-AGT-M-0051",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2042423985401"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042423985401",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 304771951,
+      "vendorCode": "JW-NB-AGT-M-0045",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо-дель-Сьело 19,7г - железо-никелевый",
+      "barcodes": [
+        "2042310511829"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042310511829",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 266967547,
+      "vendorCode": "JW-NB-AGT-M-0011",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Кампо Дель Сьело",
+      "barcodes": [
+        "2041364804680"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041364804680",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826761260,
+      "vendorCode": "2374238759463943",
+      "subjectName": "Обереги",
+      "title": "Сихотэ-Алинь метеорит, образец 19,4 гр.",
+      "barcodes": [
+        "2049066254079"
+      ],
+      "ozon": {
+        "offer_id": "2374238759463943",
+        "product_id": 4265582617,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049066254079",
+          "ym": {
+            "offerId": "2049066254079",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826767546,
+      "vendorCode": "876634542323",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь 8,9 гр.",
+      "barcodes": [
+        "2049066311604"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2049066311604",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826616992,
+      "vendorCode": "301984801481",
+      "subjectName": "Обереги",
+      "title": "Сихотэ-Алинь метеорит - 31,5 гр.",
+      "barcodes": [
+        "2049065140052"
+      ],
+      "ozon": {
+        "offer_id": "301984801481",
+        "product_id": 4265582684,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049065140052",
+          "ym": {
+            "offerId": "2049065140052",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 826589694,
+      "vendorCode": "7866556434221",
+      "subjectName": "Обереги",
+      "title": "Царев метеорит - 30 гр.",
+      "barcodes": [
+        "2049064959464"
+      ],
+      "ozon": {
+        "offer_id": "7866556434221",
+        "product_id": 4265582560,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049064959464",
+          "ym": {
+            "offerId": "2049064959464",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 825183960,
+      "vendorCode": "847598374643526",
+      "subjectName": "Обереги",
+      "title": "Царев метеорит каменный -14,8 гр.",
+      "barcodes": [
+        "2049053142112"
+      ],
+      "ozon": {
+        "offer_id": "847598374643526",
+        "product_id": 4265582533,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049053142112",
+          "ym": {
+            "offerId": "2049053142112",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 825101724,
+      "vendorCode": "868756534331",
+      "subjectName": "Обереги",
+      "title": "Каменный метеорит Царев - 21,9 гр.",
+      "barcodes": [
+        "2049052297363"
+      ],
+      "ozon": {
+        "offer_id": "868756534331",
+        "product_id": 4265582599,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049052297363",
+          "ym": {
+            "offerId": "2049052297363",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 825089161,
+      "vendorCode": "8759465974676",
+      "subjectName": "Обереги",
+      "title": "Царев метеорит - экземпляр 16 гр.",
+      "barcodes": [
+        "2049052196123"
+      ],
+      "ozon": {
+        "offer_id": "8759465974676",
+        "product_id": 4265582504,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2049052196123",
+          "ym": {
+            "offerId": "2049052196123",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820171858,
+      "vendorCode": "9879654332222",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска-метеорит Кампо Дель Сьело - 8 гр.",
+      "barcodes": [
+        "2048927922942"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048927922942",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820177972,
+      "vendorCode": "987434342321",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо Дель Сьело - 8,1 гр.",
+      "barcodes": [
+        "2048928007600"
+      ],
+      "ozon": {
+        "offer_id": "987434342321",
+        "product_id": 4265582539,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048928007600",
+          "ym": {
+            "offerId": "2048928007600",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 820164864,
+      "vendorCode": "8786786767676554",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо Дель Сьело",
+      "barcodes": [
+        "2048927870588"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048927870588",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 818378370,
+      "vendorCode": "3487564386799864",
+      "subjectName": "Обереги",
+      "title": "Кулон-артефакт из метеорита Алетай",
+      "barcodes": [
+        "2048917560857"
+      ],
+      "ozon": {
+        "offer_id": "3487564386799864",
+        "product_id": 4265582638,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048917560857",
+          "ym": {
+            "offerId": "2048917560857",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817179030,
+      "vendorCode": "9830967956621",
+      "subjectName": "Обереги",
+      "title": "Метеорит Кампо Дель Сьело, образец - 27,1 гр.",
+      "barcodes": [
+        "2048907777005"
+      ],
+      "ozon": {
+        "offer_id": "9830967956621",
+        "product_id": 4265582637,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048907777005",
+          "ym": {
+            "offerId": "2048907777005",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 815367526,
+      "vendorCode": "97829723765327853",
+      "subjectName": "Обереги",
+      "title": "Кулон-подвеска из метеорита Алетай",
+      "barcodes": [
+        "2048888778534"
+      ],
+      "ozon": {
+        "offer_id": "97829723765327853",
+        "product_id": 4265582595,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048888778534",
+          "ym": {
+            "offerId": "2048888778534",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 542418030,
+      "vendorCode": "3287432938653",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Дронино №6",
+      "barcodes": [
+        "2046267534986"
+      ],
+      "ozon": {
+        "offer_id": "3287432938653",
+        "product_id": 3320038116,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046267534986",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817146071,
+      "vendorCode": "9887896545323",
+      "subjectName": "Обереги",
+      "title": "Метеорит железный Дронино 24 гр.",
+      "barcodes": [
+        "2048907533977"
+      ],
+      "ozon": {
+        "offer_id": "9887896545323",
+        "product_id": 4265582666,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048907533977",
+          "ym": {
+            "offerId": "2048907533977",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817187422,
+      "vendorCode": "7678555644542421",
+      "subjectName": "Обереги",
+      "title": "Кампо Дель Сьело - метеорит 6,8 гр.",
+      "barcodes": [
+        "2048907880569"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048907880569",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817158269,
+      "vendorCode": "897976752231",
+      "subjectName": "Обереги",
+      "title": "Метеорит Дронино - образец 97,5 гр.",
+      "barcodes": [
+        "2048907621353"
+      ],
+      "ozon": {
+        "offer_id": "897976752231",
+        "product_id": 4265582606,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048907621353",
+          "ym": {
+            "offerId": "2048907621353",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 817125168,
+      "vendorCode": "097976675675454",
+      "subjectName": "Обереги",
+      "title": "Метеорит Дронино - коллекционный образец 62,1 гр.",
+      "barcodes": [
+        "2048907296230"
+      ],
+      "ozon": {
+        "offer_id": "097976675675454",
+        "product_id": 4265582668,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048907296230",
+          "ym": {
+            "offerId": "2048907296230",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699156637,
+      "vendorCode": "8937298586",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo 6,7",
+      "barcodes": [
+        "2047834377449"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047834377449",
+          "ym": {
+            "offerId": "2047834377449",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568612904,
+      "vendorCode": "4988665756738",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Кампо дель Сьело",
+      "barcodes": [
+        "2046721386298"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046721386298",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447792088,
+      "vendorCode": "99998754",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044506814646"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044506814646",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 545044371,
+      "vendorCode": "976657534332",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Царев",
+      "barcodes": [
+        "2046305863924"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046305863924",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 756525446,
+      "vendorCode": "786875765635432",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска \"Тайцзи Инь Ян\" с метеоритом Алетай",
+      "barcodes": [
+        "2048334065997"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048334065997",
+          "ym": {
+            "offerId": "2048334065997",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 543834982,
+      "vendorCode": "4485963864",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Царев",
+      "barcodes": [
+        "2046286657024"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046286657024",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 700375269,
+      "vendorCode": "535353567849040",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2047840396458"
+      ],
+      "ozon": {
+        "offer_id": "535353567849040",
+        "product_id": 3320038181,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047840396458",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795157398,
+      "vendorCode": "403874694",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев - 29,3 гр.",
+      "barcodes": [
+        "2048696232464"
+      ],
+      "ozon": {
+        "offer_id": "403874694",
+        "product_id": 4265582585,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048696232464",
+          "ym": {
+            "offerId": "2048696232464",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795164510,
+      "vendorCode": "89327598643",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев, каменный метеорит 9,7 гр.",
+      "barcodes": [
+        "2048696319950"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048696319950",
+          "ym": {
+            "offerId": "2048696319950",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 395873544,
+      "vendorCode": "JW-NB-AGT-M-0127",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Сихотэ-Алинь - коллекционный образец",
+      "barcodes": [
+        "2043736090998"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0127",
+        "product_id": 4265582553,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043736090998",
+          "ym": {
+            "offerId": "2043736090998",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 304767230,
+      "vendorCode": "JW-NB-AGT-M-0044",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2042310424280"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042310424280",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516978318,
+      "vendorCode": "999987654",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2045712942017"
+      ],
+      "ozon": {
+        "offer_id": "999987654",
+        "product_id": 3320038139,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045712942017",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 731575790,
+      "vendorCode": "957384759763",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Царев",
+      "barcodes": [
+        "2048101268606"
+      ],
+      "ozon": {
+        "offer_id": "957384759763",
+        "product_id": 3320038101,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048101268606",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795190493,
+      "vendorCode": "87867656534",
+      "subjectName": "Подвески бижутерные",
+      "title": "Метеорит Campo del Cielo, 9,1 гр.",
+      "barcodes": [
+        "2048696682726"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048696682726",
+          "ym": {
+            "offerId": "2048696682726",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378649009,
+      "vendorCode": "JW-NB-AGT-M-0097",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2043464730241"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0097",
+        "product_id": 3320038197,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043464730241",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541300068,
+      "vendorCode": "6565683900",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Сихотэ-Алинь",
+      "barcodes": [
+        "2046250441284"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046250441284",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 434077004,
+      "vendorCode": "9458398674",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска \"Сердце\" двусторонняя",
+      "barcodes": [
+        "2044276494512"
+      ],
+      "ozon": {
+        "offer_id": "9458398674",
+        "product_id": 3320038134,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044276494512",
+          "ym": {
+            "offerId": "2044276494512",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 731559604,
+      "vendorCode": "8787877665454433",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2048101111810"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048101111810",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710234014,
+      "vendorCode": "77776665432",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2047929164541"
+      ],
+      "ozon": {
+        "offer_id": "77776665432",
+        "product_id": 3320038164,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047929164541",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795177138,
+      "vendorCode": "9889766735462375",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo 7,3 гр.",
+      "barcodes": [
+        "2048696492554"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048696492554",
+          "ym": {
+            "offerId": "2048696492554",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 548017962,
+      "vendorCode": "8876632123456",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046354047993"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046354047993",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795195057,
+      "vendorCode": "3428758346",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo 8,6 гр.",
+      "barcodes": [
+        "2048696713291"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2048696713291",
+          "ym": {
+            "offerId": "2048696713291",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 583789984,
+      "vendorCode": "345467689",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046946765526"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046946765526",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 567297120,
+      "vendorCode": "859265337465",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев коллекционный образец",
+      "barcodes": [
+        "2046702038291"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046702038291",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 731567520,
+      "vendorCode": "8759236456221",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев (горбушка) 34,5 гр.",
+      "barcodes": [
+        "2048101187990"
+      ],
+      "ozon": {
+        "offer_id": "8759236456221",
+        "product_id": 3320038212,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048101187990",
+          "ym": {
+            "offerId": "2048101187990",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 547977238,
+      "vendorCode": "876543234567",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2046353485208"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046353485208",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447660878,
+      "vendorCode": "987786734",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044504265693"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044504265693",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 795145343,
+      "vendorCode": "8365796237657",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев",
+      "barcodes": [
+        "2048696105690"
+      ],
+      "ozon": {
+        "offer_id": "8365796237657",
+        "product_id": 4265582633,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048696105690",
+          "ym": {
+            "offerId": "2048696105690",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 528130767,
+      "vendorCode": "77776543",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь №3",
+      "barcodes": [
+        "2045909417847"
+      ],
+      "ozon": {
+        "offer_id": "77776543",
+        "product_id": 3320038098,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045909417847",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 528126045,
+      "vendorCode": "875674563622",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь №3",
+      "barcodes": [
+        "2045909364332"
+      ],
+      "ozon": {
+        "offer_id": "875674563622",
+        "product_id": 3320038092,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045909364332",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 528127722,
+      "vendorCode": "9998765443",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь №4",
+      "barcodes": [
+        "2045909391406"
+      ],
+      "ozon": {
+        "offer_id": "9998765443",
+        "product_id": 3320038146,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045909391406",
+          "ym": {
+            "offerId": "2045909391406",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 528137045,
+      "vendorCode": "98877665437",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь №5",
+      "barcodes": [
+        "2045909532700"
+      ],
+      "ozon": {
+        "offer_id": "98877665437",
+        "product_id": 3320038138,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045909532700",
+          "ym": {
+            "offerId": "2045909532700",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699184297,
+      "vendorCode": "908908786865375",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo №4",
+      "barcodes": [
+        "2047834589996"
+      ],
+      "ozon": {
+        "offer_id": "908908786865375",
+        "product_id": 3320038184,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047834589996",
+          "ym": {
+            "offerId": "2047834589996",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 468695583,
+      "vendorCode": "03985097",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Cielo №1",
+      "barcodes": [
+        "2044890706589"
+      ],
+      "ozon": {
+        "offer_id": "03985097",
+        "product_id": 3320038183,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044890706589",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 526534735,
+      "vendorCode": "554432987",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь №1",
+      "barcodes": [
+        "2045887928175"
+      ],
+      "ozon": {
+        "offer_id": "554432987",
+        "product_id": 3320038099,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045887928175",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 468705942,
+      "vendorCode": "76665545444",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Cielo №2",
+      "barcodes": [
+        "2044891056751"
+      ],
+      "ozon": {
+        "offer_id": "76665545444",
+        "product_id": 3320038156,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044891056751",
+          "ym": {
+            "offerId": "2044891056751",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 597008791,
+      "vendorCode": "9878765445421",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Дронино №7",
+      "barcodes": [
+        "2047094769664"
+      ],
+      "ozon": {
+        "offer_id": "9878765445421",
+        "product_id": 3320038142,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047094769664",
+          "ym": {
+            "offerId": "2047094769664",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 517010714,
+      "vendorCode": "88373654562782",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино №5",
+      "barcodes": [
+        "2045714273881"
+      ],
+      "ozon": {
+        "offer_id": "88373654562782",
+        "product_id": 3320038167,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045714273881",
+          "ym": {
+            "offerId": "2045714273881",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 516959913,
+      "vendorCode": "876543222",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино №3",
+      "barcodes": [
+        "2045712649466"
+      ],
+      "ozon": {
+        "offer_id": "876543222",
+        "product_id": 3320038182,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2045712649466",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447659932,
+      "vendorCode": "92739856",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь №2",
+      "barcodes": [
+        "2044504255403"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044504255403",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447659169,
+      "vendorCode": "9057404375",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь №1",
+      "barcodes": [
+        "2044504231506"
+      ],
+      "ozon": {
+        "offer_id": "9057404375",
+        "product_id": 3320038163,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044504231506",
+          "ym": {
+            "offerId": "2044504231506",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 685264731,
+      "vendorCode": "88887765432",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь №2",
+      "barcodes": [
+        "2047718159918"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047718159918",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 679816837,
+      "vendorCode": "94574935869",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь №1",
+      "barcodes": [
+        "2047677049404"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047677049404",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 678802293,
+      "vendorCode": "8797686858325",
+      "subjectName": "Подвески бижутерные",
+      "title": "Кулон Тибетский щит из метеорита Алетай",
+      "barcodes": [
+        "2047669355278"
+      ],
+      "ozon": {
+        "offer_id": "8797686858325",
+        "product_id": 3320038124,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047669355278",
+          "ym": {
+            "offerId": "2047669355278",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 567344728,
+      "vendorCode": "76875674543",
+      "subjectName": "Браслеты",
+      "title": "Браслет Сердце Будды с метеоритом Алетай",
+      "barcodes": [
+        "2046702672310"
+      ],
+      "ozon": {
+        "offer_id": "76875674543",
+        "product_id": 3320038102,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046702672310",
+          "ym": {
+            "offerId": "2046702672310",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 561815738,
+      "vendorCode": "87876532",
+      "subjectName": "Браслеты",
+      "title": "Браслет Непобедимое Солнце с метеоритом Алетай",
+      "barcodes": [
+        "2046601922097"
+      ],
+      "ozon": {
+        "offer_id": "87876532",
+        "product_id": 3320038211,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046601922097",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 445397811,
+      "vendorCode": "098876674",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный метеорит Сихотэ-Алинь 24г",
+      "barcodes": [
+        "2044462241173"
+      ],
+      "ozon": {
+        "offer_id": "098876674",
+        "product_id": 3320038150,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044462241173",
+          "ym": {
+            "offerId": "2044462241173",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 327127352,
+      "vendorCode": "JW-NB-AGT-M-0073",
+      "subjectName": "Браслеты",
+      "title": "Браслет Синергия с метеоритом Алетай",
+      "barcodes": [
+        "2042868581886",
+        "2042770600712",
+        "2042770600729",
+        "2042770600705"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0073",
+        "product_id": 3320038105,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042868581886",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042770600712",
+          "ym": {
+            "offerId": "2042770600712",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2042770600729",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042770600705",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 387711805,
+      "vendorCode": "JW-NB-AGT-M-0112",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска Сияние с метеоритом Муонионалуста",
+      "barcodes": [
+        "2043603985655"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0112",
+        "product_id": 3320038169,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2043603985655",
+          "ym": {
+            "offerId": "2043603985655",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 446306396,
+      "vendorCode": "97876575454",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Муонионалуста и Молдавитом",
+      "barcodes": [
+        "2044473196868"
+      ],
+      "ozon": {
+        "offer_id": "97876575454",
+        "product_id": 3320038132,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044473196868",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 292662989,
+      "vendorCode": "JW-NB-AGT-M-0035",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска Меркаба с метеоритом Муонионалуста",
+      "barcodes": [
+        "2042050714764"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042050714764",
+          "ym": {
+            "offerId": "2042050714764",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 731562548,
+      "vendorCode": "38279546586365",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2048101143736"
+      ],
+      "ozon": {
+        "offer_id": "38279546586365",
+        "product_id": 3320038127,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2048101143736",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 386539305,
+      "vendorCode": "JW-NB-AGT-M-0108",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Sericho",
+      "barcodes": [
+        "2043573842736"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043573842736",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 379084792,
+      "vendorCode": "JW-NB-AGT-M-0104",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо дель Сьело",
+      "barcodes": [
+        "2043468994106"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043468994106",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710279007,
+      "vendorCode": "33333787564",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2047929680157"
+      ],
+      "ozon": {
+        "offer_id": "33333787564",
+        "product_id": 3320038192,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047929680157",
+          "ym": {
+            "offerId": "2047929680157",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 597042204,
+      "vendorCode": "387527657846",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Дронино - 29,7 гр.",
+      "barcodes": [
+        "2047095062290"
+      ],
+      "ozon": {
+        "offer_id": "387527657846",
+        "product_id": 3320038095,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047095062290",
+          "ym": {
+            "offerId": "2047095062290",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447795230,
+      "vendorCode": "584348679",
+      "subjectName": "Обереги",
+      "title": "Метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044506852761"
+      ],
+      "ozon": {
+        "offer_id": "584348679",
+        "product_id": 3320038188,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044506852761",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 597014053,
+      "vendorCode": "79358476457846",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Дронино 27,8 гр.",
+      "barcodes": [
+        "2047094830647"
+      ],
+      "ozon": {
+        "offer_id": "79358476457846",
+        "product_id": 3320038161,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047094830647",
+          "ym": {
+            "offerId": "2047094830647",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541382735,
+      "vendorCode": "9337465738",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Кампо Дель Сьело",
+      "barcodes": [
+        "2046251609560"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046251609560",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 542426312,
+      "vendorCode": "8767756552",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Царев",
+      "barcodes": [
+        "2046267665178"
+      ],
+      "ozon": {
+        "offer_id": "8767756552",
+        "product_id": 3320038168,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046267665178",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568570243,
+      "vendorCode": "873256873546",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046720880773"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046720880773",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447793154,
+      "vendorCode": "7776543322",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044506830097"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044506830097",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 583796395,
+      "vendorCode": "8767655643432",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046946850628"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046946850628",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 574342203,
+      "vendorCode": "778674542",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец Campo del Cielo в прозрачном",
+      "barcodes": [
+        "2046803609222"
+      ],
+      "ozon": {
+        "offer_id": "778674542",
+        "product_id": 3320038148,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046803609222",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 710552269,
+      "vendorCode": "8976876564564352",
+      "subjectName": "Браслеты",
+      "title": "Мужской браслет из натуральных камней",
+      "barcodes": [
+        "2047932585296"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047932585296",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699284989,
+      "vendorCode": "903280357946",
+      "subjectName": "Подвески бижутерные",
+      "title": "Бусина Дзи на тибетской тханке",
+      "barcodes": [
+        "2047835027190"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047835027190",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 708551888,
+      "vendorCode": "787787787654",
+      "subjectName": "Браслеты",
+      "title": "Мужской браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2047909797196"
+      ],
+      "ozon": {
+        "offer_id": "787787787654",
+        "product_id": 3320038175,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047909797196",
+          "ym": {
+            "offerId": "2047909797196",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 702062898,
+      "vendorCode": "6363638900098",
+      "subjectName": "Браслеты",
+      "title": "Мужской браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2047852194134",
+        "2047852183152",
+        "2047852185835",
+        "2047852179018"
+      ],
+      "ozon": {
+        "offer_id": "6363638900098",
+        "product_id": 3320038159,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047852194134",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047852183152",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047852185835",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047852179018",
+          "ym": {
+            "offerId": "2047852179018",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 699196167,
+      "vendorCode": "66663533427",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2047834665300"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047834665300",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 690996240,
+      "vendorCode": "8765432345555",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2047766947925"
+      ],
+      "ozon": {
+        "offer_id": "8765432345555",
+        "product_id": 3320038128,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047766947925",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568557360,
+      "vendorCode": "98723986578",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо дель Сьело",
+      "barcodes": [
+        "2046720748073"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046720748073",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 465705373,
+      "vendorCode": "3902057",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2044825575426"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044825575426",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 451738841,
+      "vendorCode": "66790303",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2044586023563"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044586023563",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 434100575,
+      "vendorCode": "39759465",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска ДЗИ из метеорита",
+      "barcodes": [
+        "2044276758768"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044276758768",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 311722013,
+      "vendorCode": "JW-NB-AGT-M-0053",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска бусина ДЗИ 15 глаз",
+      "barcodes": [
+        "2042474974508"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042474974508",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 301521548,
+      "vendorCode": "JW-NB-AGT-M-0040",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска-мелонг из метеорита Муонионалуста амулет",
+      "barcodes": [
+        "2042233098766"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042233098766",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 288115269,
+      "vendorCode": "JW-NB-AGT-M-0030",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2041942659862"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041942659862",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 306818299,
+      "vendorCode": "JW-NB-AGT-M-0047",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Прометей\" лабрадорит с метеоритом Алетай",
+      "barcodes": [
+        "2042353656495",
+        "2042354181293"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0047",
+        "product_id": 3320038100,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042353656495",
+          "ym": {
+            "offerId": "2042353656495",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2042354181293",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568598945,
+      "vendorCode": "8327539865",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046721191656"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046721191656",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 547989081,
+      "vendorCode": "77373736574839",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2046353649013"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046353649013",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 444107775,
+      "vendorCode": "74785436578",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2044444093592"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044444093592",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391234681,
+      "vendorCode": "JW-NB-AGT-M-0128",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо дель Сьело",
+      "barcodes": [
+        "2043682261534"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043682261534",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 390788462,
+      "vendorCode": "JW-NB-AGT-M-0119",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо дель Сьело",
+      "barcodes": [
+        "2043666090600"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043666090600",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 548003149,
+      "vendorCode": "83845456739",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2046353810451"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046353810451",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541393087,
+      "vendorCode": "039270653",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2046251708362"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046251708362",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541292582,
+      "vendorCode": "2323232576789",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2046250290028"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046250290028",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505162123,
+      "vendorCode": "436457678",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита",
+      "barcodes": [
+        "2045516140701"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045516140701",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505159603,
+      "vendorCode": "866556342",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2045516112777"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045516112777",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 467177651,
+      "vendorCode": "97785346753",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2044866102360"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044866102360",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 430738893,
+      "vendorCode": "6754545454335",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2044230877269"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044230877269",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 420796977,
+      "vendorCode": "34578457896",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом",
+      "barcodes": [
+        "2044065102499"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044065102499",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 387667621,
+      "vendorCode": "JW-NB-AGT-M-0111",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Muonionalusta",
+      "barcodes": [
+        "2043603413417"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043603413417",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 379073960,
+      "vendorCode": "JW-NB-AGT-M-0103",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Кампо дель Сьело",
+      "barcodes": [
+        "2043468769414"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043468769414",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378980050,
+      "vendorCode": "JW-NB-AGT-M-0100",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Серичо",
+      "barcodes": [
+        "2043467743811"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043467743811",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 445409409,
+      "vendorCode": "8978785664",
+      "subjectName": "Кольца",
+      "title": "Кольцо из метеорита Muonionalucsta",
+      "barcodes": [
+        "2047648663486",
+        "2047648657843",
+        "2047648665916",
+        "2047648675304",
+        "2047648678350",
+        "2047648679319",
+        "2044462374703"
+      ],
+      "ozon": {
+        "offer_id": "8978785664",
+        "product_id": 3320038191,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047648663486",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047648657843",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047648665916",
+          "ym": {
+            "offerId": "2047648665916",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2047648675304",
+          "ym": {
+            "offerId": "2047648675304",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2047648678350",
+          "ym": {
+            "offerId": "2047648678350",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2047648679319",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2044462374703",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 672460430,
+      "vendorCode": "98988877634",
+      "subjectName": "Обереги",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2047620400276"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047620400276",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 672452104,
+      "vendorCode": "6972308585",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2047620319868"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047620319868",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 628342861,
+      "vendorCode": "903257985697",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритами",
+      "barcodes": [
+        "2047395929590"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047395929590",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 604455438,
+      "vendorCode": "983727685",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с бусиной ДЗИ",
+      "barcodes": [
+        "2047160507299",
+        "2047396493786"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047160507299",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2047396493786",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 266904445,
+      "vendorCode": "JW-NB-AGT-M-0010",
+      "subjectName": "Браслеты",
+      "title": "Браслет с бусиной ДЗИ из Ливийского стекла",
+      "barcodes": [
+        "2041378657647",
+        "2041363711019"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041378657647",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2041363711019",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 561820696,
+      "vendorCode": "8878787673645",
+      "subjectName": "Браслеты",
+      "title": "Браслет с бусиной Дзи",
+      "barcodes": [
+        "2046602038971"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046602038971",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 298059552,
+      "vendorCode": "JW-NB-AGT-M-0038",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Девять Врат\" с бусиной Дзи 9 глаз талисма",
+      "barcodes": [
+        "2042154066417"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042154066417",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 289945106,
+      "vendorCode": "JW-NB-AGT-M-0032",
+      "subjectName": "Браслеты",
+      "title": "Браслет с метеоритом",
+      "barcodes": [
+        "2041988460194"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041988460194",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 415524446,
+      "vendorCode": "34567890",
+      "subjectName": "Браслеты",
+      "title": "Браслет с молдавитом",
+      "barcodes": [
+        "2043972138362"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043972138362",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 291902573,
+      "vendorCode": "JW-NB-AGT-M-0034",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Звездный путник\" с метеоритом Алетай и Дз",
+      "barcodes": [
+        "2042909310109",
+        "2042338478821",
+        "2042032128565"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042909310109",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042338478821",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042032128565",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 267890574,
+      "vendorCode": "JW-NB-AGT-M-0017",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2041385499513"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041385499513",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391729632,
+      "vendorCode": "JW-NB-AGT-M-0123",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь - редкий коллекционный образ",
+      "barcodes": [
+        "2043693370416"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043693370416",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 307131325,
+      "vendorCode": "JW-NB-AGT-M-0048",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Муонионалуста",
+      "barcodes": [
+        "2042359242661"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0048",
+        "product_id": 3320038208,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042359242661",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391785664,
+      "vendorCode": "JW-NB-AGT-M-0121",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Дронино - коллекционный образец",
+      "barcodes": [
+        "2043693988482"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043693988482",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 597019891,
+      "vendorCode": "98235687435687",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино 16,5 гр.",
+      "barcodes": [
+        "2047094869296"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2047094869296",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 445394512,
+      "vendorCode": "93875346",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044462192581"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044462192581",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391771905,
+      "vendorCode": "JW-NB-AGT-M-0122",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Дронино - коллекционный образец",
+      "barcodes": [
+        "2043693843118"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043693843118",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374522317,
+      "vendorCode": "JW-NB-AGT-M-0090",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Дронино 10,2 г - редкий образец для медит",
+      "barcodes": [
+        "2043413644346"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413644346",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 365869460,
+      "vendorCode": "JW-NB-AGT-M-0084",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043289572958"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043289572958",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 335125931,
+      "vendorCode": "JW-NB-AGT-M-0069",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Сielo",
+      "barcodes": [
+        "2042910576150"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042910576150",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 334460490,
+      "vendorCode": "JW-NB-AGT-M-0062",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Каньон Дьябло",
+      "barcodes": [
+        "2042899079512"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0062",
+        "product_id": 3320038154,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042899079512",
+          "ym": {
+            "offerId": "2042899079512",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 267915412,
+      "vendorCode": "JW-NB-AGT-M-0018",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Кампо Дель Сьело",
+      "barcodes": [
+        "2041385829402"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0018",
+        "product_id": 3320038112,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2041385829402",
+          "ym": {
+            "offerId": "2041385829402",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 604445060,
+      "vendorCode": "89375298356",
+      "subjectName": "Обереги",
+      "title": "Коллекционная фигурка из метеорита Будда - 52,4 гр",
+      "barcodes": [
+        "2047160402266"
+      ],
+      "ozon": {
+        "offer_id": "89375298356",
+        "product_id": 3320038174,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2047160402266",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568536973,
+      "vendorCode": "837259562",
+      "subjectName": "Обереги",
+      "title": "Коллекционный образец метеорит Царев",
+      "barcodes": [
+        "2046720390876"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046720390876",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 563068048,
+      "vendorCode": "94379874",
+      "subjectName": "Обереги",
+      "title": "Метеорит Царев индивидуальный экземпляр - 53,3 гр.",
+      "barcodes": [
+        "2046629236558"
+      ],
+      "ozon": {
+        "offer_id": "94379874",
+        "product_id": 3320038136,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046629236558",
+          "ym": {
+            "offerId": "2046629236558",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541400165,
+      "vendorCode": "983792356837",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Кампо дель Сьело",
+      "barcodes": [
+        "2046251831442"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046251831442",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 333508872,
+      "vendorCode": "JW-NB-AGT-M-0072",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо-дель-Сьело 16,2г - образец из Полей",
+      "barcodes": [
+        "2042868629441"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042868629441",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 312927818,
+      "vendorCode": "JW-NB-AGT-M-0054",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2042500500114"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042500500114",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 583836845,
+      "vendorCode": "932875946",
+      "subjectName": "Обереги",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046947404448"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046947404448",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 583831016,
+      "vendorCode": "9875983654",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046947341361"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046947341361",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 578795659,
+      "vendorCode": "87657485835",
+      "subjectName": "Кольца",
+      "title": "Кольцо из метеорита Muonionalusta 21-й размер",
+      "barcodes": [
+        "2046868288998"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046868288998",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 434097996,
+      "vendorCode": "374293578623",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2044276698316"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044276698316",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568624083,
+      "vendorCode": "6757655544343",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046721515483"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046721515483",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505524639,
+      "vendorCode": "5475466545734",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2045524950606"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045524950606",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505173451,
+      "vendorCode": "9876543211",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Сampo del Cielo",
+      "barcodes": [
+        "2045516393688"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045516393688",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505155691,
+      "vendorCode": "346767879",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2045516021642"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045516021642",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 443474437,
+      "vendorCode": "7656982",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Сихотэ-Алинь",
+      "barcodes": [
+        "2044436255946"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044436255946",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 575978057,
+      "vendorCode": "888765432",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2046830790368"
+      ],
+      "ozon": {
+        "offer_id": "888765432",
+        "product_id": 3320038130,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2046830790368",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 575735167,
+      "vendorCode": "786764320997",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с 2-ликой Рудракшей",
+      "barcodes": [
+        "2046825613184"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046825613184",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 305733662,
+      "vendorCode": "JW-NB-AGT-M-0046",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2042328664845"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042328664845",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 303598439,
+      "vendorCode": "JW-NB-AGT-M-0041",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Вершитель реальности\" с метеоритом и лабр",
+      "barcodes": [
+        "2042287474646",
+        "2042287474639",
+        "2042285696378"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0041",
+        "product_id": 3320038107,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042287474646",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042287474639",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042285696378",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 395899421,
+      "vendorCode": "JW-NB-AGT-M-0129",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2043736321702"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043736321702",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 388167738,
+      "vendorCode": "JW-NB-AGT-M-0114",
+      "subjectName": "Браслеты",
+      "title": "Браслет с метеоритом Муонионалуста",
+      "barcodes": [
+        "2043613352102"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043613352102",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 316205510,
+      "vendorCode": "JW-NB-AGT-M-0055",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2042567613079"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042567613079",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 292157496,
+      "vendorCode": "JW-NB-AGT-M-0033",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Звездный маг\" с метеоритом Алетай и бусин",
+      "barcodes": [
+        "2042326950452",
+        "2042037693792",
+        "2042326618529"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0033",
+        "product_id": 4265582661,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2042326950452",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042037693792",
+          "ym": {
+            "offerId": "2042037693792",
+            "status": "linked"
+          }
+        },
+        {
+          "barcode": "2042326618529",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 259678801,
+      "vendorCode": "JW-NB-AGT-M-0002",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Мудрость Будды\" с бусиной и мантрой для м",
+      "barcodes": [
+        "2041383032873",
+        "2041269672940",
+        "2041168831875"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041383032873",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2041269672940",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2041168831875",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 433802528,
+      "vendorCode": "090866754",
+      "subjectName": "Браслеты",
+      "title": "Браслет с натуральными камнями",
+      "barcodes": [
+        "2044270326963"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044270326963",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 423610587,
+      "vendorCode": "45678905555678",
+      "subjectName": "Браслеты",
+      "title": "Браслет силы с бусиной Дзи",
+      "barcodes": [
+        "2044134883557"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044134883557",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 412549464,
+      "vendorCode": "4567890",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2043922874913"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043922874913",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391310895,
+      "vendorCode": "JW-NB-AGT-M-0124",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2043686169744"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043686169744",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 388241188,
+      "vendorCode": "JW-NB-AGT-M-0115",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2043614320797"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043614320797",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 362532108,
+      "vendorCode": "JW-NB-AGT-M-0059",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Хранитель\" из обсидиана с бусиной Дзи 2 г",
+      "barcodes": [
+        "2043231391927"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043231391927",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 334004727,
+      "vendorCode": "JW-NB-AGT-M-0071",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с бусиной Дзи",
+      "barcodes": [
+        "2042884880710"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042884880710",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 331517609,
+      "vendorCode": "JW-NB-AGT-M-0066",
+      "subjectName": "Браслеты",
+      "title": "Браслет лабрадорит с метеоритом Алетай \"Срединный ",
+      "barcodes": [
+        "2042828070092"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042828070092",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 318131090,
+      "vendorCode": "JW-NB-AGT-M-0070",
+      "subjectName": "Браслеты",
+      "title": "Браслет с метеоритом Сеймчан",
+      "barcodes": [
+        "2042602331869",
+        "2042602331951"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042602331869",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042602331951",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 269374290,
+      "vendorCode": "JW-NB-AGT-M-0019",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Амрита\" с метеоритом Алетай защитный тали",
+      "barcodes": [
+        "2041433496372",
+        "2042443326352"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041433496372",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042443326352",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 431548944,
+      "vendorCode": "6565542",
+      "subjectName": "Часы наручные",
+      "title": "Коллекционные часы с метеоритом",
+      "barcodes": [
+        "2044245185854"
+      ],
+      "ozon": {
+        "offer_id": "6565542",
+        "product_id": 3320038204,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044245185854",
+          "ym": {
+            "offerId": "2044245185854",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 258921133,
+      "vendorCode": "JW-NB-AGT-M-0001",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2041143469697"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041143469697",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 430742201,
+      "vendorCode": "4535657887",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральный камней с метеоритом",
+      "barcodes": [
+        "2044230961111",
+        "2044616238349",
+        "2044616238615"
+      ],
+      "ozon": {
+        "offer_id": "4535657887",
+        "product_id": 3320038094,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044230961111",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2044616238349",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2044616238615",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 322355553,
+      "vendorCode": "JW-NB-AGT-M-0076",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом Алетай",
+      "barcodes": [
+        "2042686383907"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042686383907",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 389408691,
+      "vendorCode": "JW-NB-AGT-M-0116",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом Сеймчан",
+      "barcodes": [
+        "2043630968799"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043630968799",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 329028331,
+      "vendorCode": "JW-NB-AGT-M-0079",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом Алетай",
+      "barcodes": [
+        "2042794970464"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042794970464",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 272447123,
+      "vendorCode": "JW-NB-AGT-M-0027",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Амулет яснознания\" с бусиной Дзи 21 глаз",
+      "barcodes": [
+        "2041504963833"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041504963833",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 568589946,
+      "vendorCode": "378759325637864",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2046721097149"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046721097149",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 561830891,
+      "vendorCode": "89454365",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом Сеймчан",
+      "barcodes": [
+        "2046602216560"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046602216560",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 561812320,
+      "vendorCode": "63827657863",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с бусинами Дзи",
+      "barcodes": [
+        "2046601862935"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046601862935",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 561823684,
+      "vendorCode": "8327956235736",
+      "subjectName": "Браслеты",
+      "title": "Браслет силы со старой бусиной ДЗИ",
+      "barcodes": [
+        "2046602075860"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046602075860",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 445391913,
+      "vendorCode": "8923735874658746",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044462171210"
+      ],
+      "ozon": {
+        "offer_id": "8923735874658746",
+        "product_id": 3320038165,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2044462171210",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 288063036,
+      "vendorCode": "JW-NB-AGT-M-0028",
+      "subjectName": "Шармы-подвески",
+      "title": "Шарм подвеска с Метеоритом",
+      "barcodes": [
+        "2041941855531"
+      ],
+      "ozon": {
+        "offer_id": "JW-NB-AGT-M-0028",
+        "product_id": 3320038172,
+        "status": "linked"
+      },
+      "ym": [
+        {
+          "barcode": "2041941855531",
+          "ym": {
+            "offerId": "2041941855531",
+            "status": "linked"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 447657279,
+      "vendorCode": "988776543",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2044504218545"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044504218545",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 547982686,
+      "vendorCode": "545464389",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Cielo",
+      "barcodes": [
+        "2046353568161"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046353568161",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 541346062,
+      "vendorCode": "9999887654",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Сихотэ-Алинь",
+      "barcodes": [
+        "2046251037936"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2046251037936",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391231570,
+      "vendorCode": "JW-NB-AGT-M-0120",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь - редкий коллекционный образ",
+      "barcodes": [
+        "2043682217265"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043682217265",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374544701,
+      "vendorCode": "JW-NB-AGT-M-0092",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043413725786"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413725786",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 328065348,
+      "vendorCode": "JW-NB-AGT-M-0080",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Каньон Дьябло 15,2г - из Аризонского крат",
+      "barcodes": [
+        "2042786475694"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042786475694",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 266972361,
+      "vendorCode": "JW-NB-AGT-M-0013",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Кампо Дель Сьело",
+      "barcodes": [
+        "2041364871910"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041364871910",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 386392387,
+      "vendorCode": "JW-NB-AGT-M-0107",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2043569853173"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043569853173",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374551051,
+      "vendorCode": "JW-NB-AGT-M-0093",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043413753727"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413753727",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374472432,
+      "vendorCode": "JW-NB-AGT-M-0089",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 37,2г - крупный образец",
+      "barcodes": [
+        "2043413317943"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413317943",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 343158945,
+      "vendorCode": "JW-NB-AGT-M-0060",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 16,3г - железный космический",
+      "barcodes": [
+        "2043019146183"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043019146183",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 325757368,
+      "vendorCode": "JW-NB-AGT-M-0075",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 17,7г - с видманштеттеновой ",
+      "barcodes": [
+        "2042741661704"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042741661704",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 325750462,
+      "vendorCode": "JW-NB-AGT-M-0068",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 19г - осколок с историей пад",
+      "barcodes": [
+        "2042741456423"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042741456423",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 317547824,
+      "vendorCode": "JW-NB-AGT-M-0057",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 20г - образец для коллекции",
+      "barcodes": [
+        "2042589150415"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042589150415",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505517408,
+      "vendorCode": "77766554332",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2045523387694"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045523387694",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 505176525,
+      "vendorCode": "888764321",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Campo del Cielo",
+      "barcodes": [
+        "2045516425532"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2045516425532",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378297543,
+      "vendorCode": "JW-NB-AGT-M-0096",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Муонионалуста",
+      "barcodes": [
+        "2043459425534"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043459425534",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 390775378,
+      "vendorCode": " JW-NB-AGT-M-0117",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Сielo",
+      "barcodes": [
+        "2043665788867"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043665788867",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 378971071,
+      "vendorCode": "JW-NB-AGT-M-0099",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Серичо",
+      "barcodes": [
+        "2043467603641"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043467603641",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 468740722,
+      "vendorCode": "382569886",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Cielo",
+      "barcodes": [
+        "2044892571222"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044892571222",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 468684345,
+      "vendorCode": "9854736",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Campo del Cielo",
+      "barcodes": [
+        "2044890417720"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044890417720",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 433795545,
+      "vendorCode": "09898775533",
+      "subjectName": "Браслеты",
+      "title": "Браслет с метеоритом",
+      "barcodes": [
+        "2044270246520"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044270246520",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 432459060,
+      "vendorCode": "09898763",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2044257369389"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2044257369389",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 412516849,
+      "vendorCode": "JW-NB-AGT-M-0132",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело",
+      "barcodes": [
+        "2043922589947"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043922589947",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 379033530,
+      "vendorCode": "JW-NB-AGT-M-0102",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Кампо дель Сьело",
+      "barcodes": [
+        "2043468245710"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043468245710",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 390777177,
+      "vendorCode": "JW-NB-AGT-M-0118",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Сихотэ-Алинь",
+      "barcodes": [
+        "2043665825586"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043665825586",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 336330241,
+      "vendorCode": "JW-NB-AGT-M-0067",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Campo del Сielo",
+      "barcodes": [
+        "2042931042221"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042931042221",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 391256768,
+      "vendorCode": "JW-NB-AGT-M-0125",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска из метеорита Campo del Сielo",
+      "barcodes": [
+        "2043682486746"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043682486746",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 298650698,
+      "vendorCode": "JW-NB-AGT-M-0043",
+      "subjectName": "Серьги",
+      "title": "Серьги \"Кольца Сатурна\" с метеоритом Муонионалуста",
+      "barcodes": [
+        "2042168608269"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042168608269",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 387093306,
+      "vendorCode": "JW-NB-AGT-M-0110",
+      "subjectName": "Подвески бижутерные",
+      "title": "Подвеска с метеоритом Серичо",
+      "barcodes": [
+        "2043586743990"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043586743990",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 385908252,
+      "vendorCode": "JW-NB-AGT-M-0106",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2043562551892",
+        "2043562551908"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043562551892",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2043562551908",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 383521570,
+      "vendorCode": "JW-NB-AGT-M-0105",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней с метеоритом",
+      "barcodes": [
+        "2043534875148"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043534875148",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 369052608,
+      "vendorCode": "JW-NB-AGT-M-0088",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 16,8г - образец с сертификат",
+      "barcodes": [
+        "2043336345467"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043336345467",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 317539629,
+      "vendorCode": "JW-NB-AGT-M-0056",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец - метеорит Сихоте Алинь",
+      "barcodes": [
+        "2042588913257"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042588913257",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 304681906,
+      "vendorCode": "JW-NB-AGT-M-0042",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Фигурка Пияо из марокканского метеорита",
+      "barcodes": [
+        "2042308434734"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042308434734",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 263616667,
+      "vendorCode": "JW-NB-AGT-M-0005",
+      "subjectName": "Браслеты",
+      "title": "Браслет \"Амрита\" с метеоритом Алетай и агатом тали",
+      "barcodes": [
+        "2042386937141",
+        "2042327399366",
+        "2041286209891"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042386937141",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2042327399366",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2041286209891",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 270195576,
+      "vendorCode": "JW-NB-AGT-M-0021",
+      "subjectName": "Браслеты",
+      "title": "Браслет из натуральных камней",
+      "barcodes": [
+        "2041452455749",
+        "2041452647168"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2041452455749",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        },
+        {
+          "barcode": "2041452647168",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 318613442,
+      "vendorCode": "JW-NB-AGT-M-0077",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо дель Сьело - коллекционный образец",
+      "barcodes": [
+        "2042610731958"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2042610731958",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 367834455,
+      "vendorCode": "JW-NB-AGT-M-0087",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Сихотэ-Алинь 13,1г - космический образец ",
+      "barcodes": [
+        "2043318992788"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043318992788",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 347595157,
+      "vendorCode": "JW-NB-AGT-M-0065",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Метеорит Кампо-дель-Сьело 16,6г - с уникальной стр",
+      "barcodes": [
+        "2043083380636"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043083380636",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 365938767,
+      "vendorCode": "JW-NB-AGT-M-0085",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043290337584"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043290337584",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    },
+    {
+      "nmId": 374566431,
+      "vendorCode": "JW-NB-AGT-M-0094",
+      "subjectName": "Природные материалы для творчества",
+      "title": "Коллекционный образец метеорит Дронино",
+      "barcodes": [
+        "2043413885329"
+      ],
+      "ozon": {
+        "offer_id": null,
+        "status": "missing"
+      },
+      "ym": [
+        {
+          "barcode": "2043413885329",
+          "ym": {
+            "offerId": null,
+            "status": "missing"
+          }
+        }
+      ]
+    }
+  ],
+  "extras": {
+    "ozon": [
+      "826250392"
+    ],
+    "ym": []
+  }
+}

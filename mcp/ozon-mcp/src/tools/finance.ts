@@ -97,19 +97,17 @@ export async function getBalance(_input: GetBalanceInput): Promise<{
   const now = new Date();
   const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
+  // Ozon не отдаёт «текущий баланс» напрямую — берём итог денежного потока
+  // (cash-flow-statement) за период. Эндпоинт требует page > 0.
   const result = await fetchOzon<{
     result: {
       cash_flows: Array<{
-        period: {
-          id: number;
-          begin: string;
-          end: string;
-        };
-        balance_and_transfers: {
-          begin_balance: number;
-          end_balance: number;
-          transfers: number;
-        };
+        period: { id: number; begin: string; end: string };
+        orders_amount: number;
+        returns_amount: number;
+        commission_amount: number;
+        services_amount: number;
+        item_delivery_and_return_amount: number;
         currency_code: string;
       }>;
     };
@@ -118,15 +116,27 @@ export async function getBalance(_input: GetBalanceInput): Promise<{
       from: monthAgo.toISOString().split('T')[0] + 'T00:00:00.000Z',
       to: now.toISOString().split('T')[0] + 'T23:59:59.999Z',
     },
+    page: 1,
+    page_size: 1000,
     with_details: false,
   });
 
   const cashFlows = result.result?.cash_flows || [];
-  const latestFlow = cashFlows[cashFlows.length - 1];
+  // Чистый денежный поток за период = начисления + возвраты − комиссии − услуги − логистика
+  const netFlow = cashFlows.reduce(
+    (sum, f) =>
+      sum +
+      (f.orders_amount || 0) +
+      (f.returns_amount || 0) +
+      (f.commission_amount || 0) +
+      (f.services_amount || 0) +
+      (f.item_delivery_and_return_amount || 0),
+    0
+  );
 
   const balanceData: BalanceData = {
-    balance: latestFlow?.balance_and_transfers?.end_balance || 0,
-    currency: latestFlow?.currency_code || 'RUB',
+    balance: Math.round(netFlow * 100) / 100,
+    currency: cashFlows[cashFlows.length - 1]?.currency_code || 'RUB',
     updatedAt: new Date().toISOString(),
   };
 
@@ -151,6 +161,15 @@ export async function getTransactions(input: GetTransactionsInput): Promise<{
     ? (dateTo.includes('T') ? dateTo : `${dateTo}T23:59:59.999Z`)
     : new Date().toISOString();
 
+  // Ozon допускает период не более 1 месяца
+  const spanDays = (new Date(to).getTime() - new Date(from).getTime()) / (24 * 60 * 60 * 1000);
+  if (spanDays > 31) {
+    throw new Error(
+      `Ozon разрешает период транзакций не более 1 месяца (запрошено ~${Math.round(spanDays)} дн.). ` +
+      'Сократите диапазон dateFrom..dateTo.'
+    );
+  }
+
   // Маппинг типов транзакций
   const typeMapping: Record<string, string | undefined> = {
     all: undefined,
@@ -169,7 +188,7 @@ export async function getTransactions(input: GetTransactionsInput): Promise<{
       },
       transaction_type: typeMapping[transactionType || 'all'],
     },
-    page,
+    page: page && page > 0 ? page : 1, // Ozon требует page > 0
     page_size: Math.min(pageSize || 100, 1000),
   };
 

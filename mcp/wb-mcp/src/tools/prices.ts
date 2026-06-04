@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
-import { logPriceChange, getCachedProduct, cacheProduct } from '../db/postgres.js';
 import { logRead, logWriteWithPreview, logWriteConfirmed, logError } from '../utils/logger.js';
 import {
   createPriceChangePreview,
@@ -13,19 +12,29 @@ import {
 // Input schema for wb_get_prices
 export const GetPricesInputSchema = z.object({
   nmIds: z.array(z.number()).optional().describe('Filter by specific nmIds'),
-  limit: z.number().optional().default(100).describe('Maximum number of products to return'),
-  offset: z.number().optional().default(0).describe('Offset for pagination'),
+  limit: z.number().int().positive('limit должен быть больше 0').optional().default(100).describe('Maximum number of products to return'),
+  offset: z.number().int().min(0, 'offset не может быть отрицательным').optional().default(0).describe('Offset for pagination'),
 });
 
 export type GetPricesInput = z.infer<typeof GetPricesInputSchema>;
 
 // Input schema for wb_update_price
-export const UpdatePriceInputSchema = z.object({
-  nmId: z.number().describe('Product nmId'),
-  price: z.number().optional().describe('New price (before discount)'),
-  discount: z.number().optional().describe('New discount percentage (0-100)'),
-  confirm: z.boolean().optional().default(false).describe('Set to true to confirm and apply changes'),
-});
+export const UpdatePriceInputSchema = z
+  .object({
+    nmId: z.number().int('nmId должен быть целым числом').positive('nmId должен быть положительным').describe('Product nmId'),
+    price: z.number().positive('price должна быть больше 0').optional().describe('New price (before discount)'),
+    discount: z
+      .number()
+      .int('discount должен быть целым числом')
+      .min(0, 'discount не может быть меньше 0')
+      .max(100, 'discount не может быть больше 100')
+      .optional()
+      .describe('New discount percentage (0-100)'),
+    confirm: z.boolean().optional().default(false).describe('Set to true to confirm and apply changes'),
+  })
+  .refine((d) => d.price !== undefined || d.discount !== undefined, {
+    message: 'Нужно указать хотя бы одно из полей: price или discount',
+  });
 
 export type UpdatePriceInput = z.infer<typeof UpdatePriceInputSchema>;
 
@@ -121,7 +130,8 @@ export async function getPrices(input: GetPricesInput): Promise<{
           price: size.price,
           discount,
           promoCode: item.promoCode || 0,
-          finalPrice: Math.round(size.price * (1 - discount / 100)),
+          // WB возвращает готовую цену со скидкой (discountedPrice); пересчёт — только fallback
+          finalPrice: size.discountedPrice ?? Math.round(size.price * (1 - discount / 100)),
           sizes: item.sizes,
         });
       }
@@ -175,25 +185,15 @@ export function formatPricesAsMarkdown(products: PriceData[]): string {
 async function getCurrentPrice(nmId: number): Promise<{
   price: number;
   discount: number;
-  productName?: string;
+  finalPrice: number;
 } | null> {
-  // Try cache first
-  const cached = await getCachedProduct('wb', nmId.toString(), 60); // 1 hour cache
-  if (cached && cached.price) {
-    return {
-      price: cached.price as number,
-      discount: (cached.discount_percent as number) || 0,
-      productName: cached.name as string,
-    };
-  }
-
-  // Fetch from API
   const result = await getPrices({ nmIds: [nmId], limit: 1, offset: 0 });
   if (result.products.length > 0) {
     const product = result.products[0];
     return {
       price: product.price,
       discount: product.discount,
+      finalPrice: product.finalPrice,
     };
   }
 
@@ -225,8 +225,8 @@ export async function updatePrice(
   if (!confirm) {
     const preview = createPriceChangePreview({
       nmId: nmId.toString(),
-      productName: current.productName,
       currentPrice: current.price,
+      currentFinalPrice: current.finalPrice,
       newPrice,
       currentDiscount: current.discount,
       newDiscount,
@@ -256,30 +256,10 @@ export async function updatePrice(
       }),
     });
 
-    // Log successful change
-    await logPriceChange({
-      marketplace: 'wb',
-      nmId: nmId.toString(),
-      priceOld: current.price,
-      priceNew: newPrice,
-      discountOld: current.discount,
-      discountNew: newDiscount,
-      changedBy: 'mcp',
-      reason: 'Manual price update via wb_update_price',
-    });
-
-    // Update cache
-    await cacheProduct({
-      marketplace: 'wb',
-      nmId: nmId.toString(),
-      price: newPrice,
-      discountPercent: newDiscount,
-    });
-
     const preview = createPriceChangePreview({
       nmId: nmId.toString(),
-      productName: current.productName,
       currentPrice: current.price,
+      currentFinalPrice: current.finalPrice,
       newPrice,
       currentDiscount: current.discount,
       newDiscount,

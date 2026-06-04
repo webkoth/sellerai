@@ -98,7 +98,7 @@ export async function getReviews(input: GetReviewsInput): Promise<{
     const body: Record<string, unknown> = {
       date_from: new Date(dateFrom).toISOString(),
       date_to: new Date(dateTo + 'T23:59:59').toISOString(),
-      limit: Math.min(100, limit - reviews.length),
+      limit: Math.max(20, Math.min(100, limit - reviews.length)), // Ozon /v1/review/list требует limit ∈ [20,100]
       sort_dir: 'desc',
     };
 
@@ -172,6 +172,9 @@ export async function getReviews(input: GetReviewsInput): Promise<{
     if (!result.has_next || fetched.length < 100) break;
     lastId = result.last_id;
   }
+
+  // Ozon возвращает минимум 20 за запрос — обрезаем до запрошенного limit
+  if (reviews.length > limit) reviews.length = limit;
 
   // Calculate summary
   const ratingDistribution: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };

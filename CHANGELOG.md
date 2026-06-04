@@ -7,6 +7,26 @@
 
 ---
 
+## [2.1.0] - 2026-06-03
+
+Чистка рабочего пространства: убран мусор от брошенных концепций, проект сведён к трём маркетплейсам (WB, Ozon, Яндекс.Маркет).
+
+### 🧹 Removed
+- **Avito выведен из проекта:** удалён `mcp/avito-mcp/`, записи в `.mcp.json` / `settings.local.json`, блоки в `hooks.json` и `CLAUDE.md`, ключи `AVITO_*` из `.env`.
+- **Postgres выведен:** удалён postgres MCP-сервер и `DATABASE_URL` из конфигурации и `.env`, удалён `scripts/load_to_postgres.py`. Слой кэша и инструмент `db_query` в wb-mcp удаляются в рамках доводки MCP-серверов.
+- **Hooks удалены:** `.claude/hooks.json` ссылался на несуществующий `scripts/hooks/` (битые пути) — убран вместе с описанием в `CLAUDE.md`.
+- **Брошенные концепции:** `DASHBOARD_PLAN.md`, skill `webapp-testing`, `.playwright-mcp/`, Phase-2 stubs (`ai-visual-generation`, `infographic-design-system`), `docs/LANDING_PAGE.md` + `docs/LANDING_PLAN.md` (дубли), `hire.md`, `docs/superpowers/`.
+- **Мусор/регенерируемое:** все `.DS_Store`, `__pycache__/`, дампы `data/ozon_import`, `data/ym_import`, `data/*_products_in_stock.json`.
+
+### 🔧 Changed
+- **MCP-конфиг:** единственный источник правды — реальный файл `/.mcp.json` (ранее — `.claude/.mcp.json` + symlink в корне). Дубль удалён. Серверы: `wb-mcp`, `ozon-mcp`, `ym-mcp`, `firecrawl`.
+- **CLAUDE.md / README.md:** приведены к факту — 3 маркетплейса, 24 skills, 19 commands, полные таблицы MCP-инструментов; исправлено `YM_TOKEN` → `YM_API_TOKEN`.
+
+### 🛡 Защищено (не тронуто)
+- `docs/api-reference/{wildberries,ozon,yandex-market}`, skills `marketplace-docs-parser` и `legacy-scripts` (вкл. `parse_wb_openapi.py`), справочники `data/categories` и `data/commissions`.
+
+---
+
 ## [2.0.0] - 2025-12-29
 
 ### 🔴 Breaking Changes

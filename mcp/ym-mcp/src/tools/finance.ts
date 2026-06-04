@@ -4,7 +4,6 @@
  */
 
 import { z } from 'zod';
-import { apiRequest, getCampaignId } from '../api/client.js';
 
 // ==================== Input Schemas ====================
 
@@ -55,102 +54,35 @@ export interface PaymentsSummary {
 // ==================== Functions ====================
 
 /**
- * Получить текущий баланс продавца
- * GET /campaigns/{campaignId}/balance
+ * Баланс продавца.
+ *
+ * У Яндекс.Маркета НЕТ прямого эндпоинта баланса по магазину
+ * (`/campaigns/{id}/balance` отвечает NOT_FOUND). Финансовые данные доступны
+ * только через Reports API (асинхронный финансовый отчёт) или личный кабинет.
  */
-export async function getBalance(input: GetBalanceInput): Promise<{
+export async function getBalance(_input: GetBalanceInput): Promise<{
   balance: BalanceData;
 }> {
-  const campaignId = input.campaignId || Number(getCampaignId());
-
-  const result = await apiRequest<{
-    balance: {
-      balance: number;
-      dontPay?: number;
-      totalLimit?: number;
-    };
-  }>(`/campaigns/${campaignId}/balance`);
-
-  const balanceData: BalanceData = {
-    balance: result.balance?.balance || 0,
-    currency: 'RUB',
-    updatedAt: new Date().toISOString(),
-  };
-
-  return { balance: balanceData };
+  throw new Error(
+    'Яндекс.Маркет не отдаёт баланс через прямой API. ' +
+    'Финансы доступны через финансовый отчёт по реализации (Reports API) или личный кабинет seller.market.yandex.ru.'
+  );
 }
 
 /**
- * Получить историю выплат
- * GET /campaigns/{campaignId}/account/statement
+ * История выплат.
+ *
+ * Прямого эндпоинта выплат у ЯМ нет (`/campaigns/{id}/account/statement` →
+ * NOT_FOUND). Используйте Reports API (финансовый отчёт) или ЛК.
  */
-export async function getPayments(input: GetPaymentsInput): Promise<{
+export async function getPayments(_input: GetPaymentsInput): Promise<{
   payments: PaymentData[];
   summary: PaymentsSummary;
 }> {
-  const campaignId = input.campaignId || Number(getCampaignId());
-  const { dateFrom, dateTo, limit, pageToken } = input;
-
-  const endDate = dateTo || new Date().toISOString().split('T')[0];
-
-  let url = `/campaigns/${campaignId}/account/statement?from=${dateFrom}&to=${endDate}`;
-  if (pageToken) {
-    url += `&page_token=${pageToken}`;
-  }
-
-  interface StatementItem {
-    id: number;
-    date: string;
-    type: string;
-    amount: number;
-    orderId?: number;
-    orderIds?: number[];
-    paymentOrder?: {
-      documentNumber?: string;
-      date?: string;
-    };
-  }
-
-  const result = await apiRequest<{
-    result: {
-      statement?: StatementItem[];
-      paging?: {
-        nextPageToken?: string;
-      };
-    };
-  }>(url);
-
-  const items = result.result?.statement || [];
-  const payments: PaymentData[] = items.slice(0, limit).map((item) => ({
-    id: item.id,
-    date: item.date,
-    type: item.type,
-    amount: item.amount,
-    orderId: item.orderId,
-    orderIds: item.orderIds,
-    paymentOrder: item.paymentOrder,
-  }));
-
-  // Рассчитываем сводку
-  const byType: Record<string, { count: number; sum: number }> = {};
-  for (const p of payments) {
-    const type = p.type || 'Другое';
-    if (!byType[type]) {
-      byType[type] = { count: 0, sum: 0 };
-    }
-    byType[type].count++;
-    byType[type].sum += p.amount;
-  }
-
-  const summary: PaymentsSummary = {
-    totalRecords: payments.length,
-    totalAmount: payments.reduce((sum, p) => sum + p.amount, 0),
-    periodFrom: dateFrom,
-    periodTo: endDate,
-    byType,
-  };
-
-  return { payments, summary };
+  throw new Error(
+    'Яндекс.Маркет не отдаёт историю выплат через прямой API. ' +
+    'Используйте финансовый отчёт по реализации (Reports API) или личный кабинет seller.market.yandex.ru.'
+  );
 }
 
 // ==================== Formatters ====================

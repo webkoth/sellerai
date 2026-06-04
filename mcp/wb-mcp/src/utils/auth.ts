@@ -56,18 +56,6 @@ export function getWBTokens(): WBTokens {
 }
 
 /**
- * Get database connection string
- */
-export function getDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL;
-  if (!url) {
-    // Default local PostgreSQL
-    return 'postgresql://localhost:5432/sellerai';
-  }
-  return url;
-}
-
-/**
  * WB API base URLs (согласно dev.wildberries.ru/openapi/api-information)
  *
  * Каждая категория API имеет свой базовый URL и требует соответствующий токен:

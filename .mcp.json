@@ -1,1 +1,23 @@
-.claude/.mcp.json
+{
+  "mcpServers": {
+    "wb-mcp": {
+      "command": "node",
+      "args": ["mcp/wb-mcp/dist/index.js"]
+    },
+    "ozon-mcp": {
+      "command": "node",
+      "args": ["mcp/ozon-mcp/dist/index.js"]
+    },
+    "ym-mcp": {
+      "command": "node",
+      "args": ["mcp/ym-mcp/dist/index.js"]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    }
+  }
+}
