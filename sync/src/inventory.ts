@@ -51,6 +51,8 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
   const vendorToBarcode = new Map<string, string>();
   const titleOf = new Map<string, string>();
   const vendorOf = new Map<string, string>();
+  const catOf = new Map<string, string>();
+  const finalOf = new Map<string, number>();
   for (const it of wbItems) {
     wbStock.set(it.barcode, it.stock);
     if (it.vendorCode) {
@@ -58,6 +60,8 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
       vendorOf.set(it.barcode, it.vendorCode);
     }
     if (it.title) titleOf.set(it.barcode, it.title);
+    if (it.category) catOf.set(it.barcode, it.category);
+    if (it.finalPrice) finalOf.set(it.barcode, it.finalPrice);
   }
   // подмешиваем известное из леджера (товары, временно ушедшие из наличия)
   for (const [bc, e] of Object.entries(ledger.items)) {
@@ -101,6 +105,8 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
         lastPushed: {},
         title: titleOf.get(bc),
         vendorCode: vendorOf.get(bc),
+        category: catOf.get(bc),
+        wbFinal: finalOf.get(bc),
         updatedAt: now,
       };
       ledger.items[bc] = e;
@@ -136,6 +142,8 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
 
     e.base = Math.max(0, e.base);
     if (e.appliedOrders.length > MAX_APPLIED) e.appliedOrders = e.appliedOrders.slice(-MAX_APPLIED);
+    if (catOf.has(bc)) e.category = catOf.get(bc);
+    if (finalOf.has(bc)) e.wbFinal = finalOf.get(bc);
     e.wbBaseline = e.base; // мы выставим WB = base
     e.updatedAt = now;
     available.set(bc, e.base);

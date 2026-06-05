@@ -165,9 +165,11 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
   try {
     const wb: any = await wbGetOrders({ dateFrom, limit: 1000 });
     for (const o of wb.orders || []) {
+      const qty = Number(o.quantity) || 1;
       orders.push({
         mp: 'wb', orderId: `wb:${o.orderId}:${o.barcode}`, key: String(o.barcode),
-        qty: Number(o.quantity) || 1, status: String(o.status), consuming: !isCancelled(o.status),
+        qty, status: String(o.status), consuming: !isCancelled(o.status),
+        price: o.totalPrice ? Math.round(Number(o.totalPrice) / qty) : undefined,
       });
     }
   } catch { errors.push('wb'); }
@@ -179,6 +181,7 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
         orders.push({
           mp: 'ozon', orderId: `ozon:${o.postingNumber}:${it.offerId}`, key: String(it.offerId),
           qty: Number(it.quantity) || 1, status: String(o.status), consuming: !isCancelled(o.status),
+          price: Number(it.price) || undefined,
         });
       }
     }
@@ -191,6 +194,7 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
         orders.push({
           mp: 'ym', orderId: `ym:${o.id}:${it.offerId}`, key: String(it.offerId),
           qty: Number(it.quantity) || 1, status: String(o.status), consuming: !isCancelled(o.status),
+          price: Number(it.price) || undefined,
         });
       }
     }

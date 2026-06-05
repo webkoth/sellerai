@@ -20,6 +20,7 @@ export interface OpenOrder {
   qty: number;
   status: string;
   consuming: boolean; // true — заказ держит единицу (не отменён)
+  price?: number; // цена покупателя за единицу (для суммы заказа и расчёта прибыли)
 }
 
 /** Запись леджера на один физический товар (ключ — barcode WB). */
@@ -30,6 +31,8 @@ export interface LedgerEntry {
   lastPushed: { wb?: number; ozon?: number; ym?: number };
   title?: string;
   vendorCode?: string;
+  category?: string; // WB subjectName — для комиссии и k при расчёте прибыли
+  wbFinal?: number; // WB_final (эталон) — для «нашей цены» по правилу
   updatedAt: string;
 }
 

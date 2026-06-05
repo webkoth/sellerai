@@ -6,11 +6,27 @@
  */
 import { collectOpenOrders, writeWbStock, writeOzonStock, writeYmStock } from '../clients.js';
 import { loadLedger, saveLedger } from '../inventory.js';
+import { pricing } from '../config.js';
 import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
 import type { Marketplace } from '../types.js';
 
 const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
+const round10 = (n: number): number => Math.ceil(n / 10) * 10;
+const rub = (n: number): string => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+
+interface OrderAlert {
+  mp: Marketplace;
+  title: string;
+  bc: string;
+  qty: number;
+  newStock: number;
+  buyerUnit: number; // цена покупателя за ед.
+  sum: number; // сумма заказа
+  ourUnit: number | null; // наша цена по правилу
+  profit: number | null; // прибыль при выкупе (после комиссии)
+  takePct: number | null; // комиссия %
+}
 
 export async function runOrders(apply: boolean): Promise<void> {
   const ledger = loadLedger();
@@ -28,8 +44,9 @@ export async function runOrders(apply: boolean): Promise<void> {
   }
 
   const affected = new Map<string, number>(); // barcode -> новый остаток
-  const alerts: Array<{ mp: Marketplace; title: string; bc: string; qty: number; newStock: number }> = [];
+  const alerts: OrderAlert[] = [];
   let skippedUnseeded = 0;
+  const bySubject = (pricing as any).by_subject || {};
 
   for (const o of orders) {
     if (!o.consuming) continue;
@@ -47,7 +64,16 @@ export async function runOrders(apply: boolean): Promise<void> {
     e.lastPushed = { wb: e.base, ozon: e.base, ym: e.base };
     e.updatedAt = new Date().toISOString();
     affected.set(bc, e.base);
-    alerts.push({ mp: o.mp, title: e.title || bc, bc, qty: o.qty, newStock: e.base });
+
+    // экономика заказа: комиссия и k берём из категории (pricing.json)
+    const pr = e.category ? bySubject[e.category] : null;
+    const take: number | null = pr ? pr['take_' + o.mp] ?? null : null;
+    const k: number | null = pr ? pr['k_' + o.mp] ?? null : null;
+    const buyerUnit = o.price || 0;
+    const sum = Math.round(buyerUnit * o.qty);
+    const ourUnit = e.wbFinal ? (o.mp === 'wb' ? Math.round(e.wbFinal) : k ? round10(e.wbFinal * k) : null) : null;
+    const profit = take != null && sum ? Math.round(sum * (1 - take)) : null;
+    alerts.push({ mp: o.mp, title: e.title || bc, bc, qty: o.qty, newStock: e.base, buyerUnit, sum, ourUnit, profit, takePct: take != null ? Math.round(take * 100) : null });
   }
 
   if (!alerts.length) {
@@ -72,13 +98,16 @@ export async function runOrders(apply: boolean): Promise<void> {
 
   // алерт по каждому заказу
   for (const a of alerts) {
-    await notify(
-      alertBlock(`🛒 Заказ · ${MP_NAME[a.mp]}`, [
-        `${a.title} (${a.bc})`,
-        `Продано: −${a.qty} шт`,
-        `Новый остаток пула: ${a.newStock}`,
-        `Синхронизировано: WB ${a.newStock} · Ozon ${a.newStock} · ЯМ ${a.newStock}`,
-      ])
-    );
+    const lines = [`${a.title} (${a.bc})`, `Заказано: ${a.qty} шт`];
+    if (a.buyerUnit) {
+      const ourNote = a.ourUnit && a.ourUnit !== a.buyerUnit ? ` (наша по правилу: ${rub(a.ourUnit)})` : '';
+      lines.push(`Цена покупателя: ${rub(a.buyerUnit)}${ourNote}`);
+      lines.push(`Сумма заказа: ${rub(a.sum)}`);
+    }
+    if (a.profit != null) lines.push(`Прибыль при выкупе ≈ ${rub(a.profit)} (комиссия ~${a.takePct}%)`);
+    else lines.push('Прибыль: категория/цена не определены (досчитается после reconcile)');
+    lines.push(`Новый остаток пула: ${a.newStock}`);
+    lines.push(`Синхронизировано: WB ${a.newStock} · Ozon ${a.newStock} · ЯМ ${a.newStock}`);
+    await notify(alertBlock(`🛒 Заказ · ${MP_NAME[a.mp]}`, lines));
   }
 }

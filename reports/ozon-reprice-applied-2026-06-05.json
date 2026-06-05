@@ -1,0 +1,560 @@
+{
+ "applied": 79,
+ "total": 79,
+ "errors": [],
+ "updates": [
+  {
+   "offer_id": "JW-NB-AGT-M-0086",
+   "price": "16450",
+   "old_price": "26530",
+   "min_price": "15630",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "35032037",
+   "price": "43770",
+   "old_price": "47060",
+   "min_price": "41590",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "4535657887",
+   "price": "14330",
+   "old_price": "15920",
+   "min_price": "13620",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0047",
+   "price": "12160",
+   "old_price": "14470",
+   "min_price": "11560",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "76875674543",
+   "price": "19110",
+   "old_price": "23880",
+   "min_price": "18160",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0073",
+   "price": "8210",
+   "old_price": "10130",
+   "min_price": "7800",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0018",
+   "price": "75080",
+   "old_price": "92690",
+   "min_price": "71330",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8797686858325",
+   "price": "28020",
+   "old_price": "31840",
+   "min_price": "26620",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "567567542342",
+   "price": "22590",
+   "old_price": "31380",
+   "min_price": "21470",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0095",
+   "price": "33250",
+   "old_price": "36940",
+   "min_price": "31590",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "98877665437",
+   "price": "54990",
+   "old_price": "57880",
+   "min_price": "52250",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9878765445421",
+   "price": "17740",
+   "old_price": "29070",
+   "min_price": "16860",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "872395643876",
+   "price": "32560",
+   "old_price": "0",
+   "min_price": "30940",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9998765443",
+   "price": "30420",
+   "old_price": "42840",
+   "min_price": "28900",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "098876674",
+   "price": "26700",
+   "old_price": "34230",
+   "min_price": "25370",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "76665545444",
+   "price": "20870",
+   "old_price": "29810",
+   "min_price": "19830",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "6363638900098",
+   "price": "8240",
+   "old_price": "11290",
+   "min_price": "7830",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "79358476457846",
+   "price": "16460",
+   "old_price": "29930",
+   "min_price": "15640",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9057404375",
+   "price": "28530",
+   "old_price": "35230",
+   "min_price": "27110",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "88373654562782",
+   "price": "32480",
+   "old_price": "36080",
+   "min_price": "30860",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0112",
+   "price": "13320",
+   "old_price": "14470",
+   "min_price": "12660",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "787787787654",
+   "price": "20600",
+   "old_price": "28220",
+   "min_price": "19570",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "7777665443",
+   "price": "26820",
+   "old_price": "29790",
+   "min_price": "25480",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8978785664",
+   "price": "31370",
+   "old_price": "36900",
+   "min_price": "29810",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9345896543",
+   "price": "35040",
+   "old_price": "44920",
+   "min_price": "33290",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0022",
+   "price": "76920",
+   "old_price": "82710",
+   "min_price": "73080",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "94792834376487512",
+   "price": "75970",
+   "old_price": "108530",
+   "min_price": "72180",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "87494658726767861",
+   "price": "54640",
+   "old_price": "85380",
+   "min_price": "51910",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0098",
+   "price": "75970",
+   "old_price": "108530",
+   "min_price": "72180",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "847598374643526",
+   "price": "11960",
+   "old_price": "20260",
+   "min_price": "11370",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8372985637486572",
+   "price": "19110",
+   "old_price": "28950",
+   "min_price": "18160",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "382467387253",
+   "price": "37120",
+   "old_price": "65120",
+   "min_price": "35270",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "7866556434221",
+   "price": "25560",
+   "old_price": "39940",
+   "min_price": "24290",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9863479136591751",
+   "price": "52830",
+   "old_price": "67720",
+   "min_price": "50190",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "403874694",
+   "price": "27820",
+   "old_price": "38640",
+   "min_price": "26430",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "97829723765327853",
+   "price": "49550",
+   "old_price": "67870",
+   "min_price": "47080",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "868756534331",
+   "price": "18620",
+   "old_price": "29090",
+   "min_price": "17690",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "897976752231",
+   "price": "64250",
+   "old_price": "86820",
+   "min_price": "61040",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2374238759463943",
+   "price": "22760",
+   "old_price": "50560",
+   "min_price": "21630",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "387593625426359",
+   "price": "21770",
+   "old_price": "34010",
+   "min_price": "20690",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8768757655223",
+   "price": "28120",
+   "old_price": "43940",
+   "min_price": "26720",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "6465363423312",
+   "price": "23530",
+   "old_price": "33140",
+   "min_price": "22360",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8365796237657",
+   "price": "32700",
+   "old_price": "51080",
+   "min_price": "31070",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "9830967956621",
+   "price": "24230",
+   "old_price": "39070",
+   "min_price": "23020",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "3487564386799864",
+   "price": "47540",
+   "old_price": "65120",
+   "min_price": "45170",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "89235856463594",
+   "price": "44560",
+   "old_price": "81010",
+   "min_price": "42340",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "94769469454626",
+   "price": "19730",
+   "old_price": "34010",
+   "min_price": "18750",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "03982907587",
+   "price": "36110",
+   "old_price": "56420",
+   "min_price": "34310",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "835694653692",
+   "price": "83580",
+   "old_price": "109980",
+   "min_price": "79410",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "98327594659211",
+   "price": "12880",
+   "old_price": "20120",
+   "min_price": "12240",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "JW-NB-AGT-M-0033",
+   "price": "12450",
+   "old_price": "14470",
+   "min_price": "11830",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "097976675675454",
+   "price": "45730",
+   "old_price": "57880",
+   "min_price": "43450",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "301984801481",
+   "price": "45130",
+   "old_price": "82050",
+   "min_price": "42880",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "786856646543532",
+   "price": "21490",
+   "old_price": "33580",
+   "min_price": "20420",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "8397539865396",
+   "price": "7250",
+   "old_price": "9410",
+   "min_price": "6890",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051358508104",
+   "price": "9140",
+   "old_price": "11570",
+   "min_price": "8690",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050859936980",
+   "price": "16310",
+   "old_price": "23300",
+   "min_price": "15500",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050767082878",
+   "price": "31840",
+   "old_price": "39800",
+   "min_price": "30250",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050761441312",
+   "price": "53620",
+   "old_price": "55280",
+   "min_price": "50940",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2042050714764",
+   "price": "31910",
+   "old_price": "35460",
+   "min_price": "30320",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051345237857",
+   "price": "34520",
+   "old_price": "38350",
+   "min_price": "32800",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050943700145",
+   "price": "6280",
+   "old_price": "8980",
+   "min_price": "5970",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050769384819",
+   "price": "75350",
+   "old_price": "91890",
+   "min_price": "71590",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051343913708",
+   "price": "34130",
+   "old_price": "38780",
+   "min_price": "32430",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051508626795",
+   "price": "39850",
+   "old_price": "40670",
+   "min_price": "37860",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050945148358",
+   "price": "17370",
+   "old_price": "23160",
+   "min_price": "16510",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050761847909",
+   "price": "34150",
+   "old_price": "47420",
+   "min_price": "32450",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051342634895",
+   "price": "29790",
+   "old_price": "35890",
+   "min_price": "28310",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050777145457",
+   "price": "22040",
+   "old_price": "25330",
+   "min_price": "20940",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050860410158",
+   "price": "89230",
+   "old_price": "217620",
+   "min_price": "84770",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050763339860",
+   "price": "39800",
+   "old_price": "41460",
+   "min_price": "37810",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050776784459",
+   "price": "32970",
+   "old_price": "35460",
+   "min_price": "31330",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051358618025",
+   "price": "8520",
+   "old_price": "11510",
+   "min_price": "8100",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2051358739317",
+   "price": "8050",
+   "old_price": "12380",
+   "min_price": "7650",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2050866743267",
+   "price": "42890",
+   "old_price": "64980",
+   "min_price": "40750",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2052024009161",
+   "price": "39800",
+   "old_price": "0",
+   "min_price": "37810",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2043736090998",
+   "price": "29550",
+   "old_price": "36940",
+   "min_price": "28080",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2049405532066",
+   "price": "44800",
+   "old_price": "67870",
+   "min_price": "42560",
+   "currency_code": "RUB"
+  },
+  {
+   "offer_id": "2052025128915",
+   "price": "33290",
+   "old_price": "0",
+   "min_price": "31630",
+   "currency_code": "RUB"
+  }
+ ]
+}
