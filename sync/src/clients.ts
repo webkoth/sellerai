@@ -166,8 +166,10 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
     const wb: any = await wbGetOrders({ dateFrom, limit: 1000 });
     for (const o of wb.orders || []) {
       const qty = Number(o.quantity) || 1;
+      // id WB-заказа — srid (поле orderId у WB API не заполнено; иначе ключ wb:undefined:bc один на все заказы товара)
+      const wid = o.srid || o.gNumber || o.orderId || o.barcode;
       orders.push({
-        mp: 'wb', orderId: `wb:${o.orderId}:${o.barcode}`, key: String(o.barcode),
+        mp: 'wb', orderId: `wb:${wid}:${o.barcode}`, key: String(o.barcode),
         qty, status: String(o.status), consuming: !isCancelled(o.status),
         price: o.totalPrice ? Math.round(Number(o.totalPrice) / qty) : undefined,
       });

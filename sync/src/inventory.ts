@@ -73,20 +73,29 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
   const knownBarcode = new Set<string>([...wbStock.keys(), ...Object.keys(ledger.items)]);
   const resolveKey = (k: string): string | null => (knownBarcode.has(k) ? k : vendorToBarcode.get(k) || null);
 
-  // индекс заказов Ozon/ЯМ по barcode (WB-заказы пропускаем — они в дельте WB-стока)
+  // индекс заказов Ozon/ЯМ по barcode. WB-заказы влияют через WB-дельту, но их id
+  // помечаем учтёнными (wbByBc), чтобы быстрый order-loop не задвоил то же WB-уменьшение.
   const consumingByBc = new Map<string, OpenOrder[]>();
   const cancelledByBc = new Map<string, OpenOrder[]>();
+  const wbByBc = new Map<string, OpenOrder[]>();
   for (const o of orders) {
-    if (o.mp === 'wb') continue;
     const bc = resolveKey(o.key);
     if (!bc) continue;
+    if (o.mp === 'wb') {
+      if (o.consuming) {
+        const a = wbByBc.get(bc) || [];
+        a.push(o);
+        wbByBc.set(bc, a);
+      }
+      continue;
+    }
     const map = o.consuming ? consumingByBc : cancelledByBc;
     const arr = map.get(bc) || [];
     arr.push(o);
     map.set(bc, arr);
   }
 
-  const all = new Set<string>([...knownBarcode, ...consumingByBc.keys(), ...cancelledByBc.keys()]);
+  const all = new Set<string>([...knownBarcode, ...consumingByBc.keys(), ...cancelledByBc.keys(), ...wbByBc.keys()]);
   const available = new Map<string, number>();
   const now = new Date().toISOString();
 
@@ -103,7 +112,7 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
       e = {
         base,
         wbBaseline: base,
-        appliedOrders: consuming.map((o) => o.orderId),
+        appliedOrders: [...consuming.map((o) => o.orderId), ...(wbByBc.get(bc) || []).map((o) => o.orderId)],
         lastPushed: {},
         title: titleOf.get(bc),
         vendorCode: vendorOf.get(bc),
@@ -142,6 +151,9 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
         events.push(`отмена ${o.mp} ${bc} +${o.qty}`);
       }
     }
+
+    // WB-заказы помечаем учтёнными (base уже скорректирован WB-дельтой) — защита от задвоения order-loop'ом
+    for (const o of wbByBc.get(bc) || []) if (!e.appliedOrders.includes(o.orderId)) e.appliedOrders.push(o.orderId);
 
     e.base = Math.max(0, e.base);
     if (e.appliedOrders.length > MAX_APPLIED) e.appliedOrders = e.appliedOrders.slice(-MAX_APPLIED);
