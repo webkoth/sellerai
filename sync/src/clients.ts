@@ -168,10 +168,12 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
       const qty = Number(o.quantity) || 1;
       // id WB-заказа — srid (поле orderId у WB API не заполнено; иначе ключ wb:undefined:bc один на все заказы товара)
       const wid = o.srid || o.gNumber || o.orderId || o.barcode;
+      // цена со скидкой продавца (priceWithDisc) — база для комиссии/выплаты. totalPrice = база до скидки (нельзя).
+      const wbRevBase = o.priceWithDisc ?? o.totalPrice;
       orders.push({
         mp: 'wb', orderId: `wb:${wid}:${o.barcode}`, key: String(o.barcode),
         qty, status: String(o.status), consuming: !isCancelled(o.status),
-        price: o.totalPrice ? Math.round(Number(o.totalPrice) / qty) : undefined,
+        price: wbRevBase ? Math.round(Number(wbRevBase) / qty) : undefined,
       });
     }
   } catch { errors.push('wb'); }

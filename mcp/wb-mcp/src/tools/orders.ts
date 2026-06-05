@@ -28,6 +28,9 @@ interface OrderData {
   quantity: number;
   totalPrice: number;
   discountPercent: number;
+  priceWithDisc?: number; // цена со скидкой продавца — база для комиссии/выплаты
+  finishedPrice?: number; // цена с СПП (для покупателя; поле «плавает» с текущим СПП)
+  spp?: number; // СПП %, финансирует WB
   warehouseName: string;
   regionName: string;
   status: string;
@@ -95,6 +98,9 @@ export async function getOrders(input: GetOrdersInput): Promise<{
       quantity?: number;
       totalPrice: number;
       discountPercent: number;
+      priceWithDisc?: number;
+      finishedPrice?: number;
+      spp?: number;
       warehouseName: string;
       regionName: string;
       orderType?: string;
@@ -116,6 +122,9 @@ export async function getOrders(input: GetOrdersInput): Promise<{
     quantity: o.quantity || 1,
     totalPrice: o.totalPrice,
     discountPercent: o.discountPercent,
+    priceWithDisc: o.priceWithDisc,
+    finishedPrice: o.finishedPrice,
+    spp: o.spp,
     warehouseName: o.warehouseName,
     regionName: o.regionName,
     status: o.isCancel ? 'canceled' : o.orderType || 'new',

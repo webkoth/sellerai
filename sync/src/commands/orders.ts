@@ -114,11 +114,11 @@ export async function runOrders(apply: boolean): Promise<void> {
   for (const a of alerts) {
     const lines = [`${a.title} (${a.bc})`, `Заказано: ${a.qty} шт`];
     if (a.buyerUnit) {
-      const ourNote = a.ourUnit && a.ourUnit !== a.buyerUnit ? ` (наша по правилу: ${rub(a.ourUnit)})` : '';
-      lines.push(`Цена покупателя: ${rub(a.buyerUnit)}${ourNote}`);
+      const ourNote = a.ourUnit && a.ourUnit !== a.buyerUnit ? ` (по правилу: ${rub(a.ourUnit)})` : '';
+      lines.push(`Цена за ед.: ${rub(a.buyerUnit)}${ourNote}`);
       lines.push(`Сумма заказа: ${rub(a.sum)}`);
     }
-    if (a.takePct != null && a.grossAfterComm != null) lines.push(`Комиссия ~${a.takePct}% → после комиссии ${rub(a.grossAfterComm)}`);
+    if (a.takePct != null && a.grossAfterComm != null) lines.push(`Комиссия ~${a.takePct}% → к перечислению ≈ ${rub(a.grossAfterComm)}`);
     if (a.cogs != null && a.netProfit != null) {
       const margin = a.sum ? Math.round((a.netProfit / a.sum) * 100) : 0;
       lines.push(`Себестоимость: ${rub(a.cogs)} (${rub(a.costUnit!)}/шт)`);
