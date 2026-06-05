@@ -22,6 +22,7 @@ logs/
 /data/exports/
 /data/cache/
 /data/snapshots/
+/data/state/
 /courses/
 
 # ===== СИСТЕМНЫЕ =====

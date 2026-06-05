@@ -16,6 +16,8 @@ const ROOT = '/Users/minas/projects/sai_kotelnikovartifact';
 const M = `${ROOT}/mcp`;
 const OZON_BIJOUTERIE_CAT = 17027899;
 const round10 = n => Math.ceil(n / 10) * 10;
+// Ozon отклоняет габариты вне диапазона категории (INCORRECT_DIMENSION). Клампим в мм.
+const clampDim = (v, lo, hi) => Math.min(hi, Math.max(lo, Math.round(v)));
 
 const load = f => JSON.parse(readFileSync(`${ROOT}/data/mappings/${f}`, 'utf8'));
 
@@ -40,6 +42,8 @@ function sanitize(s) {
     .replace(/original[a-z]*/gi, '')
     .replace(/высок[а-яё]*\s+качеств[а-яё]*/gi, '')
     .replace(/премиальн[а-яё]*/gi, '')
+    // Оставляем только кириллицу/латиницу/цифры/пунктуацию. Вырезаем CJK/фарси/пиньинь-диакритику/эмодзи/спецсимволы (Ozon: DESCRIPTION_DECLINE «иероглифы/недопустимые символы»).
+    .replace(/[^Ѐ-ӿA-Za-z0-9\s.,!?;:()«»"'’\-–—+\/№%°×]/g, ' ')
     .replace(/[ \t]{2,}/g, ' ')
     .replace(/ +([.,])/g, '$1')
     .trim();
@@ -110,7 +114,7 @@ export async function buildOzonCards(opts = {}) {
       name: cleanName, price: String(price), old_price: oldPrice ? String(oldPrice) : '0',
       currency_code: 'RUB', vat: '0', barcode: String(it.barcode),
       images: (it.photos || []).slice(0, 15),
-      depth: Math.round((d.length || 10) * 10), width: Math.round((d.width || 10) * 10), height: Math.round((d.height || 5) * 10),
+      depth: clampDim((d.length || 10) * 10, 5, 250), width: clampDim((d.width || 10) * 10, 5, 170), height: clampDim((d.height || 5) * 10, 5, 100),
       dimension_unit: 'mm', weight: Math.round((d.weight || 0.05) * 1000), weight_unit: 'g',
       attributes: attrs,
       _wb: { subject: it.category, finalP, baseP, k: pr.k_ozon, color: wbColor, material: wbMat },

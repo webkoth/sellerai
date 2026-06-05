@@ -1,0 +1,25 @@
+{
+  "name": "sellerai-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Авто-синхронизация WB→Ozon/ЯМ: сквозной пул остатков, авто-карточки, дрейф цен, Telegram-алерты.",
+  "bin": {
+    "sellerai-sync": "dist/orchestrator.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "stocks": "node dist/orchestrator.js stocks",
+    "cards": "node dist/orchestrator.js cards",
+    "prices": "node dist/orchestrator.js prices",
+    "reconcile": "node dist/orchestrator.js reconcile"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}

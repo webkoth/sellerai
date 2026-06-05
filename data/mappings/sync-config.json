@@ -1,7 +1,31 @@
 {
   "_meta": {
-    "description": "Конфиг /sync: рабочие склады площадок и параметры.",
+    "description": "Конфиг /sync: рабочие склады площадок и параметры авто-синхронизации.",
     "updated": "2026-06-04"
+  },
+  "telegram": {
+    "chat_id": -4625448374,
+    "group": "KOTELNIKOVARTIFACT",
+    "note": "Токен бота в .env как TELEGRAM_BOT_TOKEN. Бот @kotelnikovartifactbot — админ группы."
+  },
+  "sync": {
+    "scope": "in-stock",
+    "stock_cadence_min": 30,
+    "price_policy": "report-only",
+    "cards_policy": "auto-create",
+    "cross_marketplace": true,
+    "guardrails": {
+      "stock_abort_if_changes_over": 120,
+      "price_drift_alert_pct": 15,
+      "round_up_to": 10,
+      "ozon_min_price_factor": 0.95
+    },
+    "cron": {
+      "stocks": "*/30 * * * *",
+      "cards": "17 */2 * * *",
+      "prices": "0 9 * * *",
+      "reconcile": "30 8 * * *"
+    }
   },
   "ozon": {
     "model": "FBS",

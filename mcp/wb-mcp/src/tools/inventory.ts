@@ -215,9 +215,34 @@ async function getStocksFBO(): Promise<Map<number, { total: number; warehouses: 
 }
 
 /**
+ * Записать остатки FBS на склад продавца. PUT /api/v3/stocks/{warehouseId}.
+ * items: [{ sku: barcode, amount }]. Если warehouseId не задан — берётся первый склад продавца.
+ * Возвращает id использованного склада и число обновлённых SKU. 204 = успех.
+ */
+export async function updateStocksFBS(
+  items: Array<{ sku: string; amount: number }>,
+  warehouseId?: number
+): Promise<{ warehouseId: number; updated: number }> {
+  let whId = warehouseId;
+  if (!whId) {
+    const whs = await getSellerWarehouses();
+    if (whs.length === 0) throw new Error('Нет складов продавца (FBS) для записи остатков');
+    whId = whs[0].id;
+  }
+  const url = `${WB_API_URLS.marketplace}/api/v3/stocks/${whId}`;
+  let updated = 0;
+  for (let i = 0; i < items.length; i += 1000) {
+    const batch = items.slice(i, i + 1000);
+    await fetchWB(url, { method: 'PUT', body: JSON.stringify({ stocks: batch }) });
+    updated += batch.length;
+  }
+  return { warehouseId: whId, updated };
+}
+
+/**
  * Get seller warehouses (for FBS)
  */
-async function getSellerWarehouses(): Promise<Array<{ id: number; name: string }>> {
+export async function getSellerWarehouses(): Promise<Array<{ id: number; name: string }>> {
   const url = `${WB_API_URLS.marketplace}/api/v3/warehouses`;
 
   const result = await fetchWB<Array<{

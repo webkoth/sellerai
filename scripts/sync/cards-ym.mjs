@@ -19,6 +19,8 @@ function sanitize(s) {
     .replace(/оригинал[а-яё]*/gi, '')
     .replace(/original[a-z]*/gi, '')
     .replace(/высок[а-яё]*\s+качеств[а-яё]*/gi, '')
+    // Оставляем только кириллицу/латиницу/цифры/пунктуацию; вырезаем CJK/фарси/пиньинь-диакритику/эмодзи/спецсимволы.
+    .replace(/[^Ѐ-ӿA-Za-z0-9\s.,!?;:()«»"'’\-–—+\/№%°×]/g, ' ')
     .replace(/[ \t]{2,}/g, ' ').replace(/ +([.,])/g, '$1').trim();
 }
 const charVal = (p, re) => { const c = (p.characteristics || []).find(c => re.test(c.name)); return c && c.value && c.value[0]; };
