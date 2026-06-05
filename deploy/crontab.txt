@@ -15,3 +15,7 @@
 0 9 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
 # health-сводка — ежедневно 08:30
 30 8 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js reconcile >> /opt/sellerai-sync/logs/cron-reconcile.log 2>&1
+# приёмка себестоимости через Telegram (/cost) — каждую минуту. Отдельный lock: пишет costs.json, не леджер
+* * * * * flock -n /tmp/sai-intake.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js intake >> /opt/sellerai-sync/logs/cron-intake.log 2>&1
+# месячный P&L (выручка − комиссии − COGS) — 1-го числа в 10:00
+0 10 1 * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js finance >> /opt/sellerai-sync/logs/cron-finance.log 2>&1

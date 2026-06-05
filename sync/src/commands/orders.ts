@@ -6,6 +6,7 @@
  */
 import { collectOpenOrders, writeWbStock, writeOzonStock, writeYmStock } from '../clients.js';
 import { loadLedger, saveLedger } from '../inventory.js';
+import { costsMap } from '../costs.js';
 import { pricing } from '../config.js';
 import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
@@ -14,6 +15,8 @@ import type { Marketplace } from '../types.js';
 const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
 const round10 = (n: number): number => Math.ceil(n / 10) * 10;
 const rub = (n: number): string => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+// комиссия по умолчанию (бижутерия), если категория не определена
+const DEFAULT_TAKE: Record<string, number> = { wb: 0.32, ozon: 0.53, ym: 0.52 };
 
 interface OrderAlert {
   mp: Marketplace;
@@ -24,8 +27,11 @@ interface OrderAlert {
   buyerUnit: number; // цена покупателя за ед.
   sum: number; // сумма заказа
   ourUnit: number | null; // наша цена по правилу
-  profit: number | null; // прибыль при выкупе (после комиссии)
   takePct: number | null; // комиссия %
+  grossAfterComm: number | null; // доход после комиссии (без COGS)
+  cogs: number | null; // себестоимость заказа (cost × qty)
+  costUnit: number | null; // себестоимость за единицу
+  netProfit: number | null; // чистая прибыль = доход после комиссии − COGS
 }
 
 export async function runOrders(apply: boolean): Promise<void> {
@@ -47,6 +53,7 @@ export async function runOrders(apply: boolean): Promise<void> {
   const alerts: OrderAlert[] = [];
   let skippedUnseeded = 0;
   const bySubject = (pricing as any).by_subject || {};
+  const costs = costsMap();
 
   for (const o of orders) {
     if (!o.consuming) continue;
@@ -65,15 +72,22 @@ export async function runOrders(apply: boolean): Promise<void> {
     e.updatedAt = new Date().toISOString();
     affected.set(bc, e.base);
 
-    // экономика заказа: комиссия и k берём из категории (pricing.json)
+    // экономика заказа: комиссия и k — из категории (pricing.json), COGS — из costs.json
     const pr = e.category ? bySubject[e.category] : null;
-    const take: number | null = pr ? pr['take_' + o.mp] ?? null : null;
+    const take: number = (pr ? pr['take_' + o.mp] : null) ?? DEFAULT_TAKE[o.mp] ?? 0.5;
     const k: number | null = pr ? pr['k_' + o.mp] ?? null : null;
     const buyerUnit = o.price || 0;
     const sum = Math.round(buyerUnit * o.qty);
     const ourUnit = e.wbFinal ? (o.mp === 'wb' ? Math.round(e.wbFinal) : k ? round10(e.wbFinal * k) : null) : null;
-    const profit = take != null && sum ? Math.round(sum * (1 - take)) : null;
-    alerts.push({ mp: o.mp, title: e.title || bc, bc, qty: o.qty, newStock: e.base, buyerUnit, sum, ourUnit, profit, takePct: take != null ? Math.round(take * 100) : null });
+    const grossAfterComm = sum ? Math.round(sum * (1 - take)) : null;
+    const costUnit = costs.get(bc) ?? e.cost ?? null;
+    const cogs = costUnit != null ? Math.round(costUnit * o.qty) : null;
+    const netProfit = grossAfterComm != null && cogs != null ? grossAfterComm - cogs : null;
+    alerts.push({
+      mp: o.mp, title: e.title || bc, bc, qty: o.qty, newStock: e.base,
+      buyerUnit, sum, ourUnit, takePct: take != null ? Math.round(take * 100) : null,
+      grossAfterComm, cogs, costUnit, netProfit,
+    });
   }
 
   if (!alerts.length) {
@@ -104,8 +118,14 @@ export async function runOrders(apply: boolean): Promise<void> {
       lines.push(`Цена покупателя: ${rub(a.buyerUnit)}${ourNote}`);
       lines.push(`Сумма заказа: ${rub(a.sum)}`);
     }
-    if (a.profit != null) lines.push(`Прибыль при выкупе ≈ ${rub(a.profit)} (комиссия ~${a.takePct}%)`);
-    else lines.push('Прибыль: категория/цена не определены (досчитается после reconcile)');
+    if (a.takePct != null && a.grossAfterComm != null) lines.push(`Комиссия ~${a.takePct}% → после комиссии ${rub(a.grossAfterComm)}`);
+    if (a.cogs != null && a.netProfit != null) {
+      const margin = a.sum ? Math.round((a.netProfit / a.sum) * 100) : 0;
+      lines.push(`Себестоимость: ${rub(a.cogs)} (${rub(a.costUnit!)}/шт)`);
+      lines.push(`💰 Чистая прибыль при выкупе ≈ ${rub(a.netProfit)} (маржа ${margin}%)`);
+    } else {
+      lines.push(`Себестоимость: не задана → /cost ${a.bc} <сумма>`);
+    }
     lines.push(`Новый остаток пула: ${a.newStock}`);
     lines.push(`Синхронизировано: WB ${a.newStock} · Ozon ${a.newStock} · ЯМ ${a.newStock}`);
     await notify(alertBlock(`🛒 Заказ · ${MP_NAME[a.mp]}`, lines));

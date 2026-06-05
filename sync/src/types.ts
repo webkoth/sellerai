@@ -33,6 +33,7 @@ export interface LedgerEntry {
   vendorCode?: string;
   category?: string; // WB subjectName — для комиссии и k при расчёте прибыли
   wbFinal?: number; // WB_final (эталон) — для «нашей цены» по правилу
+  cost?: number; // себестоимость за единицу (из costs.json) — для чистой прибыли
   updatedAt: string;
 }
 

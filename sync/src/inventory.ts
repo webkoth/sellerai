@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, mkdirSync, renameSync, existsSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { LEDGER_PATH } from './config.js';
+import { costsMap } from './costs.js';
 import type { Ledger, OpenOrder } from './types.js';
 import type { WbItem } from './clients.js';
 
@@ -53,6 +54,7 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
   const vendorOf = new Map<string, string>();
   const catOf = new Map<string, string>();
   const finalOf = new Map<string, number>();
+  const costs = costsMap();
   for (const it of wbItems) {
     wbStock.set(it.barcode, it.stock);
     if (it.vendorCode) {
@@ -107,6 +109,7 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
         vendorCode: vendorOf.get(bc),
         category: catOf.get(bc),
         wbFinal: finalOf.get(bc),
+        cost: costs.get(bc),
         updatedAt: now,
       };
       ledger.items[bc] = e;
@@ -144,6 +147,7 @@ export function reconcile(ledger: Ledger, wbItems: WbItem[], orders: OpenOrder[]
     if (e.appliedOrders.length > MAX_APPLIED) e.appliedOrders = e.appliedOrders.slice(-MAX_APPLIED);
     if (catOf.has(bc)) e.category = catOf.get(bc);
     if (finalOf.has(bc)) e.wbFinal = finalOf.get(bc);
+    if (costs.has(bc)) e.cost = costs.get(bc);
     e.wbBaseline = e.base; // мы выставим WB = base
     e.updatedAt = now;
     available.set(bc, e.base);

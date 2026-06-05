@@ -35,4 +35,7 @@ export const CROSS_MARKETPLACE: boolean = !!syncConfig.sync.cross_marketplace;
 // Пути состояния
 export const STATE_DIR = resolve(ROOT, 'data/state');
 export const LEDGER_PATH = resolve(STATE_DIR, 'inventory.json');
+export const COSTS_PATH = resolve(STATE_DIR, 'costs.json');
+export const COSTS_LOG_PATH = resolve(STATE_DIR, 'costs-log.jsonl');
+export const TG_OFFSET_PATH = resolve(STATE_DIR, 'tg-offset.json');
 export const LOG_DIR = resolve(ROOT, 'logs');

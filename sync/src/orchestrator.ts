@@ -11,6 +11,8 @@ import { runOrders } from './commands/orders.js';
 import { runCards } from './commands/cards.js';
 import { runPrices } from './commands/prices.js';
 import { runReconcile } from './commands/reconcile.js';
+import { runIntake } from './commands/intake.js';
+import { runFinance } from './commands/finance.js';
 import { log } from './log.js';
 import { notify, alertBlock } from './notify.js';
 
@@ -35,8 +37,14 @@ async function main(): Promise<void> {
     case 'reconcile':
       await runReconcile();
       break;
+    case 'intake':
+      await runIntake();
+      break;
+    case 'finance':
+      await runFinance(Number(argv[1]) || 30);
+      break;
     default:
-      console.log('Использование: sellerai-sync <orders|stocks|cards|prices|reconcile> [--apply]');
+      console.log('Использование: sellerai-sync <orders|stocks|cards|prices|reconcile|intake|finance> [--apply]');
       process.exit(cmd ? 1 : 0);
   }
 }
