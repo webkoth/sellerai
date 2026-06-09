@@ -8,9 +8,10 @@
 # order-loop — заказ→сквозной синхрон остатка + Telegram-алерт, каждую минуту
 * * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply >> /opt/sellerai-sync/logs/cron-orders.log 2>&1
 # full-reconcile остатков (пополнения, ручные правки, выравнивание) — каждые 30 мин
-*/30 * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply >> /opt/sellerai-sync/logs/cron-stocks.log 2>&1
+# flock -w 15: подождать ledger.lock до 15с (order-тик держит его ~1с), чтобы не скипать reconcile при коллизии в :00/:30
+*/30 * * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply >> /opt/sellerai-sync/logs/cron-stocks.log 2>&1
 # авто-создание недостающих карточек — каждые 2 часа
-17 */2 * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js cards --apply >> /opt/sellerai-sync/logs/cron-cards.log 2>&1
+17 */2 * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js cards --apply >> /opt/sellerai-sync/logs/cron-cards.log 2>&1
 # дрейф цен (режим A vs факт) — ежедневно 09:00
 0 9 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
 # health-сводка — ежедневно 08:30
