@@ -31,6 +31,8 @@ export const YM_BUSINESS: number = syncConfig.ym.business_id;
 export const SYNC = syncConfig.sync;
 export const GUARD = syncConfig.sync.guardrails;
 export const CROSS_MARKETPLACE: boolean = !!syncConfig.sync.cross_marketplace;
+// barcode'ы, исключённые из Ozon-синка (заблокированы модерацией и т.п.) — остаются на WB+ЯМ
+export const SKIP_OZON: string[] = (syncConfig.sync.skip_ozon_barcodes as string[]) || [];
 
 // Пути состояния
 export const STATE_DIR = resolve(ROOT, 'data/state');

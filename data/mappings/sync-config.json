@@ -14,6 +14,8 @@
     "price_policy": "report-only",
     "cards_policy": "auto-create",
     "cross_marketplace": true,
+    "skip_ozon_barcodes": ["2049405532066"],
+    "_skip_ozon_note": "barcode'ы, которые НЕ синхронизируем на Ozon (карточка заблокирована модерацией и т.п.). Товар остаётся на WB+ЯМ. 2049405532066 = 'Подвеска из метеорита Алетай' — Ozon FB_JEWELRY: метеорит трактуется как ювелирка.",
     "guardrails": {
       "stock_abort_if_changes_over": 120,
       "price_drift_alert_pct": 15,

@@ -12,7 +12,7 @@ import {
   writeYmStock,
 } from '../clients.js';
 import { loadLedger, saveLedger, reconcile } from '../inventory.js';
-import { GUARD } from '../config.js';
+import { GUARD, SKIP_OZON } from '../config.js';
 import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
 import type { StockChange } from '../types.js';
@@ -55,9 +55,16 @@ export async function runStocks(apply: boolean): Promise<void> {
     const cur = wbCur.get(bc) ?? 0;
     if (cur !== target) wbChanges.push({ mp: 'wb', key: bc, was: cur, becomes: target });
   }
-  // diff по Ozon / ЯМ
+  // diff по Ozon / ЯМ. skip-list — товары, заблокированные модерацией Ozon: не трогаем, остаются на WB+ЯМ
+  const skipOzon = new Set<string>(SKIP_OZON);
+  const isSkippedOzon = (key: string): boolean => skipOzon.has(key) || skipOzon.has(vendorToBarcode.get(key) || '');
+  let ozSkipped = 0;
   const ozChanges: StockChange[] = [];
   for (const o of ozOffers) {
+    if (isSkippedOzon(o.key)) {
+      ozSkipped++;
+      continue;
+    }
     const t = targetFor(o.key);
     if (o.available !== t) ozChanges.push({ mp: 'ozon', key: o.key, was: o.available, becomes: t });
   }
@@ -69,6 +76,7 @@ export async function runStocks(apply: boolean): Promise<void> {
 
   const total = wbChanges.length + ozChanges.length + ymChanges.length;
   log(`пул: WB-товаров ${wbItems.length}, заказов ${ordersRes.orders.length}, seed ${seeded}. К изменению: WB ${wbChanges.length}, Ozon ${ozChanges.length}, ЯМ ${ymChanges.length}`);
+  if (ozSkipped) log(`  Ozon skip-list: пропущено ${ozSkipped} barcode (${SKIP_OZON.join(', ')})`);
   for (const ev of events.slice(0, 30)) log('  · ' + ev);
 
   // sanity-guard

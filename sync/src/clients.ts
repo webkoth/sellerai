@@ -15,7 +15,7 @@ import { getOrders as ymGetOrders } from '../../mcp/ym-mcp/dist/tools/orders.js'
 import { getPrices as ymGetPrices } from '../../mcp/ym-mcp/dist/tools/prices.js';
 import { apiRequest as ymApiRequest } from '../../mcp/ym-mcp/dist/api/client.js';
 
-import { OZ_WAREHOUSE, YM_WAREHOUSE, YM_CAMPAIGN } from './config.js';
+import { OZ_WAREHOUSE, YM_WAREHOUSE, YM_CAMPAIGN, SKIP_OZON } from './config.js';
 import type { Marketplace, OpenOrder } from './types.js';
 
 const daysAgoISO = (n: number): string => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
@@ -65,6 +65,11 @@ export async function listOzonOffers(): Promise<Array<{ key: string; available: 
 }
 
 export async function writeOzonStock(changes: Array<{ key: string; amount: number }>): Promise<{ ok: number; errors: string[] }> {
+  // барьер skip-list: не пишем сток для barcode, заблокированных модерацией Ozon (остаются на WB+ЯМ)
+  if (SKIP_OZON.length) {
+    const skip = new Set(SKIP_OZON);
+    changes = changes.filter((c) => !skip.has(c.key));
+  }
   if (!changes.length) return { ok: 0, errors: [] };
   const errors: string[] = [];
   let ok = 0;
