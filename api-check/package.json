@@ -1,0 +1,25 @@
+{
+  "name": "api-check",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Самостоятельные проверки API маркетплейсов (WB / Ozon / Яндекс.Маркет): живость эндпоинтов и какие данные приходят. Запускается вручную.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "wb": "node src/check-wb.ts",
+    "ozon": "node src/check-ozon.ts",
+    "ym": "node src/check-ym.ts",
+    "all": "node src/check-all.ts",
+    "typecheck": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "socks": "^2.8.3",
+    "undici": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@typescript/native-preview": "beta"
+  }
+}
