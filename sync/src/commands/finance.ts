@@ -11,8 +11,14 @@ import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
 
 const rub = (n: number): string => Math.round(n).toLocaleString('ru-RU') + ' ₽';
-// комиссия по умолчанию (бижутерия), если категория не определена — чтобы не завышать прибыль
-const DEFAULT_TAKE: Record<string, number> = { wb: 0.32, ozon: 0.53, ym: 0.52 };
+// Фактическая all-in нагрузка (комиссия + КВВ/эквайринг + логистика) — сверка 2026-06-15 (60 дн):
+//   WB   36% = номин. комиссия 31.5% + КВВ/эквайринг ~2.6% + логистика 1.7%
+//   Ozon 56% = комиссия 53.2% + услуги/логистика 3.0%
+// Для WB/Ozon берём эти ставки (заменяют commission-only из pricing.json, который ровнял маржу для k-цен).
+// ЯМ факт недоступен в MCP → остаётся per-category take_ym из pricing.json (там уже FEE + ~7% all-in).
+const EFFECTIVE_TAKE: Record<string, number> = { wb: 0.36, ozon: 0.56 };
+// фолбэк, если категория не определена — чтобы не завышать прибыль
+const DEFAULT_TAKE: Record<string, number> = { wb: 0.36, ozon: 0.56, ym: 0.53 };
 
 export async function runFinance(days = 30): Promise<void> {
   log(`=== finance (P&L, ${days} дн) ===`);
@@ -40,7 +46,7 @@ export async function runFinance(days = 30): Promise<void> {
     const e = ledger.items[bc];
     const cat = e?.category || '(без категории)';
     const pr = by[cat];
-    const take: number = (pr ? pr['take_' + o.mp] : null) ?? DEFAULT_TAKE[o.mp] ?? 0;
+    const take: number = EFFECTIVE_TAKE[o.mp] ?? (pr ? pr['take_' + o.mp] : null) ?? DEFAULT_TAKE[o.mp] ?? 0;
     const rev = (o.price || 0) * o.qty;
     const comm = rev * take;
     const cost = costs.get(bc) ?? e?.cost ?? null;
