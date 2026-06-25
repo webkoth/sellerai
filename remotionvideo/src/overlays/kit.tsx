@@ -22,7 +22,11 @@ import { useAccent } from "./ThemeContext";
 export const useSpringIn = (delay: number, damping = 22, stiffness = 110) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  return spring({ frame: frame - delay, fps, config: { damping, stiffness, mass: 0.6 } });
+  return spring({
+    frame: frame - delay,
+    fps,
+    config: { damping, stiffness, mass: 0.6 },
+  });
 };
 
 // ---------- Constellation background ----------
@@ -58,7 +62,11 @@ const ConstellationBg = () => {
     return { x: (n.x + dx) * width, y: (n.y + dy) * height };
   });
   return (
-    <svg width={width} height={height} style={{ position: "absolute", inset: 0, opacity: fadeIn }}>
+    <svg
+      width={width}
+      height={height}
+      style={{ position: "absolute", inset: 0, opacity: fadeIn }}
+    >
       {meshEdges.map(([a, b], k) => (
         <line
           key={k}
@@ -71,7 +79,13 @@ const ConstellationBg = () => {
         />
       ))}
       {pos.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r={2.4} fill="rgba(255, 255, 255, 0.26)" />
+        <circle
+          key={i}
+          cx={p.x}
+          cy={p.y}
+          r={2.4}
+          fill="rgba(255, 255, 255, 0.26)"
+        />
       ))}
     </svg>
   );
@@ -97,10 +111,24 @@ const Chevron = () => {
   });
   return (
     <div
-      style={{ position: "absolute", top: 56, left: 0, right: 0, display: "flex", justifyContent: "center", opacity }}
+      style={{
+        position: "absolute",
+        top: 56,
+        left: 0,
+        right: 0,
+        display: "flex",
+        justifyContent: "center",
+        opacity,
+      }}
     >
       <svg width={34} height={34} viewBox="0 0 24 24" fill="none">
-        <path d="M6 9l6 6 6-6" stroke={colors.chevron} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M6 9l6 6 6-6"
+          stroke={colors.chevron}
+          strokeWidth={2.4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </div>
   );
@@ -129,12 +157,37 @@ const BrandTag = ({ label }: { label: string }) => {
   );
 };
 
+/** Бренд-тег и шеврон одним слоем — для отложенного появления (напр. в Template после интро). */
+export const BrandChrome = ({
+  brand = "KOTELNIKOVARTIFACT",
+}: {
+  brand?: string;
+}) => (
+  <>
+    <Chevron />
+    <BrandTag label={brand} />
+  </>
+);
+
 /** Продукт-фото под космической тонировкой (необязательно). */
 const FootageLayer = ({ src }: { src: string }) => (
   <AbsoluteFill>
-    <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />
+    <Img
+      src={staticFile(src)}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        opacity: 0.5,
+        scale: 1.496,
+        translate: "-9.3px -446.6px",
+      }}
+    />
     <AbsoluteFill
-      style={{ background: "linear-gradient(180deg, rgba(15,16,20,0.42) 0%, rgba(15,16,20,0.30) 40%, rgba(15,16,20,0.86) 100%)" }}
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(15,16,20,0.42) 0%, rgba(15,16,20,0.30) 40%, rgba(15,16,20,0.86) 100%)",
+      }}
     />
   </AbsoluteFill>
 );
@@ -206,7 +259,10 @@ export const Typewriter = ({
   style?: CSSProperties;
 }) => {
   const frame = useCurrentFrame();
-  const n = Math.max(0, Math.min(text.length, Math.floor((frame - startAt) / charFrames)));
+  const n = Math.max(
+    0,
+    Math.min(text.length, Math.floor((frame - startAt) / charFrames)),
+  );
   return (
     <span style={style}>
       {text.slice(0, n)}
@@ -215,7 +271,13 @@ export const Typewriter = ({
   );
 };
 
-const BigTitle = ({ children, size = 104 }: { children: ReactNode; size?: number }) => (
+const BigTitle = ({
+  children,
+  size = 104,
+}: {
+  children: ReactNode;
+  size?: number;
+}) => (
   <div
     style={{
       fontSize: size,
@@ -248,7 +310,8 @@ export const Appear = ({
 }) => {
   const s = useSpringIn(delay);
   const opacity = interpolate(s, [0, 1], [0, 1], { extrapolateRight: "clamp" });
-  const d = (a: number, b: number) => interpolate(s, [0, 1], [a, b], { extrapolateRight: "clamp" });
+  const d = (a: number, b: number) =>
+    interpolate(s, [0, 1], [a, b], { extrapolateRight: "clamp" });
   let transform = "";
   if (from === "up") transform = `translateY(${d(26, 0)}px)`;
   else if (from === "down") transform = `translateY(${d(-26, 0)}px)`;
@@ -288,11 +351,23 @@ export const Kicker = ({ children }: { children: ReactNode }) => {
 };
 
 /** Маркерная подсветка слова: акцентный градиент «прочерчивается» (spring scaleX). */
-export const HighlightWord = ({ children, delay }: { children: ReactNode; delay: number }) => {
+export const HighlightWord = ({
+  children,
+  delay,
+}: {
+  children: ReactNode;
+  delay: number;
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const a = useAccent();
-  const p = spring({ fps, frame, delay, durationInFrames: 16, config: { damping: 200 } });
+  const p = spring({
+    fps,
+    frame,
+    delay,
+    durationInFrames: 16,
+    config: { damping: 200 },
+  });
   const scaleX = Math.max(0, Math.min(1, p));
   return (
     <span style={{ position: "relative", display: "inline-block" }}>
@@ -310,7 +385,13 @@ export const HighlightWord = ({ children, delay }: { children: ReactNode; delay:
           zIndex: 0,
         }}
       />
-      <span style={{ position: "relative", zIndex: 1, color: scaleX > 0.5 ? a.accentTitle : colors.title }}>
+      <span
+        style={{
+          position: "relative",
+          zIndex: 1,
+          color: scaleX > 0.5 ? a.accentTitle : colors.title,
+        }}
+      >
         {children}
       </span>
     </span>
@@ -318,7 +399,13 @@ export const HighlightWord = ({ children, delay }: { children: ReactNode; delay:
 };
 
 /** Кремовая карточка с зерном (для текстовых блоков). */
-export const Card = ({ children, style }: { children: ReactNode; style?: CSSProperties }) => (
+export const Card = ({
+  children,
+  style,
+}: {
+  children: ReactNode;
+  style?: CSSProperties;
+}) => (
   <div
     style={{
       position: "relative",
@@ -345,7 +432,10 @@ export const Card = ({ children, style }: { children: ReactNode; style?: CSSProp
 );
 
 /** Разбор текста с маркерами `*...*` → акцентный цвет (для карточек/субтитров). */
-export const renderHighlighted = (text: string, accentColor: string): ReactNode[] => {
+export const renderHighlighted = (
+  text: string,
+  accentColor: string,
+): ReactNode[] => {
   const parts = text.split(/(\*[^*]+\*)/g).filter(Boolean);
   return parts.map((part, i) => {
     const hl = part.startsWith("*") && part.endsWith("*");
@@ -361,7 +451,9 @@ export const renderHighlighted = (text: string, accentColor: string): ReactNode[
 
 /** Токенизация заголовка: слова + флаг подсветки. Многословные `*...*` и хвостовая
  *  пунктуация обрабатываются корректно (без «торчащих» звёздочек). */
-export const tokenizeTitle = (text: string): Array<{ w: string; hl: boolean }> => {
+export const tokenizeTitle = (
+  text: string,
+): Array<{ w: string; hl: boolean }> => {
   const raw: Array<{ w: string; hl: boolean }> = [];
   text
     .split(/(\*[^*]+\*)/g)

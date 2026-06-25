@@ -1,25 +1,44 @@
+import type { ReactNode } from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { inter } from "./fonts";
-import { renderHighlighted } from "./kit";
+import { HighlightWord, renderHighlighted } from "./kit";
 import { colors } from "./theme";
 import { useAccent } from "./ThemeContext";
 
 /** Вид плашки субтитра. */
 export type SubtitleVariant = "glass" | "solid";
 
+/** Сегмент `*…*` маркером-«прочерком» (единый стиль с заголовками/Statement). */
+const renderWithMarker = (text: string, delay: number): ReactNode[] => {
+  const parts = text.split(/(\*[^*]+\*)/g).filter(Boolean);
+  return parts.map((part, i) => {
+    const hl = part.startsWith("*") && part.endsWith("*");
+    const clean = hl ? part.slice(1, -1) : part;
+    return hl ? (
+      <HighlightWord key={i} delay={delay}>
+        {clean}
+      </HighlightWord>
+    ) : (
+      <span key={i}>{clean}</span>
+    );
+  });
+};
+
 /**
  * Анимированная плашка субтитра (нижняя треть).
- * Вход: spring slide-up + fade (как сцены Reel-4). Выход: fade в конце.
- * Сегмент `*…*` подсвечивается акцентом темы.
+ * Вход: spring slide-up + fade. Выход: fade в конце.
+ * Сегмент `*…*`: статичный акцент (по умолчанию) или маркер-«прочерк» (`animatedHighlight`).
  */
 export const Subtitle = ({
   text,
   variant = "glass",
   durationInFrames,
+  animatedHighlight = false,
 }: {
   text: string;
   variant?: SubtitleVariant;
   durationInFrames: number;
+  animatedHighlight?: boolean;
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -64,7 +83,7 @@ export const Subtitle = ({
             color: glass ? colors.title : colors.cardLightTitle,
           }}
         >
-          {renderHighlighted(text, a.accent)}
+          {animatedHighlight ? renderWithMarker(text, 6) : renderHighlighted(text, a.accent)}
         </div>
       </div>
     </AbsoluteFill>

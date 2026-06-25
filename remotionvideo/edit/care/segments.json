@@ -1,0 +1,60 @@
+{
+  "fps": 30,
+  "total": 90.9,
+  "segments": [
+    {
+      "src_start": 8.2,
+      "src_end": 21.6,
+      "tight_start": 0.0,
+      "dur": 13.4
+    },
+    {
+      "src_start": 24.6,
+      "src_end": 45.0,
+      "tight_start": 13.4,
+      "dur": 20.4
+    },
+    {
+      "src_start": 46.633,
+      "src_end": 56.067,
+      "tight_start": 33.8,
+      "dur": 9.433
+    },
+    {
+      "src_start": 57.0,
+      "src_end": 76.367,
+      "tight_start": 43.233,
+      "dur": 19.367
+    },
+    {
+      "src_start": 77.2,
+      "src_end": 79.967,
+      "tight_start": 62.6,
+      "dur": 2.767
+    },
+    {
+      "src_start": 91.233,
+      "src_end": 94.2,
+      "tight_start": 65.367,
+      "dur": 2.967
+    },
+    {
+      "src_start": 94.967,
+      "src_end": 110.167,
+      "tight_start": 68.333,
+      "dur": 15.2
+    },
+    {
+      "src_start": 111.067,
+      "src_end": 115.633,
+      "tight_start": 83.533,
+      "dur": 4.567
+    },
+    {
+      "src_start": 116.4,
+      "src_end": 119.2,
+      "tight_start": 88.1,
+      "dur": 2.8
+    }
+  ]
+}

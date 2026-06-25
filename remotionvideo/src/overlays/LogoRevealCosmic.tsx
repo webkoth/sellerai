@@ -1,6 +1,7 @@
 import { Stage } from "./kit";
 import { ThemeProvider, useAccent } from "./ThemeContext";
 import { LogoRevealCore, type MiniDef } from "./LogoReveal";
+import type { ThemeName } from "./theme";
 
 /**
  * Космическая копия логотипа: тёмный constellation-фон (как в Reel-5-Types-Cyan),
@@ -30,29 +31,34 @@ const MINIS: MiniDef[] = [
   { x: 700, y: 760, delay: 100, len: 130, thick: 3, travel: 250 },
 ];
 
-const CosmicInner = () => {
-  const a = useAccent(); // cyan
+/** Контент космо-логотипа БЕЗ собственной сцены-фона (для переиспользования в Template). */
+export const CosmicLogoContent = () => {
+  const a = useAccent();
   return (
-    <Stage brand={null} showChevron={false}>
-      <LogoRevealCore
-        color={LIGHT}
-        meteorColor={LIGHT}
-        glow={a.glow}
-        trailCopies={14}
-        trailLen={120}
-        dist={480}
-        stagger={3}
-        pace={1.25}
-        blur={1.5}
-        minis={MINIS}
-      />
-    </Stage>
+    <LogoRevealCore
+      color={LIGHT}
+      meteorColor={LIGHT}
+      glow={a.glow}
+      trailCopies={14}
+      trailLen={120}
+      dist={480}
+      stagger={3}
+      pace={1.25}
+      blur={0.7}
+      minis={MINIS}
+    />
   );
 };
 
-/** Логотип на космическом фоне (cyan-тема). */
-export const LogoRevealCosmic = () => (
-  <ThemeProvider name="cyan">
+const CosmicInner = () => (
+  <Stage brand={null} showChevron={false}>
+    <CosmicLogoContent />
+  </Stage>
+);
+
+/** Логотип на космическом фоне (по умолчанию cyan-тема, метеоры берут glow акцента). */
+export const LogoRevealCosmic = ({ theme = "cyan" }: { theme?: ThemeName }) => (
+  <ThemeProvider name={theme}>
     <CosmicInner />
   </ThemeProvider>
 );

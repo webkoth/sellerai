@@ -1,6 +1,6 @@
 import { Title } from "./Title";
 import { Fact } from "./Fact";
-import { Key } from "./Key";
+import { Statement } from "./Statement";
 import { Cta } from "./Cta";
 import { Type } from "./Type";
 import type { OverlayItem } from "./types";
@@ -12,8 +12,8 @@ export const Overlay = ({ item }: { item: OverlayItem }) => {
       return <Title item={item} />;
     case "FACT":
       return <Fact item={item} />;
-    case "KEY":
-      return <Key item={item} />;
+    case "STATEMENT":
+      return <Statement item={item} />;
     case "TYPE":
       return <Type item={item} />;
     case "CTA":

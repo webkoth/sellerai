@@ -17,6 +17,8 @@ export type SubtitleTrackProps = {
   theme?: ThemeName;
   /** Фон: фото из public/ под космической тонировкой (как в Reel-4). */
   footage?: string;
+  /** Сегмент `*…*` рисуется маркером-«прочерком» (единый стиль с заголовками). */
+  animatedHighlight?: boolean;
 };
 
 /** Демо-набор: показывает обе плашки (glass + solid) с подсветкой ключевого слова. */
@@ -32,7 +34,7 @@ export const subtitleTrackDuration = (cues: SubtitleCue[], fps: number) => {
 };
 
 /** Дорожка субтитров поверх фона/футажа. */
-export const SubtitleTrack = ({ cues, theme = "ember", footage }: SubtitleTrackProps) => {
+export const SubtitleTrack = ({ cues, theme = "ember", footage, animatedHighlight = false }: SubtitleTrackProps) => {
   const { fps } = useVideoConfig();
   return (
     <ThemeProvider name={theme}>
@@ -41,7 +43,7 @@ export const SubtitleTrack = ({ cues, theme = "ember", footage }: SubtitleTrackP
           const dur = Math.round(c.durationSec * fps);
           return (
             <Sequence key={i} from={Math.round(c.fromSec * fps)} durationInFrames={dur} layout="none">
-              <Subtitle text={c.text} variant={c.variant} durationInFrames={dur} />
+              <Subtitle text={c.text} variant={c.variant} durationInFrames={dur} animatedHighlight={animatedHighlight} />
             </Sequence>
           );
         })}

@@ -27,7 +27,10 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "render:alpha": "remotion render --codec=prores --prores-profile=4444 --pixel-format=yuva444p10le --image-format=png",
+    "render:plates": "npm run render:alpha -- Plate-Age-Cyan out/plate-age.mov && npm run render:alpha -- Plate-Widmanstatten-Cyan out/plate-widman.mov",
+    "render:logo": "npm run render:alpha -- LogoReveal out/logo.mov"
   },
   "sideEffects": [
     "*.css"

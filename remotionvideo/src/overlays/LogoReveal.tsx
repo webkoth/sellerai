@@ -227,7 +227,7 @@ export const LogoReveal = () => (
       dist={360}
       stagger={2.5}
       pace={1}
-      blur={1.2}
+      blur={0.7}
       minis={[
         { x: 140, y: 360, delay: 2, len: 150, thick: 4, travel: 260 },
         { x: 780, y: 300, delay: 9, len: 110, thick: 3, travel: 220 },
