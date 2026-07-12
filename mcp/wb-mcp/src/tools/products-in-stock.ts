@@ -75,26 +75,62 @@ export interface ProductInStock {
   }>;
 }
 
-// Fetch helper
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Fetch helper с retry на транзиентные сбои WB (5xx / 429 / сетевые обрывы).
+// 4xx не ретраим — это не пройдёт при повторе (авторизация, валидация).
 async function fetchWB<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...createWBHeaders(),
-      ...options?.headers,
-    },
-  });
+  const MAX_ATTEMPTS = 4;
+  const BASE_DELAY_MS = 1500;
+  let lastErr: unknown;
 
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`WB API Error ${response.status}: ${text}`);
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...createWBHeaders(),
+          ...options?.headers,
+        },
+      });
+
+      if (response.status === 204) {
+        return {} as T;
+      }
+
+      if (!response.ok) {
+        const text = await response.text();
+        const retriable = response.status >= 500 || response.status === 429;
+        if (retriable && attempt < MAX_ATTEMPTS) {
+          const delay = BASE_DELAY_MS * 2 ** (attempt - 1);
+          console.error(
+            `[wb_fetch_retry] ${response.status} на ${url} (попытка ${attempt}/${MAX_ATTEMPTS}), повтор через ${delay}мс`,
+          );
+          await sleep(delay);
+          lastErr = new Error(`WB API Error ${response.status}: ${text}`);
+          continue;
+        }
+        throw new Error(`WB API Error ${response.status}: ${text}`);
+      }
+
+      return response.json() as Promise<T>;
+    } catch (err) {
+      // Сетевой сбой (fetch failed / ECONNRESET / таймаут) — тоже ретраим.
+      const isHttpError = err instanceof Error && /WB API Error/.test(err.message);
+      if (!isHttpError && attempt < MAX_ATTEMPTS) {
+        const delay = BASE_DELAY_MS * 2 ** (attempt - 1);
+        console.error(
+          `[wb_fetch_retry] сетевой сбой на ${url} (попытка ${attempt}/${MAX_ATTEMPTS}): ${String(err)}, повтор через ${delay}мс`,
+        );
+        await sleep(delay);
+        lastErr = err;
+        continue;
+      }
+      throw err;
+    }
   }
 
-  if (response.status === 204) {
-    return {} as T;
-  }
-
-  return response.json() as Promise<T>;
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
 
 /**

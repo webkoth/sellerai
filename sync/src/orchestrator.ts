@@ -15,6 +15,7 @@ import { runIntake } from './commands/intake.js';
 import { runFinance } from './commands/finance.js';
 import { log } from './log.js';
 import { notify, alertBlock } from './notify.js';
+import { throttled } from './monitor.js';
 
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
@@ -52,6 +53,16 @@ async function main(): Promise<void> {
 main().catch(async (e: unknown) => {
   const err = e as Error;
   log('💥 FATAL: ' + (err.stack || err.message));
-  await notify(alertBlock('💥 SellerAI sync FATAL', [String(err.message)]));
+  // Throttle: при затяжном сбое (например, 500 WB часами) подкоманды падают
+  // каждый крон-тик (stocks — раз в 30 мин). Шлём FATAL-алерт по сигнатуре ошибки
+  // не чаще раза в 2 часа (окно > интервала крона, иначе не подавляется на границе).
+  // Первый инцидент уходит сразу; повторы той же ошибки — тихо в лог.
+  const cmd = process.argv[2] || '?';
+  const sig = `fatal:${cmd}:${err.message.slice(0, 80)}`;
+  if (!throttled(sig, 120 * 60 * 1000)) {
+    await notify(alertBlock('💥 SellerAI sync FATAL', [`[${cmd}] ${err.message}`]));
+  } else {
+    log('[throttle] FATAL-алерт подавлен (уже отправлялся <30 мин назад)');
+  }
   process.exit(1);
 });

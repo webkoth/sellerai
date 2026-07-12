@@ -10,7 +10,12 @@ import { costsMap } from '../costs.js';
 import { pricing } from '../config.js';
 import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
+import { beat } from '../monitor.js';
 import type { Marketplace } from '../types.js';
+
+// Порог простоя: order-loop бьётся раз в минуту, поэтому пропуск >10 мин = реальный простой
+// (выключенный сервер / снятый крон / затяжной краш), а не разовый скип по flock.
+const GAP_ALERT_MIN = 10;
 
 const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
 const round10 = (n: number): number => Math.ceil(n / 10) * 10;
@@ -35,6 +40,23 @@ interface OrderAlert {
 }
 
 export async function runOrders(apply: boolean): Promise<void> {
+  // heartbeat: детект простоя цикла. Бьём каждый тик; если разрыв большой —
+  // значит синк стоял. Шлём один алерт на восстановление (в apply-режиме).
+  const gapMin = beat();
+  if (apply && gapMin != null && gapMin > GAP_ALERT_MIN) {
+    const h = Math.floor(gapMin / 60);
+    const m = Math.round(gapMin % 60);
+    const dur = h > 0 ? `${h} ч ${m} мин` : `${m} мин`;
+    log(`🟡 heartbeat: обнаружен простой синка ${dur}`);
+    await notify(
+      alertBlock('🟡 SellerAI sync: восстановление после простоя', [
+        `Синхронизация не работала ~${dur}.`,
+        'Возможные причины: сервер был выключен, снят крон или падал процесс.',
+        'Order-loop снова активен. Рекомендуется сверка: reconcile.',
+      ]),
+    );
+  }
+
   const ledger = loadLedger();
 
   // резолв ключа заказа (offerId/barcode/vendorCode) в barcode пула
