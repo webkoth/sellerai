@@ -115,13 +115,17 @@ export async function writeYmStock(changes: Array<{ key: string; amount: number 
 // ---------- Цены (чтение) ----------
 export async function listOzonPrices(): Promise<Map<string, number>> {
   const r: any = await ozGetPrices({ limit: 1000, visibility: 'ALL' });
-  const rows = r.prices || r.items || [];
+  const rows = r.products || r.prices || r.items || [];
   const m = new Map<string, number>();
+  const num = (raw: unknown): number => {
+    const v = Number(typeof raw === 'string' ? raw.replace(',', '.') : raw);
+    return Number.isFinite(v) && v > 0 ? v : 0;
+  };
   for (const x of rows) {
     const key = String(x.offerId ?? x.offer_id ?? '');
-    const raw = x.marketingSellerPrice ?? x.price ?? '';
-    const v = Number(typeof raw === 'string' ? raw.replace(',', '.') : raw);
-    if (key && Number.isFinite(v) && v > 0) m.set(key, v);
+    // marketingSellerPrice бывает пустой строкой (нет акций) — тогда берём price
+    const v = num(x.marketingSellerPrice) || num(x.price);
+    if (key && v > 0) m.set(key, v);
   }
   return m;
 }

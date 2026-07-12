@@ -12,8 +12,9 @@
 */30 * * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply >> /opt/sellerai-sync/logs/cron-stocks.log 2>&1
 # авто-создание недостающих карточек — каждые 2 часа
 17 */2 * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js cards --apply >> /opt/sellerai-sync/logs/cron-cards.log 2>&1
-# дрейф цен (режим A vs факт) — ежедневно 09:00
-0 9 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
+# дрейф цен (режим A vs факт) — ОТКЛЮЧЁН 2026-07-13 по решению пользователя (хронический дрейф спамил одним списком).
+# Включить обратно: раскомментировать и переустановить crontab.
+# 0 9 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
 # health-сводка — ежедневно 08:30
 30 8 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js reconcile >> /opt/sellerai-sync/logs/cron-reconcile.log 2>&1
 # приёмка себестоимости через Telegram (/cost) — каждую минуту. Отдельный lock: пишет costs.json, не леджер

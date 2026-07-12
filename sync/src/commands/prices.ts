@@ -24,13 +24,14 @@ export async function runPrices(): Promise<void> {
     if (!fp) continue;
     const name = (it.title || '').slice(0, 24);
 
+    // Ozon offer_id у части карточек = vendorCode WB (созданы вручную), у новых = barcode
     const tOz = round10(fp * pr.k_ozon);
-    const aOz = ozP.get(it.barcode);
-    if (aOz && Math.abs(aOz - tOz) / tOz > thr) drifts.push(`Ozon ${it.barcode} ${name}: факт ${aOz} vs расч ${tOz} (${pct(aOz, tOz)})`);
+    const aOz = ozP.get(it.barcode) ?? ozP.get(it.vendorCode);
+    if (pr.k_ozon && aOz && Math.abs(aOz - tOz) / tOz > thr) drifts.push(`Ozon ${it.barcode} ${name}: факт ${aOz} vs расч ${tOz} (${pct(aOz, tOz)})`);
 
     const tYm = round10(fp * pr.k_ym);
     const aYm = ymP.get(it.barcode);
-    if (aYm && Math.abs(aYm - tYm) / tYm > thr) drifts.push(`ЯМ ${it.barcode} ${name}: факт ${aYm} vs расч ${tYm} (${pct(aYm, tYm)})`);
+    if (pr.k_ym && aYm && Math.abs(aYm - tYm) / tYm > thr) drifts.push(`ЯМ ${it.barcode} ${name}: факт ${aYm} vs расч ${tYm} (${pct(aYm, tYm)})`);
   }
 
   log(`дрейф цен (> ${GUARD.price_drift_alert_pct}%): ${drifts.length}`);
