@@ -107,9 +107,16 @@ export async function writeOzonStock(changes: Array<{ key: string; amount: numbe
 
 // ---------- ЯМ ----------
 export async function listYmOffers(): Promise<Array<{ key: string; available: number }>> {
-  const st: any = await ymGetStocks({ limit: 1000 });
+  // Постранично: /offers/stocks отдаёт максимум 200 за запрос (limit только в query, см. ym-mcp stocks.ts).
+  // До 2026-09-10 читалась одна страница из 50 → 33 оффера с реальным остатком считались нулевыми.
   const out = new Map<string, number>();
-  for (const s of st.stocks || []) out.set(String(s.offerId), Number(s.available) || 0);
+  let stocksToken: string | undefined;
+  for (let i = 0; i < 20; i++) {
+    const st: any = await ymGetStocks({ limit: 200, ...(stocksToken ? { pageToken: stocksToken } : {}) });
+    for (const s of st.stocks || []) out.set(String(s.offerId), Number(s.available) || 0);
+    stocksToken = st.nextPageToken;
+    if (!stocksToken) break;
+  }
   // Офферы магазина БЕЗ записи остатка (никогда не выставлялся, статус NO_STOCKS) в /offers/stocks не приходят —
   // 04.09.2026 так «потерялись» 11 живых офферов с ценами. Добираем полный список офферов магазина, их остаток = 0,
   // чтобы сверка выставила им WB-наличие. Архивные офферы бизнеса сюда не попадают (они не в магазине).
@@ -396,7 +403,9 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
   } catch (e) { errors.push('wb'); console.error(`[collectOpenOrders] wb: ${(e as Error).message.slice(0, 220)}`); }
 
   try {
-    const oz: any = await ozGetOrders({ status: 'all', limit: 1000 });
+    // Только FBS: FBO-запас лежит на складе Ozon и в сквозной пул не входит (см. listOzonOffers).
+    // 2026-09-10: /v2/posting/fbo/list у Ozon залип в 429 (retry-after: 1, не отпускает) — весь тик падал из-за ненужного вызова.
+    const oz: any = await ozGetOrders({ status: 'all', limit: 1000, scheme: 'fbs' });
     for (const o of oz.orders || []) {
       for (const it of o.items || []) {
         orders.push({

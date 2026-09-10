@@ -16,6 +16,9 @@ export const GetOrdersInputSchema = z.object({
     'all'
   ]).optional().default('all').describe('Order status filter'),
   limit: z.number().optional().default(100).describe('Maximum number of orders to return'),
+  // 2026-09-10: Ozon начал отдавать 429 (ratelimit-remaining: 0, retry-after: 1, не отпускает) на /v2/posting/fbo/list.
+  // Синк остатков тянет только FBS — FBO-запас лежит на складе Ozon и в сквозной пул не входит.
+  scheme: z.enum(['all', 'fbs', 'fbo']).optional().default('all').describe('Fulfillment scheme: fbs, fbo or all (default)'),
 });
 
 export type GetOrdersInput = z.infer<typeof GetOrdersInputSchema>;
@@ -289,6 +292,7 @@ async function getFboOrders(
 export async function getOrders(input: GetOrdersInput): Promise<{
   orders: OzonOrder[];
   total: number;
+  warnings: string[];
   summary: {
     totalOrders: number;
     fboOrders: number;
@@ -308,11 +312,23 @@ export async function getOrders(input: GetOrdersInput): Promise<{
   const status = input.status || 'all';
   const limit = input.limit || 100;
 
-  // Fetch FBS and FBO orders in parallel
-  const [fbsOrders, fboOrders] = await Promise.all([
-    getFbsOrders(dateFrom, dateTo, status, limit),
-    getFboOrders(dateFrom, dateTo, status, limit),
+  const scheme = input.scheme || 'all';
+
+  // Fetch FBS and FBO orders in parallel. Сбой одной схемы не роняет вызов целиком:
+  // если вторая стянулась — отдаём её с предупреждением (2026-09-10: FBO-list у Ozon залип в 429).
+  const [fbsRes, fboRes] = await Promise.allSettled([
+    scheme === 'fbo' ? Promise.resolve([] as OzonOrder[]) : getFbsOrders(dateFrom, dateTo, status, limit),
+    scheme === 'fbs' ? Promise.resolve([] as OzonOrder[]) : getFboOrders(dateFrom, dateTo, status, limit),
   ]);
+  const warnings: string[] = [];
+  if (fbsRes.status === 'rejected') warnings.push(`FBS: ${(fbsRes.reason as Error).message.slice(0, 200)}`);
+  if (fboRes.status === 'rejected') warnings.push(`FBO: ${(fboRes.reason as Error).message.slice(0, 200)}`);
+  if (fbsRes.status === 'rejected' && fboRes.status === 'rejected') throw fbsRes.reason;
+  if (scheme === 'fbs' && fbsRes.status === 'rejected') throw fbsRes.reason;
+  if (scheme === 'fbo' && fboRes.status === 'rejected') throw fboRes.reason;
+  for (const w of warnings) console.error(`[ozon_get_orders] частичный сбой, продолжаем: ${w}`);
+  const fbsOrders = fbsRes.status === 'fulfilled' ? fbsRes.value : [];
+  const fboOrders = fboRes.status === 'fulfilled' ? fboRes.value : [];
 
   // Combine and sort by date
   const allOrders = [...fbsOrders, ...fboOrders]
@@ -331,11 +347,14 @@ export async function getOrders(input: GetOrdersInput): Promise<{
     total: allOrders.length,
     fbo: fboOrders.length,
     fbs: fbsOrders.length,
+    scheme,
+    ...(warnings.length ? { warnings } : {}),
   });
 
   return {
     orders: allOrders,
     total: allOrders.length,
+    warnings,
     summary: {
       totalOrders: allOrders.length,
       fboOrders: fboOrders.length,

@@ -432,6 +432,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: 'Максимальное количество заказов (по умолчанию 100)',
             default: 100,
           },
+          scheme: {
+            type: 'string',
+            enum: ['all', 'fbs', 'fbo'],
+            description: 'Схема: fbs, fbo или all (по умолчанию). Сбой одной схемы не роняет вызов — идёт в warnings',
+            default: 'all',
+          },
         },
       },
     },
@@ -785,7 +791,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'ozon_get_orders': {
         const input = GetOrdersInputSchema.parse(args || {});
         const result = await getOrders(input);
-        const markdown = formatOrdersAsMarkdown(result.orders, result.summary);
+        const markdown =
+          formatOrdersAsMarkdown(result.orders, result.summary) +
+          (result.warnings.length ? '\n\n🟡 Частично: ' + result.warnings.join('; ') : '');
 
         return {
           content: [
@@ -796,6 +804,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           ],
           structuredContent: {
             total: result.total,
+            warnings: result.warnings,
             summary: result.summary,
             orders: result.orders.slice(0, 30),
           },

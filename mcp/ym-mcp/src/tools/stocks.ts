@@ -76,9 +76,12 @@ export async function getStocks(input: GetStocksInput): Promise<{
 }> {
   const campaignId = input.campaignId || parseInt(getCampaignId());
 
-  const body: Record<string, unknown> = {
-    limit: input.limit || 100,
-  };
+  // limit и page_token ЯМ принимает ТОЛЬКО в query (в теле игнорирует → отдавал первую страницу из 50).
+  // 2026-09-10: из-за этого синк видел 50 из 83 офферов и каждые 30 мин переписывал «нулевые» остатки.
+  const query = new URLSearchParams({ limit: String(input.limit || 100) });
+  if (input.pageToken) query.set('page_token', input.pageToken);
+
+  const body: Record<string, unknown> = {};
 
   if (input.offerIds?.length) {
     body.offerIds = input.offerIds;
@@ -88,12 +91,8 @@ export async function getStocks(input: GetStocksInput): Promise<{
     body.warehouseIds = input.warehouseIds;
   }
 
-  if (input.pageToken) {
-    body.page_token = input.pageToken;
-  }
-
   const response = await apiRequest<StocksResponse>(
-    `/v2/campaigns/${campaignId}/offers/stocks`,
+    `/v2/campaigns/${campaignId}/offers/stocks?${query}`,
     'POST',
     body
   );
