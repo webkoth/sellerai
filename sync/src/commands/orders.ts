@@ -7,7 +7,7 @@
 import { collectOpenOrders, writeWbStock, writeOzonStock, writeYmStock } from '../clients.js';
 import { loadLedger, saveLedger } from '../inventory.js';
 import { costsMap } from '../costs.js';
-import { pricing } from '../config.js';
+import { pricing, SKIP_OZON } from '../config.js';
 import { log } from '../log.js';
 import { notify, alertBlock } from '../notify.js';
 import { beat } from '../monitor.js';
@@ -124,13 +124,30 @@ export async function runOrders(apply: boolean): Promise<void> {
     return;
   }
 
-  // пуш нового остатка на все 3 МП (ключ оффера = barcode)
+  // пуш нового остатка на все 3 МП. WB — по баркоду. Ozon/ЯМ: offer_id = артикул WB (если уникален) или баркод
+  // (см. cards / mirrorOfferId) — шлём оба ключа, чужой просто не найдётся (Ozon: NOT_FOUND, ЯМ: notUpdatedOfferIds).
+  // До 2026-09-10 слался только баркод → на новых кабинетах ИП (офферы по артикулу) заказ не зеркалился до ближайшего stocks-тика.
   const changes = [...affected].map(([key, amount]) => ({ key, amount }));
+  const skipOzon = new Set<string>(SKIP_OZON);
+  const mirror = (forOzon: boolean): Array<{ key: string; amount: number }> => {
+    const out: Array<{ key: string; amount: number }> = [];
+    for (const [bc, amount] of affected) {
+      if (forOzon && skipOzon.has(bc)) continue;
+      out.push({ key: bc, amount });
+      const vc = ledger.items[bc]?.vendorCode;
+      if (vc && vc !== bc) out.push({ key: vc, amount });
+    }
+    return out;
+  };
   await writeWbStock(changes);
-  await writeOzonStock(changes);
-  await writeYmStock(changes);
+  const ozRes = await writeOzonStock(mirror(true));
+  const ymRes = await writeYmStock(mirror(false));
   saveLedger(ledger);
-  log(`order-loop: применено по ${changes.length} товарам`);
+  log(`order-loop: применено по ${changes.length} товарам (Ozon принято ${ozRes.ok}, ЯМ принято ${ymRes.ok})`);
+  if (changes.length && ozRes.ok === 0 && !changes.every((c) => skipOzon.has(c.key))) {
+    log(`🟡 order-loop: Ozon не принял ни один ключ: ${ozRes.errors.slice(0, 6).join(', ')}`);
+  }
+  if (changes.length && ymRes.ok === 0) log(`🟡 order-loop: ЯМ не принял ни один ключ: ${ymRes.notUpdated.slice(0, 6).join(', ')}`);
 
   // алерт по каждому заказу.
   // Терминология (утв. 2026-07-19): «Прибыль» — после комиссии, когда себестоимость
