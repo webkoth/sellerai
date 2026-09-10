@@ -9,7 +9,7 @@ import { notify, alertBlock } from '../notify.js';
 
 export async function runReconcile(): Promise<void> {
   log('=== reconcile (health) ===');
-  const [wb, oz, ym, ord] = await Promise.all([listWbInStock(), listOzonOffers(), listYmOffers(), collectOpenOrders()]);
+  const [wb, oz, ym, ord] = await Promise.all([listWbInStock(true), listOzonOffers(), listYmOffers(), collectOpenOrders()]);
 
   // прогон пула в памяти (клон леджера — без сохранения), чтобы получить актуальный available
   const ledger = loadLedger();
@@ -24,16 +24,27 @@ export async function runReconcile(): Promise<void> {
   const ozKeys = new Set(oz.map((o) => o.key));
   const ymKeys = new Set(ym.map((o) => o.key));
   const missOz = wb.filter((it) => !ozKeys.has(it.barcode) && !ozKeys.has(it.vendorCode)).length;
-  const missYm = wb.filter((it) => !ymKeys.has(it.barcode)).length;
+  // ЯМ: офферы нового магазина (2026-07-19) заведены по артикулам — проверяем оба ключа
+  const missYm = wb.filter((it) => !ymKeys.has(it.barcode) && !ymKeys.has(it.vendorCode)).length;
   const baseTotal = [...available.values()].reduce((s, v) => s + v, 0);
   const zeroItems = [...available.values()].filter((v) => v === 0).length;
 
-  const lines = [
-    `WB в наличии: ${wb.length} (ед. в пуле: ${baseTotal}, нулевых позиций: ${zeroItems})`,
-    `Ozon: офферов ${oz.length}, рассинхрон ${ozMis}, без карточки ${missOz}`,
-    `ЯМ: офферов ${ym.length}, рассинхрон ${ymMis}, без карточки ${missYm}`,
-    ord.errors.length ? `⚠ сбой тянучки заказов: ${ord.errors.join(', ')}` : `заказов за 30д: ${ord.orders.length}`,
-  ];
-  log(lines.join(' | '));
-  await notify(alertBlock('📊 Reconcile · здоровье синка', lines));
+  // подробности — в лог; в TG — вердикт и только реальные проблемы (формат утв. 2026-07-19)
+  log(
+    `WB в наличии: ${wb.length} (ед. в пуле: ${baseTotal}, нулевых: ${zeroItems}) | ` +
+      `Ozon: офферов ${oz.length}, рассинхрон ${ozMis}, без карточки ${missOz} | ` +
+      `ЯМ: офферов ${ym.length}, рассинхрон ${ymMis}, без карточки ${missYm} | заказов 30д: ${ord.orders.length}`,
+  );
+  const problems: string[] = [];
+  if (ozMis) problems.push(`Ozon: неверный остаток у ${ozMis} товаров`);
+  if (missOz) problems.push(`Ozon: нет карточки у ${missOz} товаров`);
+  if (ymMis) problems.push(`ЯМ: неверный остаток у ${ymMis} товаров`);
+  if (missYm) problems.push(`ЯМ: нет карточки у ${missYm} товаров`);
+  if (ord.errors.length) problems.push(`⚠ сбой чтения заказов: ${ord.errors.join(', ')}`);
+  const ok = problems.length === 0;
+  const lines = [`В наличии: ${wb.length} товара (${baseTotal} шт)`];
+  lines.push(...(ok ? ['Ozon и ЯМ: остатки и карточки сходятся'] : problems));
+  lines.push(`Заказов за 30 дней: ${ord.orders.length}`);
+  if (!ok) lines.push('Что делать: расхождения остатков выровняет ближайший тик stocks; по карточкам — создать вручную');
+  await notify(alertBlock(ok ? '📊 Синхронизация: всё в порядке ✅' : '📊 Синхронизация: есть расхождения ⚠️', lines));
 }

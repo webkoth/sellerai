@@ -3,7 +3,8 @@
  * CLI авто-синхронизации. Запуск из cron: node dist/orchestrator.js <cmd> [--apply]
  *   stocks     — сквозная синхронизация остатков (по умолчанию dry-run, --apply применяет)
  *   cards      — авто-создание недостающих карточек (in-stock WB без карточки)
- *   prices     — отчёт по дрейфу цен (режим A vs факт), без мутаций
+ *   prices     — цены v2 «единая база + скидки по комиссиям»: отчёт дрейфа;
+ *                --preview (CSV/MD БЫЛО→СТАЛО), --apply [barcode ...] (запись WB→Ozon→ЯМ)
  *   reconcile  — health-сводка в Telegram
  */
 import { runStocks } from './commands/stocks.js';
@@ -30,10 +31,15 @@ async function main(): Promise<void> {
       await runStocks(apply);
       break;
     case 'cards':
-      await runCards(apply);
+      // cards [--apply] [barcode|vendorCode ...] — ограничить создание перечисленными ключами
+      await runCards(apply, argv.slice(1).filter((a) => !a.startsWith('--')));
       break;
     case 'prices':
-      await runPrices();
+      await runPrices({
+        apply,
+        preview: argv.includes('--preview'),
+        only: argv.slice(1).filter((a) => !a.startsWith('--')),
+      });
       break;
     case 'reconcile':
       await runReconcile();
@@ -60,7 +66,18 @@ main().catch(async (e: unknown) => {
   const cmd = process.argv[2] || '?';
   const sig = `fatal:${cmd}:${err.message.slice(0, 80)}`;
   if (!throttled(sig, 120 * 60 * 1000)) {
-    await notify(alertBlock('💥 SellerAI sync FATAL', [`[${cmd}] ${err.message}`]));
+    const CMD_RU: Record<string, string> = {
+      orders: 'заказы (orders)', stocks: 'остатки (stocks)', cards: 'карточки (cards)',
+      prices: 'цены (prices)', reconcile: 'сверка (reconcile)',
+      intake: 'приёмка себестоимости (intake)', finance: 'финансы (finance)',
+    };
+    await notify(
+      alertBlock(`💥 Сбой синхронизации: ${CMD_RU[cmd] || cmd}`, [
+        `Ошибка: ${err.message.slice(0, 200)}`,
+        'Запуск прерван, ближайший тик по расписанию повторит попытку сам.',
+        'Вмешательство нужно, только если этот алерт приходит несколько раз подряд.',
+      ]),
+    );
   } else {
     log('[throttle] FATAL-алерт подавлен (уже отправлялся <30 мин назад)');
   }

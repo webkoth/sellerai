@@ -100,7 +100,20 @@ async function fetchWB<T>(url: string, options?: RequestInit): Promise<T> {
 
       if (!response.ok) {
         const text = await response.text();
-        const retriable = response.status >= 500 || response.status === 429;
+        // 429 у WB — не «попробуй через секунду», а штрафное окно (X-Ratelimit-Retry, сек), которое
+        // РАСТЁТ с каждым новым 429 (замерено 03.09.2026: 681 с у discounts-prices, 5226→6690 с у statistics).
+        // Повторяем только если окно короткое (≤15 с); иначе отдаём ошибку сразу и не усугубляем.
+        if (response.status === 429) {
+          const retryAfter = Number(response.headers.get('x-ratelimit-retry') ?? response.headers.get('retry-after') ?? NaN);
+          if (Number.isFinite(retryAfter) && retryAfter <= 15 && attempt < MAX_ATTEMPTS) {
+            console.error(`[wb_fetch_retry] 429 на ${url}, окно ${retryAfter}с — жду и повторяю (попытка ${attempt}/${MAX_ATTEMPTS})`);
+            await sleep(retryAfter * 1000 + 500);
+            lastErr = new Error(`WB API Error 429: ${text}`);
+            continue;
+          }
+          throw new Error(`WB API Error 429 (retry after ${Number.isFinite(retryAfter) ? retryAfter + 'с' : '?'}): ${text}`);
+        }
+        const retriable = response.status >= 500;
         if (retriable && attempt < MAX_ATTEMPTS) {
           const delay = BASE_DELAY_MS * 2 ** (attempt - 1);
           console.error(
@@ -290,13 +303,25 @@ async function getFBSStocks(barcodes: string[]): Promise<Map<string, number>> {
 /**
  * Main handler: Get all products in stock (FBS)
  */
-export async function getProductsInStock(input: GetProductsInStockInput): Promise<{
+export interface GetProductsInStockOptions {
+  /**
+   * Цены необязательны: при сбое discounts-prices (у токена лимит 1 запрос в ~11 мин) вернуть товары
+   * с price/finalPrice = 0 и summary.pricesUnavailable вместо исключения. Для синка остатков цены не нужны;
+   * для создания карточек и выравнивания цен — нужны (оставлять false).
+   */
+  pricesOptional?: boolean;
+  /** Вообще не ходить за ценами (для синка остатков): не расходует окно discounts-prices (1 запрос в ~11–12 мин). */
+  skipPrices?: boolean;
+}
+
+export async function getProductsInStock(input: GetProductsInStockInput, opts: GetProductsInStockOptions = {}): Promise<{
   products: ProductInStock[];
   total: number;
   summary: {
     totalCards: number;
     totalBarcodes: number;
     productsWithStock: number;
+    pricesUnavailable?: string;
   };
 }> {
   const { minQuantity } = input;
@@ -304,8 +329,17 @@ export async function getProductsInStock(input: GetProductsInStockInput): Promis
   // Step 1: Get all cards with photos
   const cards = await getAllCards();
 
-  // Step 2: Get prices
-  const prices = await getPricesMap();
+  // Step 2: Get prices (опционально)
+  let prices = new Map<number, { price: number; discount: number; discountedPrice: number }>();
+  let pricesUnavailable: string | undefined;
+  try {
+    if (opts.skipPrices) pricesUnavailable = 'skipped by caller';
+    else prices = await getPricesMap();
+  } catch (err) {
+    if (!opts.pricesOptional) throw err;
+    pricesUnavailable = err instanceof Error ? err.message.slice(0, 160) : String(err);
+    console.error(`[wb_products_in_stock] цены недоступны, продолжаю без них: ${pricesUnavailable}`);
+  }
 
   // Step 3: Extract all barcodes from sizes[].skus[]
   const barcodeToCard = new Map<string, { card: WBCardFull; sizeIndex: number }>();
@@ -376,6 +410,7 @@ export async function getProductsInStock(input: GetProductsInStockInput): Promis
       totalCards: cards.length,
       totalBarcodes: barcodeToCard.size,
       productsWithStock: productsInStock.length,
+      ...(pricesUnavailable ? { pricesUnavailable } : {}),
     },
   };
 }

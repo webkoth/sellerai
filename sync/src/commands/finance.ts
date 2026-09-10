@@ -37,6 +37,7 @@ export async function runFinance(days = 30): Promise<void> {
   let sales = 0;
   let noCost = 0;
   const byCat = new Map<string, { rev: number; prof: number; n: number }>();
+  const byMp = new Map<string, number>();
   const items: Array<{ title: string; profit: number }> = [];
 
   for (const o of orders) {
@@ -58,6 +59,7 @@ export async function runFinance(days = 30): Promise<void> {
     commission += comm;
     cogs += cg;
     sales++;
+    byMp.set(o.mp, (byMp.get(o.mp) || 0) + 1);
     items.push({ title: e?.title || bc, profit });
     const c = byCat.get(cat) || { rev: 0, prof: 0, n: 0 };
     c.rev += rev;
@@ -70,23 +72,28 @@ export async function runFinance(days = 30): Promise<void> {
   const margin = revenue ? Math.round((net / revenue) * 100) : 0;
   items.sort((a, b) => b.profit - a.profit);
 
+  // Формат утв. 2026-07-19: итог в заголовке, разбивка по площадкам, человеческое
+  // предупреждение о незаданной себестоимости.
+  const MPN: Record<string, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
+  const mpLine = [...byMp.entries()].map(([m, n]) => `${MPN[m] || m} ${n}`).join(' · ');
   const lines = [
-    `Период: ${days} дн · продаж: ${sales}`,
+    `Продаж: ${sales}${mpLine ? ` — ${mpLine}` : ''} (за ${days} дн)`,
     `Выручка: ${rub(revenue)}`,
-    `− Комиссии МП: ${rub(commission)}`,
-    `− Себестоимость: ${rub(cogs)}${noCost ? ` (без COGS: ${noCost} поз.)` : ''}`,
-    `= Чистая прибыль: ${rub(net)} (маржа ${margin}%)`,
+    `− Комиссии площадок: ${rub(commission)}`,
+    `− Себестоимость: ${rub(cogs)}`,
+    `= Чистая прибыль: ${rub(net)}`,
   ];
+  if (noCost) lines.push('', `⚠️ У ${noCost} товаров не задана себестоимость — их прибыль завышена (задать: /cost)`);
   if (byCat.size) {
-    lines.push('', 'По категориям:');
-    for (const [c, v] of [...byCat.entries()].sort((a, b) => b[1].prof - a[1].prof)) lines.push(`  ${c}: ${rub(v.prof)} (${v.n} прод.)`);
+    lines.push('', 'По категориям (прибыль):');
+    for (const [c, v] of [...byCat.entries()].sort((a, b) => b[1].prof - a[1].prof)) lines.push(`  ${c}: ${rub(v.prof)} (${v.n} продаж)`);
   }
   if (items.length) {
-    lines.push('', 'Топ прибыльных:');
-    for (const it of items.slice(0, 3)) lines.push(`  +${rub(it.profit)} ${it.title.slice(0, 28)}`);
+    lines.push('', 'Топ-3 по прибыли:');
+    for (const it of items.slice(0, 3)) lines.push(`  +${rub(it.profit)} — ${it.title.slice(0, 30)}`);
   }
-  if (errors.length) lines.push('', `⚠ сбой тянучки: ${errors.join(', ')}`);
+  if (errors.length) lines.push('', `⚠️ Часть данных не получена: ${errors.join(', ')}`);
 
   log(lines.join(' | '));
-  await notify(alertBlock('📊 P&L · чистая прибыль', lines));
+  await notify(alertBlock(`📊 Прибыль за месяц: ${rub(net)} (маржа ${margin}%)`, lines));
 }

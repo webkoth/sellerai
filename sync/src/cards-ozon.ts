@@ -2,17 +2,22 @@
  * Сборка Ozon-payload для авто-создания недостающих карточек (порт cards.mjs в TS).
  * Клон проверенного шаблона того же type_id + override специфики + доводка Цвет(10096)/
  * Материал(5309)/ТН ВЭД(22232). Санитайзер режет оригинальность/качество + CJK/спецсимволы.
- * Габариты клампятся в диапазон Ozon. Цена — k_ozon (режим A). offer_id = barcode WB.
+ * Габариты клампятся в диапазон Ozon.
+ * 2026-09-04: offer_id = артикул WB (если уникален среди WB-наличия, иначе баркод), цена — модель v2
+ * (computeTarget), снимок WB передаётся снаружи (один запрос цен на оба построителя), типы без
+ * шаблона в ветке бижутерии заводятся как «Подвеска», пропуски собираются в opts.skipped.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createOzonHeaders, OZON_API_URL } from '../../mcp/ozon-mcp/dist/utils/auth.js';
-import { getProductsInStock } from '../../mcp/wb-mcp/dist/tools/products-in-stock.js';
 import { getProducts as ozGetProducts } from '../../mcp/ozon-mcp/dist/tools/products.js';
 import { ROOT, categoryMap, pricing } from './config.js';
+import { computeTarget, type BasePolicy, type SubjectRates } from './pricing.js';
+import { mirrorOfferId, countVendorCodes } from './cards-ym.js';
 
 const OZON_BIJOUTERIE_CAT = 17027899;
-const round10 = (n: number): number => Math.ceil(n / 10) * 10;
+// Тип «Подвеска»: шаблон-донор для типов бижутерии без своего шаблона (Шарм 87593414 и т.п.)
+const FALLBACK_TYPE_ID = 87458901;
 const clampDim = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, Math.round(v)));
 
 export interface OzonPayload {
@@ -64,10 +69,12 @@ function sanitize(s: string | undefined): string {
     .trim();
 }
 
-export async function buildOzonCards(opts: { offerIds?: string[] } = {}): Promise<{ payloads: OzonPayload[] }> {
+export async function buildOzonCards(wbProducts: any[], opts: { offerIds?: string[]; skipped?: string[] } = {}): Promise<{ payloads: OzonPayload[] }> {
   const templates: any = JSON.parse(readFileSync(resolve(ROOT, 'data/mappings/ozon-card-templates.json'), 'utf8'));
   const catMap = (categoryMap as any).map;
-  const priceBy = (pricing as any).by_subject;
+  const bySubject: Record<string, SubjectRates> = (pricing as any).by_subject || {};
+  const policy: BasePolicy = (pricing as any).base_policy;
+  const skipped = opts.skipped ?? [];
 
   const ozPost = async (ep: string, b: any): Promise<any> => {
     const r = await fetch(OZON_API_URL + ep, { method: 'POST', headers: createOzonHeaders(), body: JSON.stringify(b) });
@@ -92,27 +99,38 @@ export async function buildOzonCards(opts: { offerIds?: string[] } = {}): Promis
     return id;
   };
 
-  const wb: any = await getProductsInStock({ minQuantity: 1 });
   const oz: any = await ozGetProducts({ limit: 1000, visibility: 'ALL' });
   const ozIds = new Set(oz.products.map((p: any) => String(p.offerId)));
   const want = opts.offerIds && opts.offerIds.length ? new Set(opts.offerIds.map(String)) : null;
   const missing = want
-    ? wb.products.filter((p: any) => want.has(String(p.barcode)) || want.has(String(p.vendorCode)))
-    : wb.products.filter((p: any) => !ozIds.has(String(p.vendorCode)) && !ozIds.has(String(p.barcode)));
+    ? wbProducts.filter((p: any) => want.has(String(p.barcode)) || want.has(String(p.vendorCode)))
+    : wbProducts.filter((p: any) => !ozIds.has(String(p.vendorCode)) && !ozIds.has(String(p.barcode)));
+  const vendorCount = countVendorCodes(wbProducts);
 
   const OVERRIDE = new Set([4180, 4191, 9048, 9024, 10096, 5309, 22232]);
   const payloads: OzonPayload[] = [];
   for (const it of missing) {
     const cm = catMap[it.category];
-    if (!cm || cm.excluded) continue;
-    const tid = cm.ozon.type_id;
-    const tmpl = templates[tid];
-    if (!tmpl) continue;
-    const pr = priceBy[it.category] || priceBy['Подвески бижутерные'];
-    const finalP = it.finalPrice || it.price;
+    const label = `${it.barcode} ${(it.title || '').slice(0, 40)}`;
+    if (!cm || cm.excluded) { skipped.push(`Ozon ${label}: категория «${it.category}» не замаплена/исключена`); continue; }
+    let tid = cm.ozon.type_id;
+    let tmpl = templates[tid];
+    if (!tmpl && cm.ozon.category_id === OZON_BIJOUTERIE_CAT && templates[FALLBACK_TYPE_ID]) {
+      tid = FALLBACK_TYPE_ID; // шарм и другие типы бижутерии без шаблона — заводим как «Подвеска»
+      tmpl = templates[tid];
+    }
+    if (!tmpl) { skipped.push(`Ozon ${label}: нет шаблона для типа ${cm.ozon.type_name || tid} — завести вручную`); continue; }
+    const offerId = mirrorOfferId(it, vendorCount);
+    const rates = bySubject[it.category] || bySubject['Подвески бижутерные'];
+    const tg = computeTarget(
+      { barcode: String(it.barcode), nmId: Number(it.nmId) || 0, vendorCode: String(it.vendorCode), category: it.category, title: it.title || '', wbFinal: Number(it.finalPrice) || 0, ozonOfferId: offerId },
+      rates, policy,
+    );
+    if (!tg.ozon) { skipped.push(`Ozon ${label}: цена не рассчиталась (${tg.skips.join(', ')})`); continue; }
+    const finalP = tg.wbFinal;
     const baseP = it.price || finalP;
-    const price = round10(finalP * pr.k_ozon);
-    const oldPrice = baseP > finalP ? round10(baseP * pr.k_ozon) : 0;
+    const price = tg.ozon.price;
+    const oldPrice = tg.ozon.oldPrice;
 
     const attrs = tmpl.attributes
       .filter((a: any) => !OVERRIDE.has(a.id))
@@ -136,7 +154,7 @@ export async function buildOzonCards(opts: { offerIds?: string[] } = {}): Promis
 
     const d = it.dimensions || {};
     payloads.push({
-      offer_id: String(it.barcode),
+      offer_id: offerId,
       description_category_id: cm.ozon.category_id,
       type_id: tid,
       name: cleanName,
@@ -153,7 +171,7 @@ export async function buildOzonCards(opts: { offerIds?: string[] } = {}): Promis
       weight: Math.round((d.weight || 0.05) * 1000),
       weight_unit: 'g',
       attributes: attrs,
-      _wb: { subject: it.category, finalP, baseP, k: pr.k_ozon, color: wbColor, material: wbMat },
+      _wb: { subject: it.category, typeName: tid === cm.ozon.type_id ? cm.ozon.type_name : `${cm.ozon.type_name}→Подвеска`, finalP, baseP, minPrice: tg.ozon.minPrice, stock: Number(it.stock) || 0, barcode: String(it.barcode), color: wbColor, material: wbMat },
     });
   }
   return { payloads };

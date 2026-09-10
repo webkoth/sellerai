@@ -5,19 +5,25 @@
 # ВАЖНО: orders/stocks/cards пишут общий леджер -> общий lock (/tmp/sai-ledger.lock),
 # чтобы исключить lost-update при пересечении тиков. flock -n = пропустить тик, если занято
 # (ничего не теряется: stocks-reconcile сам обработает заказы, что пропустил order-loop).
-# order-loop — заказ→сквозной синхрон остатка + Telegram-алерт, каждую минуту
-* * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply >> /opt/sellerai-sync/logs/cron-orders.log 2>&1
+# order-loop — заказ→сквозной синхрон остатка + Telegram-алерт. С 2026-09-03 по решению юзера — раз в 15 минут (было каждую минуту);
+# порог heartbeat-алерта «простой» в orders.ts поднят до 40 мин под эту частоту.
+# Минуты 3/18/33/48, а не 0/15/30/45: statistics-api WB (/supplier/orders) даёт 1 запрос в минуту и после 429 штрафует
+# на 1,5–2 часа с ростом окна — orders и stocks не должны дёргать его в одну и ту же минуту.
+# 2026-09-03: включено обратно после перевыпуска WB-токена (до 2027-02-15) и пересева леджера от WB (sync/scripts/ledger-reseed-from-wb.mjs)
+3-59/15 * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply >> /opt/sellerai-sync/logs/cron-orders.log 2>&1
 # full-reconcile остатков (пополнения, ручные правки, выравнивание) — каждые 30 мин
 # flock -w 15: подождать ledger.lock до 15с (order-тик держит его ~1с), чтобы не скипать reconcile при коллизии в :00/:30
 */30 * * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply >> /opt/sellerai-sync/logs/cron-stocks.log 2>&1
 # авто-создание недостающих карточек — каждые 2 часа
-17 */2 * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js cards --apply >> /opt/sellerai-sync/logs/cron-cards.log 2>&1
-# дрейф цен (режим A vs факт) — ОТКЛЮЧЁН 2026-07-13 по решению пользователя (хронический дрейф спамил одним списком).
-# Включить обратно: раскомментировать и переустановить crontab.
-# 0 9 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
-# health-сводка — ежедневно 08:30
-30 8 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js reconcile >> /opt/sellerai-sync/logs/cron-reconcile.log 2>&1
+#OFF(2026-07-19: cards-ym создаёт офферы по БАРКОДАМ — пересоздаст удалённые дубли ЯМ; включать только после починки ключа на артикулы) 17 */2 * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js cards --apply >> /opt/sellerai-sync/logs/cron-cards.log 2>&1
+# выравнивание цен v2 «единая база + скидки по комиссиям» (2026-07-16) — ежедневно 09:15.
+# Пишет WB (база+скидка, витринная неизменна) / Ozon / ЯМ только при дрейфе > price_min_change_pct (2%),
+# кап price_max_change_pct (60%), abort при > prices_abort_if_changes_over изменений. Отдельный lock (леджер не трогает).
+#OFF(2026-07-18 юзер: цены только вручную. 2026-07-19: перед ЛЮБЫМ прогоном нужна доработка — floor «не снижать» и согласование min_price с нетто-порогами) 15 9 * * * flock -n /tmp/sai-prices.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js prices --apply >> /opt/sellerai-sync/logs/cron-prices.log 2>&1
+# health-сводка — ежедневно 08:45 (не 08:30: в :30 идёт stocks; оба читают заказы WB (1/мин) и цены WB
+# (discounts-prices у этого токена — 1 запрос в ~11 мин, X-Ratelimit-Reset 681) — разносим на 15 минут)
+45 8 * * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js reconcile >> /opt/sellerai-sync/logs/cron-reconcile.log 2>&1
 # приёмка себестоимости через Telegram (/cost) — каждую минуту. Отдельный lock: пишет costs.json, не леджер
-* * * * * flock -n /tmp/sai-intake.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js intake >> /opt/sellerai-sync/logs/cron-intake.log 2>&1
+#OFF(2026-09-03 юзер: «убери себестоимость» — приём /cost выключен) * * * * * flock -n /tmp/sai-intake.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js intake >> /opt/sellerai-sync/logs/cron-intake.log 2>&1
 # месячный P&L (выручка − комиссии − COGS) — 1-го числа в 10:00
 0 10 1 * * /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js finance >> /opt/sellerai-sync/logs/cron-finance.log 2>&1

@@ -21,7 +21,7 @@ export async function runStocks(apply: boolean): Promise<void> {
   log(`=== stocks ${apply ? 'APPLY' : 'DRY-RUN'} ===`);
 
   const [wbItems, ozOffers, ymOffers, ordersRes] = await Promise.all([
-    listWbInStock(),
+    listWbInStock(true), // цены не нужны — не зависеть от лимита discounts-prices
     listOzonOffers(),
     listYmOffers(),
     collectOpenOrders(),
@@ -29,9 +29,14 @@ export async function runStocks(apply: boolean): Promise<void> {
 
   // Сбой тянучки заказов → НЕ синхронизируем вслепую (иначе можно обнулить из-за «нет заказов»).
   if (ordersRes.errors.length) {
-    const msg = `Синхронизация остатков пропущена: не стянулись заказы (${ordersRes.errors.join(', ')}). Чтобы не обнулить вслепую.`;
-    log('🔴 ' + msg);
-    await notify(alertBlock('🔴 STOCKS прерван', [msg]));
+    log(`🔴 сверка пропущена: не стянулись заказы (${ordersRes.errors.join(', ')})`);
+    await notify(
+      alertBlock('🔴 Сверка остатков пропущена', [
+        `Не удалось получить заказы: ${ordersRes.errors.join(', ')}`,
+        'Остатки не тронуты — это защита от выравнивания вслепую.',
+        'Разовый сбой не страшен: следующая сверка через 30 минут. Повторяется — проверьте площадку.',
+      ]),
+    );
     return;
   }
 
@@ -81,9 +86,14 @@ export async function runStocks(apply: boolean): Promise<void> {
 
   // sanity-guard
   if (total > GUARD.stock_abort_if_changes_over) {
-    const msg = `аномально много изменений (${total} > ${GUARD.stock_abort_if_changes_over}) — НЕ применяю, леджер не сохраняю.`;
-    log('🔴 STOP: ' + msg);
-    await notify(alertBlock('🔴 STOCKS sanity-stop', [msg, `WB ${wbChanges.length} · Ozon ${ozChanges.length} · ЯМ ${ymChanges.length}`]));
+    log(`🔴 STOP: аномально много изменений (${total} > ${GUARD.stock_abort_if_changes_over}) — не применяю, леджер не сохраняю.`);
+    await notify(
+      alertBlock('🔴 Сверка остатков остановлена защитой', [
+        `Слишком много изменений за раз: ${total} при лимите ${GUARD.stock_abort_if_changes_over} (WB ${wbChanges.length} · Ozon ${ozChanges.length} · ЯМ ${ymChanges.length}).`,
+        'Ничего не применено. Обычно так бывает после долгого простоя или массовой правки остатков.',
+        'Если изменения ожидаемы — запустить вручную: stocks --apply',
+      ]),
+    );
     return;
   }
 
@@ -111,9 +121,27 @@ export async function runStocks(apply: boolean): Promise<void> {
   if (ozRes.errors.length) log('  Ozon ошибки: ' + ozRes.errors.slice(0, 8).join(', '));
   if (ymRes.notUpdated.length) log('  ЯМ notUpdated: ' + ymRes.notUpdated.slice(0, 8).join(', '));
 
-  // сквозной алерт: товары, обнулённые/уменьшенные из-за продажи на ДРУГОМ МП
-  const crossOrders = events.filter((e) => e.startsWith('заказ ozon') || e.startsWith('заказ ym'));
-  if (crossOrders.length) {
-    await notify(alertBlock('🔁 Сквозной пул: продажа на МП → синхронизация', crossOrders.slice(0, 20)));
+  // сквозной алерт: товары, обнулённые/уменьшенные из-за продажи на ДРУГОМ МП.
+  // Формат утв. 2026-07-19: название вместо баркода, группировка, остаток в строке.
+  const crossRe = /^заказ (ozon|ym) (\S+) −(\d+)$/;
+  const grouped = new Map<string, { mp: string; bc: string; qty: number }>();
+  for (const ev of events) {
+    const m = ev.match(crossRe);
+    if (!m) continue;
+    const g = grouped.get(`${m[1]}:${m[2]}`) || { mp: m[1], bc: m[2], qty: 0 };
+    g.qty += Number(m[3]);
+    grouped.set(`${g.mp}:${g.bc}`, g);
+  }
+  if (grouped.size) {
+    const MP: Record<string, string> = { ozon: 'Ozon', ym: 'ЯМ' };
+    const lines = [...grouped.values()].slice(0, 15).map((g) => {
+      const it = ledger.items[g.bc];
+      const name = (it?.title || g.bc).slice(0, 40);
+      const left = it ? it.base : '?';
+      return `${MP[g.mp]}: ${name} — ${g.qty} шт → остаток ${left}${it && it.base === 0 ? ' ❗️' : ''}`;
+    });
+    if (grouped.size > 15) lines.push(`… и ещё ${grouped.size - 15}`);
+    lines.push('Остатки выровнены на всех площадках');
+    await notify(alertBlock('🔁 Продажи, подхваченные сверкой (order-loop их пропустил)', lines));
   }
 }

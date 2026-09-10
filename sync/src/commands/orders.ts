@@ -13,9 +13,10 @@ import { notify, alertBlock } from '../notify.js';
 import { beat } from '../monitor.js';
 import type { Marketplace } from '../types.js';
 
-// Порог простоя: order-loop бьётся раз в минуту, поэтому пропуск >10 мин = реальный простой
-// (выключенный сервер / снятый крон / затяжной краш), а не разовый скип по flock.
-const GAP_ALERT_MIN = 10;
+// Порог простоя: с 2026-09-03 order-loop идёт раз в 15 минут (было — каждую минуту), поэтому
+// реальный простой (выключенный сервер / снятый крон / затяжной краш) — это пропуск >40 мин,
+// то есть больше двух тиков подряд; один скип по flock или задержка тика алерт не даёт.
+const GAP_ALERT_MIN = 40;
 
 const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
 const round10 = (n: number): number => Math.ceil(n / 10) * 10;
@@ -49,10 +50,9 @@ export async function runOrders(apply: boolean): Promise<void> {
     const dur = h > 0 ? `${h} ч ${m} мин` : `${m} мин`;
     log(`🟡 heartbeat: обнаружен простой синка ${dur}`);
     await notify(
-      alertBlock('🟡 SellerAI sync: восстановление после простоя', [
-        `Синхронизация не работала ~${dur}.`,
-        'Возможные причины: сервер был выключен, снят крон или падал процесс.',
-        'Order-loop снова активен. Рекомендуется сверка: reconcile.',
+      alertBlock('🟡 Синхронизация снова работает', [
+        `Простой был ~${dur} (сервер был выключен, снят крон или падал процесс).`,
+        'Заказы и продажи за время простоя подхватит ближайшая сверка — в течение 30 минут, вмешиваться не нужно.',
       ]),
     );
   }
@@ -132,24 +132,27 @@ export async function runOrders(apply: boolean): Promise<void> {
   saveLedger(ledger);
   log(`order-loop: применено по ${changes.length} товарам`);
 
-  // алерт по каждому заказу
+  // алерт по каждому заказу.
+  // Терминология (утв. 2026-07-19): «Прибыль» — после комиссии, когда себестоимость
+  // не задана; «Чистая прибыль» — после комиссии и себестоимости.
   for (const a of alerts) {
-    const lines = [`${a.title} (${a.bc})`, `Заказано: ${a.qty} шт`];
-    if (a.buyerUnit) {
-      const ourNote = a.ourUnit && a.ourUnit !== a.buyerUnit ? ` (по правилу: ${rub(a.ourUnit)})` : '';
-      lines.push(`Цена за ед.: ${rub(a.buyerUnit)}${ourNote}`);
-      lines.push(`Сумма заказа: ${rub(a.sum)}`);
+    const lines = [a.title];
+    lines.push(a.buyerUnit ? `${a.qty} шт × ${rub(a.buyerUnit)}` : `Заказано: ${a.qty} шт`);
+    if (a.ourUnit && a.buyerUnit && a.buyerUnit < a.ourUnit) {
+      lines.push(`⚠️ Продано ниже модели: ${rub(a.buyerUnit)} (модель ${rub(a.ourUnit)})`);
     }
-    if (a.takePct != null && a.grossAfterComm != null) lines.push(`Комиссия ~${a.takePct}% → к перечислению ≈ ${rub(a.grossAfterComm)}`);
-    if (a.cogs != null && a.netProfit != null) {
-      const margin = a.sum ? Math.round((a.netProfit / a.sum) * 100) : 0;
-      lines.push(`Себестоимость: ${rub(a.cogs)} (${rub(a.costUnit!)}/шт)`);
-      lines.push(`💰 Чистая прибыль при выкупе ≈ ${rub(a.netProfit)} (маржа ${margin}%)`);
-    } else {
-      lines.push(`Себестоимость: не задана → /cost ${a.bc} <сумма>`);
+    if (a.takePct != null && a.grossAfterComm != null) {
+      if (a.cogs != null && a.netProfit != null) {
+        lines.push(`После комиссии (≈${a.takePct}%): ${rub(a.grossAfterComm)}`);
+        lines.push(`💰 Чистая прибыль при выкупе: ≈ ${rub(a.netProfit)} (себестоимость ${rub(a.cogs)})`);
+      } else {
+        lines.push(`💰 Прибыль после комиссии (≈${a.takePct}%): ≈ ${rub(a.grossAfterComm)}`);
+        lines.push(`Себестоимость не задана → /cost ${a.bc} <сумма>`);
+      }
     }
-    lines.push(`Новый остаток пула: ${a.newStock}`);
-    lines.push(`Синхронизировано: WB ${a.newStock} · Ozon ${a.newStock} · ЯМ ${a.newStock}`);
-    await notify(alertBlock(`🛒 Заказ · ${MP_NAME[a.mp]}`, lines));
+    lines.push(`Остаток: ${a.newStock} — обновлён на всех площадках`);
+    if (a.newStock === 0) lines.push('❗️ Товар закончился');
+    const header = a.sum ? `🛒 Заказ на ${MP_NAME[a.mp]} — ${rub(a.sum)}` : `🛒 Заказ на ${MP_NAME[a.mp]}`;
+    await notify(alertBlock(header, lines));
   }
 }

@@ -4,18 +4,20 @@
     "updated": "2026-06-04"
   },
   "telegram": {
-    "chat_id": -4625448374,
+    "chat_id": "-1004395280612",
     "group": "KOTELNIKOVARTIFACT",
     "note": "Токен бота в .env как TELEGRAM_BOT_TOKEN. Бот @kotelnikovartifactbot — админ группы."
   },
   "sync": {
     "scope": "in-stock",
     "stock_cadence_min": 30,
-    "price_policy": "report-only",
+    "price_policy": "apply-v2 (единая база + скидки по комиссиям; cron 09:15 prices --apply)",
     "cards_policy": "auto-create",
     "cross_marketplace": true,
-    "skip_ozon_barcodes": ["2049405532066"],
-    "_skip_ozon_note": "barcode'ы, которые НЕ синхронизируем на Ozon (карточка заблокирована модерацией и т.п.). Товар остаётся на WB+ЯМ. 2049405532066 = 'Подвеска из метеорита Алетай' — Ozon FB_JEWELRY: метеорит трактуется как ювелирка.",
+    "skip_ozon_barcodes": [],
+    "wb_price_quarantine_nmids": [],
+    "_quarantine_note": "Фолбэк-список nmID в ценовом карантине WB на случай недоступности GET /api/v2/quarantine/goods (обычно карантин тянется live).",
+    "_skip_ozon_note": "barcode'ы, которые НЕ синхронизируем на Ozon (карточка заблокирована модерацией и т.п.). Товар остаётся на WB+ЯМ. Пуст с 2026-07-19: Манджушри (2049405532066) в новом кабинете ИП прошёл модерацию в категории «Магический амулет, оберег» и продаётся.",
     "guardrails": {
       "stock_abort_if_changes_over": 120,
       "price_drift_alert_pct": 15,
@@ -31,17 +33,17 @@
   },
   "ozon": {
     "model": "FBS",
-    "fbs_warehouse_id": 1020005003459950,
-    "fbs_warehouse_name": "Краснодар",
-    "note": "Единственный рабочий FBS-склад. 1020002508545000 (rFBS, возвраты, отключён) и 1020005000589846 — НЕ использовать (status=disabled, отвергают остаток WAREHOUSE_WRONG_STATUS)."
+    "fbs_warehouse_id": 1020005023618600,
+    "fbs_warehouse_name": "Склад Краснодар",
+    "note": "С 2026-07-19: НОВЫЙ кабинет ИП (Client-Id 5332036, креды в .env), FBS-склад 1020005023618600 «Склад Краснодар» (DROP_OFF). 64 карточки заведены заново (data/ozon-import/), offer_id = артикулы WB. Старый кабинет самозанятого (2610573, склад 1020005003459950) — товары удалены, договор на расторжение."
   },
   "ym": {
     "model": "FBS",
-    "campaign_id": 148697627,
+    "campaign_id": 149197829,
     "business_id": 191766894,
-    "warehouse_id": 1872191,
-    "warehouse_name": "Склад Краснодар",
+    "warehouse_id": 2369574,
+    "warehouse_name": "Kotelnikovartifact",
     "price_level": "business",
-    "note": "Кампания залочена на default price (LOCKED: Partner use only default price) -> цена ставится на бизнес-уровне /businesses/{id}/offer-prices/updates. Остаток: PUT /v2/campaigns/{id}/offers/stocks {skus:[{sku,warehouseId,items:[{count,type:FIT,updatedAt}]}]}. Скидка ЯМ должна быть 1-99% (иначе без discountBase)."
+    "note": "С 2026-07-19: новый магазин ИП «Kotelnikovartifact» 149197829, склад 2369574 «Kotelnikovartifact». Нативная интеграция WB→ЯМ ПОЛНОСТЬЮ ВЫКЛЮЧЕНА юзером (цены/остатки/карточки) — остатки и цены снова наша зона: остаток PUT /v2/campaigns/{id}/offers/stocks, цена на бизнес-уровне /businesses/{id}/offer-prices/updates (скидка 1-99%). offerId = артикулы WB (105 баркодовых дублей интеграции в архиве). Старый магазин СМЗ: 148697627, склад 1872191 «Склад Краснодар»."
   }
 }
