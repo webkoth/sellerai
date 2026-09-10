@@ -61,7 +61,27 @@ export async function apiRequest<T>(
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(url, options);
+  // Разовые 5xx/429 и сетевые сбои ЯМ — не повод ронять прогон (2026-09-10 12:30: один
+  // INTERNAL_SERVER_ERROR на /offers/stocks → 💥 FATAL в Telegram). Повторяем до 2 раз с паузой.
+  // Все наши PUT идемпотентны (выставляют абсолютные значения), поэтому повтор безопасен.
+  const RETRIES = 2;
+  let response!: Response;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      response = await fetch(url, options);
+    } catch (e) {
+      if (attempt >= RETRIES) throw e;
+      console.error(`[ym apiRequest] ${method} ${endpoint}: ${(e as Error).message.slice(0, 120)} — повтор ${attempt + 1}/${RETRIES}`);
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      continue;
+    }
+    if ((response.status >= 500 || response.status === 429) && attempt < RETRIES) {
+      console.error(`[ym apiRequest] ${method} ${endpoint}: HTTP ${response.status} — повтор ${attempt + 1}/${RETRIES}`);
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      continue;
+    }
+    break;
+  }
 
   if (!response.ok) {
     const errorText = await response.text();
