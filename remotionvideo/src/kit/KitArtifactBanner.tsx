@@ -29,6 +29,8 @@ export type KitArtifactBannerProps = {
   layout: ArtifactLayout;
   /** Доля кадра под изделие. */
   photoScale?: number;
+  /** Множитель размера текста: карточки товара требуют крупнее баннеров. */
+  textScale?: number;
   /** Тёмный фон (по умолчанию) или светлый — для пергамента и травертина. */
   onLight?: boolean;
   /** Изделие уже снято внутри фонового кадра — отдельный слой с вырезкой не нужен. */
@@ -53,6 +55,7 @@ export const KitArtifactBanner = ({
   photoScale,
   onLight = false,
   productInBackground = false,
+  textScale = 1,
 }: KitArtifactBannerProps) => {
   const poster = layout === "poster";
   const strip = layout === "strip";
@@ -63,11 +66,11 @@ export const KitArtifactBanner = ({
   const accent = onLight ? "#2C7C8A" : CYAN;
 
   // размеры в долях от меньшей стороны кадра — одинаковая оптика во всех форматах
-  const u = poster ? 1 : ribbon ? 0.52 : strip ? 0.9 : 1.5;
+  const u = (poster ? 1 : ribbon ? 0.52 : strip ? 0.9 : 1.5) * textScale;
   const S = {
     brand: 26 * u,
     series: 22 * u,
-    title: ribbon ? 46 : strip ? 44 : 62 * u,
+    title: (ribbon ? 46 : strip ? 44 : 62) * (ribbon || strip ? textScale : u),
     sub: 26 * u,
     meta: 20 * u,
     note: 20 * u,
