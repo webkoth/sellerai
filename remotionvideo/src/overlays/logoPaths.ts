@@ -1,4 +1,4 @@
-// Авто-извлечено из docs/video-scripts/logo_anime.svg — 18 контуров-букв KOTELNIKOVARTIFACT.
+// Авто-извлечено из videos/_assets/logo_anime.svg — 18 контуров-букв KOTELNIKOVARTIFACT.
 // Не редактировать вручную.
 export const LOGO_VIEWBOX = "564 361 789 333";
 export const LOGO_PATHS: string[] = [

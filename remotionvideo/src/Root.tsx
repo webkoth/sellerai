@@ -5,6 +5,19 @@ import {
   showcaseDurationInFrames,
   type OverlayShowcaseProps,
 } from "./overlays/OverlayShowcase";
+import { KitBanner } from "./kit/KitBanner";
+import { KIT_SLOTS } from "./kit/banners";
+import { KitFashionBanner } from "./kit/KitFashionBanner";
+import { FASHION_SLOTS } from "./kit/fashionBanners";
+import { KitGraphiteBanner } from "./kit/KitGraphiteBanner";
+import { BLUE_SLOTS, GRAPHITE_SLOTS } from "./kit/graphiteBanners";
+import { PREMIUM_SLOTS } from "./kit/premiumBanners";
+import { KitArtifactBanner } from "./kit/KitArtifactBanner";
+import { ARTIFACT_SLOTS, HS_SLOTS, CARD_SLOTS } from "./kit/artifactBanners";
+import { PRODUCT_CARD_SLOTS, GLAV_SLOTS, GLAV_MOBILE_SLOTS } from "./kit/cardSlots";
+import { KitCollectionBanner } from "./kit/KitCollectionBanner";
+import { COLLECTION, COLLECTION_FORMATS } from "./kit/collectionBanners";
+import { AD_FORMATS, AD_SLOTS } from "./kit/adBanners";
 import { LogoReveal } from "./overlays/LogoReveal";
 import { LogoRevealCosmic } from "./overlays/LogoRevealCosmic";
 import { Template, templateDurationInFrames } from "./overlays/Template";
@@ -13,6 +26,7 @@ import { DroninoReel, droninoReelDuration } from "./overlays/DroninoReel";
 import { DroninoSubs, droninoSubsDuration } from "./overlays/DroninoSubs";
 import { CareReel, careReelDuration } from "./overlays/CareReel";
 import { ReelPreview, reelPreviewDuration } from "./overlays/ReelPreview";
+import { YouTubePreview, youTubePreviewDuration } from "./overlays/YouTubePreview";
 import { ConstellationReveal } from "./overlays/ConstellationReveal";
 import {
   ReelOverlays,
@@ -64,6 +78,15 @@ const PLATES: { id: string; item: OverlayItem }[] = [
   },
 ];
 
+/** Подсерия «Виды метеоритов» — отдельные ролики по каждому типу (05a/05b/05c). */
+const SUB_REELS: { reelId: string; prefix: string }[] = [
+  { reelId: "Reel-5a-Stony", prefix: "M5a" },
+  { reelId: "Reel-5b-Iron", prefix: "M5b" },
+  { reelId: "Reel-5c-StonyIron", prefix: "M5c" },
+  // Обзор изделия: подвеска «Звёздная мандала» с метеоритом Серичо (videos/meteorites/04-sericho-pendant)
+  { reelId: "Reel-4-Sericho", prefix: "M4S" },
+];
+
 const calcReel: CalculateMetadataFunction<ReelOverlaysProps> = ({ props }) => ({
   durationInFrames: reelDurationInFrames(props.items, FPS),
 });
@@ -87,6 +110,58 @@ export const RemotionRoot = () => {
         fps={FPS}
         width={VIDEO.width}
         height={VIDEO.height}
+      />
+      {/* Ролик 5 «Виды метеоритов» — оверлеи ОТДЕЛЬНЫМИ alpha-плашками (ProRes 4444,
+          прозрачный фон) под наложение на футаж метеоритов в DaVinci. Тексты — из
+          reels.ts (Reel-5-Types). Каждая сцена — самостоятельный клип со своей анимацией. */}
+      {(REELS.find((r) => r.id === "Reel-5-Types")?.items ?? []).map(
+        (item, i) => (
+          <Composition
+            key={`m5-overlay-${i}`}
+            id={`M5-Overlay-${i + 1}-${item.role}`}
+            component={TemplatePlate}
+            durationInFrames={Math.round(item.durationSec * FPS)}
+            fps={FPS}
+            width={VIDEO.width}
+            height={VIDEO.height}
+            defaultProps={{ item, theme: "cyan" as ThemeName }}
+            calculateMetadata={alphaMeta}
+          />
+        ),
+      )}
+      {/* Подсерия 5a/5b/5c «Каменные / Железные / Каменно-железные» — те же
+          alpha-плашки под наложение на футаж. Тексты — из reels.ts. */}
+      {SUB_REELS.flatMap(({ reelId, prefix }) =>
+        (REELS.find((r) => r.id === reelId)?.items ?? []).map((item, i) => (
+          <Composition
+            key={`${prefix}-overlay-${i}`}
+            id={`${prefix}-Overlay-${i + 1}-${item.role}`}
+            component={TemplatePlate}
+            durationInFrames={Math.round(item.durationSec * FPS)}
+            fps={FPS}
+            width={VIDEO.width}
+            height={VIDEO.height}
+            defaultProps={{ item, theme: "cyan" as ThemeName }}
+            calculateMetadata={alphaMeta}
+          />
+        )),
+      )}
+      {/* YouTube-обложка промо-ролика — 16:9 (1920×1080), стиль превью сторис. */}
+      <Composition
+        id="YouTube-Promo-Preview"
+        component={YouTubePreview}
+        durationInFrames={youTubePreviewDuration(FPS)}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{
+          title: "Как я соприкоснулась\nс *метеоритами*",
+          photo: "footage/founder-chair-removebg.png",
+          photoWidth: 690,
+          heroPhoto: "footage/meteorite-iron-removebg.png",
+          heroWidth: 470,
+          theme: "cyan" as ThemeName,
+        }}
       />
       {/* Превью роликов серии — обложка 9:16, фото мастера в углу + крупный заголовок. */}
       <Composition
@@ -113,6 +188,105 @@ export const RemotionRoot = () => {
           title: "Правила ухода за *метеоритами*",
           photo: "footage/pravila-uhoda-removebg-preview.png",
           theme: "cyan" as ThemeName,
+        }}
+      />
+      {/* Превью ролика 2 «Безопасность: радиация»: hero — образец + бытовой дозиметр
+          (0.05 µSv/h · NORMAL), сигнатурный кадр доверия ролика. */}
+      <Composition
+        id="Reel-Radiation-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "Метеорит — это *радиация*?",
+          photo: "footage/meteorite-radiation-removebg.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      {/* Превью ролика 5 «Виды метеоритов»: фото мастера с образцом в руке + заголовок-вопрос. */}
+      <Composition
+        id="Reel-Types-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "Какие бывают *метеориты*?",
+          photo: "footage/meteorite-removebg-preview.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      {/* Превью подсерии 5a/5b/5c — обложки по типам. Фото — removebg hero-кадра
+          соответствующего футажа (см. videos/meteorites/<ролик>/README.md). */}
+      <Composition
+        id="Reel-Stony-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "Что внутри *каменного* метеорита?",
+          photo: "footage/meteorite-stony-removebg.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      <Composition
+        id="Reel-Iron-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "*Железный* узор,\nчто не подделать",
+          photo: "footage/meteorite-iron-removebg.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      <Composition
+        id="Reel-Pallasite-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "*Палласит* —\nвитраж из космоса",
+          photo: "footage/meteorite-pallasite-removebg.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      {/* Превью обзора изделия «Серичо»: hero — removebg фото подвески с карточки WB. */}
+      <Composition
+        id="Reel-Sericho-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "Подвеска с метеоритом *Серичо*",
+          photo: "footage/sericho-pendant-removebg.png",
+          theme: "cyan" as ThemeName,
+        }}
+      />
+      {/* Превью ролика 6 «Алхимия и сакральность»: тёплая тема ember (огонь падения /
+          золото гробницы), фото кулона-артефакта (removebg). Заголовок — хук ролика. */}
+      <Composition
+        id="Reel-Alchemy-Preview"
+        component={ReelPreview}
+        durationInFrames={reelPreviewDuration(FPS)}
+        fps={FPS}
+        width={VIDEO.width}
+        height={VIDEO.height}
+        defaultProps={{
+          title: "Алхимия и *сакральность* метеоритов",
+          photo: "footage/meteorite-sacred-removebg.png",
+          theme: "ember" as ThemeName,
         }}
       />
       {/* Канонная сквозная витрина стиля: Logo-Cosmic → роли → субтитры (обе темы). */}
@@ -251,6 +425,92 @@ export const RemotionRoot = () => {
             theme,
             footage: "footage/dronino.png",
           }}
+        />
+      ))}
+
+      {/* Баннеры витрины Яндекс KIT — статичные кадры (remotion still). */}
+      {KIT_SLOTS.map((s) => (
+        <Composition
+          key={s.id}
+          id={`Kit-${s.id.replace(/_/g, "-")}`}
+          component={KitBanner}
+          durationInFrames={1}
+          fps={FPS}
+          width={s.width}
+          height={s.height}
+          defaultProps={s.props}
+        />
+      ))}
+
+      {/* Fashion-editorial набор на реальных фото образцов. */}
+      {FASHION_SLOTS.map((s) => (
+        <Composition
+          key={s.id}
+          id={`Kit-${s.id}`}
+          component={KitFashionBanner}
+          durationInFrames={1}
+          fps={FPS}
+          width={s.width}
+          height={s.height}
+          defaultProps={s.props}
+        />
+      ))}
+
+      {/* Набор «графит-космос»: вырезки на графите + текст прямо на фото. */}
+      {COLLECTION.flatMap((c) =>
+        COLLECTION_FORMATS.filter((f) => c.formats.includes(f.key)).map((f) => (
+          <Composition
+            key={`${c.id}-${f.key}`}
+            id={`Col-${c.id}-${f.key}`}
+            component={KitCollectionBanner}
+            durationInFrames={1}
+            fps={FPS}
+            width={f.width}
+            height={f.height}
+            defaultProps={c.props}
+          />
+        )),
+      )}
+
+      {/* Креативы РСЯ: 5 групп × 3 формата, сцены в public/kit-ad/. */}
+      {AD_SLOTS.flatMap((s) =>
+        AD_FORMATS.map((f) => (
+          <Composition
+            key={`ad-${s.id}-${f.key}`}
+            id={`Ad-${s.id}-${f.key}`}
+            component={KitCollectionBanner}
+            durationInFrames={1}
+            fps={FPS}
+            width={f.width}
+            height={f.height}
+            defaultProps={{ ...s.props, scene: `kit-ad/${s.id}-${f.key}.jpg` }}
+          />
+        )),
+      )}
+
+      {[...ARTIFACT_SLOTS, ...HS_SLOTS, ...CARD_SLOTS, ...PRODUCT_CARD_SLOTS, ...GLAV_SLOTS, ...GLAV_MOBILE_SLOTS].map((s) => (
+        <Composition
+          key={s.id}
+          id={`Kit-${s.id.replace(/_/g, "-")}`}
+          component={KitArtifactBanner}
+          durationInFrames={1}
+          fps={FPS}
+          width={s.width}
+          height={s.height}
+          defaultProps={s.props}
+        />
+      ))}
+
+      {[...GRAPHITE_SLOTS, ...BLUE_SLOTS, ...PREMIUM_SLOTS].map((s) => (
+        <Composition
+          key={s.id}
+          id={`Kit-${s.id}`}
+          component={KitGraphiteBanner}
+          durationInFrames={1}
+          fps={FPS}
+          width={s.width}
+          height={s.height}
+          defaultProps={s.props}
         />
       ))}
     </>

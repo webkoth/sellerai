@@ -276,3 +276,51 @@ export const HS_SLOTS: ArtifactSlot[] = [
     }) as KitArtifactBannerProps,
   },
 ];
+
+/** Карточки товара: фон-фактура + вырезка изделия + типографика «Книги небесного железа». */
+const CARD = (bg: string, photo: string, o: Record<string, unknown>) => ({
+  background: `kit-bg/${bg}`, photo: `kit-cutouts/${photo}`, layout: "poster", ...o,
+});
+
+export const CARD_SLOTS: ArtifactSlot[] = [
+  {
+    id: "card-kulon-drakon-aletai", width: 1200, height: 1600,
+    slot: "Карточка — кулон Дракон из метеорита Алетай",
+    props: CARD("bg_tsarev_basalt-cyan.png", "medallion-dragon.png", {
+      series: "Книга небесного железа", title: "Дракон в небесном железе",
+      subtitle: "резьба вручную по метеоритному железу",
+      meta: "Метеорит Aletai · Китай · 1898",
+      note: "Возраст: 4,5 миллиарда лет", scale: 0.62,
+    }) as KitArtifactBannerProps,
+  },
+  {
+    id: "card-busina-dzi-9-glaz", width: 1200, height: 1600,
+    slot: "Карточка — бусина Дзи 9 глаз, метеорит Алетай",
+    props: CARD("bg_medallion_ink-teal.png", "dzi-gold.png", {
+      series: "Книга небесного железа", title: "Девять глаз",
+      subtitle: "бусина Дзи из метеоритного железа",
+      meta: "Метеорит Aletai · Китай · 1898",
+      note: "Ручная резьба", scale: 0.6,
+    }) as KitArtifactBannerProps,
+  },
+  {
+    id: "card-kulon-piyao-aletai", width: 1200, height: 1600,
+    slot: "Карточка — кулон Пи Яо из метеорита Алетай",
+    props: CARD("bg_medallion_teal-raw.png", "piyao-meteorite.png", {
+      series: "Книга небесного железа", title: "Пи Яо",
+      subtitle: "резьба вручную по метеоритному железу",
+      meta: "Метеорит Aletai · Китай · 1898",
+      note: "Единственный экземпляр", scale: 0.6,
+    }) as KitArtifactBannerProps,
+  },
+  {
+    id: "card-meteorit-carev-345", width: 1200, height: 1600,
+    slot: "Карточка — метеорит Царёв, горбушка, 34,5 г",
+    props: CARD("bg_tsarev_chart-navy.png", "meteorite-stone.png", {
+      series: "Коллекционные образцы", title: "Царёв",
+      subtitle: "каменный метеорит, падение 1922 года",
+      meta: "Волгоградская область · найден в 1968",
+      note: "Вес: 34,5 г", scale: 0.58,
+    }) as KitArtifactBannerProps,
+  },
+];

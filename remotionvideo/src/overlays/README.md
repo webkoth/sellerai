@@ -156,4 +156,4 @@ npm run render:logo     # LogoReveal → out/logo.mov
 
 ## Источник контента
 
-Тексты — из `docs/video-scripts/meteorites/*.md`. Стандарт подачи — skill `artifact-video-scriptwriter`.
+Тексты — из `videos/meteorites/*/script.md`. Стандарт подачи — skill `artifact-video-scriptwriter`.
