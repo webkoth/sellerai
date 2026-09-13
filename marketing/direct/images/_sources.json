@@ -1,0 +1,452 @@
+[
+ {
+  "key": "meteority-a-1x1",
+  "src": "kit-scenes-hs/scene_009.jpg",
+  "kit_id": "100205",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 249401
+ },
+ {
+  "key": "meteority-a-4x3",
+  "src": "kit-scenes-hs/scene_009.jpg",
+  "kit_id": "100205",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 316174
+ },
+ {
+  "key": "meteority-a-16x9",
+  "src": "kit-scenes-hs/scene_009.jpg",
+  "kit_id": "100205",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 351821
+ },
+ {
+  "key": "meteority-b-1x1",
+  "src": "kit-scenes-hs/scene_015.jpg",
+  "kit_id": "100211",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 287898
+ },
+ {
+  "key": "meteority-b-4x3",
+  "src": "kit-scenes-hs/scene_015.jpg",
+  "kit_id": "100211",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 347818
+ },
+ {
+  "key": "meteority-b-16x9",
+  "src": "kit-scenes-hs/scene_015.jpg",
+  "kit_id": "100211",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 347710
+ },
+ {
+  "key": "meteority-c-1x1",
+  "src": "kit-scenes-hs/scene_012.jpg",
+  "kit_id": "100133",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 336245
+ },
+ {
+  "key": "meteority-c-4x3",
+  "src": "kit-scenes-hs/scene_012.jpg",
+  "kit_id": "100133",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 422105
+ },
+ {
+  "key": "meteority-c-16x9",
+  "src": "kit-scenes-hs/scene_012.jpg",
+  "kit_id": "100133",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 410273
+ },
+ {
+  "key": "amulety-a-1x1",
+  "src": "kit-scenes-hs/scene_039.jpg",
+  "kit_id": "100026",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 304326
+ },
+ {
+  "key": "amulety-a-4x3",
+  "src": "kit-scenes-hs/scene_039.jpg",
+  "kit_id": "100026",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 385161
+ },
+ {
+  "key": "amulety-a-16x9",
+  "src": "kit-scenes-hs/scene_039.jpg",
+  "kit_id": "100026",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 400245
+ },
+ {
+  "key": "amulety-b-1x1",
+  "src": "kit-scenes-hs/scene_007.jpg",
+  "kit_id": "100186",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 279620
+ },
+ {
+  "key": "amulety-b-4x3",
+  "src": "kit-scenes-hs/scene_007.jpg",
+  "kit_id": "100186",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 408745
+ },
+ {
+  "key": "amulety-b-16x9",
+  "src": "kit-scenes-hs/scene_007.jpg",
+  "kit_id": "100186",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 484249
+ },
+ {
+  "key": "amulety-c-1x1",
+  "src": "kit-scenes-hs/scene_026.jpg",
+  "kit_id": "100112",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 257896
+ },
+ {
+  "key": "amulety-c-4x3",
+  "src": "kit-scenes-hs/scene_026.jpg",
+  "kit_id": "100112",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 310712
+ },
+ {
+  "key": "amulety-c-16x9",
+  "src": "kit-scenes-hs/scene_026.jpg",
+  "kit_id": "100112",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 320049
+ },
+ {
+  "key": "braslety-a-1x1",
+  "src": "kit-scenes-hs/scene_016.jpg",
+  "kit_id": "100207",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 355216
+ },
+ {
+  "key": "braslety-a-4x3",
+  "src": "kit-scenes-hs/scene_016.jpg",
+  "kit_id": "100207",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 511867
+ },
+ {
+  "key": "braslety-a-16x9",
+  "src": "kit-scenes-hs/scene_016.jpg",
+  "kit_id": "100207",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 579992
+ },
+ {
+  "key": "braslety-b-1x1",
+  "src": "kit-scenes-hs/scene_005.jpg",
+  "kit_id": "100166",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 214780
+ },
+ {
+  "key": "braslety-b-4x3",
+  "src": "kit-scenes-hs/scene_005.jpg",
+  "kit_id": "100166",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 290507
+ },
+ {
+  "key": "braslety-b-16x9",
+  "src": "kit-scenes-hs/scene_005.jpg",
+  "kit_id": "100166",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 323479
+ },
+ {
+  "key": "braslety-c-1x1",
+  "src": "kit-scenes-hs/scene_008.jpg",
+  "kit_id": "100155",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 388598
+ },
+ {
+  "key": "braslety-c-4x3",
+  "src": "kit-scenes-hs/scene_008.jpg",
+  "kit_id": "100155",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 522843
+ },
+ {
+  "key": "braslety-c-16x9",
+  "src": "kit-scenes-hs/scene_008.jpg",
+  "kit_id": "100155",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 566153
+ },
+ {
+  "key": "podarki-a-1x1",
+  "src": "kit-scenes-hs/scene_042.jpg",
+  "kit_id": "100021",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 293629
+ },
+ {
+  "key": "podarki-a-4x3",
+  "src": "kit-scenes-hs/scene_042.jpg",
+  "kit_id": "100021",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 430867
+ },
+ {
+  "key": "podarki-a-16x9",
+  "src": "kit-scenes-hs/scene_042.jpg",
+  "kit_id": "100021",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 479731
+ },
+ {
+  "key": "podarki-b-1x1",
+  "src": "kit-scenes-hs/scene_018.jpg",
+  "kit_id": "100135",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 343435
+ },
+ {
+  "key": "podarki-b-4x3",
+  "src": "kit-scenes-hs/scene_018.jpg",
+  "kit_id": "100135",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 509025
+ },
+ {
+  "key": "podarki-b-16x9",
+  "src": "kit-scenes-hs/scene_018.jpg",
+  "kit_id": "100135",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 583245
+ },
+ {
+  "key": "podarki-c-1x1",
+  "src": "kit-scenes-hs/scene_037.jpg",
+  "kit_id": "100106",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 284021
+ },
+ {
+  "key": "podarki-c-4x3",
+  "src": "kit-scenes-hs/scene_037.jpg",
+  "kit_id": "100106",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 380223
+ },
+ {
+  "key": "podarki-c-16x9",
+  "src": "kit-scenes-hs/scene_037.jpg",
+  "kit_id": "100106",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 413068
+ },
+ {
+  "key": "chasy-a-1x1",
+  "src": "kit-hs/rsya-chasy-light.png",
+  "kit_id": "100174",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 273224
+ },
+ {
+  "key": "chasy-a-4x3",
+  "src": "kit-hs/rsya-chasy-light.png",
+  "kit_id": "100174",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 336909
+ },
+ {
+  "key": "chasy-a-16x9",
+  "src": "kit-hs/rsya-chasy-light.png",
+  "kit_id": "100174",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 361314
+ },
+ {
+  "key": "chasy-b-1x1",
+  "src": "kit-scenes-hs/scene_003.jpg",
+  "kit_id": "100174",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 400510
+ },
+ {
+  "key": "chasy-b-4x3",
+  "src": "kit-scenes-hs/scene_003.jpg",
+  "kit_id": "100174",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 536712
+ },
+ {
+  "key": "chasy-b-16x9",
+  "src": "kit-scenes-hs/scene_003.jpg",
+  "kit_id": "100174",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 571542
+ },
+ {
+  "key": "chasy-c-1x1",
+  "src": "kit-hs/rsya-chasy-wide.png",
+  "kit_id": "100174",
+  "size": [
+   1200,
+   1200
+  ],
+  "bytes": 519254
+ },
+ {
+  "key": "chasy-c-4x3",
+  "src": "kit-hs/rsya-chasy-wide.png",
+  "kit_id": "100174",
+  "size": [
+   1600,
+   1200
+  ],
+  "bytes": 680220
+ },
+ {
+  "key": "chasy-c-16x9",
+  "src": "kit-hs/rsya-chasy-wide.png",
+  "kit_id": "100174",
+  "size": [
+   1920,
+   1080
+  ],
+  "bytes": 715685
+ }
+]

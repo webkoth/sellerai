@@ -18,7 +18,6 @@ import { PRODUCT_CARD_SLOTS, GLAV_SLOTS, GLAV_MOBILE_SLOTS } from "./kit/cardSlo
 import { HS_CARD_SLOTS } from "./kit/hsCardSlots";
 import { KitCollectionBanner } from "./kit/KitCollectionBanner";
 import { COLLECTION, COLLECTION_FORMATS } from "./kit/collectionBanners";
-import { AD_FORMATS, AD_SLOTS } from "./kit/adBanners";
 import { LogoReveal } from "./overlays/LogoReveal";
 import { LogoRevealCosmic } from "./overlays/LogoRevealCosmic";
 import { Template, templateDurationInFrames } from "./overlays/Template";
@@ -469,22 +468,6 @@ export const RemotionRoot = () => {
             width={f.width}
             height={f.height}
             defaultProps={c.props}
-          />
-        )),
-      )}
-
-      {/* Креативы РСЯ: 5 групп × 3 формата, сцены в public/kit-ad/. */}
-      {AD_SLOTS.flatMap((s) =>
-        AD_FORMATS.map((f) => (
-          <Composition
-            key={`ad-${s.id}-${f.key}`}
-            id={`Ad-${s.id}-${f.key}`}
-            component={KitCollectionBanner}
-            durationInFrames={1}
-            fps={FPS}
-            width={f.width}
-            height={f.height}
-            defaultProps={{ ...s.props, scene: `kit-ad/${s.id}-${f.key}.jpg` }}
           />
         )),
       )}

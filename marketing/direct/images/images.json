@@ -1,0 +1,587 @@
+{
+ "amulety-a-16x9": {
+  "file": "marketing/direct/images/amulety-a-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21136051/xwdn8lzw46lt7mjj79l5nzvhzw7ppgkk/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-74b7-7176-90dc-acb2c062590b",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100026",
+  "scene": "kit-scenes-hs/scene_039.jpg"
+ },
+ "amulety-a-1x1": {
+  "file": "marketing/direct/images/amulety-a-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/cdssxgpwwmfxzvp7k4lmj8zmfcf55228/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-7c1c-7a10-8ce2-4c7171f3cb32",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100026",
+  "scene": "kit-scenes-hs/scene_039.jpg"
+ },
+ "amulety-a-4x3": {
+  "file": "marketing/direct/images/amulety-a-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/6r5v8dp62j7pbsh658xphhcd6s8ztr96/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-837b-76d0-9400-373bdb073021",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100026",
+  "scene": "kit-scenes-hs/scene_039.jpg"
+ },
+ "amulety-b-16x9": {
+  "file": "marketing/direct/images/amulety-b-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19196982/j9w9csx6js8rn99rsvp77d2glvwtpbfj/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-8b9b-7876-8295-02947e3dc6bd",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100186",
+  "scene": "kit-scenes-hs/scene_007.jpg"
+ },
+ "amulety-b-1x1": {
+  "file": "marketing/direct/images/amulety-b-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/18764786/ghhbq4459pwhc88j2r4hn4888p4b8cnh/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-92a1-7be8-9d87-98011ea0f84c",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100186",
+  "scene": "kit-scenes-hs/scene_007.jpg"
+ },
+ "amulety-b-4x3": {
+  "file": "marketing/direct/images/amulety-b-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/18793859/trx5tnggz9bntc4pjzld5fqz5vft7sd5/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-9984-7666-bfb8-13610a4227b0",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100186",
+  "scene": "kit-scenes-hs/scene_007.jpg"
+ },
+ "amulety-c-16x9": {
+  "file": "marketing/direct/images/amulety-c-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21696355/r8kc8lmqmkqt62ccm9bvh4wkfgzphv87/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-a293-7211-8b1a-5023935cd8f0",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100112",
+  "scene": "kit-scenes-hs/scene_026.jpg"
+ },
+ "amulety-c-1x1": {
+  "file": "marketing/direct/images/amulety-c-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/18793859/rhwtlts5n5ntcdt74z9ck922jcpn5l9h/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-a9df-786e-977f-b83616e64f6d",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100112",
+  "scene": "kit-scenes-hs/scene_026.jpg"
+ },
+ "amulety-c-4x3": {
+  "file": "marketing/direct/images/amulety-c-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21696355/f5kmhr7zhq69cfg2ltnz5bfn6p5pq2lg/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-b185-78a0-bbaa-cfae7b7f9c40",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100112",
+  "scene": "kit-scenes-hs/scene_026.jpg"
+ },
+ "braslety-a-16x9": {
+  "file": "marketing/direct/images/braslety-a-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21696355/hh25hdm7f67sxjdsrn25lnh82qbfx4jw/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-b9dc-7b00-acef-b6d525337c3c",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100207",
+  "scene": "kit-scenes-hs/scene_016.jpg"
+ },
+ "braslety-a-1x1": {
+  "file": "marketing/direct/images/braslety-a-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/sbf9b74zcn5hpcwv5lxdsp4nfpc8frql/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-c2a5-7d21-aa12-acb96923059e",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100207",
+  "scene": "kit-scenes-hs/scene_016.jpg"
+ },
+ "braslety-a-4x3": {
+  "file": "marketing/direct/images/braslety-a-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19034732/9fxk2668vv8kldlhl4fdlqj88zts4ztg/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-cb82-713e-8a0b-d11ee95d9133",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100207",
+  "scene": "kit-scenes-hs/scene_016.jpg"
+ },
+ "braslety-b-16x9": {
+  "file": "marketing/direct/images/braslety-b-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/kwphm7bwzlb68hscsvtsqnq4x5jbb82r/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-d2dc-7d76-9fdc-fd4ffa555ed2",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100166",
+  "scene": "kit-scenes-hs/scene_005.jpg"
+ },
+ "braslety-b-1x1": {
+  "file": "marketing/direct/images/braslety-b-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/kjjs296t2dm9fprthkhpkfs9nf974r27/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-da4a-79fd-b728-0f5e9f55b17a",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100166",
+  "scene": "kit-scenes-hs/scene_005.jpg"
+ },
+ "braslety-b-4x3": {
+  "file": "marketing/direct/images/braslety-b-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/kg2476ckzbb9cj2znndvb5hs4frw4fgc/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-e11b-73ee-baaa-6c303477cdbc",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100166",
+  "scene": "kit-scenes-hs/scene_005.jpg"
+ },
+ "braslety-c-16x9": {
+  "file": "marketing/direct/images/braslety-c-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/rqh2d8s2kphhshxg7mb7q2dbd7jjxjph/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099dd-ea44-7b5b-b577-19c5106b459b",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100155",
+  "scene": "kit-scenes-hs/scene_008.jpg"
+ },
+ "braslety-c-1x1": {
+  "file": "marketing/direct/images/braslety-c-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20811730/czvb5zq7jh5mghp699dl7b9rzmq7hjjk/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-f237-7046-affc-140b6c12af16",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100155",
+  "scene": "kit-scenes-hs/scene_008.jpg"
+ },
+ "braslety-c-4x3": {
+  "file": "marketing/direct/images/braslety-c-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21136051/x9zn289lrkd5wkvf2h8v2kq8jfgtgb2l/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099dd-ff27-7d13-b8b3-babdb2dc1bc7",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100155",
+  "scene": "kit-scenes-hs/scene_008.jpg"
+ },
+ "chasy-a-16x9": {
+  "file": "marketing/direct/images/chasy-a-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/jsv2q7f5tmkkgwp58hc2k7qmbz5sstvq/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-0607-7141-9039-17a443fee544",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-light.png"
+ },
+ "chasy-a-1x1": {
+  "file": "marketing/direct/images/chasy-a-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21528387/h9vc7c6xdvvqc795b297kvrkmcm7xxlb/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-0cb2-79d2-835e-d0dabe469958",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-light.png"
+ },
+ "chasy-a-4x3": {
+  "file": "marketing/direct/images/chasy-a-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21497181/p7pv8945pvzmh9tnpdv9rndtgvswpvhn/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-138b-70e1-9ce3-a77f9f8c237a",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-light.png"
+ },
+ "chasy-b-16x9": {
+  "file": "marketing/direct/images/chasy-b-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19196982/sw8wnx6twv2dqt8c4r99tbdtzrgdrbgw/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-1c22-7c61-9678-fd238333921e",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-scenes-hs/scene_003.jpg"
+ },
+ "chasy-b-1x1": {
+  "file": "marketing/direct/images/chasy-b-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/18793859/4h6glwvp9js2q5lvwssq2k88zthbb8mg/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-23d0-7810-9ed5-82351b3db414",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-scenes-hs/scene_003.jpg"
+ },
+ "chasy-b-4x3": {
+  "file": "marketing/direct/images/chasy-b-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20811730/kdr6xl29jsnj65qf6sg7vtnvzcxbmfxx/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-2cdb-7749-a3ea-f752934aee7c",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-scenes-hs/scene_003.jpg"
+ },
+ "chasy-c-16x9": {
+  "file": "marketing/direct/images/chasy-c-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19034732/7kdpfn9j6wr968n5vbfjz6gs8hm2jw6h/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-3480-7a1e-970d-1c8aa4e51265",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-wide.png"
+ },
+ "chasy-c-1x1": {
+  "file": "marketing/direct/images/chasy-c-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19196982/mjlvf52svnf5nxrnd2nz5qbd57w8xl5p/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-3be9-7c76-a413-18d372ff7940",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-wide.png"
+ },
+ "chasy-c-4x3": {
+  "file": "marketing/direct/images/chasy-c-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/fknwb5c5pxrkcdww5pgl6zk5xdwwfrh9/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-440c-78bb-ac21-f20f4b0ecc20",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100174",
+  "scene": "kit-hs/rsya-chasy-wide.png"
+ },
+ "meteority-a-16x9": {
+  "file": "marketing/direct/images/meteority-a-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/h65jvb4tw87fccgnpg6sg65p524hptmm/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-4bc3-7c0e-b503-211f53a5d2bc",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100205",
+  "scene": "kit-scenes-hs/scene_009.jpg"
+ },
+ "meteority-a-1x1": {
+  "file": "marketing/direct/images/meteority-a-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21136051/pqzrhhc7l9cvrbzx48mvc5k7tf9whfr5/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099dd-1dfa-728f-9458-3c369b37ddff",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100205",
+  "scene": "kit-scenes-hs/scene_009.jpg"
+ },
+ "meteority-a-4x3": {
+  "file": "marketing/direct/images/meteority-a-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/gxjz5h97967mrzktnjf2wkdqsd4gq8wn/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-5a05-729a-bc60-0204ff00c595",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100205",
+  "scene": "kit-scenes-hs/scene_009.jpg"
+ },
+ "meteority-b-16x9": {
+  "file": "marketing/direct/images/meteority-b-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21136051/qmw7kslh9jpf5tz4wq5qqpcvnpkfwcbp/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-6212-74b8-ac0a-857fe848885e",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100211",
+  "scene": "kit-scenes-hs/scene_015.jpg"
+ },
+ "meteority-b-1x1": {
+  "file": "marketing/direct/images/meteority-b-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21497181/hp6z2hzbkssxxbwqckmv5th94jx729c5/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-69b7-7143-870c-139b835d6abf",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100211",
+  "scene": "kit-scenes-hs/scene_015.jpg"
+ },
+ "meteority-b-4x3": {
+  "file": "marketing/direct/images/meteority-b-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/wfttm6qkcl557xjz8khvgmsjj7j9trj4/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-7142-7652-9ddd-dfe4e875a102",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100211",
+  "scene": "kit-scenes-hs/scene_015.jpg"
+ },
+ "meteority-c-16x9": {
+  "file": "marketing/direct/images/meteority-c-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20776375/2vh59bdhhjg2l72nqj4p864gsrtcn6pv/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-7a1c-7cb6-af6e-757bfac7cfdb",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100133",
+  "scene": "kit-scenes-hs/scene_012.jpg"
+ },
+ "meteority-c-1x1": {
+  "file": "marketing/direct/images/meteority-c-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/sx4glkxvqbg5xdzv75s2wfbtdv55bcfx/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-810f-73df-9cd9-37b886613485",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100133",
+  "scene": "kit-scenes-hs/scene_012.jpg"
+ },
+ "meteority-c-4x3": {
+  "file": "marketing/direct/images/meteority-c-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/gjgrwfc9tn6rfrcv482cbmsdx8422zsk/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-8899-78ee-9e63-8d2497dbbf23",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100133",
+  "scene": "kit-scenes-hs/scene_012.jpg"
+ },
+ "podarki-a-16x9": {
+  "file": "marketing/direct/images/podarki-a-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20776375/9p8xkpsqmddccxj49rmhzr7z5b579s2z/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-906f-745a-a7ca-815f3a35ce3b",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100021",
+  "scene": "kit-scenes-hs/scene_042.jpg"
+ },
+ "podarki-a-1x1": {
+  "file": "marketing/direct/images/podarki-a-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19396857/g6nsqx452rssmx8b98jk9xlcq9b82r6j/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-977d-7bd7-a772-ecae90302d0f",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100021",
+  "scene": "kit-scenes-hs/scene_042.jpg"
+ },
+ "podarki-a-4x3": {
+  "file": "marketing/direct/images/podarki-a-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/c72jxn2j5rhzxbskhms7pfbnfjlvld9s/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-9eb0-72bc-a911-84a66acbab21",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100021",
+  "scene": "kit-scenes-hs/scene_042.jpg"
+ },
+ "podarki-b-16x9": {
+  "file": "marketing/direct/images/podarki-b-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/18793859/824fh7gp89qm4xgjd2msj8nlm4ws2xmt/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-a678-7384-8b8f-8f87a86d66d6",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100135",
+  "scene": "kit-scenes-hs/scene_018.jpg"
+ },
+ "podarki-b-1x1": {
+  "file": "marketing/direct/images/podarki-b-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/rtlj5247sqwcm5skknhz6sntsd9n8l59/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-ae92-74bf-b342-de08992cad3e",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100135",
+  "scene": "kit-scenes-hs/scene_018.jpg"
+ },
+ "podarki-b-4x3": {
+  "file": "marketing/direct/images/podarki-b-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/21553739/vkxp6zjppvgp95rz45qn7v69mx6wn989/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-b6dc-72bb-ad78-998f6cd6787e",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100135",
+  "scene": "kit-scenes-hs/scene_018.jpg"
+ },
+ "podarki-c-16x9": {
+  "file": "marketing/direct/images/podarki-c-16x9.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20493671/drx6pr24hqztz9kthcdk8lskw4htf5mk/orig",
+  "size": [
+   1920,
+   1080
+  ],
+  "image_id": "01a099de-bee7-7a90-8fd4-02bff120fe6d",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100106",
+  "scene": "kit-scenes-hs/scene_037.jpg"
+ },
+ "podarki-c-1x1": {
+  "file": "marketing/direct/images/podarki-c-1x1.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/20811730/748z6vmq4r6hpmc2dpv7t7k9ntgqpmtw/orig",
+  "size": [
+   1200,
+   1200
+  ],
+  "image_id": "01a099de-c609-7560-b5aa-bb36c519e593",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100106",
+  "scene": "kit-scenes-hs/scene_037.jpg"
+ },
+ "podarki-c-4x3": {
+  "file": "marketing/direct/images/podarki-c-4x3.jpg",
+  "url": "https://avatars.mds.yandex.net/get-yastore/19196982/2rf76nl87l279tbwhjfdmk9wk8s66dv8/orig",
+  "size": [
+   1600,
+   1200
+  ],
+  "image_id": "01a099de-cd42-7ee7-8ea1-80523d4bb98d",
+  "public": true,
+  "content_type": "image/jpeg",
+  "kit_id": "100106",
+  "scene": "kit-scenes-hs/scene_037.jpg"
+ }
+}
