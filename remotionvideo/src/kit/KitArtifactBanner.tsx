@@ -73,7 +73,7 @@ export const KitArtifactBanner = ({
     title: (ribbon ? 46 : strip ? 44 : 62) * (ribbon || strip ? textScale : u),
     sub: 26 * u,
     meta: 20 * u,
-    note: 20 * u,
+    note: 22 * u,
     gapS: 18 * u,
     gapM: 30 * u,
   };
@@ -111,7 +111,7 @@ export const KitArtifactBanner = ({
       </div>
       <Spaced size={S.meta} color={accent} spacing="0.32em">{meta}</Spaced>
       {note ? (
-        <div style={{ fontFamily: artifact, fontSize: S.note, fontWeight: 300, color: soft }}>{note}</div>
+        <div style={{ fontFamily: artifact, fontSize: S.note, fontWeight: 400, color: soft }}>{note}</div>
       ) : null}
     </div>
   );
