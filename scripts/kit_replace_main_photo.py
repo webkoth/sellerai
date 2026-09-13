@@ -43,6 +43,11 @@ def req(method, path, body=None, raw=None, ctype=None):
                 time.sleep(1.5 + attempt)
                 continue
             return e.code, e.read()[:300].decode()
+        except (urllib.error.URLError, OSError) as e:
+            # обрыв соединения на длинной серии загрузок — повторяем
+            time.sleep(2 + 2 * attempt)
+            last = str(e)
+            continue
     return 0, "нет ответа"
 
 
@@ -51,7 +56,7 @@ def upload(path):
     body = (f'--{b}\r\nContent-Disposition: form-data; name="file"; filename="{path.name}"\r\n'
             f"Content-Type: image/png\r\n\r\n").encode() + path.read_bytes() + f"\r\n--{b}--\r\n".encode()
     code, d = req("POST", "/v1/files", raw=body, ctype=f"multipart/form-data; boundary={b}")
-    if code != 200:
+    if code not in (200, 201):
         raise SystemExit(f"{path.name}: загрузка не прошла, {code} {d}")
     return d
 
@@ -60,8 +65,13 @@ def main():
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
     manifest = {m["file"]: m for m in json.loads((CARDS / "manifest.json").read_text(encoding="utf-8"))}
     errors = 0
+    done = sum(1 for m in manifest.values() if m.get("status_v_kit") == "залито")
+    if done:
+        print(f"уже залито в прошлый раз: {done}, продолжаю с остальных")
     for n, x in enumerate(plan, 1):
         card = CARDS / f"{x['slot_id']}.png"
+        if manifest[card.name].get("status_v_kit") == "залито":
+            continue
         f = upload(card)
         old = sorted(x["old_media"], key=lambda m: m["display_sequence"])
         media = [{"type": "IMAGE", "display_sequence": 0, "image_id": f["id"]}]
@@ -69,7 +79,7 @@ def main():
                   for i, m in enumerate(old, start=1)]
         code, d = req("PATCH", f"/v1/variants/{x['vid']}", body={"media": media})
         rec = manifest[card.name]
-        if code != 200:
+        if code not in (200, 201, 204):
             errors += 1
             rec["status_v_kit"] = f"ошибка {code}"
             print(f"  ошибка {x['slot_id']}: {code} {d}")
@@ -78,6 +88,8 @@ def main():
             rec["image_id"] = f["id"]
             rec["url"] = f["url"]
             rec["current_main_image_id"] = f["id"]
+        (CARDS / "manifest.json").write_text(
+            json.dumps(list(manifest.values()), ensure_ascii=False, indent=1), encoding="utf-8")
         if n % 10 == 0:
             print(f"  {n}/{len(plan)}")
         time.sleep(0.3)
