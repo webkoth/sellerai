@@ -1,4 +1,4 @@
-import { Img, staticFile } from "remotion";
+import { Img, staticFile, useVideoConfig } from "remotion";
 import { artifact } from "./artifactFont";
 
 /**
@@ -57,7 +57,15 @@ export const KitArtifactBanner = ({
   productInBackground = false,
   textScale = 1,
 }: KitArtifactBannerProps) => {
+  const { height } = useVideoConfig();
   const poster = layout === "poster";
+  // Wildberries рисует поверх главного фото свои плашки. Замерено на живом WB 13.09.2026
+  // (доли от кадра 3:4): скидка, «Хорошая цена» и кешбэк занимают низ-лево x 0.03–0.44,
+  // y 0.836–0.978; сердце — верх-право x 0.855–1, y 0–0.109; значок сравнения — верх-лево
+  // x 0–0.145, y 0–0.109. Поэтому низ кадра поднят: название, описание и строка
+  // происхождения уходят выше 0.836. Строка веса остаётся ниже сознательно — на плитке
+  // каталога (275×367) она всё равно нечитаема, а на странице товара плашек внизу нет.
+  const WB_BADGE_TOP = 0.836;
   const strip = layout === "strip";
   const ribbon = layout === "ribbon";
   const text = onLight ? INK : LIGHT;
@@ -88,6 +96,12 @@ export const KitArtifactBanner = ({
 
   const Hairline = ({ w, bright = false }: { w: number | string; bright?: boolean }) => (
     <div style={{ width: w, height: 2, background: bright ? CYAN_BRIGHT : rule, opacity: bright ? 0.95 : 0.9, boxShadow: bright ? `0 0 12px ${CYAN_BRIGHT}66` : "none" }} />
+  );
+
+  // Низ постера: держим над зоной плашек всё, кроме строки веса — её слот вычитаем.
+  const posterBottom = Math.max(
+    64 * u,
+    height * (1 - WB_BADGE_TOP) - (note ? S.note * 1.25 + S.gapS : 0),
   );
 
   const Head = (
@@ -155,7 +169,7 @@ export const KitArtifactBanner = ({
           <Spaced size={S.meta} color={accent} spacing="0.3em">{meta}</Spaced>
         </div>
       ) : poster ? (
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: `${86 * u}px ${56 * u}px ${64 * u}px` }}>
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: `${86 * u}px ${56 * u}px ${posterBottom}px` }}>
           {Head}
           {productInBackground ? <div style={{ flex: 1 }} /> : (
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", width: `${(photoScale ?? 0.5) * 100}%`, padding: `${S.gapM}px 0` }}>{Product}</div>
