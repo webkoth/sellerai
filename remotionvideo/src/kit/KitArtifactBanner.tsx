@@ -68,10 +68,10 @@ export const KitArtifactBanner = ({
   // размеры в долях от меньшей стороны кадра — одинаковая оптика во всех форматах
   const u = (poster ? 1 : ribbon ? 0.52 : strip ? 0.9 : 1.5) * textScale;
   const S = {
-    brand: 26 * u,
-    series: 22 * u,
+    brand: 30 * u,
+    series: 25 * u,
     title: (ribbon ? 46 : strip ? 44 : 62) * (ribbon || strip ? textScale : u),
-    sub: 26 * u,
+    sub: 30 * u,
     meta: 20 * u,
     note: 22 * u,
     gapS: 18 * u,
@@ -100,10 +100,10 @@ export const KitArtifactBanner = ({
 
   const Foot = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: poster ? "center" : "flex-start", gap: S.gapS }}>
-      <div style={{ fontFamily: artifact, fontSize: S.title, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: text, lineHeight: 1.05 }}>
+      <div style={{ fontFamily: artifact, fontSize: S.title, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: text, lineHeight: 1.05, textAlign: poster ? "center" : "left" }}>
         {title}
       </div>
-      <div style={{ fontFamily: artifact, fontSize: S.sub, fontWeight: 300, color: soft, letterSpacing: "0.01em" }}>
+      <div style={{ fontFamily: artifact, fontSize: S.sub, fontWeight: 300, color: soft, letterSpacing: "0.01em", textAlign: poster ? "center" : "left" }}>
         {subtitle}
       </div>
       <div style={{ marginTop: S.gapS * 0.6, marginBottom: S.gapS * 0.4 }}>
