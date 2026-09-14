@@ -8,7 +8,11 @@ import type { ArtifactSlot } from "./artifactBanners";
  *  серия = категория товара на витрине, подзаголовок = что это и из чего,
  *  meta = происхождение материала, note = вес или размер с фото WB.
  *  Ничего не утверждаем сверх карточки KIT: тектит (индошинит, молдавит) не назван
- *  метеоритом, каменный метеорит не назван железом, состав браслетов по характеристикам. */
+ *  метеоритом, каменный метеорит не назван железом, состав браслетов по характеристикам.
+ *
+ *  `bottomInset` — доля высоты под нижним текстом, посчитана 14.09.2026 по реальному низу
+ *  изделия в каждой сцене: текст не ложится на изделие, а где изделие стоит высоко —
+ *  поднимается над зоной плашек Wildberries (y 0.836). Пересчёт: scripts/kit_card_layout.py */
 export const HS_CARD_SLOTS: ArtifactSlot[] = [
   {
     id: "hcard-001", width: 1200, height: 1600,
@@ -16,7 +20,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_001.jpg",
       photo: "kit-scenes-hs/scene_001.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "ЗВЁЗДНОЕ СЕРДЦЕ",
       subtitle: "шарм со вставкой из метеорита",
       meta: "Муонионалуста · Швеция · 1906",
@@ -28,7 +32,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_002.jpg",
       photo: "kit-scenes-hs/scene_002.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.054,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 34,5 г",
@@ -40,7 +44,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_003.jpg",
       photo: "kit-scenes-hs/scene_003.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.088,
       series: "Часы наручные", title: "МУОНИОНАЛУСТА",
       subtitle: "часы со вставкой из метеорита",
       meta: "Швеция · 1906",
@@ -52,7 +56,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_004.jpg",
       photo: "kit-scenes-hs/scene_004.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "МУОНИОНАЛУСТА",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Норботтен, Швеция · 1906", note: "Размер подбираем по запястью",
@@ -64,7 +68,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_005.jpg",
       photo: "kit-scenes-hs/scene_005.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "ПРОМЕТЕЙ",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Метеорит Aletai · Китай · 1898", note: "Размер подбираем по запястью",
@@ -76,7 +80,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_006.jpg",
       photo: "kit-scenes-hs/scene_006.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.054,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 27,8 г",
@@ -88,7 +92,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_007.jpg",
       photo: "kit-scenes-hs/scene_007.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "ДЕВЯТЬ ГЛАЗ",
       subtitle: "бусина Дзи из метеоритного железа",
       meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
@@ -100,7 +104,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_008.jpg",
       photo: "kit-scenes-hs/scene_008.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "СЕРДЦЕ БУДДЫ",
       subtitle: "браслет с метеоритом Алетай и бусиной Дзи",
       meta: "Метеорит Aletai · Китай · 1898", note: "Размер подбираем по запястью",
@@ -112,7 +116,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_009.jpg",
       photo: "kit-scenes-hs/scene_009.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.099,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 55,7 г",
@@ -124,7 +128,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_010.jpg",
       photo: "kit-scenes-hs/scene_010.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.077,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 31,1 г",
@@ -136,7 +140,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_011.jpg",
       photo: "kit-scenes-hs/scene_011.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 24,2 г",
@@ -148,7 +152,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_012.jpg",
       photo: "kit-scenes-hs/scene_012.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.088,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 34 г",
@@ -160,7 +164,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_013.jpg",
       photo: "kit-scenes-hs/scene_013.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.116,
       series: "Амулеты и обереги", title: "ПАУК",
       subtitle: "резьба по индошиниту, тектит",
       meta: "Индошинит · Юго-Восточная Азия", note: "Ручная резьба",
@@ -172,7 +176,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_014.jpg",
       photo: "kit-scenes-hs/scene_014.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.095,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 50 г",
@@ -184,7 +188,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_015.jpg",
       photo: "kit-scenes-hs/scene_015.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.115,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 35,3 г",
@@ -196,7 +200,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_016.jpg",
       photo: "kit-scenes-hs/scene_016.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "ALETAI",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Китай · 1898", note: "Размер подбираем по запястью",
@@ -208,7 +212,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_018.jpg",
       photo: "kit-scenes-hs/scene_018.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 62,1 г",
@@ -220,7 +224,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_019.jpg",
       photo: "kit-scenes-hs/scene_019.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 28 г",
@@ -232,7 +236,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_020.jpg",
       photo: "kit-scenes-hs/scene_020.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "ДЕВЯТЬ ГЛАЗ",
       subtitle: "бусина Дзи из метеоритного железа",
       meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
@@ -244,7 +248,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_021.jpg",
       photo: "kit-scenes-hs/scene_021.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 29,3 г",
@@ -256,7 +260,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_022.jpg",
       photo: "kit-scenes-hs/scene_022.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.096,
       series: "Амулеты и обереги", title: "ЧЖУН КУЙ",
       subtitle: "резьба по индошиниту, тектит",
       meta: "Индошинит · Юго-Восточная Азия", note: "Ручная резьба",
@@ -268,7 +272,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_023.jpg",
       photo: "kit-scenes-hs/scene_023.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 37,8 г",
@@ -280,7 +284,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_024.jpg",
       photo: "kit-scenes-hs/scene_024.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 12 г",
@@ -292,7 +296,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_025.jpg",
       photo: "kit-scenes-hs/scene_025.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 19,4 г",
@@ -304,7 +308,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_026.jpg",
       photo: "kit-scenes-hs/scene_026.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.098,
       series: "Амулеты и обереги", title: "БУДДА",
       subtitle: "резьба по каменному метеориту",
       meta: "Ordinary chondrite", note: "Вес: 46,8 г",
@@ -316,7 +320,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_027.jpg",
       photo: "kit-scenes-hs/scene_027.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 34 г",
@@ -328,7 +332,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_028.jpg",
       photo: "kit-scenes-hs/scene_028.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.093,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 30 г",
@@ -340,7 +344,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_029.jpg",
       photo: "kit-scenes-hs/scene_029.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "КАМПО-ДЕЛЬ-СЬЕЛО",
       subtitle: "железный метеорит",
       meta: "Аргентина · 1576", note: "Вес: 114,4 г",
@@ -352,7 +356,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_030.jpg",
       photo: "kit-scenes-hs/scene_030.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 64 г",
@@ -364,7 +368,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_031.jpg",
       photo: "kit-scenes-hs/scene_031.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.074,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 27 г",
@@ -376,7 +380,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_032.jpg",
       photo: "kit-scenes-hs/scene_032.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.075,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 24 г",
@@ -388,7 +392,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_033.jpg",
       photo: "kit-scenes-hs/scene_033.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.124,
       series: "Коллекционные образцы", title: "КАМПО-ДЕЛЬ-СЬЕЛО",
       subtitle: "железный метеорит",
       meta: "Аргентина · 1576", note: "Вес: 27,1 г",
@@ -400,7 +404,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_034.jpg",
       photo: "kit-scenes-hs/scene_034.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "СИНЕРГИЯ",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Метеорит Aletai · Китай · 1898", note: "Размер подбираем по запястью",
@@ -412,7 +416,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_036.jpg",
       photo: "kit-scenes-hs/scene_036.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "СИЯНИЕ",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Муонионалуста · Швеция · 1906",
@@ -424,7 +428,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_037.jpg",
       photo: "kit-scenes-hs/scene_037.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.108,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 119 г",
@@ -436,7 +440,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_038.jpg",
       photo: "kit-scenes-hs/scene_038.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.054,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 45,1 г",
@@ -448,7 +452,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_039.jpg",
       photo: "kit-scenes-hs/scene_039.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.079,
       series: "Амулеты и обереги", title: "ДРАКОН",
       subtitle: "резьба по метеоритному железу",
       meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
@@ -460,7 +464,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_040.jpg",
       photo: "kit-scenes-hs/scene_040.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ЦАРЁВ",
       subtitle: "каменный метеорит",
       meta: "Волгоградская область · 1968", note: "Вес: 33 г",
@@ -472,7 +476,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_041.jpg",
       photo: "kit-scenes-hs/scene_041.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "ДЕВЯТЬ ГЛАЗ",
       subtitle: "бусина Дзи из метеоритного железа",
       meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
@@ -484,7 +488,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_042.jpg",
       photo: "kit-scenes-hs/scene_042.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.112,
       series: "Подвески и кулоны", title: "АВАЛОКИТЕШВАРА",
       subtitle: "кулон из цельного метеоритного железа",
       meta: "Метеорит Aletai · Китай · 1898", note: "Вес: 46,2 г",
@@ -496,7 +500,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_044.jpg",
       photo: "kit-scenes-hs/scene_044.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "МАНДЖУШРИ",
       subtitle: "резьба по метеоритному железу",
       meta: "Метеорит Aletai · Китай · 1898", note: "Вес: 41,4 г",
@@ -508,7 +512,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_045.jpg",
       photo: "kit-scenes-hs/scene_045.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 19,1 г",
@@ -520,7 +524,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_046.jpg",
       photo: "kit-scenes-hs/scene_046.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.06,
       series: "Коллекционные образцы", title: "КАМПО-ДЕЛЬ-СЬЕЛО",
       subtitle: "железный метеорит",
       meta: "Аргентина · 1576", note: "Вес: 23,2 г",
@@ -532,7 +536,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_047.jpg",
       photo: "kit-scenes-hs/scene_047.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.054,
       series: "Подвески и кулоны", title: "НОРДИЧЕСКИЙ КРЕСТ",
       subtitle: "крест из метеоритного железа",
       meta: "Муонионалуста · Швеция · 1906",
@@ -544,7 +548,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_048.jpg",
       photo: "kit-scenes-hs/scene_048.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.054,
       series: "Амулеты и обереги", title: "МЕЛОНГ",
       subtitle: "резьба по метеоритному железу",
       meta: "Метеорит Aletai · Китай · 1898", note: "Вес: 53 г",
@@ -556,7 +560,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_049.jpg",
       photo: "kit-scenes-hs/scene_049.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Подвески и кулоны", title: "МУОНИОНАЛУСТА",
       subtitle: "подвеска с метеоритом и молдавитом",
       meta: "Швеция · 1906", note: "Диаметр: 21 мм",
@@ -568,7 +572,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_050.jpg",
       photo: "kit-scenes-hs/scene_050.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "ЧЖУН КУЙ",
       subtitle: "резьба по индошиниту, тектит",
       meta: "Индошинит · Юго-Восточная Азия", note: "Ручная резьба",
@@ -580,7 +584,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_052.jpg",
       photo: "kit-scenes-hs/scene_052.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.155,
       series: "Подвески и кулоны", title: "НЕПОБЕДИМОЕ СОЛНЦЕ",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Муонионалуста · Швеция · 1906",
@@ -592,7 +596,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_053.jpg",
       photo: "kit-scenes-hs/scene_053.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "ДЕНЕЖНЫЙ СТРАЖ",
       subtitle: "кулон из метеоритного железа",
       meta: "Муонионалуста · Швеция · 1906",
@@ -604,7 +608,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_054.jpg",
       photo: "kit-scenes-hs/scene_054.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "SERICHO",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Кения · 2016",
@@ -616,7 +620,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_056.jpg",
       photo: "kit-scenes-hs/scene_056.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.099,
       series: "Браслеты", title: "ДЕВЯТЬ ГЛАЗ КОСМОСА",
       subtitle: "браслет с Дзи из индошинита и лавой",
       meta: "Индошинит · тектит", note: "Размер подбираем по запястью",
@@ -628,7 +632,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_057.jpg",
       photo: "kit-scenes-hs/scene_057.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.112,
       series: "Амулеты и обереги", title: "БУДДА",
       subtitle: "резьба по каменному метеориту",
       meta: "Ordinary chondrite", note: "Вес: 77,3 г",
@@ -640,7 +644,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_058.jpg",
       photo: "kit-scenes-hs/scene_058.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Подвески и кулоны", title: "СУНЬ УКУН",
       subtitle: "кулон из метеоритного железа в титане",
       meta: "Метеорит Aletai · Китай · 1898", note: "Метеорит: 20 г",
@@ -652,7 +656,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_059.jpg",
       photo: "kit-scenes-hs/scene_059.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "ДРОНИНО",
       subtitle: "железный метеорит",
       meta: "Рязанская область · 2000", note: "Вес: 60,2 г",
@@ -664,7 +668,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_060.jpg",
       photo: "kit-scenes-hs/scene_060.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.077,
       series: "Коллекционные образцы", title: "СИХОТЭ-АЛИНЬ",
       subtitle: "железный метеорит",
       meta: "Приморский край · 1947", note: "Вес: 89,2 г",
@@ -676,7 +680,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_061.jpg",
       photo: "kit-scenes-hs/scene_061.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1256,
       series: "Коллекционные образцы", title: "КАНЬОН ДЬЯБЛО",
       subtitle: "железный метеорит",
       meta: "Аризона, США · XIX век", note: "Вес: 14,2 г",
@@ -688,7 +692,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_062.jpg",
       photo: "kit-scenes-hs/scene_062.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "SERICHO",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Кения · 2016",
@@ -700,7 +704,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_063.jpg",
       photo: "kit-scenes-hs/scene_063.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Амулеты и обереги", title: "ПИ ЯО",
       subtitle: "резьба по метеоритному железу",
       meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
@@ -712,7 +716,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_064.jpg",
       photo: "kit-scenes-hs/scene_064.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.1,
       series: "Браслеты", title: "ВЕРШИТЕЛЬ",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Муонионалуста · Швеция · 1906", note: "Размер подбираем по запястью",
@@ -724,7 +728,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_065.jpg",
       photo: "kit-scenes-hs/scene_065.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.1256,
       series: "Браслеты", title: "МУДРОСТЬ БУДДЫ",
       subtitle: "браслет из лавы, бронзита и гематита",
       meta: "Бусина Будды · Таиланд", note: "Размер подбираем по запястью",
@@ -736,7 +740,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_066.jpg",
       photo: "kit-scenes-hs/scene_066.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.054,
       series: "Браслеты", title: "СИНЕРГИЯ",
       subtitle: "браслет ручной сборки с метеоритом",
       meta: "Метеорит Aletai · Китай · 1898", note: "Размер подбираем по запястью",
@@ -748,7 +752,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_067.jpg",
       photo: "kit-scenes-hs/scene_067.jpg",
-      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35,
+      productInBackground: true, layout: "poster", onLight: true, textScale: 1.35, bottomInset: 0.079,
       series: "Браслеты", title: "ЗВЁЗДНЫЙ МАГ",
       subtitle: "браслет с метеоритом и бусиной Дзи",
       meta: "Метеорит Aletai · Китай · 1898", note: "Размер подбираем по запястью",
@@ -760,7 +764,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_068.jpg",
       photo: "kit-scenes-hs/scene_068.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Серьги", title: "МОЛДАВИТ",
       subtitle: "серьги-пусеты с молдавитом",
       meta: "Молдавит, тектит · Чехия",
@@ -772,7 +776,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_069.jpg",
       photo: "kit-scenes-hs/scene_069.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Серьги", title: "МОЛДАВИТ",
       subtitle: "серьги-пусеты с молдавитом",
       meta: "Молдавит, тектит · Чехия",
@@ -784,7 +788,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_070.jpg",
       photo: "kit-scenes-hs/scene_070.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "SERICHO",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Кения · 2016",
@@ -796,7 +800,7 @@ export const HS_CARD_SLOTS: ArtifactSlot[] = [
     props: {
       background: "kit-scenes-hs/scene_071.jpg",
       photo: "kit-scenes-hs/scene_071.jpg",
-      productInBackground: true, layout: "poster", textScale: 1.35,
+      productInBackground: true, layout: "poster", textScale: 1.35, bottomInset: 0.164,
       series: "Подвески и кулоны", title: "КОСМИЧЕСКАЯ УДАЧА",
       subtitle: "подвеска со вставкой из метеорита",
       meta: "Муонионалуста · Швеция · 1906",

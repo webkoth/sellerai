@@ -31,6 +31,8 @@ export type KitArtifactBannerProps = {
   photoScale?: number;
   /** Множитель размера текста: карточки товара требуют крупнее баннеров. */
   textScale?: number;
+  /** Доля высоты кадра под нижним текстом. Считается по низу изделия в сцене. */
+  bottomInset?: number;
   /** Тёмный фон (по умолчанию) или светлый — для пергамента и травертина. */
   onLight?: boolean;
   /** Изделие уже снято внутри фонового кадра — отдельный слой с вырезкой не нужен. */
@@ -56,6 +58,7 @@ export const KitArtifactBanner = ({
   onLight = false,
   productInBackground = false,
   textScale = 1,
+  bottomInset,
 }: KitArtifactBannerProps) => {
   const { height } = useVideoConfig();
   const poster = layout === "poster";
@@ -99,10 +102,12 @@ export const KitArtifactBanner = ({
   );
 
   // Низ постера: держим над зоной плашек всё, кроме строки веса — её слот вычитаем.
-  const posterBottom = Math.max(
-    64 * u,
-    height * (1 - WB_BADGE_TOP) - (note ? S.note * 1.25 + S.gapS : 0),
-  );
+  // Низ постера. По умолчанию держим над зоной плашек WB всё, кроме строки веса.
+  // Но изделие важнее плашки: если в сцене оно опускается низко, слот задаёт
+  // `bottomInset` — посчитанный по реальному низу изделия, и текст уходит ниже.
+  const posterBottom = bottomInset !== undefined
+    ? height * bottomInset
+    : Math.max(64 * u, height * (1 - WB_BADGE_TOP) - (note ? S.note * 1.25 + S.gapS : 0));
 
   const Head = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: poster ? "center" : "flex-start", gap: S.gapS }}>
