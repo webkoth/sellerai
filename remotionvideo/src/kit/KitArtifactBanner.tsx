@@ -31,8 +31,11 @@ export type KitArtifactBannerProps = {
   photoScale?: number;
   /** Множитель размера текста: карточки товара требуют крупнее баннеров. */
   textScale?: number;
-  /** Доля высоты кадра под нижним текстом. Считается по низу изделия в сцене. */
-  bottomInset?: number;
+  /** Масштаб фона и его верх в долях кадра: подгоняют изделие под фиксированный шаблон. */
+  bgScale?: number;
+  bgTop?: number;
+  /** Множитель кегля заголовка: длинные имена ужимаются, чтобы остаться в одну строку. */
+  titleScale?: number;
   /** Тёмный фон (по умолчанию) или светлый — для пергамента и травертина. */
   onLight?: boolean;
   /** Изделие уже снято внутри фонового кадра — отдельный слой с вырезкой не нужен. */
@@ -58,17 +61,17 @@ export const KitArtifactBanner = ({
   onLight = false,
   productInBackground = false,
   textScale = 1,
-  bottomInset,
+  bgScale,
+  bgTop,
+  titleScale = 1,
 }: KitArtifactBannerProps) => {
   const { height } = useVideoConfig();
   const poster = layout === "poster";
   // Wildberries рисует поверх главного фото свои плашки. Замерено на живом WB 13.09.2026
   // (доли от кадра 3:4): скидка, «Хорошая цена» и кешбэк занимают низ-лево x 0.03–0.44,
   // y 0.836–0.978; сердце — верх-право x 0.855–1, y 0–0.109; значок сравнения — верх-лево
-  // x 0–0.145, y 0–0.109. Поэтому низ кадра поднят: название, описание и строка
-  // происхождения уходят выше 0.836. Строка веса остаётся ниже сознательно — на плитке
-  // каталога (275×367) она всё равно нечитаема, а на странице товара плашек внизу нет.
-  const WB_BADGE_TOP = 0.836;
+  // x 0–0.145, y 0–0.109. Линия заголовка ниже выбрана так, чтобы название, описание
+  // и строка происхождения оставались выше 0.836, а под плашками была только строка веса.
   const strip = layout === "strip";
   const ribbon = layout === "ribbon";
   const text = onLight ? INK : LIGHT;
@@ -102,12 +105,10 @@ export const KitArtifactBanner = ({
   );
 
   // Низ постера: держим над зоной плашек всё, кроме строки веса — её слот вычитаем.
-  // Низ постера. По умолчанию держим над зоной плашек WB всё, кроме строки веса.
-  // Но изделие важнее плашки: если в сцене оно опускается низко, слот задаёт
-  // `bottomInset` — посчитанный по реальному низу изделия, и текст уходит ниже.
-  const posterBottom = bottomInset !== undefined
-    ? height * bottomInset
-    : Math.max(64 * u, height * (1 - WB_BADGE_TOP) - (note ? S.note * 1.25 + S.gapS : 0));
+  // Шаблон карточки фиксирован: заголовок у всех товаров начинается на одной линии,
+  // и под эту линию подгоняется кадр изделия (bgScale/bgTop считает kit_card_layout.py).
+  // Иначе в каталоге имена пляшут по высоте и витрина рассыпается.
+  const TITLE_TOP = 0.68;
 
   const Head = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: poster ? "center" : "flex-start", gap: S.gapS }}>
@@ -119,7 +120,7 @@ export const KitArtifactBanner = ({
 
   const Foot = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: poster ? "center" : "flex-start", gap: S.gapS }}>
-      <div style={{ fontFamily: artifact, fontSize: S.title, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: text, lineHeight: 1.05, textAlign: poster ? "center" : "left" }}>
+      <div style={{ fontFamily: artifact, fontSize: S.title * titleScale, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: text, lineHeight: 1.05, textAlign: poster ? "center" : "left", whiteSpace: poster ? "nowrap" : "normal" }}>
         {title}
       </div>
       <div style={{ fontFamily: artifact, fontSize: S.sub, fontWeight: 300, color: soft, letterSpacing: "0.01em", textAlign: poster ? "center" : "left" }}>
@@ -151,7 +152,13 @@ export const KitArtifactBanner = ({
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden", background: onLight ? "#EFEAE0" : "#0B121B" }}>
-      <Img src={staticFile(background)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+      <Img
+        src={staticFile(background)}
+        style={bgScale && bgTop !== undefined
+          ? { position: "absolute", left: `${((1 - bgScale) / 2) * 100}%`, top: `${bgTop * 100}%`,
+              width: `${bgScale * 100}%`, height: `${bgScale * 100}%`, objectFit: "cover" }
+          : { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
       {/* Лёгкая вуаль: макеты держат текст читаемым поверх фактуры. */}
       <div style={{ position: "absolute", inset: 0, background: onLight
         ? "linear-gradient(180deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.10) 42%, rgba(255,255,255,0.34) 100%)"
@@ -174,13 +181,19 @@ export const KitArtifactBanner = ({
           <Spaced size={S.meta} color={accent} spacing="0.3em">{meta}</Spaced>
         </div>
       ) : poster ? (
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: `${86 * u}px ${56 * u}px ${posterBottom}px` }}>
-          {Head}
-          {productInBackground ? <div style={{ flex: 1 }} /> : (
-            <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", width: `${(photoScale ?? 0.5) * 100}%`, padding: `${S.gapM}px 0` }}>{Product}</div>
+        <>
+          <div style={{ position: "absolute", left: 0, right: 0, top: `${86 * u}px`, padding: `0 ${56 * u}px`, display: "flex", justifyContent: "center" }}>
+            {Head}
+          </div>
+          {productInBackground ? null : (
+            <div style={{ position: "absolute", left: 0, right: 0, top: `${230 * u}px`, height: `${TITLE_TOP * height - 280 * u}px`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: `${(photoScale ?? 0.5) * 100}%`, display: "flex", alignItems: "center", justifyContent: "center" }}>{Product}</div>
+            </div>
           )}
-          {Foot}
-        </div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: `${TITLE_TOP * height}px`, padding: `0 ${56 * u}px`, display: "flex", justifyContent: "center" }}>
+            {Foot}
+          </div>
+        </>
       ) : (
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: strip ? "0 110px" : "0 150px", gap: 72 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: strip ? S.gapS : S.gapM * 1.1, maxWidth: strip ? "62%" : productInBackground ? "40%" : "52%" }}>

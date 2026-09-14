@@ -1,30 +1,29 @@
-"""Посадка нижнего текста на карточках товара: считает `bottomInset` для каждой сцены.
+"""Подгонка кадра под фиксированный шаблон карточки: bgScale, bgTop и titleScale.
 
-Задача: текст не должен лежать на изделии, но и не должен уезжать под плашки Wildberries.
-Совместить удаётся не всегда — у части сцен изделие опускается почти до низа кадра.
-Приоритет: изделие важнее плашки. Правило:
+Шаблон карточки один на все товары: заголовок начинается на линии TITLE_TOP, под ним
+описание, происхождение и вес. Иначе в каталоге имена пляшут по высоте и витрина
+рассыпается. Значит двигать надо не текст, а кадр изделия.
 
-    низ_блока = clamp(низ_изделия + зазор + высота_блока,  минимум = над плашками,
-                                                           максимум = исходный низ кадра)
+Правило: низ изделия у всех товаров приводится к одной линии TARGET_PB. Сцена
+масштабируется и сдвигается так, чтобы это выполнялось и кадр остался закрыт:
 
-Откуда берутся числа:
+    a = max(1, TARGET_PB / низ_изделия, (1 - TARGET_PB) / (1 - низ_изделия))
+    b = TARGET_PB - a * низ_изделия
 
-- **низ изделия** — из самой сцены. Фон у сцен ровный по горизонтали (туман, мрамор,
-  сланец), изделие — единственное, что заметно отличается от медианы своей строки.
-  Считаем долю таких пикселей в центральных 70% ширины и идём вниз от пика.
-  Проверено на 15 сценах, размеченных глазами по сетке: средняя ошибка 0.04 высоты,
-  промах всегда в сторону «ниже, чем есть» — то есть в безопасную.
-- **высота блока** — из маски текста. Композиция рендерится второй раз с плоским фоном
-  (`--props` подменяет background и photo на kit-bg/flat-mask.png), вуаль постоянна вдоль
-  строки, поэтому текст видно как отклонение от построчной медианы.
-- **зона плашек WB** — замерена по DOM на живом Wildberries 13.09.2026, см. README
-  в site-assets/kit-cards-2026-09-13.
+`a` — множитель размера сцены (bgScale), `b` — её верх в долях кадра (bgTop).
+Точка сцены на высоте y оказывается на b + a*y, поэтому низ изделия садится ровно
+на TARGET_PB. `a` всегда не меньше 1, поэтому кадр закрыт полностью.
 
-Запуск (нужны отрендеренные маски в /private/tmp/hmask):
-    npx remotion bundle --out-dir=/private/tmp/hbundle
-    for id in ...; do npx remotion still /private/tmp/hbundle "Kit-$id" /private/tmp/hmask/$id.png \
-        --props='{"background":"kit-bg/flat-mask.png","photo":"kit-bg/flat-mask.png"}'; done
-    python3 scripts/kit_card_layout.py
+Низ изделия измеряется двумя способами и берётся нижний из них:
+- отклонение от медианы строки — фон у сцен ровный по горизонтали, изделие выбивается;
+- резкость (лапласиан) — у сцен малая глубина резкости, в фокусе только изделие.
+Оба дают среднюю ошибку около 0.04 высоты, поэтому результат проверяется глазами:
+линии рисуются поверх сцен, промахи правятся руками. Выверенные значения лежат
+в site-assets/kit-cards-2026-09-13/layout.json, поле `product_bottom`.
+
+`titleScale` ужимает длинные имена, чтобы заголовок остался в одну строку: ширины
+заголовков снимаются с маски текста (композиция рендерится с плоским фоном через
+--props), предел — ширина кадра минус поля.
 """
 from pathlib import Path
 import json
@@ -39,11 +38,9 @@ PLAN = ROOT / "site-assets/kit-cards-plan-2026-09-12.json"
 OUT = ROOT / "site-assets/kit-cards-2026-09-13/layout.json"
 
 W, H = 1200, 1600
-TEXT_SCALE = 1.35
-NOTE_SLOT = (22 * TEXT_SCALE * 1.25 + 18 * TEXT_SCALE) / H   # строка веса + отступ над ней
-WB_BADGE_TOP = 0.836                                          # верх зоны плашек Wildberries
-LOWEST = 1 - 86.4 / H                                         # ниже исходного низа не опускаемся
-CLEARANCE = 0.010                                             # зазор между изделием и текстом
+TITLE_TOP = 0.68      # линия заголовка, та же константа в KitArtifactBanner
+TARGET_PB = 0.66      # линия, на которую сажается низ изделия у всех карточек
+TITLE_LIMIT = 1120    # предельная ширина заголовка в пикселях
 
 
 def product_bottom(i: int) -> float:
@@ -75,27 +72,20 @@ def text_block(i: int) -> tuple[float, float]:
 
 def main() -> None:
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
-    fix = json.loads(Path("/tmp/cards-fix.json").read_text(encoding="utf-8"))
+    verified = json.loads(Path("/tmp/pb-final.json").read_text()) if Path("/tmp/pb-final.json").exists() else {}
     out = []
     for x in plan:
         i = x["i"]
-        pb = product_bottom(i)
-        top, bot = text_block(i)
-        block_h = bot - top
-        has_note = bool(fix[str(i)]["note"])
-        ideal = WB_BADGE_TOP + (NOTE_SLOT if has_note else 0)
-        bottom = min(LOWEST, max(ideal, pb + CLEARANCE + block_h))
+        pb = verified.get(str(i)) or product_bottom(i)
+        a = max(1.0, TARGET_PB / pb, (1 - TARGET_PB) / (1 - pb))
+        b = TARGET_PB - a * pb
         out.append({"i": i, "slot_id": x["slot_id"], "product_bottom": round(pb, 3),
-                    "block_height": round(block_h, 3), "bottom_inset": round(1 - bottom, 4),
-                    "text_top": round(bottom - block_h, 3),
-                    "clears_wb_badges": bool(bottom <= ideal + 1e-6)})
+                    "bg_scale": round(a, 4), "bg_top": round(b, 4),
+                    "verified_by_eye": str(i) in verified})
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
-    over = [o for o in out if o["text_top"] < o["product_bottom"]]
-    print(f"посчитано: {len(out)} | над плашками WB: {sum(o['clears_wb_badges'] for o in out)} | "
-          f"текст всё ещё близко к изделию: {len(over)}")
-    for o in over:
-        print(f"  #{o['i']}: низ изделия {o['product_bottom']}, верх текста {o['text_top']} "
-              f"(ниже опускать некуда)")
+    scales = [o["bg_scale"] for o in out]
+    print(f"посчитано: {len(out)} | масштаб кадра {min(scales):.3f}–{max(scales):.3f} | "
+          f"низ изделия у всех приведён к {TARGET_PB}")
 
 
 if __name__ == "__main__":

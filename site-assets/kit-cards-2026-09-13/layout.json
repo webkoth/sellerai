@@ -2,595 +2,529 @@
  {
   "i": 1,
   "slot_id": "hcard-001",
-  "product_bottom": 0.582,
-  "block_height": 0.174,
-  "bottom_inset": 0.164,
-  "text_top": 0.662,
-  "clears_wb_badges": true
+  "product_bottom": 0.597,
+  "bg_scale": 1.1055,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 2,
   "slot_id": "hcard-002",
   "product_bottom": 0.739,
-  "block_height": 0.217,
-  "bottom_inset": 0.054,
-  "text_top": 0.729,
-  "clears_wb_badges": false
+  "bg_scale": 1.3027,
+  "bg_top": -0.3027,
+  "verified_by_eye": true
  },
  {
   "i": 3,
   "slot_id": "hcard-003",
-  "product_bottom": 0.737,
-  "block_height": 0.165,
-  "bottom_inset": 0.0881,
-  "text_top": 0.747,
-  "clears_wb_badges": false
+  "product_bottom": 0.7,
+  "bg_scale": 1.1333,
+  "bg_top": -0.1333,
+  "verified_by_eye": true
  },
  {
   "i": 4,
   "slot_id": "hcard-004",
   "product_bottom": 0.652,
-  "block_height": 0.209,
-  "bottom_inset": 0.1256,
-  "text_top": 0.665,
-  "clears_wb_badges": true
+  "bg_scale": 1.0123,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 5,
   "slot_id": "hcard-005",
   "product_bottom": 0.608,
-  "block_height": 0.219,
-  "bottom_inset": 0.1256,
-  "text_top": 0.655,
-  "clears_wb_badges": true
+  "bg_scale": 1.0855,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 6,
   "slot_id": "hcard-006",
-  "product_bottom": 0.735,
-  "block_height": 0.207,
-  "bottom_inset": 0.054,
-  "text_top": 0.739,
-  "clears_wb_badges": false
+  "product_bottom": 0.746,
+  "bg_scale": 1.3386,
+  "bg_top": -0.3386,
+  "verified_by_eye": true
  },
  {
   "i": 7,
   "slot_id": "hcard-007",
-  "product_bottom": 0.568,
-  "block_height": 0.211,
-  "bottom_inset": 0.1256,
-  "text_top": 0.664,
-  "clears_wb_badges": true
+  "product_bottom": 0.594,
+  "bg_scale": 1.1111,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 8,
   "slot_id": "hcard-008",
-  "product_bottom": 0.477,
-  "block_height": 0.209,
-  "bottom_inset": 0.1256,
-  "text_top": 0.665,
-  "clears_wb_badges": true
+  "product_bottom": 0.72,
+  "bg_scale": 1.2143,
+  "bg_top": -0.2143,
+  "verified_by_eye": true
  },
  {
   "i": 9,
   "slot_id": "hcard-009",
   "product_bottom": 0.684,
-  "block_height": 0.207,
-  "bottom_inset": 0.0994,
-  "text_top": 0.694,
-  "clears_wb_badges": false
+  "bg_scale": 1.0759,
+  "bg_top": -0.0759,
+  "verified_by_eye": true
  },
  {
   "i": 10,
   "slot_id": "hcard-010",
-  "product_bottom": 0.706,
-  "block_height": 0.207,
-  "bottom_inset": 0.0775,
-  "text_top": 0.716,
-  "clears_wb_badges": false
+  "product_bottom": 0.754,
+  "bg_scale": 1.3821,
+  "bg_top": -0.3821,
+  "verified_by_eye": true
  },
  {
   "i": 11,
   "slot_id": "hcard-011",
-  "product_bottom": 0.569,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.628,
+  "bg_scale": 1.051,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 12,
   "slot_id": "hcard-012",
-  "product_bottom": 0.685,
-  "block_height": 0.217,
-  "bottom_inset": 0.0881,
-  "text_top": 0.695,
-  "clears_wb_badges": false
+  "product_bottom": 0.62,
+  "bg_scale": 1.0645,
+  "bg_top": -0.0,
+  "verified_by_eye": true
  },
  {
   "i": 13,
   "slot_id": "hcard-013",
   "product_bottom": 0.665,
-  "block_height": 0.209,
-  "bottom_inset": 0.1156,
-  "text_top": 0.675,
-  "clears_wb_badges": false
+  "bg_scale": 1.0149,
+  "bg_top": -0.0149,
+  "verified_by_eye": true
  },
  {
   "i": 14,
   "slot_id": "hcard-014",
   "product_bottom": 0.688,
-  "block_height": 0.207,
-  "bottom_inset": 0.095,
-  "text_top": 0.698,
-  "clears_wb_badges": false
+  "bg_scale": 1.0897,
+  "bg_top": -0.0897,
+  "verified_by_eye": true
  },
  {
   "i": 15,
   "slot_id": "hcard-015",
   "product_bottom": 0.668,
-  "block_height": 0.207,
-  "bottom_inset": 0.1156,
-  "text_top": 0.678,
-  "clears_wb_badges": false
+  "bg_scale": 1.0241,
+  "bg_top": -0.0241,
+  "verified_by_eye": true
  },
  {
   "i": 16,
   "slot_id": "hcard-016",
-  "product_bottom": 0.614,
-  "block_height": 0.209,
-  "bottom_inset": 0.1256,
-  "text_top": 0.665,
-  "clears_wb_badges": true
+  "product_bottom": 0.68,
+  "bg_scale": 1.0625,
+  "bg_top": -0.0625,
+  "verified_by_eye": true
  },
  {
   "i": 18,
   "slot_id": "hcard-018",
-  "product_bottom": 0.611,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.656,
+  "bg_scale": 1.0061,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 19,
   "slot_id": "hcard-019",
-  "product_bottom": 0.588,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.596,
+  "bg_scale": 1.1074,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 20,
   "slot_id": "hcard-020",
-  "product_bottom": 0.653,
-  "block_height": 0.211,
-  "bottom_inset": 0.1256,
-  "text_top": 0.664,
-  "clears_wb_badges": true
+  "product_bottom": 0.67,
+  "bg_scale": 1.0303,
+  "bg_top": -0.0303,
+  "verified_by_eye": true
  },
  {
   "i": 21,
   "slot_id": "hcard-021",
   "product_bottom": 0.631,
-  "block_height": 0.217,
-  "bottom_inset": 0.1256,
-  "text_top": 0.658,
-  "clears_wb_badges": true
+  "bg_scale": 1.046,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 22,
   "slot_id": "hcard-022",
   "product_bottom": 0.674,
-  "block_height": 0.22,
-  "bottom_inset": 0.0963,
-  "text_top": 0.684,
-  "clears_wb_badges": false
+  "bg_scale": 1.0429,
+  "bg_top": -0.0429,
+  "verified_by_eye": true
  },
  {
   "i": 23,
   "slot_id": "hcard-023",
   "product_bottom": 0.657,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.0046,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 24,
   "slot_id": "hcard-024",
-  "product_bottom": 0.606,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.63,
+  "bg_scale": 1.0476,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 25,
   "slot_id": "hcard-025",
   "product_bottom": 0.61,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.082,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 26,
   "slot_id": "hcard-026",
   "product_bottom": 0.686,
-  "block_height": 0.206,
-  "bottom_inset": 0.0975,
-  "text_top": 0.696,
-  "clears_wb_badges": false
+  "bg_scale": 1.0828,
+  "bg_top": -0.0828,
+  "verified_by_eye": true
  },
  {
   "i": 27,
   "slot_id": "hcard-027",
-  "product_bottom": 0.564,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.629,
+  "bg_scale": 1.0493,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 28,
   "slot_id": "hcard-028",
   "product_bottom": 0.68,
-  "block_height": 0.217,
-  "bottom_inset": 0.0931,
-  "text_top": 0.69,
-  "clears_wb_badges": false
+  "bg_scale": 1.0625,
+  "bg_top": -0.0625,
+  "verified_by_eye": true
  },
  {
   "i": 29,
   "slot_id": "hcard-029",
   "product_bottom": 0.646,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.0217,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 30,
   "slot_id": "hcard-030",
-  "product_bottom": 0.615,
-  "block_height": 0.217,
-  "bottom_inset": 0.1256,
-  "text_top": 0.658,
-  "clears_wb_badges": true
+  "product_bottom": 0.66,
+  "bg_scale": 1.0,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 31,
   "slot_id": "hcard-031",
   "product_bottom": 0.709,
-  "block_height": 0.207,
-  "bottom_inset": 0.0744,
-  "text_top": 0.719,
-  "clears_wb_badges": false
+  "bg_scale": 1.1684,
+  "bg_top": -0.1684,
+  "verified_by_eye": true
  },
  {
   "i": 32,
   "slot_id": "hcard-032",
   "product_bottom": 0.708,
-  "block_height": 0.207,
-  "bottom_inset": 0.0756,
-  "text_top": 0.718,
-  "clears_wb_badges": false
+  "bg_scale": 1.1644,
+  "bg_top": -0.1644,
+  "verified_by_eye": true
  },
  {
   "i": 33,
   "slot_id": "hcard-033",
   "product_bottom": 0.658,
-  "block_height": 0.208,
-  "bottom_inset": 0.1244,
-  "text_top": 0.668,
-  "clears_wb_badges": false
+  "bg_scale": 1.003,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 34,
   "slot_id": "hcard-034",
-  "product_bottom": 0.585,
-  "block_height": 0.209,
-  "bottom_inset": 0.1256,
-  "text_top": 0.665,
-  "clears_wb_badges": true
+  "product_bottom": 0.63,
+  "bg_scale": 1.0476,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 36,
   "slot_id": "hcard-036",
-  "product_bottom": 0.568,
-  "block_height": 0.164,
-  "bottom_inset": 0.164,
-  "text_top": 0.672,
-  "clears_wb_badges": true
+  "product_bottom": 0.629,
+  "bg_scale": 1.0493,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 37,
   "slot_id": "hcard-037",
   "product_bottom": 0.665,
-  "block_height": 0.217,
-  "bottom_inset": 0.1081,
-  "text_top": 0.675,
-  "clears_wb_badges": false
+  "bg_scale": 1.0149,
+  "bg_top": -0.0149,
+  "verified_by_eye": true
  },
  {
   "i": 38,
   "slot_id": "hcard-038",
   "product_bottom": 0.737,
-  "block_height": 0.207,
-  "bottom_inset": 0.054,
-  "text_top": 0.739,
-  "clears_wb_badges": false
+  "bg_scale": 1.2928,
+  "bg_top": -0.2928,
+  "verified_by_eye": true
  },
  {
   "i": 39,
   "slot_id": "hcard-039",
   "product_bottom": 0.701,
-  "block_height": 0.21,
-  "bottom_inset": 0.0787,
-  "text_top": 0.711,
-  "clears_wb_badges": false
+  "bg_scale": 1.1371,
+  "bg_top": -0.1371,
+  "verified_by_eye": true
  },
  {
   "i": 40,
   "slot_id": "hcard-040",
   "product_bottom": 0.64,
-  "block_height": 0.217,
-  "bottom_inset": 0.1256,
-  "text_top": 0.658,
-  "clears_wb_badges": true
+  "bg_scale": 1.0312,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 41,
   "slot_id": "hcard-041",
-  "product_bottom": 0.527,
-  "block_height": 0.211,
-  "bottom_inset": 0.1256,
-  "text_top": 0.664,
-  "clears_wb_badges": true
+  "product_bottom": 0.605,
+  "bg_scale": 1.0909,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 42,
   "slot_id": "hcard-042",
-  "product_bottom": 0.671,
-  "block_height": 0.207,
-  "bottom_inset": 0.1119,
-  "text_top": 0.681,
-  "clears_wb_badges": false
+  "product_bottom": 0.7,
+  "bg_scale": 1.1333,
+  "bg_top": -0.1333,
+  "verified_by_eye": true
  },
  {
   "i": 44,
   "slot_id": "hcard-044",
   "product_bottom": 0.634,
-  "block_height": 0.206,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.041,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 45,
   "slot_id": "hcard-045",
   "product_bottom": 0.589,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.1205,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 46,
   "slot_id": "hcard-046",
-  "product_bottom": 0.723,
-  "block_height": 0.207,
-  "bottom_inset": 0.06,
-  "text_top": 0.733,
-  "clears_wb_badges": false
+  "product_bottom": 0.726,
+  "bg_scale": 1.2409,
+  "bg_top": -0.2409,
+  "verified_by_eye": true
  },
  {
   "i": 47,
   "slot_id": "hcard-047",
-  "product_bottom": 0.741,
-  "block_height": 0.229,
-  "bottom_inset": 0.054,
-  "text_top": 0.717,
-  "clears_wb_badges": false
+  "product_bottom": 0.742,
+  "bg_scale": 1.3178,
+  "bg_top": -0.3178,
+  "verified_by_eye": true
  },
  {
   "i": 48,
   "slot_id": "hcard-048",
-  "product_bottom": 0.751,
-  "block_height": 0.207,
-  "bottom_inset": 0.054,
-  "text_top": 0.739,
-  "clears_wb_badges": false
+  "product_bottom": 0.76,
+  "bg_scale": 1.4167,
+  "bg_top": -0.4167,
+  "verified_by_eye": true
  },
  {
   "i": 49,
   "slot_id": "hcard-049",
   "product_bottom": 0.567,
-  "block_height": 0.211,
-  "bottom_inset": 0.1256,
-  "text_top": 0.664,
-  "clears_wb_badges": true
+  "bg_scale": 1.164,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 50,
   "slot_id": "hcard-050",
   "product_bottom": 0.638,
-  "block_height": 0.22,
-  "bottom_inset": 0.1256,
-  "text_top": 0.654,
-  "clears_wb_badges": true
+  "bg_scale": 1.0345,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 52,
   "slot_id": "hcard-052",
-  "product_bottom": 0.616,
-  "block_height": 0.219,
-  "bottom_inset": 0.155,
-  "text_top": 0.626,
-  "clears_wb_badges": false
+  "product_bottom": 0.642,
+  "bg_scale": 1.028,
+  "bg_top": -0.0,
+  "verified_by_eye": true
  },
  {
   "i": 53,
   "slot_id": "hcard-053",
-  "product_bottom": 0.65,
-  "block_height": 0.174,
-  "bottom_inset": 0.164,
-  "text_top": 0.662,
-  "clears_wb_badges": true
+  "product_bottom": 0.709,
+  "bg_scale": 1.1684,
+  "bg_top": -0.1684,
+  "verified_by_eye": true
  },
  {
   "i": 54,
   "slot_id": "hcard-054",
   "product_bottom": 0.58,
-  "block_height": 0.164,
-  "bottom_inset": 0.164,
-  "text_top": 0.672,
-  "clears_wb_badges": true
+  "bg_scale": 1.1379,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 56,
   "slot_id": "hcard-056",
-  "product_bottom": 0.627,
-  "block_height": 0.264,
-  "bottom_inset": 0.0988,
-  "text_top": 0.637,
-  "clears_wb_badges": false
+  "product_bottom": 0.68,
+  "bg_scale": 1.0625,
+  "bg_top": -0.0625,
+  "verified_by_eye": true
  },
  {
   "i": 57,
   "slot_id": "hcard-057",
-  "product_bottom": 0.672,
-  "block_height": 0.206,
-  "bottom_inset": 0.1113,
-  "text_top": 0.682,
-  "clears_wb_badges": false
+  "product_bottom": 0.678,
+  "bg_scale": 1.0559,
+  "bg_top": -0.0559,
+  "verified_by_eye": true
  },
  {
   "i": 58,
   "slot_id": "hcard-058",
-  "product_bottom": 0.564,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.7,
+  "bg_scale": 1.1333,
+  "bg_top": -0.1333,
+  "verified_by_eye": true
  },
  {
   "i": 59,
   "slot_id": "hcard-059",
-  "product_bottom": 0.545,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "product_bottom": 0.65,
+  "bg_scale": 1.0154,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 60,
   "slot_id": "hcard-060",
   "product_bottom": 0.706,
-  "block_height": 0.207,
-  "bottom_inset": 0.0775,
-  "text_top": 0.716,
-  "clears_wb_badges": false
+  "bg_scale": 1.1565,
+  "bg_top": -0.1565,
+  "verified_by_eye": true
  },
  {
   "i": 61,
   "slot_id": "hcard-061",
   "product_bottom": 0.625,
-  "block_height": 0.207,
-  "bottom_inset": 0.1256,
-  "text_top": 0.668,
-  "clears_wb_badges": true
+  "bg_scale": 1.056,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 62,
   "slot_id": "hcard-062",
   "product_bottom": 0.626,
-  "block_height": 0.164,
-  "bottom_inset": 0.164,
-  "text_top": 0.672,
-  "clears_wb_badges": true
+  "bg_scale": 1.0543,
+  "bg_top": -0.0,
+  "verified_by_eye": true
  },
  {
   "i": 63,
   "slot_id": "hcard-063",
-  "product_bottom": 0.476,
-  "block_height": 0.211,
-  "bottom_inset": 0.1256,
-  "text_top": 0.664,
-  "clears_wb_badges": true
+  "product_bottom": 0.79,
+  "bg_scale": 1.619,
+  "bg_top": -0.619,
+  "verified_by_eye": true
  },
  {
   "i": 64,
   "slot_id": "hcard-064",
-  "product_bottom": 0.681,
-  "block_height": 0.209,
-  "bottom_inset": 0.1006,
-  "text_top": 0.691,
-  "clears_wb_badges": false
+  "product_bottom": 0.686,
+  "bg_scale": 1.0828,
+  "bg_top": -0.0828,
+  "verified_by_eye": true
  },
  {
   "i": 65,
   "slot_id": "hcard-065",
-  "product_bottom": 0.599,
-  "block_height": 0.209,
-  "bottom_inset": 0.1256,
-  "text_top": 0.665,
-  "clears_wb_badges": true
+  "product_bottom": 0.68,
+  "bg_scale": 1.0625,
+  "bg_top": -0.0625,
+  "verified_by_eye": true
  },
  {
   "i": 66,
   "slot_id": "hcard-066",
-  "product_bottom": 0.744,
-  "block_height": 0.209,
-  "bottom_inset": 0.054,
-  "text_top": 0.737,
-  "clears_wb_badges": false
+  "product_bottom": 0.752,
+  "bg_scale": 1.371,
+  "bg_top": -0.371,
+  "verified_by_eye": true
  },
  {
   "i": 67,
   "slot_id": "hcard-067",
-  "product_bottom": 0.692,
-  "block_height": 0.219,
-  "bottom_inset": 0.0781,
-  "text_top": 0.702,
-  "clears_wb_badges": false
+  "product_bottom": 0.7,
+  "bg_scale": 1.1333,
+  "bg_top": -0.1333,
+  "verified_by_eye": true
  },
  {
   "i": 68,
   "slot_id": "hcard-068",
-  "product_bottom": 0.468,
-  "block_height": 0.167,
-  "bottom_inset": 0.164,
-  "text_top": 0.669,
-  "clears_wb_badges": true
+  "product_bottom": 0.614,
+  "bg_scale": 1.0749,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 69,
   "slot_id": "hcard-069",
-  "product_bottom": 0.542,
-  "block_height": 0.167,
-  "bottom_inset": 0.164,
-  "text_top": 0.669,
-  "clears_wb_badges": true
+  "product_bottom": 0.56,
+  "bg_scale": 1.1786,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  },
  {
   "i": 70,
   "slot_id": "hcard-070",
-  "product_bottom": 0.463,
-  "block_height": 0.164,
-  "bottom_inset": 0.164,
-  "text_top": 0.672,
-  "clears_wb_badges": true
+  "product_bottom": 0.682,
+  "bg_scale": 1.0692,
+  "bg_top": -0.0692,
+  "verified_by_eye": true
  },
  {
   "i": 71,
   "slot_id": "hcard-071",
-  "product_bottom": 0.574,
-  "block_height": 0.22,
-  "bottom_inset": 0.164,
-  "text_top": 0.616,
-  "clears_wb_badges": true
+  "product_bottom": 0.585,
+  "bg_scale": 1.1282,
+  "bg_top": 0.0,
+  "verified_by_eye": true
  }
 ]
