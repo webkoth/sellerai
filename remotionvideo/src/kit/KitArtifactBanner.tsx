@@ -155,8 +155,12 @@ export const KitArtifactBanner = ({
       <Img
         src={staticFile(background)}
         style={bgScale && bgTop !== undefined
+          // maxWidth/maxHeight none обязательны: preflight tailwind ставит img{max-width:100%},
+          // и кадр, увеличенный до bgScale, обрезался обратно до ширины карточки — справа
+          // оставалась пустая полоса цвета фона шириной (bgScale-1)/2.
           ? { position: "absolute", left: `${((1 - bgScale) / 2) * 100}%`, top: `${bgTop * 100}%`,
-              width: `${bgScale * 100}%`, height: `${bgScale * 100}%`, objectFit: "cover" }
+              width: `${bgScale * 100}%`, height: `${bgScale * 100}%`,
+              maxWidth: "none", maxHeight: "none", objectFit: "cover" }
           : { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
       />
       {/* Лёгкая вуаль: макеты держат текст читаемым поверх фактуры. */}
