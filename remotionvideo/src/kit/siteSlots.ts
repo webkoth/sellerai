@@ -187,3 +187,46 @@ export const SITE_LINKS: Record<string, string> = Object.fromEntries([
   ["site-strip-d-10x1", "/delivery"], ["site-strip-m-7x1", "/delivery"],
   ["site-strip-p-5x1", "/delivery"], ["site-strip-p-5x2", "/delivery"],
 ]);
+
+/**
+ * Обложки категорий и коллекций, 3:4 — тот же шаблон, что у карточек товара.
+ * `bgScale`/`bgTop` взяты из site-assets/kit-cards-2026-09-13/layout.json: низ изделия
+ * у всех обложек садится на ту же линию, что и на карточках, поэтому каталог читается
+ * как одна сетка. Половина обложек до этого была старыми фото с белым фоном из WB.
+ */
+const COVERS = [
+  { id: "cat-podveski", scene: 42, s: 1.1333, t: -0.1333, dark: true,
+    series: "Подвески и кулоны", title: "КОСМОС В ОПРАВЕ",
+    subtitle: "метеорит в серебре и титане", meta: "Ручная работа · Краснодар" },
+  { id: "cat-braslety", scene: 5, s: 1.0855, t: 0.0, dark: false,
+    series: "Браслеты", title: "СОБРАН ВРУЧНУЮ",
+    subtitle: "натуральный камень и метеорит", meta: "Размер подбираем по запястью" },
+  { id: "cat-chasy", scene: 3, s: 1.1333, t: -0.1333, dark: true,
+    series: "Часы наручные", title: "КОСМОС НА ЗАПЯСТЬЕ",
+    subtitle: "вставка из метеорита Муонионалуста", meta: "Швеция · 1906" },
+  { id: "cat-sergi", scene: 68, s: 1.0749, t: 0.0, dark: true,
+    series: "Серьги", title: "ТИХИЙ ЗНАК",
+    subtitle: "серьги-пусеты с молдавитом", meta: "Молдавит, тектит · Чехия" },
+  { id: "col-meteority", scene: 15, s: 1.0241, t: -0.0241, dark: false,
+    series: "Коллекционные метеориты", title: "СТАРШЕ ЗЕМЛИ",
+    subtitle: "железные, каменные и палласиты", meta: "Сертификат подлинности" },
+  { id: "col-amulety", scene: 39, s: 1.1371, t: -0.1371, dark: false,
+    series: "Амулеты из метеорита", title: "НЕБЕСНОЕ ЖЕЛЕЗО",
+    subtitle: "резьба вручную по метеориту Алетай", meta: "Китай · 1898" },
+  { id: "col-ukrasheniya", scene: 4, s: 1.0123, t: 0.0, dark: false,
+    series: "Украшения с метеоритом", title: "НОСИТЬ КАЖДЫЙ ДЕНЬ",
+    subtitle: "браслеты и подвески с метеоритом", meta: "От 6 900 ₽" },
+  { id: "col-podarki", scene: 18, s: 1.0061, t: 0.0, dark: true,
+    series: "Необычный подарок", title: "СТАРШЕ ЗЕМЛИ",
+    subtitle: "метеорит в коробке с сертификатом", meta: "Доставка по России бесплатно" },
+] as const;
+
+export const SITE_COVERS: ArtifactSlot[] = COVERS.map((c) => ({
+  id: `site-cover-${c.id}`, width: 1200, height: 1600,
+  slot: `Обложка — ${c.series}`,
+  props: SCENE(c.scene, {
+    layout: "poster", onLight: !c.dark, textScale: 1.35,
+    bgScale: c.s, bgTop: c.t,
+    series: c.series, title: c.title, subtitle: c.subtitle, meta: c.meta,
+  }),
+}));
