@@ -1,0 +1,184 @@
+[
+ {
+  "file": "site-block-amulety.png",
+  "w": 1600,
+  "h": 1200,
+  "ratio": "1600:1200",
+  "kb": 2220
+ },
+ {
+  "file": "site-block-braslety.png",
+  "w": 1600,
+  "h": 1200,
+  "ratio": "1600:1200",
+  "kb": 2331
+ },
+ {
+  "file": "site-block-meteority.png",
+  "w": 1600,
+  "h": 1200,
+  "ratio": "1600:1200",
+  "kb": 2162
+ },
+ {
+  "file": "site-block-podarki.png",
+  "w": 1600,
+  "h": 1200,
+  "ratio": "1600:1200",
+  "kb": 2365
+ },
+ {
+  "file": "site-hero-d-amulety.png",
+  "w": 2400,
+  "h": 960,
+  "ratio": "2400:960",
+  "kb": 2634
+ },
+ {
+  "file": "site-hero-d-braslety.png",
+  "w": 2400,
+  "h": 960,
+  "ratio": "2400:960",
+  "kb": 2777
+ },
+ {
+  "file": "site-hero-d-chasy.png",
+  "w": 2400,
+  "h": 960,
+  "ratio": "2400:960",
+  "kb": 2767
+ },
+ {
+  "file": "site-hero-d-meteority.png",
+  "w": 2400,
+  "h": 960,
+  "ratio": "2400:960",
+  "kb": 2563
+ },
+ {
+  "file": "site-hero-d-podarki.png",
+  "w": 2400,
+  "h": 960,
+  "ratio": "2400:960",
+  "kb": 2879
+ },
+ {
+  "file": "site-hero-m-amulety.png",
+  "w": 1440,
+  "h": 1080,
+  "ratio": "1440:1080",
+  "kb": 1827
+ },
+ {
+  "file": "site-hero-m-braslety.png",
+  "w": 1440,
+  "h": 1080,
+  "ratio": "1440:1080",
+  "kb": 1917
+ },
+ {
+  "file": "site-hero-m-chasy.png",
+  "w": 1440,
+  "h": 1080,
+  "ratio": "1440:1080",
+  "kb": 1927
+ },
+ {
+  "file": "site-hero-m-meteority.png",
+  "w": 1440,
+  "h": 1080,
+  "ratio": "1440:1080",
+  "kb": 1768
+ },
+ {
+  "file": "site-hero-m-podarki.png",
+  "w": 1440,
+  "h": 1080,
+  "ratio": "1440:1080",
+  "kb": 1947
+ },
+ {
+  "file": "site-pcard-amulety.png",
+  "w": 1200,
+  "h": 1600,
+  "ratio": "1200:1600",
+  "kb": 2667
+ },
+ {
+  "file": "site-pcard-braslety.png",
+  "w": 1200,
+  "h": 1600,
+  "ratio": "1200:1600",
+  "kb": 2335
+ },
+ {
+  "file": "site-pcard-meteority.png",
+  "w": 1200,
+  "h": 1600,
+  "ratio": "1200:1600",
+  "kb": 2570
+ },
+ {
+  "file": "site-strip-d-10x1.png",
+  "w": 2400,
+  "h": 240,
+  "ratio": "2400:240",
+  "kb": 662
+ },
+ {
+  "file": "site-strip-m-7x1.png",
+  "w": 1680,
+  "h": 240,
+  "ratio": "1680:240",
+  "kb": 484
+ },
+ {
+  "file": "site-strip-p-5x1.png",
+  "w": 2400,
+  "h": 480,
+  "ratio": "2400:480",
+  "kb": 1322
+ },
+ {
+  "file": "site-strip-p-5x2.png",
+  "w": 1440,
+  "h": 576,
+  "ratio": "1440:576",
+  "kb": 1014
+ },
+ {
+  "file": "site-tile-amulety.png",
+  "w": 1200,
+  "h": 1200,
+  "ratio": "1200:1200",
+  "kb": 2036
+ },
+ {
+  "file": "site-tile-braslety.png",
+  "w": 1200,
+  "h": 1200,
+  "ratio": "1200:1200",
+  "kb": 1828
+ },
+ {
+  "file": "site-tile-chasy.png",
+  "w": 1200,
+  "h": 1200,
+  "ratio": "1200:1200",
+  "kb": 2013
+ },
+ {
+  "file": "site-tile-meteority.png",
+  "w": 1200,
+  "h": 1200,
+  "ratio": "1200:1200",
+  "kb": 1964
+ },
+ {
+  "file": "site-tile-podarki.png",
+  "w": 1200,
+  "h": 1200,
+  "ratio": "1200:1200",
+  "kb": 1974
+ }
+]

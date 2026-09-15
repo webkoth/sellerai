@@ -16,6 +16,7 @@ import { KitArtifactBanner } from "./kit/KitArtifactBanner";
 import { ARTIFACT_SLOTS, HS_SLOTS, CARD_SLOTS } from "./kit/artifactBanners";
 import { PRODUCT_CARD_SLOTS, GLAV_SLOTS, GLAV_MOBILE_SLOTS } from "./kit/cardSlots";
 import { HS_CARD_SLOTS } from "./kit/hsCardSlots";
+import { SITE_SLOTS } from "./kit/siteSlots";
 import { KitCollectionBanner } from "./kit/KitCollectionBanner";
 import { COLLECTION, COLLECTION_FORMATS } from "./kit/collectionBanners";
 import { LogoReveal } from "./overlays/LogoReveal";
@@ -472,7 +473,7 @@ export const RemotionRoot = () => {
         )),
       )}
 
-      {[...ARTIFACT_SLOTS, ...HS_SLOTS, ...CARD_SLOTS, ...PRODUCT_CARD_SLOTS, ...GLAV_SLOTS, ...GLAV_MOBILE_SLOTS, ...HS_CARD_SLOTS].map((s) => (
+      {[...ARTIFACT_SLOTS, ...HS_SLOTS, ...CARD_SLOTS, ...PRODUCT_CARD_SLOTS, ...GLAV_SLOTS, ...GLAV_MOBILE_SLOTS, ...HS_CARD_SLOTS, ...SITE_SLOTS].map((s) => (
         <Composition
           key={s.id}
           id={`Kit-${s.id.replace(/_/g, "-")}`}
