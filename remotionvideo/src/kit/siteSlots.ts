@@ -94,29 +94,70 @@ export const SITE_HERO_M: ArtifactSlot[] = GROUPS.map((g) => ({
   }),
 }));
 
+/**
+ * Баннеры главной, ведущие в каталог. Все в одной светлой теме: тёмная плитка среди
+ * светлых читается как чужая, а ряд должен смотреться одной сеткой.
+ *
+ * «Подарки» убраны: категории больше нет, подарочное намерение закрывает весь каталог.
+ * Вместо них «Подвески» — вторая по величине категория, 12 товаров в наличии.
+ *
+ * `tilePos` и `titleTop` посчитаны от низа изделия в сцене: квадрат режет портретный кадр,
+ * и без сдвига окна заголовок ложится прямо на предмет.
+ */
+const CATS = [
+  { key: "meteority", short: "Метеориты", series: "Коллекционные метеориты",
+    sub: "железные и каменные образцы", meta: "Каждый в одном экземпляре",
+    href: "/catalog/meteority-i-mineraly",
+    scene: 15, tilePos: "50% 89.7%", titleTop: 0.65,
+    wide: "rsya-meteority-wide.png", blockPos: "75% 50%" },
+  { key: "amulety", short: "Амулеты", series: "Амулеты из метеорита",
+    sub: "резьба по метеоритному железу", meta: "Метеорит Aletai · Китай · 1898",
+    href: "/catalog/amulety-i-oberegi",
+    scene: 39, tilePos: "50% 100%", titleTop: 0.65,
+    wide: "rsya-amulety-wide.png", blockPos: "85% 50%" },
+  { key: "braslety", short: "Браслеты", series: "Браслеты с метеоритом",
+    sub: "ручная сборка, натуральный камень", meta: "От 6 900 ₽",
+    href: "/catalog/braslety",
+    scene: 5, tilePos: "50% 66.1%", titleTop: 0.65,
+    wide: "rsya-braslety-wide.png", blockPos: "100% 50%" },
+  { key: "podveski", short: "Подвески", series: "Подвески и кулоны",
+    sub: "метеорит в серебре и титане", meta: "Ручная работа · Краснодар",
+    href: "/catalog/podveski-i-kulony",
+    scene: 62, tilePos: "50% 73.2%", titleTop: 0.65,
+    wide: null, blockPos: null },
+  { key: "chasy", short: "Часы", series: "Часы с метеоритом",
+    sub: "вставка из метеорита Муонионалуста", meta: "Швеция · 1906",
+    href: "/catalog/chasy-naruchnye",
+    scene: null, tilePos: null, titleTop: 0.65,
+    wide: "rsya-chasy-wide-light.png", blockPos: "100% 50%" },
+] as const;
+
 /** Плитки «Коллекции и категории» на главной, 1:1. */
-export const SITE_TILE: ArtifactSlot[] = GROUPS.map((g) => ({
-  id: `site-tile-${g.key}`, width: 1200, height: 1200,
-  slot: `Главная, плитка — ${g.short} → ${g.href}`,
-  // Квадрат режет портретную сцену: изделие уезжает вниз и заголовок ложится на него.
-  // bgPosition выбирает нижнее окно кадра — низ изделия садится на 0.60, заголовок на 0.68.
-  props: SCENE(g.scene, {
-    layout: "poster", onLight: g.sceneLight, textScale: 1.15, bgPosition: g.tilePos,
-    series: g.series, title: g.short.toUpperCase(), subtitle: g.subtitle.split(",")[0],
-    meta: g.meta,
-  }),
+export const SITE_TILE: ArtifactSlot[] = CATS.map((c) => ({
+  id: `site-tile-${c.key}`, width: 1200, height: 1200,
+  slot: `Главная, плитка — ${c.short} → ${c.href}`,
+  props: c.scene
+    ? SCENE(c.scene, {
+        layout: "poster", onLight: true, textScale: 1.1,
+        bgPosition: c.tilePos, titleTop: c.titleTop,
+        series: c.series, title: c.short.toUpperCase(), subtitle: c.sub, meta: c.meta,
+      })
+    // у часов светлая сцена только широкая: увеличиваем и поднимаем кадр, чтобы часы
+    // встали над строкой заголовка и квадрат остался закрыт
+    : BG("rsya-chasy-square.png", {
+        layout: "poster", onLight: true, textScale: 1.1,
+        bgScale: 1.53, bgTop: 0, titleTop: c.titleTop,
+        series: c.series, title: c.short.toUpperCase(), subtitle: c.sub, meta: c.meta,
+      }),
 }));
 
 /** Крупные блоки «Коллекции и категории» на главной, 4:3. */
-export const SITE_BLOCK: ArtifactSlot[] = GROUPS.slice(0, 4).map((g) => ({
-  id: `site-block-${g.key}`, width: 1600, height: 1200,
-  slot: `Главная, крупный блок — ${g.series} → ${g.href}`,
-  // Ландшафтный блок: широкая сцена и текст слева. Портретная сцена в 4:3 режется так,
-  // что изделие уходит в середину кадра и заголовок ложится прямо на него.
-  props: BG(g.bg, {
-    layout: "wide", textScale: 0.95,
-    series: g.series, title: g.short.toUpperCase(), subtitle: g.subtitle.split(",")[0],
-    meta: g.meta,
+export const SITE_BLOCK: ArtifactSlot[] = CATS.filter((c) => c.wide).map((c) => ({
+  id: `site-block-${c.key}`, width: 1600, height: 1200,
+  slot: `Главная, крупный блок — ${c.series} → ${c.href}`,
+  props: BG(c.wide as string, {
+    layout: "wide", onLight: true, textScale: 0.95, bgPosition: c.blockPos as string,
+    series: c.series, title: c.short.toUpperCase(), subtitle: c.sub, meta: c.meta,
   }),
 }));
 

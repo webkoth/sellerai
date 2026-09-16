@@ -1,0 +1,56 @@
+[
+ {
+  "file": "pack-1.png",
+  "zamenyaet": [
+   "01a05c99-b73a-7975-bd74-4895bede16fe"
+  ],
+  "bylo": "Ваши артефакты упакованы в фирменные мешочки и коробочки",
+  "scena": "r1 index 1",
+  "hs_job": "8a543a6a-b33b-436e-98fd-c248fa63ad92",
+  "text": {
+   "series": "В каждом заказе",
+   "title": "ФИРМЕННАЯ УПАКОВКА",
+   "subtitle": "мешочек и коробочка с логотипом бренда",
+   "meta": "Входит в заказ без доплаты"
+  },
+  "image_id": null,
+  "url": null,
+  "status_v_kit": "не залито"
+ },
+ {
+  "file": "pack-2.png",
+  "zamenyaet": [
+   "01a05c99-b845-79da-bddb-d0665764ec13",
+   "01a05c99-b777-7777-becb-2cfbbcc28cd5"
+  ],
+  "bylo": "KOTELNIKOVARTIFACT · meteorites & jewelry (две версии, с рамкой и без)",
+  "hs_job": "0d5381dc-92ac-44e9-9c11-c76d3f4af1d1",
+  "text": {
+   "series": "Метеориты и украшения",
+   "title": "ГОТОВО К ВРУЧЕНИЮ",
+   "subtitle": "серебряное тиснение на матовой коробочке",
+   "meta": "Welcome to space community"
+  },
+  "image_id": null,
+  "url": null,
+  "status_v_kit": "не залито"
+ },
+ {
+  "file": "pack-3.png",
+  "zamenyaet": [
+   "01a05c99-ba06-78d3-806a-de77a4129635",
+   "01a05c99-babd-75c3-91bd-ae5d639cae6a"
+  ],
+  "bylo": "Ваше украшение заслуживает достойной упаковки (две версии)",
+  "hs_job": "a2824450-70e3-4efb-b4a6-0abdced13dc1",
+  "text": {
+   "series": "Подарочная упаковка",
+   "title": "ДОСТОЙНАЯ УПАКОВКА",
+   "subtitle": "для вашего артефакта",
+   "meta": "Бархатный мешочек · коробочка"
+  },
+  "image_id": null,
+  "url": null,
+  "status_v_kit": "не залито"
+ }
+]

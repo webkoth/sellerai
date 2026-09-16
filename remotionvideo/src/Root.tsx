@@ -16,6 +16,7 @@ import { KitArtifactBanner } from "./kit/KitArtifactBanner";
 import { ARTIFACT_SLOTS, HS_SLOTS, CARD_SLOTS } from "./kit/artifactBanners";
 import { PRODUCT_CARD_SLOTS, GLAV_SLOTS, GLAV_MOBILE_SLOTS } from "./kit/cardSlots";
 import { HS_CARD_SLOTS } from "./kit/hsCardSlots";
+import { PACK_SLOTS } from "./kit/packSlots";
 import { SITE_SLOTS, SITE_COVERS } from "./kit/siteSlots";
 import { KitCareCard } from "./kit/KitCareCard";
 import { CARE_SLOTS } from "./kit/careSlots";
@@ -475,7 +476,7 @@ export const RemotionRoot = () => {
         )),
       )}
 
-      {[...ARTIFACT_SLOTS, ...HS_SLOTS, ...CARD_SLOTS, ...PRODUCT_CARD_SLOTS, ...GLAV_SLOTS, ...GLAV_MOBILE_SLOTS, ...HS_CARD_SLOTS, ...SITE_SLOTS, ...SITE_COVERS].map((s) => (
+      {[...ARTIFACT_SLOTS, ...HS_SLOTS, ...CARD_SLOTS, ...PRODUCT_CARD_SLOTS, ...GLAV_SLOTS, ...GLAV_MOBILE_SLOTS, ...HS_CARD_SLOTS, ...PACK_SLOTS, ...SITE_SLOTS, ...SITE_COVERS].map((s) => (
         <Composition
           key={s.id}
           id={`Kit-${s.id.replace(/_/g, "-")}`}

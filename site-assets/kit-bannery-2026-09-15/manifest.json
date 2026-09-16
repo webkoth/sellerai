@@ -20,16 +20,6 @@
   "group": "Коллекционные метеориты"
  },
  {
-  "file": "site-tile-meteority.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — плитки",
-  "device": "обе",
-  "ratio": "1:1",
-  "size": "1200×1200",
-  "link": "/collections/meteority",
-  "group": "Коллекционные метеориты"
- },
- {
   "file": "site-hero-d-amulety.png",
   "page": "Главная",
   "section": "Слайдшоу-герой",
@@ -46,16 +36,6 @@
   "device": "телефон",
   "ratio": "4:3",
   "size": "1440×1080",
-  "link": "/collections/amulety-iz-meteorita",
-  "group": "Амулеты из метеорита"
- },
- {
-  "file": "site-tile-amulety.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — плитки",
-  "device": "обе",
-  "ratio": "1:1",
-  "size": "1200×1200",
   "link": "/collections/amulety-iz-meteorita",
   "group": "Амулеты из метеорита"
  },
@@ -80,16 +60,6 @@
   "group": "Браслеты и подвески с метеоритом"
  },
  {
-  "file": "site-tile-braslety.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — плитки",
-  "device": "обе",
-  "ratio": "1:1",
-  "size": "1200×1200",
-  "link": "/collections/ukrasheniya-s-meteoritom",
-  "group": "Браслеты и подвески с метеоритом"
- },
- {
   "file": "site-hero-d-podarki.png",
   "page": "Главная",
   "section": "Слайдшоу-герой",
@@ -106,16 +76,6 @@
   "device": "телефон",
   "ratio": "4:3",
   "size": "1440×1080",
-  "link": "/collections/podarki",
-  "group": "Необычный подарок мужчине"
- },
- {
-  "file": "site-tile-podarki.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — плитки",
-  "device": "обе",
-  "ratio": "1:1",
-  "size": "1200×1200",
   "link": "/collections/podarki",
   "group": "Необычный подарок мужчине"
  },
@@ -138,56 +98,6 @@
   "size": "1440×1080",
   "link": "/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174",
   "group": "Часы с метеоритом"
- },
- {
-  "file": "site-tile-chasy.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — плитки",
-  "device": "обе",
-  "ratio": "1:1",
-  "size": "1200×1200",
-  "link": "/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174",
-  "group": "Часы с метеоритом"
- },
- {
-  "file": "site-block-meteority.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — крупные блоки",
-  "device": "обе",
-  "ratio": "4:3",
-  "size": "1600×1200",
-  "link": "/collections/meteority",
-  "group": "Коллекционные метеориты"
- },
- {
-  "file": "site-block-amulety.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — крупные блоки",
-  "device": "обе",
-  "ratio": "4:3",
-  "size": "1600×1200",
-  "link": "/collections/amulety-iz-meteorita",
-  "group": "Амулеты из метеорита"
- },
- {
-  "file": "site-block-braslety.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — крупные блоки",
-  "device": "обе",
-  "ratio": "4:3",
-  "size": "1600×1200",
-  "link": "/collections/ukrasheniya-s-meteoritom",
-  "group": "Браслеты и подвески с метеоритом"
- },
- {
-  "file": "site-block-podarki.png",
-  "page": "Главная",
-  "section": "Коллекции и категории — крупные блоки",
-  "device": "обе",
-  "ratio": "4:3",
-  "size": "1600×1200",
-  "link": "/collections/podarki",
-  "group": "Необычный подарок мужчине"
  },
  {
   "file": "site-pcard-meteority.png",
@@ -258,5 +168,95 @@
   "size": "1440×576",
   "link": "/delivery",
   "group": "Сертификат и доставка"
+ },
+ {
+  "file": "site-tile-meteority.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — плитки",
+  "device": "обе",
+  "ratio": "1:1",
+  "size": "1200×1200",
+  "link": "/catalog/meteority-i-mineraly",
+  "group": "Метеориты"
+ },
+ {
+  "file": "site-tile-amulety.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — плитки",
+  "device": "обе",
+  "ratio": "1:1",
+  "size": "1200×1200",
+  "link": "/catalog/amulety-i-oberegi",
+  "group": "Амулеты"
+ },
+ {
+  "file": "site-tile-braslety.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — плитки",
+  "device": "обе",
+  "ratio": "1:1",
+  "size": "1200×1200",
+  "link": "/catalog/braslety",
+  "group": "Браслеты"
+ },
+ {
+  "file": "site-tile-podveski.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — плитки",
+  "device": "обе",
+  "ratio": "1:1",
+  "size": "1200×1200",
+  "link": "/catalog/podveski-i-kulony",
+  "group": "Подвески"
+ },
+ {
+  "file": "site-tile-chasy.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — плитки",
+  "device": "обе",
+  "ratio": "1:1",
+  "size": "1200×1200",
+  "link": "/catalog/chasy-naruchnye",
+  "group": "Часы"
+ },
+ {
+  "file": "site-block-meteority.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — крупные блоки",
+  "device": "обе",
+  "ratio": "4:3",
+  "size": "1600×1200",
+  "link": "/catalog/meteority-i-mineraly",
+  "group": "Метеориты"
+ },
+ {
+  "file": "site-block-amulety.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — крупные блоки",
+  "device": "обе",
+  "ratio": "4:3",
+  "size": "1600×1200",
+  "link": "/catalog/amulety-i-oberegi",
+  "group": "Амулеты"
+ },
+ {
+  "file": "site-block-braslety.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — крупные блоки",
+  "device": "обе",
+  "ratio": "4:3",
+  "size": "1600×1200",
+  "link": "/catalog/braslety",
+  "group": "Браслеты"
+ },
+ {
+  "file": "site-block-chasy.png",
+  "page": "Главная",
+  "section": "Коллекции и категории — крупные блоки",
+  "device": "обе",
+  "ratio": "4:3",
+  "size": "1600×1200",
+  "link": "/catalog/chasy-naruchnye",
+  "group": "Часы"
  }
 ]

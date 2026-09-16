@@ -86,15 +86,21 @@
 
 ### Главная → Коллекции и категории, плитки (5 штук, 1:1)
 
+Обновлено 16.09: все пять в одной светлой теме, ведут в **категории**, а не в коллекции.
+«Подарки» убраны — категории больше нет, подарочное намерение закрывает весь каталог;
+вместо них «Подвески», вторая по величине категория.
+
 | Плитка | Файл | Ссылка |
 |---|---|---|
-| Метеориты | `site-tile-meteority.png` | `/collections/meteority` |
-| Амулеты | `site-tile-amulety.png` | `/collections/amulety-iz-meteorita` |
-| Браслеты | `site-tile-braslety.png` | `/collections/ukrasheniya-s-meteoritom` |
-| Подарки | `site-tile-podarki.png` | `/collections/podarki` |
-| Часы | `site-tile-chasy.png` | `/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174` |
+| Метеориты | `site-tile-meteority.png` | `/catalog/meteority-i-mineraly` |
+| Амулеты | `site-tile-amulety.png` | `/catalog/amulety-i-oberegi` |
+| Браслеты | `site-tile-braslety.png` | `/catalog/braslety` |
+| Подвески | `site-tile-podveski.png` | `/catalog/podveski-i-kulony` |
+| Часы | `site-tile-chasy.png` | `/catalog/chasy-naruchnye` |
 
-**Главное здесь — поменять ссылки.** Сейчас все пять ведут на `/catalog`.
+Заголовок у всех пяти стоит на одной линии (0.65 высоты), низ изделия — на 0.59.
+Тёмных плиток в ряду не осталось: часы и подарки были единственными, для часов снята
+отдельная светлая сцена.
 
 ### Главная → Слайдшоу-полоса (10:1 и 7:1)
 
@@ -105,15 +111,15 @@
 
 ### Главная → Коллекции и категории, крупные блоки (4:3)
 
-Две секции по два блока. Заполнить четырьмя коллекциями и **заменить заголовок
-«Название коллекции»**:
+Обновлено 16.09: светлая тема, вуаль под текстом тоже светлая. Кадр сдвинут вправо —
+по умолчанию `object-fit: cover` резал именно ту сторону, где стоит изделие.
 
 | Блок | Файл | Заголовок | Ссылка |
 |---|---|---|---|
-| 1 | `site-block-meteority.png` | Коллекционные метеориты | `/collections/meteority` |
-| 2 | `site-block-amulety.png` | Амулеты из метеорита | `/collections/amulety-iz-meteorita` |
-| 3 | `site-block-braslety.png` | Браслеты и подвески | `/collections/ukrasheniya-s-meteoritom` |
-| 4 | `site-block-podarki.png` | Необычный подарок | `/collections/podarki` |
+| 1 | `site-block-meteority.png` | Коллекционные метеориты | `/catalog/meteority-i-mineraly` |
+| 2 | `site-block-amulety.png` | Амулеты из метеорита | `/catalog/amulety-i-oberegi` |
+| 3 | `site-block-braslety.png` | Браслеты с метеоритом | `/catalog/braslety` |
+| 4 | `site-block-chasy.png` | Часы с метеоритом | `/catalog/chasy-naruchnye` |
 
 ### Карточка товара → Коллекции и категории (3:4) — вместо MUTED
 

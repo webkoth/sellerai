@@ -178,7 +178,10 @@ export const KitArtifactBanner = ({
           : "linear-gradient(180deg, rgba(8,14,22,0.52) 0%, rgba(8,14,22,0.18) 40%, rgba(8,14,22,0.62) 100%)" }} />
 
       {productInBackground && !poster ? (
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(5,9,15,0.90) 0%, rgba(5,9,15,0.66) 26%, rgba(5,9,15,0.22) 46%, transparent 62%)" }} />
+        // Вуаль под текст слева. Светлая для светлой темы, иначе тёмный текст на тёмной вуали.
+        <div style={{ position: "absolute", inset: 0, background: onLight
+          ? "linear-gradient(90deg, rgba(247,245,241,0.94) 0%, rgba(247,245,241,0.80) 26%, rgba(247,245,241,0.38) 46%, transparent 64%)"
+          : "linear-gradient(90deg, rgba(5,9,15,0.90) 0%, rgba(5,9,15,0.66) 26%, rgba(5,9,15,0.22) 46%, transparent 62%)" }} />
       ) : null}
 
       {ribbon ? (
