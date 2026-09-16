@@ -74,7 +74,7 @@
 | Коллекционные метеориты | `site-hero-d-meteority.png` | `site-hero-m-meteority.png` | `/collections/meteority` |
 | Амулеты из метеорита | `site-hero-d-amulety.png` | `site-hero-m-amulety.png` | `/collections/amulety-iz-meteorita` |
 | Браслеты и подвески | `site-hero-d-braslety.png` | `site-hero-m-braslety.png` | `/collections/ukrasheniya-s-meteoritom` |
-| Необычный подарок | `site-hero-d-podarki.png` | `site-hero-m-podarki.png` | `/collections/podarki` |
+| Необычный подарок | `site-hero-d-podarki.png` | `site-hero-m-podarki.png` | `/catalog` — коллекция удалена 16.09 |
 | Часы с метеоритом | `site-hero-d-chasy.png` | `site-hero-m-chasy.png` | `/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174` |
 
 Сейчас в секции три слайда — два надо добавить кнопкой «Добавить элемент».
