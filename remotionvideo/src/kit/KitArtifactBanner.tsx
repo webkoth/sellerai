@@ -36,6 +36,10 @@ export type KitArtifactBannerProps = {
   bgTop?: number;
   /** Множитель кегля заголовка: длинные имена ужимаются, чтобы остаться в одну строку. */
   titleScale?: number;
+  /** Линия заголовка в долях высоты. По умолчанию 0.68 — общий шаблон карточек. */
+  titleTop?: number;
+  /** object-position фона: выбирает окно кадра, когда сцена выше слота. */
+  bgPosition?: string;
   /** Тёмный фон (по умолчанию) или светлый — для пергамента и травертина. */
   onLight?: boolean;
   /** Изделие уже снято внутри фонового кадра — отдельный слой с вырезкой не нужен. */
@@ -64,6 +68,8 @@ export const KitArtifactBanner = ({
   bgScale,
   bgTop,
   titleScale = 1,
+  titleTop,
+  bgPosition,
 }: KitArtifactBannerProps) => {
   const { height } = useVideoConfig();
   const poster = layout === "poster";
@@ -108,7 +114,7 @@ export const KitArtifactBanner = ({
   // Шаблон карточки фиксирован: заголовок у всех товаров начинается на одной линии,
   // и под эту линию подгоняется кадр изделия (bgScale/bgTop считает kit_card_layout.py).
   // Иначе в каталоге имена пляшут по высоте и витрина рассыпается.
-  const TITLE_TOP = 0.68;
+  const TITLE_TOP = titleTop ?? 0.68;
 
   const Head = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: poster ? "center" : "flex-start", gap: S.gapS }}>
@@ -161,7 +167,8 @@ export const KitArtifactBanner = ({
           ? { position: "absolute", left: `${((1 - bgScale) / 2) * 100}%`, top: `${bgTop * 100}%`,
               width: `${bgScale * 100}%`, height: `${bgScale * 100}%`,
               maxWidth: "none", maxHeight: "none", objectFit: "cover" }
-          : { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          : { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover",
+              objectPosition: bgPosition ?? "50% 50%" }}
       />
       {/* Лёгкая вуаль: макеты держат текст читаемым поверх фактуры. */}
       <div style={{ position: "absolute", inset: 0, background: onLight

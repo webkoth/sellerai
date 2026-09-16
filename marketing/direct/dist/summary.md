@@ -5,7 +5,7 @@
 | РСЯ · KOTELNIKOVARTIFACT магазин | Коллекционные метеориты | 25 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/meteority?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=meteority&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Амулеты из метеорита | 25 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/amulety-iz-meteorita?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=amulety&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Браслеты и подвески с метеоритом | 20 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/ukrasheniya-s-meteoritom?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=braslety&utm_term={source} |
-| РСЯ · KOTELNIKOVARTIFACT магазин | Необычный подарок мужчине | 22 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/podarki?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=podarki&utm_term={source} |
+| РСЯ · KOTELNIKOVARTIFACT магазин | Необычный подарок мужчине | 22 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/catalog?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=podarki&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Часы с метеоритом | 15 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=chasy&utm_term={source} |
 
 ## Тексты объявлений по группам
@@ -75,7 +75,7 @@
 
 ### Необычный подарок мужчине
 
-Посадочная: /collections/podarki
+Посадочная: /catalog
 
 Заголовки:
 - Подарок, который старше Земли

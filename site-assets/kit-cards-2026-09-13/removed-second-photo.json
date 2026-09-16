@@ -1,0 +1,398 @@
+[
+ {
+  "vid": "01a05c9d-589e-7e97-ac82-b0bc552ff5cc",
+  "slot": "hcard-001",
+  "removed_image_id": "01a05c9d-8f00-7155-839b-1a85cce7e04f",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9c-2561-7f09-8ae9-2b1131bf9095",
+  "slot": "hcard-002",
+  "removed_image_id": "01a05c9c-5cd8-70cd-8717-22b1dd1a1e13",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-74c3-9695-d5cc899ec815",
+  "slot": "hcard-003",
+  "removed_image_id": "01a05c9b-351a-7074-a7fd-bea218014bf8",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-74ae-afef-155ce963ab09",
+  "slot": "hcard-004",
+  "removed_image_id": "01a05c9b-3da9-772c-95ce-bc4ed077a4fa",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7487-bba2-200778fe608c",
+  "slot": "hcard-005",
+  "removed_image_id": "01a05c9b-2e27-72dc-8ac1-82bb0872d5f0",
+  "photos_left": 11
+ },
+ {
+  "vid": "01a05c9a-fa7e-7478-89f6-1b28eff1ab55",
+  "slot": "hcard-006",
+  "removed_image_id": "01a05c9b-4bda-7f30-9f86-70c5e3653970",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-7474-8f3f-1591d9e349c8",
+  "slot": "hcard-007",
+  "removed_image_id": "01a05c9b-4103-7d10-9d49-5712e735c743",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-746b-a08a-9e6ab072f42e",
+  "slot": "hcard-008",
+  "removed_image_id": "01a05c9b-241d-7820-abb9-730a90c15364",
+  "photos_left": 11
+ },
+ {
+  "vid": "01a05c9a-fa7e-7463-a7e2-5a3a28013b2f",
+  "slot": "hcard-009",
+  "removed_image_id": "01a05c9b-4f8d-75f3-9820-d68ce812fb59",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-745f-84e3-9040ff036196",
+  "slot": "hcard-010",
+  "removed_image_id": "01a05c9b-4eb4-7934-aeee-f82428940806",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-7457-bfe9-05d38680115f",
+  "slot": "hcard-011",
+  "removed_image_id": "01a05c9b-4afb-7524-b39c-d5d0ed9beefd",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7428-b117-2100fb04cca8",
+  "slot": "hcard-012",
+  "removed_image_id": "01a05c9b-0d34-7d0d-955d-d05149622cc4",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-741a-a3a4-dc76d5fef47d",
+  "slot": "hcard-013",
+  "removed_image_id": "01a05c9b-298a-77ef-8283-336a205a11b2",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7405-bef3-ff602c6639c7",
+  "slot": "hcard-014",
+  "removed_image_id": "01a05c9b-0f8b-78fc-bf12-73c50c2139fa",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-73f9-89cd-b87413ff76a1",
+  "slot": "hcard-015",
+  "removed_image_id": "01a05c9b-54c1-7967-8bb2-e6b4e9f14ab8",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-73f6-8f16-1748fc2c5d8c",
+  "slot": "hcard-016",
+  "removed_image_id": "01a05c9b-5125-72ae-b985-a36592f3090e",
+  "photos_left": 5
+ },
+ {
+  "vid": "01a05c9a-fa7e-73c0-9ffd-ad8ef0a9ce33",
+  "slot": "hcard-018",
+  "removed_image_id": "01a05c9b-0ed9-75aa-8be3-cc9b46691a10",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-73bc-a899-0e09de9b3b99",
+  "slot": "hcard-019",
+  "removed_image_id": "01a05c9b-3e3f-703a-bec4-384ba7c3b903",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-7397-af30-67e380f44141",
+  "slot": "hcard-020",
+  "removed_image_id": "01a05c9b-44f0-7954-883c-47944f191ba7",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-736c-b912-6bb0975f7f6c",
+  "slot": "hcard-021",
+  "removed_image_id": "01a05c9b-4414-7d67-8f9c-91877940e91d",
+  "photos_left": 10
+ },
+ {
+  "vid": "01a05c9a-fa7e-7367-bbec-87078de467cc",
+  "slot": "hcard-022",
+  "removed_image_id": "01a05c9a-1a16-70ef-a236-c4c501d4ddd7",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-7355-a11a-1be4f13ef37d",
+  "slot": "hcard-023",
+  "removed_image_id": "01a05c9b-20ff-7066-be1d-a6c66a61584f",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7336-a1e0-44d870359e5e",
+  "slot": "hcard-024",
+  "removed_image_id": "01a05c9b-46e5-77c0-bff7-7e8afc38389b",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-731a-8e03-cd05253c3428",
+  "slot": "hcard-025",
+  "removed_image_id": "01a05c9b-105e-7819-a94f-ce16fef48b99",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-7311-b25d-f76be1533bb2",
+  "slot": "hcard-026",
+  "removed_image_id": "01a05c9a-fb5b-74e9-8491-39dbec11b6b5",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-7308-9b3f-3e8b17b2f123",
+  "slot": "hcard-027",
+  "removed_image_id": "01a05c9b-538e-7e5c-abee-a579095cd6af",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-72fb-93dc-4b93f06782a2",
+  "slot": "hcard-028",
+  "removed_image_id": "01a05c9b-183c-78e1-bd69-de7292572b35",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-72d6-a90f-9c26d77b7ec6",
+  "slot": "hcard-029",
+  "removed_image_id": "01a05c9b-1415-75fc-8133-e9115962d201",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-72cb-8c6a-c452f57d48f6",
+  "slot": "hcard-030",
+  "removed_image_id": "01a05c9b-3811-7556-8a6c-58fae3ab3536",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c9a-fa7e-72b3-ade7-ccfb913bb7f5",
+  "slot": "hcard-031",
+  "removed_image_id": "01a05c9b-425c-7af5-9397-513716eeab40",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c9a-fa7e-72aa-9806-a127bb14ccca",
+  "slot": "hcard-032",
+  "removed_image_id": "01a05c9b-02df-7a6f-bff0-f17c3299236a",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7299-b95b-c8130b3a05fd",
+  "slot": "hcard-033",
+  "removed_image_id": "01a05c9b-134b-7968-80b9-3c30b7751ed0",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-728f-aaa1-4925bbef0e69",
+  "slot": "hcard-034",
+  "removed_image_id": "01a05c9b-0515-7334-b9cb-f6e1595fb90f",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-7740-9e0e-c5c38a51d1ee",
+  "slot": "hcard-036",
+  "removed_image_id": "01a05c99-cbad-79e9-8541-e0ab55c4ed0f",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c99-b686-7736-a4f4-ce79b57a0476",
+  "slot": "hcard-037",
+  "removed_image_id": "01a05c9a-1546-7e2c-b21b-e8b3edf93c87",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-7705-ad45-18aac3201f4a",
+  "slot": "hcard-038",
+  "removed_image_id": "01a05c99-d390-7031-8f8d-700dac9671b7",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-76fe-9103-e9da8016b749",
+  "slot": "hcard-039",
+  "removed_image_id": "01a05c99-c550-7c1b-aa8e-6106f21c1f46",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-76f1-a342-50a7c60c5e73",
+  "slot": "hcard-040",
+  "removed_image_id": "01a05c9a-1625-738c-ae23-988f7b2a0fc1",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-76eb-b556-397863973531",
+  "slot": "hcard-041",
+  "removed_image_id": "01a05c9a-0656-72c8-93bb-248dc0ec4cf0",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c99-b686-76cf-b1e4-6e2445a628f2",
+  "slot": "hcard-042",
+  "removed_image_id": "01a05c99-c016-7696-9ab9-e1841a7ff2c3",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-76a5-bfb2-29cea358f557",
+  "slot": "hcard-044",
+  "removed_image_id": "01a05c99-c727-7bae-98ba-7b335523d016",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-761a-a61d-17dbf98d745c",
+  "slot": "hcard-045",
+  "removed_image_id": "01a05c99-c7df-726d-b42c-b5ec33986e8c",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-75ea-ac87-2c024311de41",
+  "slot": "hcard-046",
+  "removed_image_id": "01a05c99-e8ad-7e53-97d9-85be63c9fdd8",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c99-b686-75d6-a1ca-a2ee72651cff",
+  "slot": "hcard-047",
+  "removed_image_id": "01a05c99-cdff-7126-83e1-d87b551efd73",
+  "photos_left": 6
+ },
+ {
+  "vid": "01a05c99-b686-75c9-af6d-51bf0a09097a",
+  "slot": "hcard-048",
+  "removed_image_id": "01a05c99-ca29-7ed2-af1a-523338c5053b",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-75c2-9c7d-738f9bffec33",
+  "slot": "hcard-049",
+  "removed_image_id": "01a05c99-bb93-7e44-9a86-85404be3a54a",
+  "photos_left": 3
+ },
+ {
+  "vid": "01a05c99-b686-758f-a8a9-bdb0d3929dc0",
+  "slot": "hcard-050",
+  "removed_image_id": "01a05c9a-1a16-70ef-a236-c4c501d4ddd7",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c99-b686-755b-a8ad-6585d64e0edb",
+  "slot": "hcard-052",
+  "removed_image_id": "01a05c99-c3bd-7576-979a-3b425f6ecf76",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-7544-920a-47df42ff06de",
+  "slot": "hcard-053",
+  "removed_image_id": "01a05c9a-071f-7026-adce-932f0979480f",
+  "photos_left": 12
+ },
+ {
+  "vid": "01a05c99-b686-753c-8fd9-fa4d560fa62f",
+  "slot": "hcard-054",
+  "removed_image_id": "01a05c99-e693-7dbb-b949-9325f6129d6d",
+  "photos_left": 16
+ },
+ {
+  "vid": "01a05c99-b686-74f1-96e8-fdf32d84f513",
+  "slot": "hcard-056",
+  "removed_image_id": "01a05c9a-05be-79fe-b1ba-3930e18a3b6b",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c99-b686-74ea-969c-b9e2e55ed54c",
+  "slot": "hcard-057",
+  "removed_image_id": "01a05c9a-039f-7b70-a60f-4c7b55b896b9",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-74d1-b6e2-16e35a833bb3",
+  "slot": "hcard-058",
+  "removed_image_id": "01a05c9a-1213-7aa0-86e2-5dd1c759ffd5",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-74ad-85aa-cf646fb74303",
+  "slot": "hcard-059",
+  "removed_image_id": "01a05c99-d96c-7b6f-b4cd-a1dc4c3ed5a5",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-74a6-90ab-9b26770c9d46",
+  "slot": "hcard-060",
+  "removed_image_id": "01a05c9a-13c0-7471-934e-023607b46352",
+  "photos_left": 10
+ },
+ {
+  "vid": "01a05c99-b686-7462-91ce-714b542bb898",
+  "slot": "hcard-061",
+  "removed_image_id": "01a05c99-dd1e-772c-9c10-88fb654f3205",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-745b-b425-af3709babec6",
+  "slot": "hcard-062",
+  "removed_image_id": "01a05c99-c97c-7551-b95e-06ee826b08a3",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c99-b686-7448-8c74-07baec3c56ca",
+  "slot": "hcard-063",
+  "removed_image_id": "01a05c99-f145-7c2b-8030-3fae40f46bde",
+  "photos_left": 7
+ },
+ {
+  "vid": "01a05c9a-fa7e-72de-bb6d-a39b82f826fe",
+  "slot": "hcard-064",
+  "removed_image_id": "01a05c9b-21e4-7a55-84fc-cf475524ac34",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9d-589e-7dfd-909d-cead74ed2bb1",
+  "slot": "hcard-065",
+  "removed_image_id": "01a05c9d-671e-796b-8f35-0318b2b90a23",
+  "photos_left": 12
+ },
+ {
+  "vid": "01a05c9a-fa7e-733b-b2df-cadc8052a091",
+  "slot": "hcard-066",
+  "removed_image_id": "01a05c9b-0515-7334-b9cb-f6e1595fb90f",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c9a-fa7e-7323-a086-bd4465a026ba",
+  "slot": "hcard-067",
+  "removed_image_id": "01a05c9a-fc5b-7b97-86eb-36278beec293",
+  "photos_left": 11
+ },
+ {
+  "vid": "01a05c99-b686-7754-842b-04ab9f87de5c",
+  "slot": "hcard-068",
+  "removed_image_id": "01a05c9a-10f4-7e7c-a8dd-605fd61ee869",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-76b2-bcd9-d19047d87880",
+  "slot": "hcard-069",
+  "removed_image_id": "01a05c99-ed6c-7552-8ca4-33d224e08838",
+  "photos_left": 8
+ },
+ {
+  "vid": "01a05c99-b686-7579-8c4a-9ca3bbdfbfda",
+  "slot": "hcard-070",
+  "removed_image_id": "01a05c99-eabb-7031-a9fa-ddde650338a8",
+  "photos_left": 9
+ },
+ {
+  "vid": "01a05c99-b686-7519-8d50-1394c0adfdfd",
+  "slot": "hcard-071",
+  "removed_image_id": "01a05c9a-023c-7375-a237-88323780c1da",
+  "photos_left": 7
+ }
+]

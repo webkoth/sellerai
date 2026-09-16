@@ -144,9 +144,10 @@ def fetch_wb_commissions():
 
     print("  Загружаем комиссии WB...")
     try:
+        # ответ ~5 MB (7000+ предметов), лимит 1 req/min — таймаут с запасом
         data = api_get(
             'https://common-api.wildberries.ru/api/v1/tariffs/commission',
-            headers
+            headers, timeout=120
         )
     except urllib.error.HTTPError as e:
         body = e.read().decode('utf-8') if e.fp else ''
@@ -299,17 +300,19 @@ def fetch_ozon_commissions():
     }
 
     print("  Загружаем цены с комиссиями Ozon...")
+    # v5 /product/info/prices: ответ { items, total, cursor } БЕЗ обёртки result,
+    # пагинация полем cursor (не last_id). Страница ≤100.
     all_items = []
-    last_id = ''
-    limit = 1000
+    cursor = ''
+    limit = 100
 
     while True:
         body = {
             'filter': {'visibility': 'ALL'},
             'limit': limit,
         }
-        if last_id:
-            body['last_id'] = last_id
+        if cursor:
+            body['cursor'] = cursor
 
         try:
             data = api_post(
@@ -320,16 +323,22 @@ def fetch_ozon_commissions():
             print(f"  Ошибка Ozon Prices API: {e}")
             break
 
-        result = data.get('result', {})
-        items = result.get('items', [])
+        items = data.get('items') or data.get('result', {}).get('items', [])
         if not items:
             break
 
-        all_items.extend(items)
-        last_id = result.get('last_id', '')
+        for item in items:
+            all_items.append({
+                'product_id': item.get('product_id'),
+                'offer_id': item.get('offer_id'),
+                'acquiring': item.get('acquiring'),
+                'commissions': item.get('commissions', {}),
+                'price': item.get('price', {}),
+            })
+        cursor = data.get('cursor', '')
         print(f"    Получено {len(all_items)} товаров с комиссиями...")
 
-        if len(items) < limit or not last_id:
+        if len(items) < limit or not cursor:
             break
 
         time.sleep(0.3)
@@ -340,7 +349,7 @@ def fetch_ozon_commissions():
             'type': 'commissions',
             'fetched_at': datetime.now().isoformat(),
             'total': len(all_items),
-            'note': 'Комиссии из цен товаров (sales_percent в поле commissions)',
+            'note': 'Комиссии из цен товаров: полный блок commissions (sales_percent_*, логистика в ₽) + acquiring',
             'products_with_commissions': all_items
         }, COMMISSIONS_DIR / 'ozon_commissions.json')
     else:

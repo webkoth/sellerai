@@ -157,7 +157,7 @@ export const campaigns = [
       {
         slug: 'podarki',
         name: 'Необычный подарок мужчине',
-        path: '/collections/podarki',
+        path: '/catalog',
         keywords: [
           'необычный подарок мужчине',
           'оригинальный подарок мужчине',

@@ -38,35 +38,35 @@ const SCENE = (n: number, o: Record<string, unknown>) => ({
 /** Пять групп РСЯ: кадр, тексты и посадочная у слайда те же, что в объявлении. */
 const GROUPS = [
   {
-    key: "meteority", bg: "rsya-meteority-wide.png", scene: 15, onLight: true, sceneLight: true,
+    key: "meteority", tilePos: "50% 86.8%", bg: "rsya-meteority-wide.png", scene: 15, onLight: true, sceneLight: true,
     series: "Коллекционные метеориты", title: "Настоящий метеорит\nс сертификатом",
     subtitle: "Сихотэ-Алинь, Дронино, Царёв",
     meta: "Каждый образец в одном экземпляре", note: "Вес и место падения — в карточке",
     short: "Метеориты", href: "/collections/meteority",
   },
   {
-    key: "amulety", bg: "rsya-amulety-wide.png", scene: 39, onLight: true, sceneLight: true,
+    key: "amulety", tilePos: "50% 99.8%", bg: "rsya-amulety-wide.png", scene: 39, onLight: true, sceneLight: true,
     series: "Амулеты из метеорита", title: "Резьба\nпо небесному железу",
     subtitle: "кулоны, бусины Дзи, фигурки из Алетая",
     meta: "Метеорит Aletai · Китай · 1898", note: "Ручная резьба",
     short: "Амулеты", href: "/collections/amulety-iz-meteorita",
   },
   {
-    key: "braslety", bg: "rsya-braslety-wide.png", scene: 5, onLight: true, sceneLight: true,
+    key: "braslety", tilePos: "50% 63.1%", bg: "rsya-braslety-wide.png", scene: 5, onLight: true, sceneLight: true,
     series: "Браслеты и подвески", title: "Носить космос\nкаждый день",
     subtitle: "браслеты ручной сборки с метеоритом",
     meta: "От 6 900 ₽", note: "Размер подбираем по запястью",
     short: "Браслеты", href: "/collections/ukrasheniya-s-meteoritom",
   },
   {
-    key: "podarki", bg: "rsya-podarki-wide.png", scene: 18, onLight: false, sceneLight: false,
+    key: "podarki", tilePos: "50% 82.0%", bg: "rsya-podarki-wide.png", scene: 18, onLight: false, sceneLight: false,
     series: "Необычный подарок", title: "Подарок,\nкоторый старше Земли",
     subtitle: "метеорит в коробке с сертификатом",
     meta: "Доставка по России бесплатно", note: "Возврат 7 дней",
     short: "Подарки", href: "/collections/podarki",
   },
   {
-    key: "chasy", bg: "rsya-chasy-light.png", scene: 3, onLight: true, sceneLight: false,
+    key: "chasy", tilePos: "50% 99.4%", bg: "rsya-chasy-light.png", scene: 3, onLight: true, sceneLight: false,
     series: "Часы с метеоритом", title: "Космос\nна запястье",
     subtitle: "вставка из метеорита Муонионалуста",
     meta: "Муонионалуста · Швеция · 1906", note: "Сертификат и коробка",
@@ -98,8 +98,10 @@ export const SITE_HERO_M: ArtifactSlot[] = GROUPS.map((g) => ({
 export const SITE_TILE: ArtifactSlot[] = GROUPS.map((g) => ({
   id: `site-tile-${g.key}`, width: 1200, height: 1200,
   slot: `Главная, плитка — ${g.short} → ${g.href}`,
+  // Квадрат режет портретную сцену: изделие уезжает вниз и заголовок ложится на него.
+  // bgPosition выбирает нижнее окно кадра — низ изделия садится на 0.60, заголовок на 0.68.
   props: SCENE(g.scene, {
-    layout: "poster", onLight: g.sceneLight, textScale: 1.15, bottomInset: 0.1,
+    layout: "poster", onLight: g.sceneLight, textScale: 1.15, bgPosition: g.tilePos,
     series: g.series, title: g.short.toUpperCase(), subtitle: g.subtitle.split(",")[0],
     meta: g.meta,
   }),
@@ -219,6 +221,15 @@ const COVERS = [
   { id: "col-podarki", scene: 18, s: 1.0061, t: 0.0, dark: true,
     series: "Необычный подарок", title: "СТАРШЕ ЗЕМЛИ",
     subtitle: "метеорит в коробке с сертификатом", meta: "Доставка по России бесплатно" },
+  { id: "met-iron", scene: 15, s: 1.0241, t: -0.0241, dark: false,
+    series: "Метеориты", title: "ЖЕЛЕЗНЫЕ",
+    subtitle: "Сихотэ-Алинь, Дронино, Кампо-дель-Сьело", meta: "22 образца в наличии" },
+  { id: "met-stone", scene: 12, s: 1.0645, t: -0.0, dark: false,
+    series: "Метеориты", title: "КАМЕННЫЕ",
+    subtitle: "Царёв, обыкновенные хондриты", meta: "7 образцов в наличии" },
+  { id: "populyarnye", scene: 16, s: 1.0625, t: -0.0625, dark: false,
+    series: "Выбор покупателей", title: "ПОПУЛЯРНОЕ",
+    subtitle: "что покупают чаще всего", meta: "По продажам за полгода" },
 ] as const;
 
 export const SITE_COVERS: ArtifactSlot[] = COVERS.map((c) => ({

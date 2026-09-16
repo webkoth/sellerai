@@ -17,6 +17,8 @@ import { ARTIFACT_SLOTS, HS_SLOTS, CARD_SLOTS } from "./kit/artifactBanners";
 import { PRODUCT_CARD_SLOTS, GLAV_SLOTS, GLAV_MOBILE_SLOTS } from "./kit/cardSlots";
 import { HS_CARD_SLOTS } from "./kit/hsCardSlots";
 import { SITE_SLOTS, SITE_COVERS } from "./kit/siteSlots";
+import { KitCareCard } from "./kit/KitCareCard";
+import { CARE_SLOTS } from "./kit/careSlots";
 import { KitCollectionBanner } from "./kit/KitCollectionBanner";
 import { COLLECTION, COLLECTION_FORMATS } from "./kit/collectionBanners";
 import { LogoReveal } from "./overlays/LogoReveal";
@@ -478,6 +480,20 @@ export const RemotionRoot = () => {
           key={s.id}
           id={`Kit-${s.id.replace(/_/g, "-")}`}
           component={KitArtifactBanner}
+          durationInFrames={1}
+          fps={FPS}
+          width={s.width}
+          height={s.height}
+          defaultProps={s.props}
+        />
+      ))}
+
+      {/* Памятки по уходу — последнее фото карточки товара. */}
+      {CARE_SLOTS.map((s) => (
+        <Composition
+          key={s.id}
+          id={`Kit-${s.id}`}
+          component={KitCareCard}
           durationInFrames={1}
           fps={FPS}
           width={s.width}

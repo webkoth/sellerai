@@ -258,10 +258,10 @@
  {
   "i": 34,
   "slot_id": "hcard-034",
-  "product_bottom": 0.63,
-  "bg_scale": 1.0476,
-  "bg_top": 0.0,
-  "verified_by_eye": true
+  "product_bottom": 0.706,
+  "bg_scale": 1.1574,
+  "bg_top": -0.1574,
+  "verified_by_eye": false
  },
  {
   "i": 36,
@@ -482,10 +482,10 @@
  {
   "i": 66,
   "slot_id": "hcard-066",
-  "product_bottom": 0.752,
-  "bg_scale": 1.371,
-  "bg_top": -0.371,
-  "verified_by_eye": true
+  "product_bottom": 0.706,
+  "bg_scale": 1.1574,
+  "bg_top": -0.1574,
+  "verified_by_eye": false
  },
  {
   "i": 67,
