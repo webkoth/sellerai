@@ -92,7 +92,9 @@ for (const c of plan) {
       UnifiedCampaign: {
         BiddingStrategy: { Search: { BiddingStrategyType: 'SERVING_OFF' }, Network: { BiddingStrategyType: 'WB_MAXIMUM_CONVERSION_RATE', WbMaximumConversionRate: { WeeklySpendLimit: WEEKLY * 1_000_000, GoalId: GOAL_CART } } },
         CounterIds: { Items: [COUNTER] },
-        Settings: [{ Option: 'ADD_METRICA_TAG', Value: 'YES' }],
+        Settings: [{ Option: 'ADD_METRICA_TAG', Value: 'YES' }, { Option: 'ENABLE_SITE_MONITORING', Value: 'YES' }, { Option: 'ALTERNATIVE_TEXTS_ENABLED', Value: 'NO' }],
+        // Метки поверх ссылки объявления: фраза, площадка, устройство, id (аудит 17.09.2026).
+        TrackingParams: 'utm_term={keyword}&placement={source}&source_type={source_type}&device={device_type}&region={region_id}&cid={campaign_id}&gid={gbid}&aid={ad_id}&pid={phrase_id}&match={match_type}',
       },
     }] }))[0]; save(); console.log('   кампания:', rec.campaignId)
   }
@@ -109,7 +111,7 @@ for (const c of plan) {
     }
     if (!gr.adId) {
       gr.adId = ids(await api('ads', 'add', { Ads: [{ AdGroupId: gr.adGroupId, ResponsiveAd: {
-        Titles: x.ad.titles, Texts: x.ad.texts, Href: x.href, DisplayUrlPath: DISPLAY[c.base],
+        Titles: x.ad.titles, Texts: x.ad.texts, Href: x.href, DisplayUrlPath: DISPLAY[x.g.slug] ?? DISPLAY[c.base],
         ...(gr.sitelinkSetId ? { SitelinkSetId: gr.sitelinkSetId } : {}), AdExtensionIds: rec.callouts, AdImageHashes: rec.images[x.g.slug] } }] }))[0]; save()
     }
     if (!gr.keywords) {

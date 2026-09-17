@@ -5,7 +5,7 @@
 | РСЯ · KOTELNIKOVARTIFACT магазин | Коллекционные метеориты | 25 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/meteority?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=meteority&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Амулеты из метеорита | 25 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/amulety-iz-meteorita?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=amulety&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Браслеты и подвески с метеоритом | 20 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/collections/ukrasheniya-s-meteoritom?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=braslety&utm_term={source} |
-| РСЯ · KOTELNIKOVARTIFACT магазин | Необычный подарок мужчине | 22 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/catalog?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=podarki&utm_term={source} |
+| РСЯ · KOTELNIKOVARTIFACT магазин | Необычный подарок мужчине | 21 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/catalog?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=podarki&utm_term={source} |
 | РСЯ · KOTELNIKOVARTIFACT магазин | Часы с метеоритом | 15 | 6 | 3 | 5 | https://kit.kotelnikovartifact.ru/products/chasy-naruchnye-jenskie-s-meteoritom-muonionalusta-podarok-100174?utm_source=yandex&utm_medium=cpc&utm_campaign=kit-rsya&utm_content=chasy&utm_term={source} |
 
 ## Тексты объявлений по группам
@@ -90,7 +90,7 @@
 - Метеориты, часы и украшения с метеоритом. Сертификат, упаковка, доставка 0 ₽.
 - Тому, у кого всё есть: метеорит возрастом 4,5 млрд лет. Сертификат в комплекте.
 
-Фразы (22): необычный подарок мужчине · оригинальный подарок мужчине · подарок мужчине на день рождения · подарок мужу на юбилей · дорогой подарок мужчине · статусный подарок мужчине · эксклюзивный подарок мужчине · подарок мужчине у которого все есть · что подарить мужчине который все имеет · подарок начальнику мужчине · подарок руководителю · подарок партнеру по бизнесу · vip подарок · подарок папе на юбилей · подарок на юбилей 50 лет мужчине · подарок на юбилей 60 лет мужчине · подарок другу необычный · подарок любителю космоса · подарок астроному · подарок ученому · подарок коллекционеру · подарок с историей
+Фразы (21): необычный подарок мужчине · оригинальный подарок мужчине · подарок мужчине на день рождения · подарок мужу на юбилей · дорогой подарок мужчине · статусный подарок мужчине · эксклюзивный подарок мужчине · подарок мужчине у которого все есть · что подарить мужчине который все имеет · подарок начальнику мужчине · подарок руководителю · подарок партнеру по бизнесу · vip подарок · подарок папе на юбилей · подарок на юбилей 50 лет мужчине · подарок на юбилей 60 лет мужчине · подарок другу необычный · подарок любителю космоса · подарок астроному · подарок ученому · подарок с историей
 
 Минус-слова группы: девушке, женщине, маме, жене, ребенку, мальчику, школьнику, прикольный, смешной, бюджетный, до 1000, до 2000, до 3000, до 5000, сертификат впечатление, впечатление
 
