@@ -1,0 +1,166 @@
+{
+ "at": "2026-09-17T10:11:47",
+ "pool_ledger": "2026-09-04T07:16:16.322Z",
+ "changes": [
+  {
+   "variant_id": "01a05c9a-fa7e-7474-8f3f-1591d9e349c8",
+   "barcode": "2050763339860",
+   "status": "PUBLISHED",
+   "name": "Бусина Дзи 9 глаз метеорит Алетай, золото, амулет оберег",
+   "was": 2,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-73f6-8f16-1748fc2c5d8c",
+   "barcode": "2047852183152",
+   "status": "PUBLISHED",
+   "name": "Мужской браслет из натуральных камней с метеоритом Алетай",
+   "was": 2,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-73de-98f3-ea4e3b2c888b",
+   "barcode": "2050860410158",
+   "status": "HIDDEN",
+   "name": "Метеорит Царёв каменный коллекционный образец 169 гр",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-73c8-b907-5ffee138ff59",
+   "barcode": "2041942767208",
+   "status": "HIDDEN",
+   "name": "Подвеска с метеоритом",
+   "was": 0,
+   "becomes": 2
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-7397-af30-67e380f44141",
+   "barcode": "2050769090710",
+   "status": "PUBLISHED",
+   "name": "Бусина Дзи из метеорита Алетай",
+   "was": 2,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-733e-beda-e248d3046827",
+   "barcode": "2051508626795",
+   "status": "HIDDEN",
+   "name": "Амулет бусина Дзи 9 глаз из ливийского стекла, талисман",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-728f-aaa1-4925bbef0e69",
+   "barcode": "2042770600705",
+   "status": "PUBLISHED",
+   "name": "Браслет Синергия с метеоритом Алетай и лабрадоритом",
+   "was": 1,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c99-b686-7759-9681-35d78e69ad15",
+   "barcode": "2042050714764",
+   "status": "HIDDEN",
+   "name": "Подвеска Меркаба с метеоритом Муонионалуста, оберег",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-7740-9e0e-c5c38a51d1ee",
+   "barcode": "2053725583103",
+   "status": "PUBLISHED",
+   "name": "Подвеска женская Сияние с метеоритом Муонионалуста, оберег",
+   "was": 1,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c99-b686-75c2-9c7d-738f9bffec33",
+   "barcode": "2044473196868",
+   "status": "PUBLISHED",
+   "name": "Подвеска с метеоритом Муонионалуста и Молдавитом",
+   "was": 3,
+   "becomes": 2
+  },
+  {
+   "variant_id": "01a05c99-b686-75a6-a836-de5c8e5ac707",
+   "barcode": "2049405433813",
+   "status": "HIDDEN",
+   "name": "Подвеска и метеоритом Серичо",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-7519-8d50-1394c0adfdfd",
+   "barcode": "2053726713943",
+   "status": "PUBLISHED",
+   "name": "Подвеска \"Космическая удача\" с метеоритом Муонионалуста",
+   "was": 2,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c99-b686-7513-a84a-7f12b92b9bee",
+   "barcode": "2051343913708",
+   "status": "HIDDEN",
+   "name": "Мужской браслет из натуральных камней с каменным метеоритом",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-74f1-96e8-fdf32d84f513",
+   "barcode": "2051342634895",
+   "status": "PUBLISHED",
+   "name": "Браслет из индошинита с бусиной Дзи, натуральные камни",
+   "was": 1,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c99-b686-7479-a112-172a597544c7",
+   "barcode": "2043464730241",
+   "status": "HIDDEN",
+   "name": "Подвеска из метеорита Муонионалуста",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-745b-b425-af3709babec6",
+   "barcode": "2055011754587",
+   "status": "PUBLISHED",
+   "name": "Подвеска с метеоритом Серичо",
+   "was": 1,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c9d-589e-7dfd-909d-cead74ed2bb1",
+   "barcode": "2041383032873",
+   "status": "PUBLISHED",
+   "name": "Браслет \"Мудрость Будды\" с бусиной и мантрой для медитации",
+   "was": 1,
+   "becomes": 2
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-7275-b5ca-03281dd0ff8a",
+   "barcode": "2047852179018",
+   "status": "HIDDEN",
+   "name": "Мужской браслет из натуральных камней с метеоритом Алетай",
+   "was": 0,
+   "becomes": 2
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-747c-8bbd-b8af692b368e",
+   "barcode": "2042770600729",
+   "status": "HIDDEN",
+   "name": "Браслет Синергия с метеоритом Алетай и лабрадоритом",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9a-fa7e-7378-bf2b-ca1077a1bb07",
+   "barcode": "2047852194134",
+   "status": "HIDDEN",
+   "name": "Мужской браслет из натуральных камней с метеоритом Алетай",
+   "was": 0,
+   "becomes": 1
+  }
+ ]
+}
