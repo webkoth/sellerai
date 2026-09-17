@@ -1,0 +1,70 @@
+{
+  "campaignId": 714530831,
+  "images": {
+    "meteority": [
+      "z8ZKSmZmq478AGpzF_QxPA",
+      "gzsTNioaEw_fm82D9VmjAA",
+      "ks0B4q17o6aNYi2e-gQ6rg",
+      "9FUZcTW6-5cZkhTQVnOnqQ",
+      "B5qllq7aWYO6wls7_a077w"
+    ],
+    "amulety": [
+      "OkzDLRmom3zbEQCTs8N5VA",
+      "bb2ooAuCJwBimFB8e3xh-g",
+      "ixWelIg8uWg-siRU_E2MSg",
+      "T3un83ixz4Z30y8FNBRSlw",
+      "4A1RFFxkSnv291_moNIp2A"
+    ],
+    "braslety": [
+      "GQ-CzlL0MBadRDx3q5z6cg",
+      "_RV2P0uRqM-1j6i-uy8obQ",
+      "4tPdhApNPKI7SdOSk3LAXQ",
+      "k2XM09ToCqxn7g0o2R6eGA",
+      "iG2G32YTelzAfE7roldImw"
+    ],
+    "podarki": [
+      "B0Fs1ziJ-7t84t5-owiILw",
+      "WWK9ZQlyXks91MwWXBm8Aw",
+      "WjDtj-_P7sOuSZgh6EeuzQ",
+      "kLN6jvmDW3t4w86zoI_SQQ",
+      "PDti3vooo0mwniK4GQMKyw"
+    ],
+    "chasy": [
+      "JcsFmvHQXd5aEukERlL-Bg",
+      "I6lD67DtiQevwUT4JJfJ2A",
+      "ybtga496mrLhSg0WmVB7wQ",
+      "sTWhM3CiStL55BRomHhZdw",
+      "imUImj7Megt4QYVNxf1bkA"
+    ]
+  },
+  "callouts": [
+    44480377,
+    44480378,
+    44480379,
+    44480380,
+    44480381
+  ],
+  "groups": {
+    "meteority": {
+      "adGroupId": 5800047977,
+      "sitelinkSetId": 1511000459
+    },
+    "amulety": {
+      "adGroupId": 5800048057,
+      "sitelinkSetId": 1511000465
+    },
+    "braslety": {
+      "adGroupId": 5800048076,
+      "sitelinkSetId": 1511000472
+    },
+    "podarki": {
+      "adGroupId": 5800048086,
+      "sitelinkSetId": 1511000548
+    },
+    "chasy": {
+      "adGroupId": 5800048142,
+      "sitelinkSetId": 1511000553
+    }
+  },
+  "note": "17.09.2026: черновик, без модерации. Кадры браслета 100207 исключены (распродан). Корректировки: Москва +20%, СПб +10%, до 18 −100%, 18–24 −50%; исключены сети BidSwitch, Inner-active, Inner-active SSP, MobFox, Smaato, Smaato Inc."
+}
