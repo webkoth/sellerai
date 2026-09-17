@@ -6,6 +6,7 @@
 import { z } from 'zod';
 import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
 import { logRead } from '../utils/logger.js';
+import { fetchRealizationDetail } from './finance-report.js';
 
 // ==================== Input Schemas ====================
 
@@ -157,20 +158,16 @@ export async function getPayments(input: GetPaymentsInput): Promise<{
 }> {
   const { dateFrom, dateTo, limit } = input;
 
-  // Statistics API - детальный отчёт о реализации
-  let url = `${WB_API_URLS.statistics}/api/v5/supplier/reportDetailByPeriod?dateFrom=${dateFrom}`;
+  // Детализация отчёта о реализации — новый finance-api (reportDetailByPeriod удалён WB),
+  // одна страница размером limit, строки в прежней форме
+  const { rows } = await fetchRealizationDetail({
+    dateFrom,
+    dateTo: dateTo || new Date().toISOString().split('T')[0],
+    limit,
+    maxPages: 1,
+  });
 
-  if (dateTo) {
-    url += `&dateTo=${dateTo}`;
-  } else {
-    url += `&dateTo=${new Date().toISOString().split('T')[0]}`;
-  }
-
-  url += `&limit=${limit}&rrdid=0`;
-
-  const result = await fetchWB<PaymentData[]>(url);
-
-  const payments = result || [];
+  const payments: PaymentData[] = rows;
 
   // Рассчитываем сводку (API возвращает поля в snake_case)
   const summary: PaymentsSummary = {

@@ -5,8 +5,8 @@
  */
 
 import { z } from 'zod';
-import { createWBHeaders, WB_API_URLS } from '../utils/auth.js';
 import { logRead } from '../utils/logger.js';
+import { fetchRealizationDetail } from './finance-report.js';
 
 // ==================== Input Schemas ====================
 
@@ -106,46 +106,6 @@ export interface RealizationSummary {
   uniqueProducts: number;
 }
 
-// ==================== Fetch Helper ====================
-
-async function fetchWB<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...createWBHeaders(),
-      ...options?.headers,
-    },
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`WB API Error ${response.status}: ${text}`);
-  }
-
-  if (response.status === 204) {
-    return [] as T;
-  }
-
-  const text = await response.text();
-  if (!text || text.trim() === '') {
-    return [] as T;
-  }
-
-  try {
-    const json = JSON.parse(text);
-    // API может вернуть объект с ошибкой вместо массива
-    if (json && typeof json === 'object' && !Array.isArray(json) && json.error) {
-      throw new Error(`WB API Error: ${json.error}`);
-    }
-    return json as T;
-  } catch (e) {
-    if (e instanceof SyntaxError) {
-      throw new Error(`WB API returned invalid JSON: ${text.substring(0, 100)}`);
-    }
-    throw e;
-  }
-}
-
 // ==================== Functions ====================
 
 /**
@@ -159,47 +119,12 @@ export async function getRealizationReport(input: GetRealizationReportInput): Pr
   summary: RealizationSummary;
 }> {
   const { dateFrom, dateTo, limit } = input;
-  const allRecords: RealizationData[] = [];
-
-  let rrdid = 0;
-  let hasMore = true;
-  let requestCount = 0;
-  const maxRequests = 100; // Защита от бесконечного цикла
-  const batchLimit = Math.min(100000, limit);
-
   const endDate = dateTo || new Date().toISOString().split('T')[0];
 
-  while (hasMore && allRecords.length < limit && requestCount < maxRequests) {
-    requestCount++;
-
-    const url = `${WB_API_URLS.statistics}/api/v5/supplier/reportDetailByPeriod?dateFrom=${dateFrom}&dateTo=${endDate}&limit=${batchLimit}&rrdid=${rrdid}`;
-
-    const result = await fetchWB<RealizationData[]>(url);
-
-    // Проверяем что результат - массив
-    if (!result || !Array.isArray(result) || result.length === 0) {
-      hasMore = false;
-      break;
-    }
-
-    allRecords.push(...result);
-
-    // Проверяем нужно ли продолжать пагинацию
-    if (result.length < batchLimit) {
-      hasMore = false;
-    } else {
-      // Используем rrd_id последней записи для следующего запроса (API возвращает snake_case)
-      const lastRecord = result[result.length - 1];
-      if (lastRecord && lastRecord.rrd_id) {
-        rrdid = lastRecord.rrd_id;
-      } else {
-        hasMore = false;
-      }
-    }
-  }
-
-  // Применяем лимит
-  const records = allRecords.slice(0, limit);
+  // Детализация из нового finance-api (reportDetailByPeriod удалён WB); пагинация по rrdId
+  // внутри, строки уже в прежней snake_case-форме. Страница — до 100 000 строк, поэтому
+  // потолок в 5 запросов с запасом покрывает любой период магазина и бережёт суточную квоту.
+  const { rows: records } = await fetchRealizationDetail({ dateFrom, dateTo: endDate, limit, maxPages: 5 });
 
   // Группируем по товарам (API возвращает snake_case)
   const productMap = new Map<number, {
