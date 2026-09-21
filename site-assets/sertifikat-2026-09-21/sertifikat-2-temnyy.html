@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Сертификат подлинности — тёмный</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #1a1c20; }
+  .page {
+    position: relative; width: 210mm; height: 297mm; margin: 0 auto; overflow: hidden;
+    background-image: url("fon-temnyy.jpg");
+    background-size: 106% auto; background-position: 50% 50%; background-repeat: no-repeat;
+    background-color: #24262b;
+    font-family: Georgia, "Times New Roman", serif; color: #e8e6e1;
+  }
+  .inner { position: absolute; inset: 32mm 30mm 34mm 30mm; display: flex; flex-direction: column; }
+  .brand { text-align: center; letter-spacing: .45em; font-size: 10pt; text-transform: uppercase; color: #cfcabf; }
+  .brand small { display: block; letter-spacing: .24em; font-size: 6.5pt; margin-top: 2mm; color: #8d8880; }
+  h1 { margin: 14mm 0 0; text-align: center; font-size: 24pt; letter-spacing: .14em; font-weight: normal; text-transform: uppercase; color: #f4f1ea; }
+  .sub { margin-top: 3mm; text-align: center; font-size: 9.5pt; letter-spacing: .3em; text-transform: uppercase; color: #8d8880; }
+  .rule { width: 46mm; height: 1px; background: linear-gradient(90deg, transparent, #b9b3a4, transparent); margin: 8mm auto 0; }
+  .lead { margin: 10mm 6mm 0; text-align: center; font-size: 11pt; line-height: 1.7; color: #d8d4cb; }
+  .name { margin: 7mm 0 0; text-align: center; font-size: 19pt; letter-spacing: .06em; color: #fff; }
+  table { width: 100%; margin: 10mm 0 0; border-collapse: collapse; font-size: 10.5pt; }
+  td { padding: 2.8mm 0; border-bottom: 1px solid rgba(232,230,225,.18); vertical-align: bottom; }
+  td.k { width: 46%; color: #9b968c; letter-spacing: .04em; }
+  td.v { text-align: right; color: #f1eee8; }
+  .note { margin-top: 8mm; font-size: 8.5pt; line-height: 1.65; color: #9b968c; text-align: center; }
+  .foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; }
+  .sign { width: 74mm; }
+  .sign .line { border-bottom: 1px solid rgba(232,230,225,.45); height: 12mm; }
+  .sign .cap { margin-top: 2mm; font-size: 8pt; color: #9b968c; }
+  .seal { width: 34mm; height: 34mm; border: 1px solid rgba(232,230,225,.35); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 6.5pt; letter-spacing: .12em; color: #9b968c; text-transform: uppercase; }
+  .qr { width: 26mm; text-align: center; }
+  .qr .box { width: 26mm; height: 26mm; border: 1px solid rgba(232,230,225,.35); background: rgba(255,255,255,.06); }
+  .qr .cap { margin-top: 1.5mm; font-size: 6.5pt; color: #9b968c; }
+  @media screen { .page { box-shadow: 0 6px 30px rgba(0,0,0,.6); margin-top: 12px; margin-bottom: 12px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="inner">
+    <div class="brand">Kotelnikovartifact<small>коллекционные метеориты</small></div>
+
+    <h1>Сертификат подлинности</h1>
+    <div class="sub">Certificate of authenticity</div>
+    <div class="rule"></div>
+
+    <p class="lead">Настоящим подтверждается, что представленный образец является подлинным внеземным веществом — метеоритом.</p>
+    <div class="name">{{НАЗВАНИЕ ОБРАЗЦА}}</div>
+
+    <table>
+      <tr><td class="k">Классификация</td><td class="v">{{тип, напр. железный, октаэдрит}}</td></tr>
+      <tr><td class="k">Место находки</td><td class="v">{{регион, страна}}</td></tr>
+      <tr><td class="k">Год падения или находки</td><td class="v">{{год}}</td></tr>
+      <tr><td class="k">Масса образца</td><td class="v">{{0,0}} г</td></tr>
+      <tr><td class="k">Размеры</td><td class="v">{{д × ш × в}} мм</td></tr>
+      <tr><td class="k">Номер образца</td><td class="v">№ {{0000}}</td></tr>
+      <tr><td class="k">Дата выдачи</td><td class="v">{{дд.мм.гггг}}</td></tr>
+    </table>
+
+    <p class="note">Образец существует в единственном экземпляре: фотография в карточке товара сделана именно с него.<br>Сертификат выдан продавцом и действителен вместе с чеком.</p>
+
+    <div class="foot">
+      <div class="sign">
+        <div class="line"></div>
+        <div class="cap">{{ИП, ФИО}} · ИНН {{000000000000}}<br>kit.kotelnikovartifact.ru · 8 (978) 238-97-81</div>
+      </div>
+      <div class="seal">Место<br>печати</div>
+      <div class="qr"><div class="box"></div><div class="cap">QR на карточку</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
