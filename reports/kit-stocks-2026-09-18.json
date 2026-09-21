@@ -1,0 +1,54 @@
+{
+ "at": "2026-09-18T21:29:48",
+ "pool_ledger": "2026-09-04T07:16:16.322Z",
+ "changes": [
+  {
+   "variant_id": "01a05c9c-2561-7b79-8805-2d46a20481da",
+   "barcode": "2044506852761",
+   "status": "HIDDEN",
+   "name": "Метеорит Сихотэ-Алинь",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-7754-842b-04ab9f87de5c",
+   "barcode": "2055074620560",
+   "status": "PUBLISHED",
+   "name": "Серьги с Молдавитом",
+   "was": 2,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-7732-8272-acefa62287c8",
+   "barcode": "2053611934965",
+   "status": "HIDDEN",
+   "name": "Метеорит Сихотэ-Алинь коллекционный образец 8,7 гр, оберег",
+   "was": 0,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c99-b686-75ea-ac87-2c024311de41",
+   "barcode": "2048926572377",
+   "status": "PUBLISHED",
+   "name": "Метеорит Кампо-дель-Сьело железный образец 23,2 гр, оберег",
+   "was": 1,
+   "becomes": 0
+  },
+  {
+   "variant_id": "01a05c99-b686-75c2-9c7d-738f9bffec33",
+   "barcode": "2044473196868",
+   "status": "PUBLISHED",
+   "name": "Подвеска с метеоритом Муонионалуста и Молдавитом",
+   "was": 2,
+   "becomes": 1
+  },
+  {
+   "variant_id": "01a05c9d-589e-7dfd-909d-cead74ed2bb1",
+   "barcode": "2041383032873",
+   "status": "PUBLISHED",
+   "name": "Браслет \"Мудрость Будды\" с бусиной и мантрой для медитации",
+   "was": 1,
+   "becomes": 2
+  }
+ ]
+}
