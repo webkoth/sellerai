@@ -14,6 +14,10 @@
     python3 scripts/kit_sync_prices.py --from <снимок.json>     # показать по сохранённому снимку
     python3 scripts/kit_sync_prices.py --from <снимок.json> --apply
     python3 scripts/kit_sync_prices.py --from <снимок.json> --apply --allow-jump <штрихкод,...>
+    python3 scripts/kit_sync_prices.py --from <снимок.json> --apply --skip <штрихкод,...>
+
+--skip оставляет цену KIT как есть: например, когда цену WB опустила автоакция
+и переносить её на KIT не нужно (Дронино, 24.09.2026).
 
 Защита от битого чтения WB:
 - в снимке должно быть не меньше MIN_WB_GOODS товаров;
@@ -146,12 +150,15 @@ def main():
     allowed = set()
     if "--allow-jump" in sys.argv:
         allowed = set(sys.argv[sys.argv.index("--allow-jump") + 1].split(","))
+    skipped = set()
+    if "--skip" in sys.argv:
+        skipped = set(sys.argv[sys.argv.index("--skip") + 1].split(","))
 
     wb = wb_price_by_barcode(snap)
     changes, jumps = [], []
     for v in kit_variants():
         bc = str(v.get("barcode") or "")
-        if bc not in wb:
+        if bc not in wb or bc in skipped:
             continue
         p = v.get("pricing") or {}
         was_base, was_disc = dec(p.get("price")), dec(p.get("manual_discount_price"))
