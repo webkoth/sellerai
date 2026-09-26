@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import type { NormalizedStock } from "@sync2/shared"
 import type { PoolItemState } from "./pool"
-import { MAX_STOCK_CHANGES_PER_RUN, planStockWrites } from "./stock-plan"
+import { MAX_STOCK_CHANGES_PER_RUN, MAX_STOCK_TO_ZERO_PER_RUN, planStockWrites } from "./stock-plan"
 
 const item = (barcode: string, base: number): PoolItemState => ({
   barcode,
@@ -62,7 +62,30 @@ describe("planStockWrites", () => {
     const items = [item("A", 0), item("B", 0), item("C", 0)]
     const r = planStockWrites(items, [{ channel: "kit", stocks: [s("A", 1), s("B", 1), s("C", 1)] }], { maxChanges: 2 })
     expect(r.changes).toEqual([])
-    expect(r.aborted).toEqual({ count: 3, max: 2 })
+    expect(r.aborted).toEqual({ reason: "changes", count: 3, max: 2 })
+  })
+
+  it("предохранитель обнуления: 21 разный баркод уходит в 0 — abort reason to_zero; 20 — норма", () => {
+    const barcodes = Array.from({ length: 21 }, (_, i) => `B${i}`)
+    const items21 = barcodes.map((b) => item(b, 0))
+    const stocks21 = barcodes.map((b) => s(b, 1))
+
+    const aborted = planStockWrites(items21, [{ channel: "kit", stocks: stocks21 }], { maxChanges: 100 })
+    expect(aborted.changes).toEqual([])
+    expect(aborted.aborted).toEqual({ reason: "to_zero", count: 21, max: MAX_STOCK_TO_ZERO_PER_RUN })
+
+    const ok = planStockWrites(items21.slice(0, 20), [{ channel: "kit", stocks: stocks21.slice(0, 20) }], { maxChanges: 100 })
+    expect(ok.aborted).toBeNull()
+    expect(ok.changes).toHaveLength(20)
+  })
+
+  it("maxToZero из вызывающего кода поднимает порог для первого запуска с массой сирот", () => {
+    const barcodes = Array.from({ length: 21 }, (_, i) => `B${i}`)
+    const stocks21 = barcodes.map((b) => s(b, 1))
+    // Пул пуст (первый запуск) — все 21 баркода сироты, уходят в 0.
+    const r = planStockWrites([], [{ channel: "kit", stocks: stocks21 }], { maxChanges: 100, maxToZero: 21 })
+    expect(r.aborted).toBeNull()
+    expect(r.changes).toHaveLength(21)
   })
 
   it("порог считает разные баркоды, а не строки изменений: один баркод на трёх площадках — не абort", () => {

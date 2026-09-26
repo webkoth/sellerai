@@ -11,6 +11,19 @@ import { aggregateStockByBarcode } from "./stock"
  */
 export const MAX_STOCK_CHANGES_PER_RUN = 120
 
+/**
+ * Отдельный, более строгий предохранитель именно для обнуления: столько
+ * РАЗНЫХ баркодов уходит в 0 (сироты считаются тоже) — уже подозрение на
+ * частичный снимок площадки-мастера, а не реальный уход товара со склада.
+ * Частичный снимок WB (сеть моргнула, отдал половину каталога) иначе
+ * превращается в массовое обнуление на каждом зеркале — это и есть отказ,
+ * который здесь ловится. Порог того же порядка, что MAX_TO_ZERO в старом
+ * скрипте KIT. Первому запуску с законной массой сирот (пока не всё
+ * заведено в WB) нужен свой, более высокий предел — вызывающий код передаёт
+ * его явно через `opts.maxToZero`.
+ */
+export const MAX_STOCK_TO_ZERO_PER_RUN = 20
+
 export interface ChannelStockSnapshot {
   channel: Channel
   stocks: NormalizedStock[]
@@ -29,8 +42,8 @@ export interface StockChange {
 
 export interface StockPlan {
   changes: StockChange[]
-  /** Не null — разных баркодов с изменением больше порога, писать нельзя ничего. */
-  aborted: { count: number; max: number } | null
+  /** Не null — сработал один из предохранителей (см. `reason`), писать нельзя ничего. */
+  aborted: { reason: "changes" | "to_zero"; count: number; max: number } | null
 }
 
 /**
@@ -44,13 +57,17 @@ export interface StockPlan {
  * представлению о факте на WB — рискованно). Удержанный баркод не даёт
  * изменения, даже если он сирота.
  *
+ * Два предохранителя проверяются независимо: сначала по всем изменениям
+ * (`opts.maxChanges`), потом отдельно по обнулениям (`opts.maxToZero`,
+ * умалчивается `MAX_STOCK_TO_ZERO_PER_RUN`). Любой сработавший — план пуст.
+ *
  * Результат отсортирован по площадке, затем по баркоду — детерминированный
  * порядок для логов и тестов, план не зависит от порядка снимков на входе.
  */
 export function planStockWrites(
   items: PoolItemState[],
   snapshots: ChannelStockSnapshot[],
-  opts: { maxChanges: number; hold?: ReadonlyMap<Channel, ReadonlySet<string>> },
+  opts: { maxChanges: number; maxToZero?: number; hold?: ReadonlyMap<Channel, ReadonlySet<string>> },
 ): StockPlan {
   const base = new Map(items.map((i) => [i.barcode, Math.max(0, i.base)]))
   const changes: StockChange[] = []
@@ -68,9 +85,20 @@ export function planStockWrites(
       }
     }
   }
-  changes.sort((a, b) => (a.channel === b.channel ? a.barcode.localeCompare(b.barcode) : a.channel.localeCompare(b.channel)))
+  // Сравнение простыми `<`/`>`, а не localeCompare: детерминированный порядок
+  // по кодовым точкам, без зависимости от локали окружения, где выполняется код.
+  changes.sort((a, b) => {
+    if (a.channel !== b.channel) return a.channel < b.channel ? -1 : 1
+    if (a.barcode !== b.barcode) return a.barcode < b.barcode ? -1 : 1
+    return 0
+  })
 
   const distinctBarcodes = new Set(changes.map((c) => c.barcode)).size
-  if (distinctBarcodes > opts.maxChanges) return { changes: [], aborted: { count: distinctBarcodes, max: opts.maxChanges } }
+  if (distinctBarcodes > opts.maxChanges) return { changes: [], aborted: { reason: "changes", count: distinctBarcodes, max: opts.maxChanges } }
+
+  const maxToZero = opts.maxToZero ?? MAX_STOCK_TO_ZERO_PER_RUN
+  const toZeroBarcodes = new Set(changes.filter((c) => c.before > 0 && c.after === 0).map((c) => c.barcode))
+  if (toZeroBarcodes.size > maxToZero) return { changes: [], aborted: { reason: "to_zero", count: toZeroBarcodes.size, max: maxToZero } }
+
   return { changes, aborted: null }
 }
