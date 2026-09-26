@@ -1,4 +1,4 @@
-import { WRITE_MODES, isChannel, type Channel, type WriteMode } from "@sync2/shared"
+import { WRITE_MODES, errorText, isChannel, type Channel, type WriteMode } from "@sync2/shared"
 
 /** Одна запись на площадку: поле товара было → станет. */
 export interface WriteOp {
@@ -54,15 +54,6 @@ const rank = (m: WriteMode) => WRITE_MODES.indexOf(m)
 
 const isWriteMode = (value: unknown): value is WriteMode =>
   typeof value === "string" && (WRITE_MODES as readonly string[]).includes(value)
-
-/** Текст ошибки для журнала: причина, а не просто "[object Object]" или голый [Error]. */
-function errorText(e: unknown): string {
-  return e instanceof Error
-    ? [e.message, e.cause instanceof Error ? e.cause.message : null].filter(Boolean).join(": ") || e.name
-    : typeof e === "object" && e !== null
-      ? JSON.stringify(e)
-      : String(e)
-}
 
 /** Действует меньший из двух ключей: глобального SYNC_WRITE_MODE и режима площадки в таблице channels. */
 export function effectiveMode(global: WriteMode, channel: WriteMode): WriteMode {
