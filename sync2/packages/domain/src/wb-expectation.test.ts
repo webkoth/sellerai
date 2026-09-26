@@ -192,3 +192,11 @@ describe("WB_SETTLE_MINUTES_SELF", () => {
     expect(WB_SETTLE_MINUTES_SELF).toBeLessThan(WB_SETTLE_MINUTES)
   })
 })
+
+describe("applyWbWriteOutcomes — отрицательный остаток в снимке", () => {
+  it("ожидание WB не ниже нуля: иначе база отклонит сохранение, и пул встанет навсегда", () => {
+    const post = { barcode: "A", base: 0, wbExpected: 0, expectedAt: null, wbSnapshotAt: "2026-09-26T10:00:00.000Z" }
+    const [a] = applyWbWriteOutcomes([post], [], new Set(["A"]), new Map([["A", -1]]), new Map(), "2026-09-26T10:05:00.000Z")
+    expect(a?.wbExpected).toBe(0)
+  })
+})

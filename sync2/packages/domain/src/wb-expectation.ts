@@ -137,7 +137,8 @@ export function applyWbWriteOutcomes(
       return { ...item, wbExpected: prev?.wbExpected ?? item.base }
     }
 
-    const actual = wbActual.get(item.barcode) ?? 0
+    // Площадка может отдать минус (резерв больше остатка) — ожидание не ниже нуля, как база в pool_items.
+    const actual = Math.max(0, wbActual.get(item.barcode) ?? 0)
     const result = results.get(item.barcode)
 
     if (result === "applied") return { ...item, wbExpected: item.base, expectedAt: now }

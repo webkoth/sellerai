@@ -4,7 +4,7 @@ import { seedChannels } from "./channels-seed"
 import { upsertOrders } from "./orders"
 import { loadPoolState, savePoolRun } from "./pool-store"
 import { channels, ordersRaw, poolItems } from "./schema"
-import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
+import { TEST_DATABASE_URL, expectConstraint, freshTestDb, insertRun } from "./test-db"
 
 const RUN1 = "00000000-0000-4000-8000-0000000000d1"
 const RUN2 = "00000000-0000-4000-8000-0000000000d2"
@@ -60,9 +60,10 @@ describe.skipIf(!TEST_DATABASE_URL)("хранилище пула", () => {
   })
 
   it("повтор того же события — откат всего прогона, состояние не меняется", async () => {
-    await expect(
+    await expectConstraint(
       savePoolRun(h.db, { runId: RUN2, items: [{ ...item, base: 0, wbExpected: 0 }], events: [orderEvent()] }),
-    ).rejects.toThrow()
+      "pool_events_order_kind_idx",
+    )
     const [row] = await h.db.select().from(poolItems)
     expect(row!.base).toBe(1)
   })
