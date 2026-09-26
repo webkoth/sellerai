@@ -14,14 +14,15 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core"
-import { CHANNELS, WRITE_MODES } from "@sync2/shared"
+import { CHANNELS, ORDER_LIFECYCLES, WRITE_MODES } from "@sync2/shared"
+
+export { ORDER_LIFECYCLES }
 
 /** 'a','b','c' для check-ограничения из закрытого списка — единый источник в @sync2/shared. */
 const inList = (values: readonly string[]) => sql.raw(values.map((v) => `'${v}'`).join(", "))
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: "string" })
 
-export const ORDER_LIFECYCLES = ["open", "shipped", "cancelled_before_ship", "returned"] as const
 export const POOL_EVENT_KINDS = ["order", "cancel", "wb_signal", "cold_start", "manual"] as const
 export const RUN_STATUSES = ["running", "ok", "partial", "failed"] as const
 export const WRITE_FIELDS = ["stock", "price"] as const
