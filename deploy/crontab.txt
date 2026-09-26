@@ -10,7 +10,9 @@
 # Минуты 3/18/33/48, а не 0/15/30/45: statistics-api WB (/supplier/orders) даёт 1 запрос в минуту и после 429 штрафует
 # на 1,5–2 часа с ростом окна — orders и stocks не должны дёргать его в одну и ту же минуту.
 # 2026-09-03: включено обратно после перевыпуска WB-токена (до 2027-02-15) и пересева леджера от WB (sync/scripts/ledger-reseed-from-wb.mjs)
-3-59/15 * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply >> /opt/sellerai-sync/logs/cron-orders.log 2>&1
+# 2026-09-25: раз в 5 минут (решение владельца, business-os/decisions/2026-09-25-sinhronizaciya-ostatkov-cen-i-kartochek.md):
+# заказы WB давно из marketplace-api (300/мин), statistics-api синк не трогает; минуты 3,8,…,58 — мимо :00/:30 stocks.
+3-58/5 * * * * flock -n /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply >> /opt/sellerai-sync/logs/cron-orders.log 2>&1
 # full-reconcile остатков (пополнения, ручные правки, выравнивание) — каждые 30 мин
 # flock -w 15: подождать ledger.lock до 15с (order-тик держит его ~1с), чтобы не скипать reconcile при коллизии в :00/:30
 */30 * * * * flock -w 15 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply >> /opt/sellerai-sync/logs/cron-stocks.log 2>&1
