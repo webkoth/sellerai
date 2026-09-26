@@ -14,7 +14,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core"
-import { CHANNELS, ORDER_LIFECYCLES, WRITE_MODES } from "@sync2/shared"
+import { CHANNELS, ORDER_LIFECYCLES, WRITE_MODES, type NormalizedStock } from "@sync2/shared"
 
 export { ORDER_LIFECYCLES }
 
@@ -80,8 +80,8 @@ export const stockSnapshotsRaw = pgTable(
     channelId: integer("channel_id").notNull().references(() => channels.id),
     takenAt: ts("taken_at").notNull(),
     runId: uuid("run_id").notNull().references(() => runs.runId),
-    /** NormalizedStock[] из @sync2/shared — форма как в finstock. */
-    stocks: jsonb("stocks").notNull(),
+    /** Форма как NormalizedStock[] в finstock. */
+    stocks: jsonb("stocks").$type<NormalizedStock[]>().notNull(),
   },
   (t) => [uniqueIndex("stock_snapshots_channel_taken_idx").on(t.channelId, t.takenAt)],
 )

@@ -46,4 +46,15 @@ describe.skipIf(!TEST_DATABASE_URL)("хранилище заказов", () => {
     expect(typeof rows[0]!.id).toBe("number")
     expect(rows[0]).toMatchObject({ channelId: ozon, barcode: "A", quantity: 1, occurredAt: "2026-09-26T10:00:00.000Z" })
   })
+
+  it("дубль ключа в одной пачке — берётся последняя строка, без ошибки", async () => {
+    const n = await upsertOrders(h.db, ozon, [
+      o("OZ-DUP", { occurredAt: "2026-01-01T00:00:00.000Z" }),
+      o("OZ-DUP", { occurredAt: "2026-01-01T00:00:00.000Z", lifecycle: "cancelled_before_ship" }),
+    ])
+    expect(n).toBe(1)
+    const rows = await h.db.select().from(ordersRaw).where(eq(ordersRaw.externalId, "OZ-DUP"))
+    expect(rows).toHaveLength(1)
+    expect(rows[0]!.lifecycle).toBe("cancelled_before_ship")
+  })
 })

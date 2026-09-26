@@ -20,12 +20,21 @@ export interface OrderUpsert {
  * Идемпотентная запись заказов площадки: новая строка вставляется, известная —
  * обновляет статус, баркод, количество и сырьё. updated_at ставится явно:
  * defaultNow() работает только на вставке.
+ *
+ * Внутри одной пачки строки с одинаковым `(externalId, line)` схлопываются в
+ * последнюю: постранично пересекающиеся выдачи площадки иначе дают дубль
+ * ключа в одном INSERT, и Postgres роняет весь запрос ("ON CONFLICT DO UPDATE
+ * command cannot affect row a second time" — конфликтовать со строкой можно
+ * только один раз за команду).
  */
 export async function upsertOrders(db: Db, channelId: number, rows: OrderUpsert[]): Promise<number> {
   if (rows.length === 0) return 0
+  const dedup = new Map<string, OrderUpsert>()
+  for (const r of rows) dedup.set(`${r.externalId}\u0000${r.line}`, r)
+  const values = [...dedup.values()]
   await db
     .insert(ordersRaw)
-    .values(rows.map((r) => ({ ...r, channelId })))
+    .values(values.map((r) => ({ ...r, channelId })))
     .onConflictDoUpdate({
       target: [ordersRaw.channelId, ordersRaw.externalId, ordersRaw.line],
       set: {
@@ -36,10 +45,17 @@ export async function upsertOrders(db: Db, channelId: number, rows: OrderUpsert[
         updatedAt: sql`now()`,
       },
     })
-  return rows.length
+  return values.length
 }
 
-/** Заказы всех площадок с момента `since` (ISO) — вход для toPoolOrders. */
+/**
+ * Заказы всех площадок с момента `since` (ISO) — вход для toPoolOrders.
+ *
+ * `since` — щедрое скользящее окно, а не «с прошлого прогона»: обновление
+ * жизненного цикла сохраняет исходный `occurredAt` заказа, поэтому поздняя
+ * отмена старого заказа видна, только пока сам заказ ещё внутри окна. План —
+ * не короче 60 дней (см. «Контракт адаптеров для плана 1.3»).
+ */
 export async function loadOrdersSince(db: Db, since: string): Promise<OrderRowForPool[]> {
   const rows = await db
     .select({

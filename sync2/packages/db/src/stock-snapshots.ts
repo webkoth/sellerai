@@ -26,5 +26,5 @@ export async function latestStockSnapshots(db: Db): Promise<Map<number, { takenA
     })
     .from(stockSnapshotsRaw)
     .orderBy(stockSnapshotsRaw.channelId, desc(stockSnapshotsRaw.takenAt))
-  return new Map(rows.map((r) => [r.channelId, { takenAt: toIso(r.takenAt), stocks: r.stocks as NormalizedStock[] }]))
+  return new Map(rows.map((r) => [r.channelId, { takenAt: toIso(r.takenAt), stocks: r.stocks }]))
 }
