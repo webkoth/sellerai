@@ -19,11 +19,17 @@ describe.skipIf(!TEST_DATABASE_URL)("seedChannels", () => {
     expect(rows.every((r) => r.writeMode === "off")).toBe(true)
   })
 
-  it("повторный сид не дублирует и не сбрасывает режим записи", async () => {
-    await h.db.update(channels).set({ writeMode: "apply" }).where(eq(channels.code, "kit"))
+  it("повторный сид не дублирует и не сбрасывает режим записи и склад", async () => {
+    await seedChannels(h.db)
+    await h.db
+      .update(channels)
+      .set({ writeMode: "apply", warehouseRef: "01a05cb0-214d-7c49-afc5-df8853f9d7e1" })
+      .where(eq(channels.code, "kit"))
     await seedChannels(h.db)
     const rows = await h.db.select().from(channels)
     expect(rows).toHaveLength(5)
-    expect(rows.find((r) => r.code === "kit")?.writeMode).toBe("apply")
+    const kit = rows.find((r) => r.code === "kit")
+    expect(kit?.writeMode).toBe("apply")
+    expect(kit?.warehouseRef).toBe("01a05cb0-214d-7c49-afc5-df8853f9d7e1")
   })
 })

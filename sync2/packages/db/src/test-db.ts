@@ -27,6 +27,9 @@ export async function freshTestDb() {
  * Ждёт, что запрос нарушит ограничение `name`. Drizzle 0.44+ оборачивает ошибку базы
  * в DrizzleQueryError («Failed query: …»), а исходная ошибка postgres.js — в `cause`,
  * с полем `constraint_name`. Поэтому `.rejects.toThrow(/имя/)` здесь не работает.
+ * Сравнение с `constraint_name` — точное, а не по вхождению: иначе будущее ограничение
+ * `orders_raw_lifecycle_check_v2` молча пройдёт проверку, рассчитанную на `..._check`.
+ * На вхождение в `message` откатываемся только тогда, когда `constraint_name` в ошибке нет.
  */
 export async function expectConstraint(query: PromiseLike<unknown>, name: string): Promise<void> {
   const err = await Promise.resolve(query).then(
@@ -35,6 +38,10 @@ export async function expectConstraint(query: PromiseLike<unknown>, name: string
   )
   if (err === null) throw new Error(`ожидалось нарушение ${name}, но запрос прошёл`)
   const cause = ((err as { cause?: unknown }).cause ?? err) as { constraint_name?: string; message?: string }
-  const text = `${cause.constraint_name ?? ""} ${cause.message ?? ""}`
-  if (!text.includes(name)) throw new Error(`ожидалось нарушение ${name}, получено: ${text}`)
+  const matched = cause.constraint_name !== undefined ? cause.constraint_name === name : (cause.message ?? "").includes(name)
+  if (!matched) {
+    throw new Error(
+      `ожидалось нарушение ${name}, получено: constraint_name="${cause.constraint_name ?? ""}" message="${cause.message ?? ""}"`,
+    )
+  }
 }
