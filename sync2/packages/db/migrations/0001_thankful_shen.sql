@@ -1,0 +1,4 @@
+ALTER TABLE "pool_events" ADD CONSTRAINT "pool_events_run_id_runs_run_id_fk" FOREIGN KEY ("run_id") REFERENCES "public"."runs"("run_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "stock_snapshots_raw" ADD CONSTRAINT "stock_snapshots_raw_run_id_runs_run_id_fk" FOREIGN KEY ("run_id") REFERENCES "public"."runs"("run_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "pool_items" ADD CONSTRAINT "pool_items_base_check" CHECK ("pool_items"."base" >= 0);--> statement-breakpoint
+ALTER TABLE "pool_items" ADD CONSTRAINT "pool_items_wb_expected_check" CHECK ("pool_items"."wb_expected" >= 0);

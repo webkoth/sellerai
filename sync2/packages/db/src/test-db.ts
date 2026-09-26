@@ -1,7 +1,9 @@
 import { fileURLToPath } from "node:url"
 import { sql } from "drizzle-orm"
 import { migrate } from "drizzle-orm/postgres-js/migrator"
+import type { Db } from "./client"
 import { createDb } from "./client"
+import { runs } from "./schema"
 
 export const TEST_DATABASE_URL = process.env.TEST_DATABASE_URL
 
@@ -21,6 +23,11 @@ export async function freshTestDb() {
   await handle.db.execute(sql`create schema public`)
   await migrate(handle.db, { migrationsFolder })
   return handle
+}
+
+/** Запуск в журнале — всё с run_id ссылается на runs, как в жизни, где пишет только withRun. */
+export async function insertRun(db: Db, runId: string): Promise<void> {
+  await db.insert(runs).values({ runId, job: "test", status: "running", writeMode: "off", startedAt: "2026-09-26T09:00:00.000Z" })
 }
 
 /**

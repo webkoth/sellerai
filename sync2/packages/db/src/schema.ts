@@ -79,8 +79,8 @@ export const stockSnapshotsRaw = pgTable(
     id: bigserial("id", { mode: "number" }).primaryKey(),
     channelId: integer("channel_id").notNull().references(() => channels.id),
     takenAt: ts("taken_at").notNull(),
-    runId: uuid("run_id").notNull(),
-    /** [{ barcode, externalId, quantity }] — уже нормализованный адаптером вид. */
+    runId: uuid("run_id").notNull().references(() => runs.runId),
+    /** NormalizedStock[] из @sync2/shared — форма как в finstock. */
     stocks: jsonb("stocks").notNull(),
   },
   (t) => [uniqueIndex("stock_snapshots_channel_taken_idx").on(t.channelId, t.takenAt)],
@@ -114,14 +114,22 @@ export const ordersRaw = pgTable(
  * Состояние пула на баркод — те же поля, что PoolItemState в finstock/packages/domain/src/pool.ts.
  * Без FK на products: баркод из снимка WB, которого ещё нет в справочнике, не должен ронять прогон пула целиком.
  */
-export const poolItems = pgTable("pool_items", {
-  barcode: text("barcode").primaryKey(),
-  base: integer("base").notNull(),
-  wbExpected: integer("wb_expected").notNull(),
-  expectedAt: ts("expected_at"),
-  wbSnapshotAt: ts("wb_snapshot_at"),
-  updatedAt: ts("updated_at").notNull().defaultNow(),
-})
+export const poolItems = pgTable(
+  "pool_items",
+  {
+    barcode: text("barcode").primaryKey(),
+    base: integer("base").notNull(),
+    wbExpected: integer("wb_expected").notNull(),
+    expectedAt: ts("expected_at"),
+    wbSnapshotAt: ts("wb_snapshot_at"),
+    updatedAt: ts("updated_at").notNull().defaultNow(),
+  },
+  (t) => [
+    // Домен не опускает базу ниже нуля; отрицательное значение в базе — ошибка кода, а не данные.
+    check("pool_items_base_check", sql`${t.base} >= 0`),
+    check("pool_items_wb_expected_check", sql`${t.wbExpected} >= 0`),
+  ],
+)
 
 /** Журнал пула. Дубль события отсекает база, а не код. */
 export const poolEvents = pgTable(
@@ -137,7 +145,7 @@ export const poolEvents = pgTable(
     orderId: bigint("order_id", { mode: "number" }).references(() => ordersRaw.id),
     snapshotAt: ts("snapshot_at"),
     occurredAt: ts("occurred_at").notNull(),
-    runId: uuid("run_id").notNull(),
+    runId: uuid("run_id").notNull().references(() => runs.runId),
     detail: jsonb("detail"),
   },
   (t) => [
