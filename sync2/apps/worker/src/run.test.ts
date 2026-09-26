@@ -1,13 +1,16 @@
-import { describe, expect, it } from "vitest"
+import { beforeEach, describe, expect, it } from "vitest"
 import type { RunFinish, RunStart, RunStore } from "@sync2/shared"
 import { createLogger } from "./log"
 import { withRun } from "./run"
 
-function memoryStore(opts: { failFinish?: boolean } = {}) {
+function memoryStore(opts: { failFinish?: boolean; failStart?: boolean } = {}) {
   const started: RunStart[] = []
   const finished: Array<{ runId: string } & RunFinish> = []
   const store: RunStore = {
-    start: async (r) => void started.push(r),
+    start: async (r) => {
+      if (opts.failStart) throw new Error("не удалось открыть соединение")
+      started.push(r)
+    },
     finish: async (runId, r) => {
       if (opts.failFinish) throw new Error("соединение с базой потеряно")
       finished.push({ runId, ...r })
@@ -17,6 +20,9 @@ function memoryStore(opts: { failFinish?: boolean } = {}) {
 }
 
 const lines: string[] = []
+beforeEach(() => {
+  lines.length = 0
+})
 const log = createLogger("debug", { write: (s: string) => void lines.push(s) })
 const deps = (store: RunStore) => ({
   store,
@@ -81,5 +87,22 @@ describe("withRun", () => {
     expect(r.status).toBe("failed")
     const entry = lines.map((l) => JSON.parse(l)).find((x) => x.msg === "джоба упала" && x.job === "writes-journal")
     expect(entry?.outcomes?.[0]?.barcode).toBe("A")
+  })
+
+  it("джоба бросила null — failed, withRun не падает", async () => {
+    const m = memoryStore()
+    const r = await withRun("ping", deps(m.store), async () => {
+      throw null
+    })
+    expect(r.status).toBe("failed")
+    expect(m.finished[0]).toMatchObject({ status: "failed" })
+  })
+
+  it("сбой открытия журнала — withRun падает, а не притворяется запуском", async () => {
+    const m = memoryStore({ failStart: true })
+    await expect(withRun("ping", deps(m.store), async () => ({ counters: {} }))).rejects.toThrow(
+      "не удалось открыть соединение",
+    )
+    expect(lines.some((l) => l.includes("не удалось открыть запись журнала"))).toBe(true)
   })
 })

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import type { RunStatus, RunStore, WriteMode } from "@sync2/shared"
+import { errorText, type RunStatus, type RunStore, type WriteMode } from "@sync2/shared"
 import type { Logger } from "./log"
 
 export interface RunContext {
@@ -43,7 +43,13 @@ export async function withRun(
   const runId = (deps.newId ?? randomUUID)()
   const log = deps.log.child({ run_id: runId, job })
 
-  await deps.store.start({ runId, job, writeMode: deps.writeMode, startedAt: now().toISOString() })
+  try {
+    await deps.store.start({ runId, job, writeMode: deps.writeMode, startedAt: now().toISOString() })
+  } catch (e: unknown) {
+    // Открывающая запись не удалась — запуска нет, притворяться им нельзя: наружу летит исключение.
+    log.error({ err: e }, "не удалось открыть запись журнала")
+    throw e
+  }
   log.info({ writeMode: deps.writeMode }, "старт")
 
   let outcome: RunOutcome
@@ -51,11 +57,12 @@ export async function withRun(
     const result = await fn({ runId, log })
     outcome = { runId, status: result.status ?? "ok", counters: result.counters, error: null }
   } catch (e: unknown) {
-    const error = e instanceof Error ? e.message : String(e)
+    const error = errorText(e)
     // Ошибка записи площадок (WriteJournalError из @sync2/platforms) несёт итоги по
     // позициям: площадки уже могли принять изменения, эти строки нельзя потерять
     // в одном текстовом сообщении. Duck-typing вместо импорта platforms в worker.
-    const outcomes = (e as { outcomes?: unknown }).outcomes
+    // e может быть null/не-объектом (throw null/throw "текст") — проверяем перед доступом к полю.
+    const outcomes = e !== null && typeof e === "object" ? (e as { outcomes?: unknown }).outcomes : undefined
     if (outcomes !== undefined) {
       log.error({ err: e, outcomes }, "джоба упала")
     } else {
