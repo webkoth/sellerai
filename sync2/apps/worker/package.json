@@ -1,0 +1,12 @@
+{
+  "name": "@sync2/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sync2/db": "*",
+    "@sync2/platforms": "*",
+    "@sync2/shared": "*",
+    "pino": "^10.3.1"
+  }
+}
