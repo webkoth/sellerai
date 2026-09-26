@@ -8,6 +8,7 @@ const pkg = (name: string) => fileURLToPath(new URL(`./packages/${name}/src/inde
 const alias = {
   "@sync2/shared": pkg("shared"),
   "@sync2/db": pkg("db"),
+  "@sync2/domain": pkg("domain"),
   "@sync2/platforms": pkg("platforms"),
 }
 
