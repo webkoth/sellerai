@@ -109,9 +109,12 @@ export const ordersRaw = pgTable(
   ],
 )
 
-/** Состояние пула на баркод — те же поля, что PoolItemState в finstock/packages/domain/src/pool.ts. */
+/**
+ * Состояние пула на баркод — те же поля, что PoolItemState в finstock/packages/domain/src/pool.ts.
+ * Без FK на products: баркод из снимка WB, которого ещё нет в справочнике, не должен ронять прогон пула целиком.
+ */
 export const poolItems = pgTable("pool_items", {
-  barcode: text("barcode").primaryKey().references(() => products.barcode),
+  barcode: text("barcode").primaryKey(),
   base: integer("base").notNull(),
   wbExpected: integer("wb_expected").notNull(),
   expectedAt: ts("expected_at"),
@@ -138,12 +141,19 @@ export const poolEvents = pgTable(
   },
   (t) => [
     check("pool_events_kind_check", sql`${t.kind} in (${inList(POOL_EVENT_KINDS)})`),
+    // Вид события обязан нести свой ключ: иначе частичный индекс ниже его не видит и дубль проходит.
+    check("pool_events_order_ref_check", sql`(${t.kind} in ('order', 'cancel')) = (${t.orderId} is not null)`),
+    check(
+      "pool_events_snapshot_ref_check",
+      sql`(${t.kind} in ('wb_signal', 'cold_start')) = (${t.snapshotAt} is not null)`,
+    ),
     // Заказ списывается ровно один раз и отменяется ровно один раз.
     uniqueIndex("pool_events_order_kind_idx").on(t.orderId, t.kind).where(sql`${t.orderId} is not null`),
     // Один снимок WB даёт не больше одного сигнала на баркод.
     uniqueIndex("pool_events_snapshot_kind_idx")
       .on(t.barcode, t.kind, t.snapshotAt)
       .where(sql`${t.snapshotAt} is not null`),
+    index("pool_events_barcode_occurred_idx").on(t.barcode, t.occurredAt),
   ],
 )
 

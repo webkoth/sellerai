@@ -4,7 +4,12 @@ import * as schema from "./schema"
 
 /** Соединение передаётся явно: воркер берёт URL из loadConfig, тесты — из TEST_DATABASE_URL. */
 export function createDb(url: string, opts: { max?: number } = {}) {
-  const client = postgres(url, { max: opts.max ?? 5, onnotice: () => {} })
+  const client = postgres(url, {
+    max: opts.max ?? 5,
+    onnotice: () => {},
+    // Время из базы — в UTC на любой машине: иначе строки timestamptz расходятся между Mac и VPS.
+    connection: { TimeZone: "UTC" },
+  })
   return { db: drizzle(client, { schema }), close: () => client.end() }
 }
 

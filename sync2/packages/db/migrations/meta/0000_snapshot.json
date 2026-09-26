@@ -1,5 +1,5 @@
 {
-  "id": "ae8911eb-f194-422b-91b4-57f72b460ee1",
+  "id": "4988eb8d-9b4d-4978-9102-d83dceaaf9f8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -461,6 +461,27 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "pool_events_barcode_occurred_idx": {
+          "name": "pool_events_barcode_occurred_idx",
+          "columns": [
+            {
+              "expression": "barcode",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "occurred_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -498,6 +519,14 @@
         "pool_events_kind_check": {
           "name": "pool_events_kind_check",
           "value": "\"pool_events\".\"kind\" in ('order', 'cancel', 'wb_signal', 'cold_start', 'manual')"
+        },
+        "pool_events_order_ref_check": {
+          "name": "pool_events_order_ref_check",
+          "value": "(\"pool_events\".\"kind\" in ('order', 'cancel')) = (\"pool_events\".\"order_id\" is not null)"
+        },
+        "pool_events_snapshot_ref_check": {
+          "name": "pool_events_snapshot_ref_check",
+          "value": "(\"pool_events\".\"kind\" in ('wb_signal', 'cold_start')) = (\"pool_events\".\"snapshot_at\" is not null)"
         }
       },
       "isRLSEnabled": false
@@ -545,21 +574,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "pool_items_barcode_products_barcode_fk": {
-          "name": "pool_items_barcode_products_barcode_fk",
-          "tableFrom": "pool_items",
-          "tableTo": "products",
-          "columnsFrom": [
-            "barcode"
-          ],
-          "columnsTo": [
-            "barcode"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

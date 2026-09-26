@@ -48,7 +48,9 @@ CREATE TABLE "pool_events" (
 	"occurred_at" timestamp with time zone NOT NULL,
 	"run_id" uuid NOT NULL,
 	"detail" jsonb,
-	CONSTRAINT "pool_events_kind_check" CHECK ("pool_events"."kind" in ('order', 'cancel', 'wb_signal', 'cold_start', 'manual'))
+	CONSTRAINT "pool_events_kind_check" CHECK ("pool_events"."kind" in ('order', 'cancel', 'wb_signal', 'cold_start', 'manual')),
+	CONSTRAINT "pool_events_order_ref_check" CHECK (("pool_events"."kind" in ('order', 'cancel')) = ("pool_events"."order_id" is not null)),
+	CONSTRAINT "pool_events_snapshot_ref_check" CHECK (("pool_events"."kind" in ('wb_signal', 'cold_start')) = ("pool_events"."snapshot_at" is not null))
 );
 --> statement-breakpoint
 CREATE TABLE "pool_items" (
@@ -112,7 +114,6 @@ ALTER TABLE "listings" ADD CONSTRAINT "listings_barcode_products_barcode_fk" FOR
 ALTER TABLE "orders_raw" ADD CONSTRAINT "orders_raw_channel_id_channels_id_fk" FOREIGN KEY ("channel_id") REFERENCES "public"."channels"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "pool_events" ADD CONSTRAINT "pool_events_channel_id_channels_id_fk" FOREIGN KEY ("channel_id") REFERENCES "public"."channels"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "pool_events" ADD CONSTRAINT "pool_events_order_id_orders_raw_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders_raw"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "pool_items" ADD CONSTRAINT "pool_items_barcode_products_barcode_fk" FOREIGN KEY ("barcode") REFERENCES "public"."products"("barcode") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "stock_snapshots_raw" ADD CONSTRAINT "stock_snapshots_raw_channel_id_channels_id_fk" FOREIGN KEY ("channel_id") REFERENCES "public"."channels"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "writes" ADD CONSTRAINT "writes_run_id_runs_run_id_fk" FOREIGN KEY ("run_id") REFERENCES "public"."runs"("run_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "writes" ADD CONSTRAINT "writes_channel_id_channels_id_fk" FOREIGN KEY ("channel_id") REFERENCES "public"."channels"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -122,6 +123,7 @@ CREATE UNIQUE INDEX "orders_raw_channel_ext_line_idx" ON "orders_raw" USING btre
 CREATE INDEX "orders_raw_barcode_idx" ON "orders_raw" USING btree ("barcode");--> statement-breakpoint
 CREATE UNIQUE INDEX "pool_events_order_kind_idx" ON "pool_events" USING btree ("order_id","kind") WHERE "pool_events"."order_id" is not null;--> statement-breakpoint
 CREATE UNIQUE INDEX "pool_events_snapshot_kind_idx" ON "pool_events" USING btree ("barcode","kind","snapshot_at") WHERE "pool_events"."snapshot_at" is not null;--> statement-breakpoint
+CREATE INDEX "pool_events_barcode_occurred_idx" ON "pool_events" USING btree ("barcode","occurred_at");--> statement-breakpoint
 CREATE INDEX "runs_job_started_idx" ON "runs" USING btree ("job","started_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "stock_snapshots_channel_taken_idx" ON "stock_snapshots_raw" USING btree ("channel_id","taken_at");--> statement-breakpoint
 CREATE UNIQUE INDEX "writes_run_channel_barcode_field_idx" ON "writes" USING btree ("run_id","channel_id","barcode","field");
