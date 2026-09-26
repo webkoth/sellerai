@@ -1841,3 +1841,18 @@ git commit -m "sync2: README каркаса"
   прогон: перед пулом — upsert заготовки `products` из снимка (1.2).
 - **`counters` у упавшей джобы — `{}`.** Если нужны частичные счётчики упавшей джобы, джоба
   возвращает `partial` сама, а не бросает.
+- **Из финальной проверки ветки (26.09):**
+  - 1.2: первыми — тесты на живой базе для `pool_events_snapshot_kind_idx`, `pool_events_snapshot_ref_check`,
+    `writes_run_channel_barcode_field_idx` и его check, `stock_snapshots_channel_taken_idx`.
+  - 1.2: единое правило FK на `runs.run_id` (сейчас есть только у `writes`) — решить до новой миграции;
+    схему менять только новой миграцией, 0000 не править.
+  - 1.2: перенести `NormalizedStock` и `aggregateStockByBarcode` из finstock, форму зафиксировать в
+    `@sync2/shared` и поправить комментарий у `stock_snapshots_raw.stocks`; новый `packages/domain` —
+    псевдоним в `vitest.config.ts`, без импорта значений из shared.
+  - 1.3: `record` для `writes` — пустой массив не вставлять (`.values([])` бросает); `redact` в pino до
+    появления токенов; `--env-file-if-exists` или `.env` на VPS; advisory lock от наложения кронов;
+    длительность запуска в `runs` (правило finstock).
+  - До переноса в finstock: eslint и тест-страж расширений импортов; CLI — `help`/неизвестная команда
+    до `loadConfig`, ошибки конфига через `errorText` без стектрейса.
+  - Спека §5 (abort > 120 изменений, нет записи остатков при сбое чтения заказов) — в 1.3/1.4;
+    сверить формулировки спеки (`PlatformWriter`, `--apply`) с кодом (`executeWrites`, режимы).
