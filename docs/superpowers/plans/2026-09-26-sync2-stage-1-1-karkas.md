@@ -1816,3 +1816,28 @@ git commit -m "sync2: README каркаса"
 ## Следующий план
 
 План 1.2 «домен пула» (`docs/superpowers/plans/`, пишется после приёмки этого) — перенос `reconcilePool` из `finstock/packages/domain/src/pool.ts` с тестами, жизненный цикл заказа (`cancelled_before_ship` / `returned`), цели по площадкам.
+
+## Заметки из проверок 1.1 — учесть в планах 1.2–1.4
+
+Собраны при исполнении плана 26.09.2026 (проверки по задачам).
+
+- **Отклонения от текста этого плана, принятые при проверке:** в `pool_events` добавлены
+  `pool_events_order_ref_check`, `pool_events_snapshot_ref_check` (вид события обязан нести
+  свой ключ — иначе частичный индекс не видит дубль) и индекс `(barcode, occurred_at)`;
+  у `pool_items` нет FK на `products`; `createDb` закрепляет `TimeZone: UTC`;
+  `executeWrites` бросает `WriteJournalError` с итогами, отсекает дубли, битые режимы и
+  неизвестные площадки считает `off`; `errorText` — в `@sync2/shared`; `withRun` переживает
+  `throw null` и логирует сбой открытия журнала; версии зависимостей — как в finstock.
+- **Время.** Колонки `timestamptz` в режиме `string` возвращаются в текстовом формате Postgres
+  (`2026-09-26 11:15:54.405+00`), а не ISO. Домен пула (1.2) живёт в ISO 8601 — нормализовать
+  в слое репозитория через `new Date(x).toISOString()`.
+- **bigint через сырой SQL.** Режим `number` действует только через конструктор запросов;
+  `db.execute(sql\`…\`)` отдаёт int8 строкой. Множества `applied`/`cancelledApplied`
+  (`ReadonlySet<number>`) строить только через `db.select({ orderId: poolEvents.orderId })`,
+  иначе `Set.has(number)` всегда false и заказы спишутся повторно.
+- **`updated_at` при upsert.** `defaultNow()` работает только на вставке — в
+  `onConflictDoUpdate.set` явно передавать `updatedAt: sql\`now()\``.
+- **Заготовки товаров.** Баркод из снимка WB, которого ещё нет в `products`, не должен ронять
+  прогон: перед пулом — upsert заготовки `products` из снимка (1.2).
+- **`counters` у упавшей джобы — `{}`.** Если нужны частичные счётчики упавшей джобы, джоба
+  возвращает `partial` сама, а не бросает.
