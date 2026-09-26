@@ -1,4 +1,4 @@
-import { WRITE_MODES, type Channel, type WriteMode } from "@sync2/shared"
+import { WRITE_MODES, isChannel, type Channel, type WriteMode } from "@sync2/shared"
 
 /** Одна запись на площадку: поле товара было → станет. */
 export interface WriteOp {
@@ -36,7 +36,33 @@ export interface WriteDeps {
   record: (outcomes: WriteOutcome[]) => Promise<void>
 }
 
+/**
+ * Журнал не записался после того, как площадки уже могли принять изменения —
+ * молча проглотить это нельзя, но и итоги терять нельзя: они едут вместе с ошибкой.
+ */
+export class WriteJournalError extends Error {
+  public readonly outcomes: WriteOutcome[]
+
+  constructor(message: string, options: { cause: unknown; outcomes: WriteOutcome[] }) {
+    super(message, { cause: options.cause })
+    this.name = "WriteJournalError"
+    this.outcomes = options.outcomes
+  }
+}
+
 const rank = (m: WriteMode) => WRITE_MODES.indexOf(m)
+
+const isWriteMode = (value: unknown): value is WriteMode =>
+  typeof value === "string" && (WRITE_MODES as readonly string[]).includes(value)
+
+/** Текст ошибки для журнала: причина, а не просто "[object Object]" или голый [Error]. */
+function errorText(e: unknown): string {
+  return e instanceof Error
+    ? [e.message, e.cause instanceof Error ? e.cause.message : null].filter(Boolean).join(": ") || e.name
+    : typeof e === "object" && e !== null
+      ? JSON.stringify(e)
+      : String(e)
+}
 
 /** Действует меньший из двух ключей: глобального SYNC_WRITE_MODE и режима площадки в таблице channels. */
 export function effectiveMode(global: WriteMode, channel: WriteMode): WriteMode {
@@ -48,21 +74,37 @@ export function effectiveMode(global: WriteMode, channel: WriteMode): WriteMode 
  * это проверено тестом и не должно обходиться ни одним адаптером.
  */
 export async function executeWrites(ops: WriteOp[], deps: WriteDeps): Promise<WriteOutcome[]> {
+  // Дубль по ключу channel+barcode+field перезапишет сам себя в журнале — ловим до сети, а не после.
+  const seen = new Set<string>()
+  for (const o of ops) {
+    const dupKey = `${o.channel}\u0000${o.barcode}\u0000${o.field}`
+    if (seen.has(dupKey)) throw new Error(`дубль операции записи: ${o.channel}/${o.barcode}/${o.field}`)
+    seen.add(dupKey)
+  }
+
   const byChannel = new Map<Channel, WriteOp[]>()
   for (const o of ops) byChannel.set(o.channel, [...(byChannel.get(o.channel) ?? []), o])
 
+  // Битый глобальный режим — не повод угадывать: считаем его выключенным, как и опечатку площадки.
+  const globalMode = isWriteMode(deps.globalMode) ? deps.globalMode : "off"
+
   const outcomes: WriteOutcome[] = []
   for (const [channel, channelOps] of byChannel) {
-    const mode = effectiveMode(deps.globalMode, deps.channelModes[channel])
+    const channelMode = deps.channelModes[channel]
+    const safeChannelMode = isWriteMode(channelMode) ? channelMode : "off"
+    // Площадка, которой нет в списке известных, не должна попасть в сеть ни при каких режимах.
+    const mode: WriteMode = isChannel(channel) ? effectiveMode(globalMode, safeChannelMode) : "off"
     if (mode !== "apply") {
       for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error: null })
       continue
     }
     let results: SendResult[]
     try {
-      results = await deps.send(channel, channelOps)
+      const raw = await deps.send(channel, channelOps)
+      if (!Array.isArray(raw)) throw new Error("площадка вернула ответ не списком")
+      results = raw
     } catch (e: unknown) {
-      const error = e instanceof Error ? e.message : String(e)
+      const error = errorText(e)
       for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error })
       continue
     }
@@ -77,6 +119,12 @@ export async function executeWrites(ops: WriteOp[], deps: WriteDeps): Promise<Wr
       }
     }
   }
-  await deps.record(outcomes)
+
+  try {
+    await deps.record(outcomes)
+  } catch (e: unknown) {
+    // На площадке уже могло уйти изменение — журнал без этих строк не восстановить, поэтому отдаём их вызывающему.
+    throw new WriteJournalError(`журнал записей не сохранён: ${errorText(e)}`, { cause: e, outcomes })
+  }
   return outcomes
 }

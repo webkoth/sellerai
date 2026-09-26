@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
-import type { Channel, WriteMode } from "@sync2/shared"
-import { effectiveMode, executeWrites, type SendResult, type WriteOp, type WriteOutcome } from "./writer"
+import { WRITE_MODES, type Channel, type WriteMode } from "@sync2/shared"
+import { effectiveMode, executeWrites, WriteJournalError, type SendResult, type WriteOp, type WriteOutcome } from "./writer"
 
 const allModes = (mode: WriteMode): Record<Channel, WriteMode> => ({
   wb: mode,
@@ -97,5 +97,77 @@ describe("executeWrites", () => {
     const { outcomes } = await run([op("kit", "A", 1), op("site", "A", 1)], "apply", allModes("apply"), send)
     expect(outcomes.find((o) => o.channel === "kit")).toMatchObject({ applied: false, error: "ECONNRESET" })
     expect(outcomes.find((o) => o.channel === "site")).toMatchObject({ applied: true })
+  })
+
+  it("запись ушла, журнал упал — ошибка несёт итоги по позициям", async () => {
+    const send = okSender()
+    let caught: unknown
+    try {
+      await executeWrites([op("kit", "A", 1)], {
+        globalMode: "apply",
+        channelModes: allModes("apply"),
+        send,
+        record: async () => {
+          throw new Error("ETIMEDOUT")
+        },
+      })
+    } catch (e) {
+      caught = e
+    }
+    expect(send).toHaveBeenCalledTimes(1)
+    expect(caught).toBeInstanceOf(WriteJournalError)
+    const err = caught as WriteJournalError
+    expect(err.message).toBe("журнал записей не сохранён: ETIMEDOUT")
+    expect(err.outcomes[0]).toMatchObject({ applied: true })
+  })
+
+  it("площадка вернула не список — ошибка по её позициям, другие пишутся", async () => {
+    const send = vi.fn(async (channel: Channel): Promise<SendResult[]> => {
+      if (channel === "kit") return null as unknown as SendResult[]
+      return [{ barcode: "A", field: "stock", ok: true }]
+    })
+    const { outcomes } = await run([op("kit", "A", 1), op("site", "A", 1)], "apply", allModes("apply"), send)
+    expect(outcomes.find((o) => o.channel === "kit")).toMatchObject({
+      applied: false,
+      error: "площадка вернула ответ не списком",
+    })
+    expect(outcomes.find((o) => o.channel === "site")).toMatchObject({ applied: true })
+  })
+
+  it("дубль операции — ошибка до любой отправки", async () => {
+    const send = okSender()
+    const record = vi.fn(async () => {})
+    const dupOps = [op("kit", "A", 1), op("kit", "A", 2)]
+    await expect(
+      executeWrites(dupOps, { globalMode: "apply", channelModes: allModes("apply"), send, record }),
+    ).rejects.toThrow("дубль операции записи: kit/A/stock")
+    expect(send).not.toHaveBeenCalled()
+    expect(record).not.toHaveBeenCalled()
+  })
+
+  it("площадки нет в channelModes — off, отправки нет, режим в журнале валиден", async () => {
+    const { wb, ozon, ym, site } = allModes("apply")
+    const modes = { wb, ozon, ym, site } as Record<Channel, WriteMode> // kit намеренно отсутствует
+    const { outcomes, send } = await run([op("kit", "A", 1)], "apply", modes)
+    expect(send).not.toHaveBeenCalled()
+    expect(outcomes[0]).toMatchObject({ mode: "off", applied: false })
+    expect(WRITE_MODES).toContain(outcomes[0]!.mode)
+  })
+
+  it("неизвестная площадка в операции — не отправляется", async () => {
+    const send = okSender()
+    const unknownChannel = "foo" as Channel
+    const modes = { ...allModes("apply"), [unknownChannel]: "apply" } as Record<Channel, WriteMode>
+    const { outcomes } = await run([op(unknownChannel, "A", 1)], "apply", modes, send)
+    expect(send).not.toHaveBeenCalled()
+    expect(outcomes[0]).toMatchObject({ mode: "off", applied: false })
+  })
+
+  it("ошибка не-Error: объект превращается в JSON", async () => {
+    const send = vi.fn(async (): Promise<SendResult[]> => {
+      throw { code: 429 }
+    })
+    const { outcomes } = await run([op("kit", "A", 1)], "apply", allModes("apply"), send)
+    expect(outcomes[0]).toMatchObject({ applied: false, error: '{"code":429}' })
   })
 })
