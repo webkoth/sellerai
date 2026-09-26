@@ -1545,8 +1545,8 @@ describe.skipIf(!TEST_DATABASE_URL)("сквозной цикл пула", () => 
     const plan = planStockWrites(items, [{ channel: "kit", stocks: [s("A", 3), s("Z", 1)] }], { maxChanges: MAX_STOCK_CHANGES_PER_RUN })
     expect(plan.aborted).toBeNull()
     expect(plan.changes).toEqual([
-      { channel: "kit", barcode: "A", before: 3, after: 1, orphan: false },
-      { channel: "kit", barcode: "Z", before: 1, after: 0, orphan: true },
+      { channel: "kit", barcode: "A", externalSku: null, before: 3, after: 1, orphan: false },
+      { channel: "kit", barcode: "Z", externalSku: null, before: 1, after: 0, orphan: true },
     ])
   })
 })
@@ -1583,8 +1583,11 @@ git commit -m "sync2: сквозной цикл пула на живой баз�
 - `packages/domain` — чистые функции, из `@sync2/shared` только типы:
   - `reconcilePool` — перенос из finstock (`cabinetId → channelId`), 21 тест перенесены как есть;
   - `toPoolOrders` — заказы WB не вычитаются (они в снимке WB), `cancelled_before_ship` возвращает единицу, `returned` — нет;
-  - `applyWbWriteOutcomes` — когда WB пишет sync2: ожидание WB = база, если запись применилась, иначе остаток из снимка;
-  - `planStockWrites` — было → станет по площадкам, сироты обнуляются, больше 120 изменений — не писать ничего.
+  - `wbSignalAccepted` / `acceptedWbBarcodes` / `applyWbWriteOutcomes` — когда WB пишет sync2: WB правится только по баркодам,
+    чей сигнал WB принят в этом прогоне; применилась запись → ожидание = база и `expectedAt = now`; исход неизвестен →
+    `max(база, факт)`; не применилась → факт из снимка;
+  - `planStockWrites` — было → станет по площадкам (с артикулом), сироты обнуляются, `hold` удерживает баркоды площадки,
+    больше 120 разных баркодов — не писать ничего.
 - `packages/db`: `upsertOrders`/`loadOrdersSince`, `insertStockSnapshot`/`latestStockSnapshots`,
   `loadPoolState`/`savePoolRun` (одна транзакция). Время из базы — `toIso`: Postgres отдаёт текст, домен живёт в ISO.
 - Приёмка: `packages/db/src/pool-cycle.db.test.ts` — вся история товара на живой базе.
@@ -1609,3 +1612,21 @@ git commit -m "sync2: README — пул остатков"
 ## Следующий план
 
 1.3 «KIT и сайт»: адаптеры KIT (`/v1/orders`, `/v1/variants/stocks/bulk_update`) и служебный API сайта (`kotelnikovartifact`), статусы заказов → жизненный цикл, джобы `orders` и `stocks` внутри `withRun` (WB в режиме `external`), `record` для `writes` (пустой массив не вставлять), `redact` в pino, advisory lock от наложения кронов, выкладка на VPS, `dry-run` → `apply` для KIT и сайта.
+
+## Поправки при исполнении (26.09.2026)
+
+Смысловая проверка задач 4–6 нашла гонки режима «WB пишет sync2»; исправлено в коммитах `4fc0af9`, `22e919b`:
+`applyWbWriteOutcomes(items, accepted, wbActual, results, now)` вместо трёхаргументной версии из задачи 5;
+`planStockWrites` — `hold`, предохранитель по разным баркодам, `externalSku`, сортировка. Тексты задач 5–6 выше —
+исходная редакция; действует код.
+
+## Контракт адаптеров для плана 1.3 (обязателен, с тестами)
+
+- Снимок остатков любой площадки, включая WB, содержит **и нулевые строки** по всем существующим карточкам:
+  отсутствие баркода в снимке домен читает как «карточки нет» и ничего туда не пишет.
+- `NormalizedStock.barcode` — всегда баркод WB; Ozon и ЯМ сопоставляются через offer_id = артикул WB → баркод.
+  Иначе товар станет «сиротой» и обнулится.
+- Окно чтения заказов (`loadOrdersSince`) — не короче срока, за который площадка может отменить заказ (закладывать 60 дней):
+  поздняя отмена за окном потеряет возврат единицы.
+- Режим WB `self` (1.4): перед записью на WB перечитывать остаток записываемых баркодов и не писать те, что изменились
+  с момента снимка — продажа WB между чтением и записью иначе затрётся.
