@@ -79,6 +79,55 @@ describe("kitRequest", () => {
 
     await Promise.all(calls)
   })
+
+  it("важно: второй запрос не стартует, пока первый не ЗАВЕРШИЛСЯ — не только пауза темпа", async () => {
+    // Раньше очередь разносила только СТАРТЫ: если первый ответ шёл дольше
+    // 1100 мс, второй запрос стартовал, пока первый ещё был в полёте —
+    // ровно то пересечение, из-за которого KIT рвёт соединение.
+    vi.useFakeTimers()
+    let resolveFirst: ((r: Response) => void) | undefined
+    const fetchMock = vi
+      .fn()
+      .mockImplementationOnce(() => new Promise<Response>((resolve) => { resolveFirst = resolve }))
+      .mockImplementationOnce(() => Promise.resolve(jsonResponse({ ok: true })))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const p1 = kitRequest({ token: "t" }, "/v1/a")
+    const p2 = kitRequest({ token: "t" }, "/v1/b")
+
+    // Проходит намного больше паузы темпа (1100 мс): если бы очередь ждала
+    // только её, второй fetch уже пошёл бы.
+    await vi.advanceTimersByTimeAsync(5000)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    resolveFirst?.(jsonResponse({ ok: true }))
+    await vi.advanceTimersByTimeAsync(0)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+
+    await Promise.all([p1, p2])
+  })
+
+  it("сбой запроса не блокирует очередь — следующий всё равно стартует после своей паузы", async () => {
+    vi.useFakeTimers()
+    const fetchMock = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError("terminated"))
+      .mockImplementationOnce(() => Promise.resolve(jsonResponse({ ok: true })))
+    vi.stubGlobal("fetch", fetchMock)
+
+    const p1 = kitRequest({ token: "t" }, "/v1/a", { retryDelaysMs: [] })
+    const p2 = kitRequest({ token: "t" }, "/v1/b")
+
+    await expect(p1).rejects.toThrow(/сеть: terminated/)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    await vi.advanceTimersByTimeAsync(1099)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    await vi.advanceTimersByTimeAsync(1)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+
+    await expect(p2).resolves.toEqual({ ok: true })
+  })
 })
 
 describe("fetchKitVariants", () => {
@@ -108,6 +157,25 @@ describe("fetchKitVariants", () => {
     expect(result).toHaveLength(1)
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
+
+  it("потолок MAX_PAGES — бросает, а не отдаёт частичный список, если площадка никогда не отдаёт короткую страницу", async () => {
+    vi.useFakeTimers()
+    let call = 0
+    const fetchMock = vi.fn(() => {
+      call += 1
+      // Полная страница (100 штук) КАЖДЫЙ раз — площадка никогда не отдаёт
+      // короткую страницу, единственная причина остановки — потолок MAX_PAGES.
+      const variants = Array.from({ length: 100 }, (_, i) => ({ id: `${call}-${i}`, barcode: null, stocks: [] }))
+      return Promise.resolve(jsonResponse({ variants, total_count: 999_999 }))
+    })
+    vi.stubGlobal("fetch", fetchMock)
+
+    const resultPromise = fetchKitVariants({ token: "t" })
+    const assertion = expect(resultPromise).rejects.toThrow(/1000 страниц/)
+    await vi.runAllTimersAsync()
+    await assertion
+    expect(fetchMock).toHaveBeenCalledTimes(1000)
+  }, 30_000)
 })
 
 describe("fetchKitOrders", () => {
@@ -125,4 +193,21 @@ describe("fetchKitOrders", () => {
     expect(result).toHaveLength(101)
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
+
+  it("потолок MAX_PAGES — бросает, а не отдаёт частичный список заказов", async () => {
+    vi.useFakeTimers()
+    let call = 0
+    const fetchMock = vi.fn(() => {
+      call += 1
+      const orders = Array.from({ length: 100 }, (_, i) => ({ id: `${call}-${i}` }))
+      return Promise.resolve(jsonResponse({ orders, total_count: 999_999 }))
+    })
+    vi.stubGlobal("fetch", fetchMock)
+
+    const resultPromise = fetchKitOrders({ token: "t" })
+    const assertion = expect(resultPromise).rejects.toThrow(/1000 страниц/)
+    await vi.runAllTimersAsync()
+    await assertion
+    expect(fetchMock).toHaveBeenCalledTimes(1000)
+  }, 30_000)
 })

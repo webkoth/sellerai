@@ -74,7 +74,7 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   if (wbCatalogOk) channels.push({ channel: "wb", adapter: wbAdapter })
   channels.push({ channel: "ozon", adapter: createOzonAdapter(config.ozon, wbIndex) })
   channels.push({ channel: "ym", adapter: createYmAdapter(config.ym, wbIndex, config.ym.warehouseIds) })
-  channels.push({ channel: "kit", adapter: createKitAdapter(config.kit) })
+  channels.push({ channel: "kit", adapter: createKitAdapter(config.kit, wbIndex) })
 
   const skippedByChannel = new Map<string, string[]>()
   for (const { channel, adapter } of channels) {

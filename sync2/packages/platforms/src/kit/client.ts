@@ -32,33 +32,44 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+function noop(): void {}
+
 /**
- * Очередь пауз — общая на МОДУЛЬ, а не на вызов: гарантирует строгую
- * последовательность стартов запросов, даже если вызывающий код запустит
- * несколько fetchKit* «параллельно» (`Promise.all`, как в kit/adapter.ts
- * при первом заходе за вариантами и заказами сразу) — второй старт всё
- * равно встанет в очередь и подождёт своих 1100 мс, а не рванёт вместе
- * с первым.
+ * Пауза перед СТАРТОМ следующего запроса, отмеряется от старта предыдущего.
  */
-let queue: Promise<void> = Promise.resolve()
 let lastCallAt = 0
 
-async function waitTurn(): Promise<void> {
-  const turn = queue.then(async () => {
-    const wait = lastCallAt + PACE_MS - Date.now()
-    if (wait > 0) await sleep(wait)
-    lastCallAt = Date.now()
-  })
-  // Не даём одному сбою в очереди развалить её для всех последующих
-  // ожидающих — каждый вызывающий видит СВОЙ `turn`, а не общий `queue`.
-  queue = turn.catch(() => {})
-  return turn
+async function pace(): Promise<void> {
+  const wait = lastCallAt + PACE_MS - Date.now()
+  if (wait > 0) await sleep(wait)
+  lastCallAt = Date.now()
 }
 
 /**
- * Сброс очереди пауз — только для тестов: без него состояние модуля
- * («когда был последний запрос») переживало бы конец одного теста и портило
- * ожидание паузы в следующем.
+ * Очередь запросов — общая на МОДУЛЬ, а не на вызов, и держит в себе ВЕСЬ
+ * запрос (паузу темпа плюс сам `requestJson`), а не только паузу.
+ *
+ * Раньше очередь разносила только СТАРТЫ (`waitTurn` ждал 1100 мс и сразу
+ * освобождал место следующему), и это не защищало от главного: если ответ
+ * первого запроса шёл дольше 1100 мс, второй стартовал ПОКА ПЕРВЫЙ ЕЩЁ БЫЛ
+ * В ПОЛЁТЕ — то самое пересечение, из-за которого площадка рвёт соединение
+ * (sync/src/kit.ts). Здесь `run` — пауза И запрос вместе, а `queue`
+ * продвигается только когда `run` СЕТТЛИТСЯ (успехом или ошибкой) — значит
+ * следующий вызов не может начать свою паузу, пока предыдущий запрос не
+ * закончился целиком, независимо от того, сколько параллельных вызовов
+ * (`Promise.all` или просто гонка двух `await`) пришло почти одновременно.
+ *
+ * `queue = run.then(noop, noop)`, а не `run` напрямую: ошибка одного запроса
+ * не должна распространяться на цепочку и блокировать следующий вызов —
+ * `noop` на обоих путях (успех/отказ) превращает любой исход в разрешённый
+ * `undefined`, и следующий `.then(pace)` в очереди всё равно запускается.
+ */
+let queue: Promise<unknown> = Promise.resolve()
+
+/**
+ * Сброс очереди — только для тестов: без него состояние модуля («когда был
+ * последний запрос», «что сейчас в очереди») переживало бы конец одного
+ * теста и портило бы следующий.
  */
 export function resetKitPaceForTests(): void {
   queue = Promise.resolve()
@@ -66,17 +77,19 @@ export function resetKitPaceForTests(): void {
 }
 
 /**
- * Запрос к KIT поверх `requestJson`, с паузой не короче `PACE_MS` от старта
- * предыдущего запроса (см. `waitTurn`) — единственный вход в сеть у этого
- * клиента, чтобы темп не смог случайно нарушиться в новом методе.
+ * Запрос к KIT поверх `requestJson` — единственный вход в сеть у этого
+ * клиента, чтобы темп и последовательность не смогли случайно нарушиться
+ * в новом методе. См. комментарий у `queue`: следующий вызов ждёт не только
+ * паузу темпа, но и ЗАВЕРШЕНИЯ этого запроса целиком.
  */
-export async function kitRequest<T = unknown>(
+export function kitRequest<T = unknown>(
   credentials: KitCredentials,
   path: string,
   options: Omit<RequestOptions, "token" | "authHeader"> = {},
 ): Promise<T> {
-  await waitTurn()
-  return requestJson<T>("kit", `${BASE}${path}`, { ...kitAuth(credentials), ...options })
+  const run = queue.then(pace).then(() => requestJson<T>("kit", `${BASE}${path}`, { ...kitAuth(credentials), ...options }))
+  queue = run.then(noop, noop)
+  return run
 }
 
 // ── Варианты (каталог продавца в KIT) ───────────────────────────────────────
@@ -88,14 +101,17 @@ export interface KitStockEntry {
 }
 
 /**
- * Вариант товара KIT. `barcode` — штрихкод WB напрямую: варианты магазина
- * kit42191 заведены со штрихкодами WB при первом импорте (память «Яндекс KIT
- * store»), поэтому в отличие от Ozon/ЯМ здесь нет отдельного разрешения через
- * `resolveWbBarcode` (см. kit/mapper.ts).
+ * Вариант товара KIT. `barcode`, по наблюдению, УЖЕ штрихкод WB (варианты
+ * магазина kit42191 заведены с ним при первом импорте, память «Яндекс KIT
+ * store») — тем не менее ключ товара во всём синке разрешается через
+ * `resolveWbBarcode` по каталогу WB (`mapper.ts`), как у Ozon/ЯМ, а не
+ * принимается на веру: `sku` — артикул продавца (второй, запасной ключ
+ * сопоставления — offer_id = артикул WB).
  */
 export interface KitVariant {
   id: string
   barcode: string | null
+  sku?: string | null
   stocks?: KitStockEntry[] | null
 }
 
@@ -105,7 +121,16 @@ interface KitVariantsResponse {
 }
 
 const PAGE_SIZE = 100
-/** Потолок числа страниц — на патологию, не рабочий лимит (как в ozon/client.ts). */
+/**
+ * Потолок числа страниц — последний рубеж на патологию (площадка, которая
+ * никогда не отдаёт короткую страницу), не рабочий лимит (как в
+ * ozon/client.ts). Обычное завершение цикла — страница короче `PAGE_SIZE`.
+ * Если потолок всё же достигнут, функция БРОСАЕТ, а не молча отдаёт то, что
+ * успела собрать: частичный список каталога или заказов синк не отличил бы
+ * от полного, а неполный каталог WB как раз запрещено принимать без
+ * разбора (план, «Поправки при исполнении», пункт про 1.3b) — то же самое
+ * верно и для KIT.
+ */
 const MAX_PAGES = 1000
 
 /**
@@ -120,9 +145,9 @@ export async function fetchKitVariants(credentials: KitCredentials): Promise<Kit
     const body = await kitRequest<KitVariantsResponse>(credentials, `/v1/variants?per_page=${PAGE_SIZE}&page=${page}`)
     const got = body.variants ?? []
     all.push(...got)
-    if (got.length < PAGE_SIZE) break
+    if (got.length < PAGE_SIZE) return all
   }
-  return all
+  throw new Error(`KIT: варианты не кончились за ${MAX_PAGES} страниц — похоже на зацикливание пагинации`)
 }
 
 // ── Заказы ───────────────────────────────────────────────────────────────
@@ -135,19 +160,38 @@ export interface KitOrderItem {
   final_price: string
 }
 
+/**
+ * Неперсональная часть доставки части заказа — то немногое из
+ * `delivery_info`, что маппер (`mapKitOrders`) кладёт в `raw`: способ и
+ * статус доставки, склад отгрузки. НЕ включает `address` — адрес получателя
+ * (домашний для курьерской доставки) — персональные данные, которых в
+ * снимке для разбора споров быть не должно (см. `mapKitOrders`, allow-list
+ * `raw`).
+ */
+export interface KitDeliveryInfo {
+  method: string
+  raw_status: string
+  warehouse_id: string
+}
+
 export interface KitDeliveryChunk {
+  id: number
+  delivery_info: KitDeliveryInfo
   items: KitOrderItem[]
 }
 
 /**
- * Заказ KIT. `client` — персональные данные покупателя (имя, телефон,
- * e-mail) — типизирован как есть, чтобы маппер (`mapKitOrders`) мог
- * типобезопасно вырезать его из `raw` перед тем, как строка заказа уйдёт
- * в базу синка: снимок для разбора споров не должен нести личные данные
- * (план, задача 6, шаг 1 — то же правило, что и для образцов ответов).
+ * Заказ KIT. `client` (имя, телефон, e-mail покупателя) и адрес доставки
+ * внутри `delivery_chunks[].delivery_info.address` — персональные данные
+ * площадки; маппер (`mapKitOrders`) строит `raw` через ЯВНЫЙ allow-list
+ * полей (id, order_number, status, created_at, позиция, часть доставки без
+ * адреса), а не вычитанием `client` из копии заказа — вычитание одного поля
+ * оставляло бы адрес получателя в `raw` нетронутым (найдено финальным
+ * ревью 1.3a).
  */
 export interface KitOrder {
   id: string
+  order_number: number
   status: string
   created_at: string
   delivery_chunks: KitDeliveryChunk[]
@@ -170,7 +214,7 @@ export async function fetchKitOrders(credentials: KitCredentials): Promise<KitOr
     const body = await kitRequest<KitOrdersResponse>(credentials, `/v1/orders?per_page=${PAGE_SIZE}&page=${page}`)
     const got = body.orders ?? []
     all.push(...got)
-    if (got.length < PAGE_SIZE) break
+    if (got.length < PAGE_SIZE) return all
   }
-  return all
+  throw new Error(`KIT: заказы не кончились за ${MAX_PAGES} страниц — похоже на зацикливание пагинации`)
 }
