@@ -83,16 +83,6 @@ function parseErrorBody(text: string): unknown {
   }
 }
 
-/**
- * `AbortSignal.timeout` действует не только на сам fetch, но и на чтение
- * тела ответа: обрыв может случиться уже после того, как площадка ответила
- * 200, но не успела дослать большое тело. Без этой проверки такой обрыв
- * ронял бы прогон сырым `TimeoutError`/`AbortError` вместо понятной ошибки.
- */
-function isBodyTimeout(error: unknown): boolean {
-  return error instanceof DOMException && (error.name === "TimeoutError" || error.name === "AbortError")
-}
-
 export interface RequestOptions {
   token: string
   method?: string
@@ -167,16 +157,17 @@ export async function requestJson<T = unknown>(
     // странице каждого отчёта.
     if (response.status === 204) return null as T
     if (response.ok) {
-      // Тело читается через .text() + JSON.parse, а не response.json(), —
-      // так же, как для тела ошибки ниже, — чтобы обрыв по таймауту на
-      // самом чтении ловился тем же catch, что и обрыв самого fetch: та же
-      // задержка из retryDelaysMs, тот же PlatformApiError со статусом 0
-      // по исчерпании попыток.
+      // Тело читается через .text(), а не response.json(), и в отдельном try:
+      // любое отклонение чтения — сетевой сбой, как и обрыв самого fetch.
+      // Площадка ответила заголовками, но не дослала тело: таймаут
+      // `AbortSignal.timeout` на чтении или обрыв сокета посреди тела
+      // (`TypeError: terminated` у undici). Та же задержка из retryDelaysMs,
+      // тот же PlatformApiError со статусом 0 по исчерпании попыток.
+      // JSON.parse — снаружи: битое тело не станет целым от повтора.
+      let text: string
       try {
-        const text = await response.text()
-        return (text.length > 0 ? JSON.parse(text) : null) as T
+        text = await response.text()
       } catch (error: unknown) {
-        if (!isBodyTimeout(error)) throw error
         if (attempt < delays.length) {
           await sleep(delays[attempt] ?? 0)
           continue
@@ -184,6 +175,7 @@ export async function requestJson<T = unknown>(
         const message = error instanceof Error ? error.message : String(error)
         throw new PlatformApiError(platform, 0, `сеть: ${message}`, null)
       }
+      return (text.length > 0 ? JSON.parse(text) : null) as T
     }
 
     // Число попыток всегда ограничено своим расписанием (delays.length) — это

@@ -294,4 +294,30 @@ describe("requestJson", () => {
     await expect(requestJson("kit", "https://api.kit.yandex.net/v1/orders", { token: "t", retryDelaysMs: [0] })).rejects.toMatchObject({ status: 0 })
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
+
+  it("обрыв сокета посреди тела (terminated) — сетевой сбой с повтором, а не падение прогона", async () => {
+    // undici бросает TypeError("terminated") из чтения тела, когда площадка
+    // оборвала соединение после заголовков: это не таймаут, но тот же сетевой сбой.
+    const broken = { ok: true, status: 200, headers: new Headers(), text: () => Promise.reject(new TypeError("terminated")) } as unknown as Response
+    const fetchMock = vi.fn().mockResolvedValueOnce(broken).mockResolvedValue(response(200, { ok: true }))
+    vi.stubGlobal("fetch", fetchMock)
+    await expect(requestJson("ym", "https://example.test", { token: "t", retryDelaysMs: [0] })).resolves.toEqual({ ok: true })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it("обрыв тела на последней попытке — PlatformApiError «сеть: terminated»", async () => {
+    const broken = () => ({ ok: true, status: 200, headers: new Headers(), text: () => Promise.reject(new TypeError("terminated")) }) as unknown as Response
+    vi.stubGlobal("fetch", vi.fn(async () => broken()))
+    await expect(requestJson("ym", "https://example.test", { token: "t", retryDelaysMs: [] })).rejects.toMatchObject({
+      status: 0,
+      message: expect.stringMatching(/сеть: terminated/),
+    })
+  })
+
+  it("битый JSON в теле 200 — не сетевой сбой: без повтора, ошибка разбора наружу", async () => {
+    const fetchMock = vi.fn(async () => new Response("{не json", { status: 200 }))
+    vi.stubGlobal("fetch", fetchMock)
+    await expect(requestJson("wb", "https://example.test", { token: "t", retryDelaysMs: [0] })).rejects.toThrow(SyntaxError)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
 })
