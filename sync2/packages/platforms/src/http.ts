@@ -102,17 +102,45 @@ export interface RequestOptions {
 const DEFAULT_TIMEOUT_MS = 60_000
 
 /**
- * Запрос к API площадки с откатом при лимитах и пятисотых.
- * Четырёхсотые, кроме 429 и 420, не повторяются: неверный токен или неверный
- * запрос не станут верными от повторения. 420 — это тот же упор в лимит, но
- * в исполнении Яндекс.Маркета (спецификация: «превышено ограничение на
- * доступ к ресурсу»), и обращение с ним то же, что с 429.
+ * Запрос к API площадки, для которого пустой ответ — законное «данных нет»:
+ * 204 или пустое тело 200 дают null (так WB сообщает конец пагинации).
+ * Тип результата это отражает — вызывающий обязан обработать null.
+ */
+export async function requestJsonOrNull<T = unknown>(
+  platform: ApiSource,
+  url: string,
+  options: RequestOptions,
+): Promise<T | null> {
+  return (await request<T>(platform, url, options)).body
+}
+
+/**
+ * Запрос к API площадки, который обязан вернуть JSON. Пустой ответ (204,
+ * пустое тело, литерал null) — PlatformApiError с кодом ответа, а не null,
+ * который вызывающий разобрал бы как объект и упал бы на чтении поля.
  */
 export async function requestJson<T = unknown>(
   platform: ApiSource,
   url: string,
   options: RequestOptions,
 ): Promise<T> {
+  const { status, body } = await request<T>(platform, url, options)
+  if (body === null) throw new PlatformApiError(platform, status, `${platform}: пустой ответ ${status} — ожидался JSON`, null)
+  return body
+}
+
+/**
+ * Запрос к API площадки с откатом при лимитах и пятисотых.
+ * Четырёхсотые, кроме 429 и 420, не повторяются: неверный токен или неверный
+ * запрос не станут верными от повторения. 420 — это тот же упор в лимит, но
+ * в исполнении Яндекс.Маркета (спецификация: «превышено ограничение на
+ * доступ к ресурсу»), и обращение с ним то же, что с 429.
+ */
+async function request<T>(
+  platform: ApiSource,
+  url: string,
+  options: RequestOptions,
+): Promise<{ status: number; body: T | null }> {
   const delays = options.retryDelaysMs ?? DEFAULT_RETRY_DELAYS_MS
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS
 
@@ -155,7 +183,7 @@ export async function requestJson<T = unknown>(
     // SyntaxError. Новое финансовое API WB именно так сообщает конец
     // пагинации, то есть без этой ветки клиент падал бы на последней
     // странице каждого отчёта.
-    if (response.status === 204) return null as T
+    if (response.status === 204) return { status: 204, body: null }
     if (response.ok) {
       // Тело читается через .text(), а не response.json(), и в отдельном try:
       // любое отклонение чтения — сетевой сбой, как и обрыв самого fetch.
@@ -175,7 +203,7 @@ export async function requestJson<T = unknown>(
         const message = error instanceof Error ? error.message : String(error)
         throw new PlatformApiError(platform, 0, `сеть: ${message}`, null)
       }
-      return (text.length > 0 ? JSON.parse(text) : null) as T
+      return { status: response.status, body: text.length > 0 ? (JSON.parse(text) as T | null) : null }
     }
 
     // Число попыток всегда ограничено своим расписанием (delays.length) — это

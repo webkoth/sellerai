@@ -2,7 +2,7 @@
 // Финансовая детализация, тарифы и всё, что к ним относится (`fetchAllBarcodes`,
 // фото карточек, `subjectID` для сопоставления с комиссиями), убраны — этому
 // плану они не нужны: каталог строится из `fetchAllCards` прямо в cards-mapper.ts.
-import { requestJson } from "../http"
+import { requestJsonOrNull } from "../http"
 
 const MARKETPLACE = "https://marketplace-api.wildberries.ru"
 const CONTENT = "https://content-api.wildberries.ru"
@@ -87,7 +87,7 @@ export function isCancelledStatus(status: WbFbsOrderStatus): boolean {
  * здесь не появится никогда.
  */
 export async function fetchNewFbsOrders(token: string): Promise<WbFbsOrder[]> {
-  const response = await requestJson<{ orders: WbFbsOrder[] } | null>(
+  const response = await requestJsonOrNull<{ orders: WbFbsOrder[] }>(
     "wb",
     `${MARKETPLACE}/api/v3/orders/new`,
     { token },
@@ -130,7 +130,7 @@ export async function fetchFbsOrders(token: string, fromUnix: number): Promise<W
     url.searchParams.set("next", String(next))
     url.searchParams.set("dateFrom", String(fromUnix))
 
-    const page = await requestJson<{ orders: WbFbsOrder[]; next: number | null } | null>(
+    const page = await requestJsonOrNull<{ orders: WbFbsOrder[]; next: number | null }>(
       "wb",
       url.toString(),
       { token },
@@ -167,7 +167,7 @@ export async function fetchFbsOrderStatuses(
 
   for (let i = 0; i < ids.length; i += STATUS_BATCH_SIZE) {
     const batch = ids.slice(i, i + STATUS_BATCH_SIZE)
-    const page = await requestJson<{ orders: WbFbsOrderStatus[] } | null>(
+    const page = await requestJsonOrNull<{ orders: WbFbsOrderStatus[] }>(
       "wb",
       `${MARKETPLACE}/api/v3/orders/status`,
       { token, method: "POST", body: { orders: batch } },
@@ -197,7 +197,7 @@ export interface WbFbsWarehouse {
  * а при глубине запаса в одну штуку именно он решает, будет ли двойная продажа.
  */
 export async function fetchFbsWarehouses(token: string): Promise<WbFbsWarehouse[]> {
-  const response = await requestJson<WbFbsWarehouse[] | null>(
+  const response = await requestJsonOrNull<WbFbsWarehouse[]>(
     "wb",
     `${MARKETPLACE}/api/v3/warehouses`,
     { token },
@@ -257,7 +257,7 @@ export async function fetchFbsStocks(
 
   for (let i = 0; i < skus.length; i += STOCKS_BATCH_SIZE) {
     const batch = skus.slice(i, i + STOCKS_BATCH_SIZE)
-    const page = await requestJson<{ stocks: WbFbsStock[] } | null>(
+    const page = await requestJsonOrNull<{ stocks: WbFbsStock[] }>(
       "wb",
       `${MARKETPLACE}/api/v3/stocks/${warehouseId}`,
       { token, method: "POST", body: { skus: batch } },
@@ -306,7 +306,7 @@ interface CardsListCursorState {
  * Одна страница перечня карточек,
  * `POST https://content-api.wildberries.ru/content/v2/get/cards/list`
  * (лимит категории «Контент» — 100 запросов в минуту; здесь отдельно не
- * регулируется, requestJson откатывается на 429 общим механизмом).
+ * регулируется, requestJsonOrNull откатывается на 429 общим механизмом).
  *
  * `cursor` — из предыдущего ответа либо null для первой страницы.
  */
@@ -328,7 +328,7 @@ export async function fetchCardsPage(
     },
   }
 
-  return requestJson<WbCardsListResponse | null>(
+  return requestJsonOrNull<WbCardsListResponse>(
     "wb",
     `${CONTENT}/content/v2/get/cards/list`,
     { token, method: "POST", body },

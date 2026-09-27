@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { PlatformApiError, RateLimitError } from "./errors"
-import { requestJson } from "./http"
+import { requestJson, requestJsonOrNull } from "./http"
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -183,7 +183,21 @@ describe("requestJson", () => {
     // тело как JSON и упал бы ровно на последней странице каждого отчёта.
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(null, { status: 204 })))
 
-    await expect(requestJson("wb", "https://example.test", { token: "t" })).resolves.toBeNull()
+    await expect(requestJsonOrNull("wb", "https://example.test", { token: "t" })).resolves.toBeNull()
+  })
+
+  it("пустое тело 200 — null у requestJsonOrNull", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("", { status: 200 })))
+    await expect(requestJsonOrNull("wb", "https://example.test", { token: "t" })).resolves.toBeNull()
+  })
+
+  it("requestJson не отдаёт null: 204 или пустое тело — PlatformApiError с кодом ответа", async () => {
+    // Тип requestJson — T без null: Ozon/ЯМ/KIT разбирают тело без проверки, и
+    // пустой ответ там — сбой площадки, а не «данных нет».
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(null, { status: 204 })))
+    await expect(requestJson("ozon", "https://example.test", { token: "t" })).rejects.toMatchObject({ status: 204, message: expect.stringMatching(/пуст/) })
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("", { status: 200 })))
+    await expect(requestJson("ym", "https://example.test", { token: "t" })).rejects.toMatchObject({ status: 200 })
   })
 
   it("420 Яндекс.Маркета — лимит: пауза по своему расписанию, затем повтор и успех", async () => {
