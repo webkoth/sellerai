@@ -1,12 +1,19 @@
-import { insertStockSnapshot, loadChannels, upsertOrders, upsertProducts, type Db, type OrderUpsert } from "@sync2/db"
+import { insertStockSnapshot, lastCounter, loadChannels, upsertOrders, upsertProducts, type Db, type OrderUpsert } from "@sync2/db"
 import { buildWbCatalogIndex, errorText, type ChannelOrder } from "@sync2/shared"
 import type { ChannelAdapter } from "@sync2/platforms"
 import type { Adapters } from "../adapters"
+import type { Logger } from "../log"
 
 /** Окно чтения заказов — не короче срока поздней отмены (заметки к 1.3b: 60 дней). */
 export const ORDERS_WINDOW_DAYS = 60
 /** Каталог WB короче этой доли прошлого принятого — прогон не пишет снимки и заказы зеркал. */
 export const MIN_CATALOG_SHARE = 0.9
+/**
+ * Счётчик принятого каталога — эталон для ворот следующего прогона. Пишется только
+ * принятым каталогом: отклонённый прогон тоже пишет `wbCatalog`, и бери эталон оттуда —
+ * короткий каталог стал бы эталоном уже на следующем тике.
+ */
+export const CATALOG_ACCEPTED_KEY = "wbCatalogAccepted"
 
 export interface IngestResult {
   status: "ok" | "partial"
@@ -26,29 +33,45 @@ const toUpsert = (o: ChannelOrder): OrderUpsert => ({
 
 /**
  * Заказы и остатки всех площадок в базу. Каталог WB — ворота: не получен — джоба падает
- * (без индекса остатки зеркал не сопоставить); заметно короче прошлого — пишутся только
- * товары, снимки и заказы зеркал пропускаются. Сбой отдельной площадки не роняет остальные.
+ * (без индекса остатки зеркал не сопоставить); короче MIN_CATALOG_SHARE последнего
+ * принятого — пишутся только товары, снимки и заказы зеркал пропускаются. Настоящую
+ * усадку каталога принимает `acceptCatalog` (`--accept-catalog` в cli) — без проверки
+ * доли, с предупреждением в лог. Сбой отдельной площадки не роняет остальные.
  */
 export async function runIngest(deps: {
   db: Db
   now: () => Date
   runId: string
   adapters: Adapters
-  previousCatalog: number | null
+  acceptCatalog: boolean
+  log: Logger
 }): Promise<IngestResult> {
   const { db, runId } = deps
   const counters: Record<string, number> = {}
   const errors: string[] = []
   const since = new Date(deps.now().getTime() - ORDERS_WINDOW_DAYS * 86_400_000).toISOString()
   const channels = await loadChannels(db)
+  const previous = await lastCounter(db, "ingest", CATALOG_ACCEPTED_KEY)
 
   const catalog = await deps.adapters.wb.fetchCatalog()
   counters.wbCatalog = catalog.length
   await upsertProducts(db, catalog)
-  if (deps.previousCatalog !== null && catalog.length < deps.previousCatalog * MIN_CATALOG_SHARE) {
+  const shrunk = previous !== null && catalog.length < previous * MIN_CATALOG_SHARE
+  if (shrunk && !deps.acceptCatalog) {
     counters.catalogRejected = 1
-    return { status: "partial", counters, errors: [`каталог WB ${catalog.length} при прошлом ${deps.previousCatalog}`] }
+    return {
+      status: "partial",
+      counters,
+      errors: [
+        `каталог WB ${catalog.length} при прошлом принятом ${previous} (меньше ${MIN_CATALOG_SHARE * 100}%) — снимки и заказы зеркал пропущены; если усадка настоящая: ingest --accept-catalog`,
+      ],
+    }
   }
+  if (deps.acceptCatalog) {
+    deps.log.warn({ wbCatalog: catalog.length, previousAccepted: previous }, "каталог WB принят без проверки доли (--accept-catalog)")
+    if (shrunk) counters.catalogForced = 1
+  }
+  counters[CATALOG_ACCEPTED_KEY] = catalog.length
 
   const all: ChannelAdapter[] = [deps.adapters.wb, ...deps.adapters.mirrors(buildWbCatalogIndex(catalog))]
   for (const a of all) {

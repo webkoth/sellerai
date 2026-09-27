@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm"
-import { channels, createDb, drizzleRunStore, lastCounter, lastRunStatus, runs, seedChannels, type Db } from "@sync2/db"
+import { channels, createDb, drizzleRunStore, lastRunStatus, runs, seedChannels, type Db } from "@sync2/db"
 import {
   createKitAdapter,
   createOzonAdapter,
@@ -32,12 +32,17 @@ const USAGE = `sync2 <команда>
   runs [N]               последние N запусков (по умолчанию 20)
   ping                   пустая джоба: проверка конфига, базы и журнала
   probe                  живое чтение четырёх площадок (WB, Ozon, ЯМ, KIT) без базы и записи
-  ingest                 каталог WB, заказы и снимки остатков всех площадок в базу
+  ingest [--accept-catalog]
+                         каталог WB, заказы и снимки остатков всех площадок в базу;
+                         --accept-catalog — принять каталог WB без проверки усадки (усадка настоящая)
   pool                   пересчёт пула и план записей (dry-run в этапе 1.3b)
-  tick                   ingest, затем pool (pool — если ingest не failed)
+  tick [--accept-catalog]
+                         ingest, затем pool (pool — если ingest не failed)
   compare-v1             сверка пула с леджером старого синка, сводка в Telegram
   write-mode <площадка> <off|dry-run|apply>   режим записи одной площадки (apply отклонён в 1.3b)`
 
+/** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки доли. */
+const ACCEPT_CATALOG_FLAG = "--accept-catalog"
 const PROBE_WINDOW_MS = 60 * 24 * 60 * 60 * 1000
 /** Путь по умолчанию к леджеру старого синка на VPS (план 1.3b, задача 6). */
 const DEFAULT_V1_LEDGER_PATH = "/opt/sellerai-sync/data/state/inventory.json"
@@ -176,12 +181,11 @@ async function notifyTransition(notifier: Notifier, job: string, prevStatus: "ok
 }
 
 /** Джоба `ingest` внутри `withRun`, с уведомлением о смене состояния. */
-async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: Notifier): Promise<RunOutcome> {
+async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: Notifier, acceptCatalog: boolean): Promise<RunOutcome> {
   const prevStatus = await lastRunStatus(db, "ingest")
   const outcome = await withRun("ingest", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
     const adapters = buildAdapters(loadChannelsConfig(process.env))
-    const previousCatalog = await lastCounter(db, "ingest", "wbCatalog")
-    const result = await runIngest({ db, now: () => new Date(), runId: ctx.runId, adapters, previousCatalog })
+    const result = await runIngest({ db, now: () => new Date(), runId: ctx.runId, adapters, acceptCatalog, log: ctx.log })
     return { status: result.status, counters: result.counters, error: result.errors.length ? result.errors.join("; ") : undefined }
   })
   await notifyTransition(notifier, "ingest", prevStatus, outcome)
@@ -200,11 +204,20 @@ async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Not
 }
 
 async function main(argv: string[]): Promise<number> {
-  const [cmd, arg, arg2] = argv
+  const [cmd, arg, arg2] = argv.filter((a) => !a.startsWith("--"))
+  const flags = argv.filter((a) => a.startsWith("--"))
   if (!cmd || cmd === "help") {
     console.log(USAGE)
     return cmd ? 0 : 2
   }
+  // Единственный флаг — ручной обход ворот каталога WB, и только там, где есть ingest.
+  for (const flag of flags) {
+    if (flag !== ACCEPT_CATALOG_FLAG || (cmd !== "ingest" && cmd !== "tick")) {
+      console.error(`неизвестный флаг для ${cmd}: ${flag}\n\n${USAGE}`)
+      return 2
+    }
+  }
+  const acceptCatalog = flags.includes(ACCEPT_CATALOG_FLAG)
   // probe — только чтение площадок, без базы: не должен требовать DATABASE_URL
   // и не должен трогать журнал runs (план, задача 7, Step 3).
   if (cmd === "probe") {
@@ -221,7 +234,7 @@ async function main(argv: string[]): Promise<number> {
         log.info("площадки заведены")
         return 0
       case "ingest": {
-        const outcome = await runIngestCommand(db, log, config, notifier)
+        const outcome = await runIngestCommand(db, log, config, notifier, acceptCatalog)
         return outcome.status === "failed" ? 1 : 0
       }
       case "pool": {
@@ -231,7 +244,7 @@ async function main(argv: string[]): Promise<number> {
       case "tick": {
         // pool пересчитывается и после partial у ingest (частичные данные лучше, чем никакие),
         // но не после failed: без записи в базу пул считать не от чего.
-        const ingestOutcome = await runIngestCommand(db, log, config, notifier)
+        const ingestOutcome = await runIngestCommand(db, log, config, notifier, acceptCatalog)
         if (ingestOutcome.status === "failed") return 1
         const poolOutcome = await runPoolCommand(db, log, config, notifier)
         return poolOutcome.status === "failed" ? 1 : 0

@@ -148,8 +148,12 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
 
 - `sync2 ingest` — каталог WB → `products`, заказы и снимки остатков всех площадок → `orders_raw`/
   `stock_snapshots_raw` (`apps/worker/src/jobs/ingest.ts`). Каталог WB — ворота: не прочитался — вся джоба падает
-  (`failed`); прочитался, но короче 90 % прошлого принятого (`lastCounter(db, "ingest", "wbCatalog")`) — товары
-  пишутся, а снимки и заказы зеркал в этом прогоне нет (`partial`, `catalogRejected: 1`). Сбой отдельной площадки
+  (`failed`); прочитался, но короче 90 % прошлого **принятого** — товары пишутся, а снимки и заказы зеркал в этом
+  прогоне нет (`partial`, `catalogRejected: 1`, в `runs.error` — подсказка про `--accept-catalog`). Эталон —
+  счётчик `wbCatalogAccepted` последнего прогона, где он есть (`lastCounter` пропускает прогоны без ключа); его
+  пишет только принятый каталог, поэтому отклонённый прогон эталон не сдвигает и короткий каталог отклоняется
+  на каждом тике, пока усадку не примут вручную: `ingest --accept-catalog` (или `tick --accept-catalog`) —
+  каталог принимается без проверки доли, в лог — warn, в счётчики — `catalogForced: 1`, эталон обновляется. Сбой отдельной площадки
   (заказы или остатки) не роняет остальные — джоба заканчивается `partial` с текстом ошибок в `runs.error`.
 - `sync2 pool` — пересчёт пула (`reconcilePool`) и план записей по зеркалам (`planStockWrites` → `executeWrites`)
   в режиме WB `external`: WB пишет старый синк, `sync2` в 1.3b только считает (`apps/worker/src/jobs/pool.ts`).

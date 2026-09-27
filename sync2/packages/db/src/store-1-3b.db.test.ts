@@ -53,4 +53,19 @@ describe.skipIf(!TEST_DATABASE_URL)("хранилище этапа 1.3b", () => 
     expect(await lastCounter(h.db, "ingest", "wbCatalog")).toBe(400)
     expect(await lastCounter(h.db, "ingest", "нет-такого")).toBeNull()
   })
+
+  it("счётчик берётся из последнего запуска, где этот ключ есть, а не просто из последнего", async () => {
+    const store = drizzleRunStore(h.db)
+    const rows = [
+      ["a1", "2026-09-28T10:00:00.000Z", "ok", { wbCatalog: 400, wbCatalogAccepted: 400 }],
+      ["a2", "2026-09-28T10:10:00.000Z", "partial", { wbCatalog: 100, catalogRejected: 1 }],
+    ] as const
+    for (const [id, at, status, counters] of rows) {
+      const runId = `00000000-0000-4000-8000-0000000000${id}`
+      await store.start({ runId, job: "ingest", writeMode: "dry-run", startedAt: at })
+      await store.finish(runId, { status, finishedAt: at, counters, error: null })
+    }
+    expect(await lastCounter(h.db, "ingest", "wbCatalogAccepted")).toBe(400)
+    expect(await lastCounter(h.db, "ingest", "wbCatalog")).toBe(100)
+  })
 })
