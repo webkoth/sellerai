@@ -41,7 +41,7 @@ describe("formatComparison", () => {
     const text = formatComparison({ same: 80, diff: [{ barcode: "B", v1: 3, v2: 1 }], onlyV1: [], onlyV2: [] }, extra())
     expect(text).toContain("совпадает 80 из 81")
     expect(text).toContain("B: старый 3, новый 1")
-    expect(text).not.toContain("(заказ ≤30 мин)")
+    expect(text).not.toContain("(заказ ≤40 мин)")
   })
 
   it("план записей — разные баркоды по площадке и рядом строки", () => {
@@ -49,12 +49,12 @@ describe("formatComparison", () => {
     expect(text).toContain("План записей за сутки (dry-run, баркодов/строк): Ozon 2/30, ЯМ 0/0, KIT 1/4")
   })
 
-  it("строка diff с заказом/отменой зеркала за последние 30 мин помечена", () => {
+  it("строка diff с заказом/отменой зеркала за последние 40 мин помечена", () => {
     const text = formatComparison(
       { same: 0, diff: [{ barcode: "B", v1: 3, v2: 2 }, { barcode: "C", v1: 1, v2: 0 }], onlyV1: [], onlyV2: [] },
       extra({ recentOrderBarcodes: new Set(["B"]) }),
     )
-    expect(text).toContain("B: старый 3, новый 2 (заказ ≤30 мин)")
+    expect(text).toContain("B: старый 3, новый 2 (заказ ≤40 мин)")
     expect(text).toContain("C: старый 1, новый 0")
     expect(text).not.toContain("C: старый 1, новый 0 (заказ")
   })
