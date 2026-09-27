@@ -1,0 +1,5 @@
+# sync2 (этап 1.3b, dry-run): каждые 10 минут в минуты 1,11,…,51 — мимо старого синка (3,8,…,58 и :00/:30).
+# timeout 9m: зависший прогон не держит flock и не глушит следующие тики.
+1-59/10 * * * * cd /opt/sync2 && flock -n /tmp/sync2.lock timeout 9m node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts tick >> logs/tick.log 2>&1
+# сверка со старым синком — раз в сутки, 09:05 МСК
+5 6 * * * cd /opt/sync2 && timeout 5m node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts compare-v1 >> logs/compare.log 2>&1

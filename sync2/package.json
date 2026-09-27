@@ -16,7 +16,8 @@
     "test:db": "TEST_DATABASE_URL=${TEST_DATABASE_URL:-postgres://localhost:5432/sync2_test} vitest run --project db",
     "db:generate": "drizzle-kit generate --config packages/db/drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config packages/db/drizzle.config.ts",
-    "cli": "tsx --env-file=.env apps/worker/src/cli.ts"
+    "cli": "tsx --env-file=.env apps/worker/src/cli.ts",
+    "deploy": "bash deploy/deploy.sh"
   },
   "devDependencies": {
     "@types/node": "^20",
