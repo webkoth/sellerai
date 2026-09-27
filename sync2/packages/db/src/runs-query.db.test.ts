@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { loadChannels } from "./channels"
 import { seedChannels } from "./channels-seed"
 import { drizzleRunStore } from "./run-store"
-import { countFailedRunsSince, lastRunStatus, nonOkStreak, plannedWritesSince } from "./runs-query"
+import { countFailedRunsSince, countStuckRunsSince, lastOkRunAt, lastRunStatus, nonOkStreak, plannedWritesSince } from "./runs-query"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 import { drizzleWriteStore } from "./writes-store"
 
@@ -37,9 +37,23 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
       { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
       { channel: "ozon", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null },
       { channel: "kit", barcode: "A", field: "stock", before: 3, after: 2, mode: "dry-run", applied: false, response: null, error: null },
+      // Режим off — не план dry-run, в сводку не попадает.
+      { channel: "ym", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null },
+    ])
+    // Тот же баркод в следующем прогоне (план держится, пока зеркало не выровняли) — строк больше, баркодов столько же.
+    const runId2 = "00000000-0000-4000-8000-0000000000f6"
+    await insertRun(h.db, runId2)
+    await drizzleWriteStore(h.db, runId2, ids)([
+      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
     ])
     const planned = await plannedWritesSince(h.db, "2026-09-01T00:00:00.000Z")
-    expect(planned).toMatchObject({ ozon: 2, kit: 1, ym: 0, wb: 0, site: 0 })
+    expect(planned).toMatchObject({
+      ozon: { barcodes: 2, rows: 3 },
+      kit: { barcodes: 1, rows: 1 },
+      ym: { barcodes: 0, rows: 0 },
+      wb: { barcodes: 0, rows: 0 },
+      site: { barcodes: 0, rows: 0 },
+    })
   })
 
   it("статус последнего завершённого запуска джобы; ни одного — null", async () => {
@@ -78,5 +92,20 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     expect(await nonOkStreak(h.db, "streak")).toBe(1)
     // Ни одного ok — все не-ok подряд.
     expect(await nonOkStreak(h.db, "other")).toBe(1)
+  })
+
+  it("время последнего ok-прогона джобы; ни одного — null", async () => {
+    expect(await lastOkRunAt(h.db, "нет-такой-джобы")).toBeNull()
+    // a1 10:00 и a5 10:40 — ok; a6 10:50 partial позже.
+    expect(await lastOkRunAt(h.db, "streak")).toBe("2026-09-27T10:40:00.000Z")
+  })
+
+  it("зависшие прогоны: running старше порога в окне; свежий running и закрытые — нет", async () => {
+    await run("hang", "b1", "2026-09-27T09:00:00.000Z", "running")
+    await run("hang", "b2", "2026-09-27T11:50:00.000Z", "running")
+    await run("hang", "b3", "2026-09-26T09:00:00.000Z", "running")
+    // Окно с 2026-09-27 00:00; зависшим считается running, начатый раньше 11:30.
+    // a4 (streak, 10:30, running) — тоже зависший.
+    expect(await countStuckRunsSince(h.db, "2026-09-27T00:00:00.000Z", "2026-09-27T11:30:00.000Z")).toBe(2)
   })
 })

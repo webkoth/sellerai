@@ -244,7 +244,7 @@ async function main(argv: string[]): Promise<number> {
         const outcome = await withRun("compare-v1", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => {
           const ledgerPath = process.env.V1_LEDGER_PATH?.trim() || DEFAULT_V1_LEDGER_PATH
           const result = await runCompareV1({ db, ledgerPath, notifier, now: () => new Date() })
-          return { counters: { same: result.same, diff: result.diff, onlyV1: result.onlyV1, onlyV2: result.onlyV2 } }
+          return { counters: { ...result } }
         })
         return outcome.status === "failed" ? 1 : 0
       }

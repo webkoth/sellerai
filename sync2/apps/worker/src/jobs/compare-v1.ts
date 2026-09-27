@@ -1,10 +1,27 @@
 import { readFileSync } from "node:fs"
-import { countFailedRunsSince, loadPoolState, plannedWritesSince, type Db } from "@sync2/db"
+import {
+  countFailedRunsSince,
+  countStuckRunsSince,
+  countSuspectedDoubleCounts,
+  DOUBLE_COUNT_WINDOW_MINUTES,
+  lastOkRunAt,
+  loadPoolState,
+  mirrorOrderBarcodesSince,
+  plannedWritesSince,
+  type Db,
+  type PlannedWrites,
+} from "@sync2/db"
 import { errorText, type Channel } from "@sync2/shared"
 import type { Notifier } from "../notify"
 
 /** Сутки — окно сводки compare-v1: и для упавших запусков, и для плана записей. */
 export const COMPARE_WINDOW_MS = 24 * 60 * 60 * 1000
+/** Прогон `running` дольше этого — «зависший»: процесс убит, закрывающей записи не будет. */
+export const STUCK_RUN_MS = 30 * 60 * 1000
+/** Пул не пересчитывался дольше этого — пометка в сводке (тик — раз в 10 минут). */
+export const POOL_STALE_MS = 60 * 60 * 1000
+/** Лимит Telegram — 4096 символов; с запасом. */
+export const MAX_TELEGRAM_TEXT = 4000
 
 /** Позиция пула sync2 — как её видит сверка. */
 export interface V2PoolItem {
@@ -58,29 +75,67 @@ export function comparePools(v2: V2PoolItem[], v1: V1Ledger): ComparisonResult {
   return { same, diff, onlyV1, onlyV2 }
 }
 
-const MAX_DIFF_LINES = 10
+const MAX_LIST_LINES = 10
+const TRUNCATED_MARK = "\n… (сводка обрезана)"
 
+/** Первые MAX_LIST_LINES через запятую и «… (ещё N)»; пусто — «—». */
 function formatList(items: string[]): string {
-  return items.length === 0 ? "—" : items.join(", ")
+  if (items.length === 0) return "—"
+  const tail = items.length > MAX_LIST_LINES ? `, … (ещё ${items.length - MAX_LIST_LINES})` : ""
+  return items.slice(0, MAX_LIST_LINES).join(", ") + tail
 }
 
-/** Короткая сводка для Telegram — не отчёт с рекомендацией, а числа для решения владельца. */
-export function formatComparison(r: ComparisonResult, extra: { failedRuns: number; planned: Record<Channel, number> }): string {
-  const total = r.same + r.diff.length + r.onlyV1.length + r.onlyV2.length
-  const shown = r.diff.slice(0, MAX_DIFF_LINES).map((d) => `${d.barcode}: старый ${d.v1}, новый ${d.v2}`)
-  const diffTail = r.diff.length > MAX_DIFF_LINES ? `, … (ещё ${r.diff.length - MAX_DIFF_LINES})` : ""
-  const diffLine = r.diff.length === 0 ? "расходится 0" : `расходится ${r.diff.length}: ${shown.join(", ")}${diffTail}`
-  const onlyV1Line = formatList(r.onlyV1.map((i) => `${i.barcode} (${i.v1})`))
-  const onlyV2Line = formatList(r.onlyV2.map((i) => `${i.barcode} (${i.v2})`))
+/** Время для владельца: «27.09 14:50 МСК» (Москва — UTC+3 без перехода на летнее). */
+function formatMsk(iso: string): string {
+  const t = new Date(Date.parse(iso) + 3 * 60 * 60 * 1000).toISOString()
+  return `${t.slice(8, 10)}.${t.slice(5, 7)} ${t.slice(11, 16)} МСК`
+}
 
-  return [
+/** Всё, кроме самой сверки пулов, что попадает в сводку. */
+export interface SummaryExtra {
+  now: Date
+  failedRuns: number
+  /** `running` старше STUCK_RUN_MS за сутки. */
+  stuckRuns: number
+  planned: Record<Channel, PlannedWrites>
+  /** Начало последнего ok-прогона pool; ни одного — null. */
+  lastPoolOkAt: string | null
+  /** Баркоды с заказом/отменой зеркала за последние DOUBLE_COUNT_WINDOW_MINUTES — пометка у строк diff. */
+  recentOrderBarcodes: ReadonlySet<string>
+  suspectedDoubleCounts: number
+}
+
+function poolLine(lastOkAt: string | null, now: Date): string {
+  if (lastOkAt === null) return "Пул: ⚠️ пул ни разу не пересчитан"
+  const ageMs = now.getTime() - Date.parse(lastOkAt)
+  const stale = ageMs > POOL_STALE_MS ? ` ⚠️ пул не пересчитывался ${Math.floor(ageMs / 3_600_000)} ч` : ""
+  return `Пул пересчитан: ${formatMsk(lastOkAt)}${stale}`
+}
+
+/**
+ * Короткая сводка для Telegram — не отчёт с рекомендацией, а числа для решения владельца.
+ * Не длиннее MAX_TELEGRAM_TEXT: длиннее Telegram не примет вовсе.
+ */
+export function formatComparison(r: ComparisonResult, extra: SummaryExtra): string {
+  const total = r.same + r.diff.length + r.onlyV1.length + r.onlyV2.length
+  const recent = ` (заказ ≤${DOUBLE_COUNT_WINDOW_MINUTES} мин)`
+  const diffItems = r.diff.map((d) => `${d.barcode}: старый ${d.v1}, новый ${d.v2}${extra.recentOrderBarcodes.has(d.barcode) ? recent : ""}`)
+  const diffLine = r.diff.length === 0 ? "расходится 0" : `расходится ${r.diff.length}: ${formatList(diffItems)}`
+  const p = extra.planned
+  const plan = (c: Channel) => `${p[c].barcodes}/${p[c].rows}`
+
+  const text = [
     "🔎 sync2 ↔ старый синк, сверка пула",
     `совпадает ${r.same} из ${total}`,
     diffLine,
-    `Только у старого: ${onlyV1Line}  Только у нового: ${onlyV2Line}`,
-    `План записей за сутки (dry-run): Ozon ${extra.planned.ozon}, ЯМ ${extra.planned.ym}, KIT ${extra.planned.kit}`,
-    `Упавших прогонов за сутки: ${extra.failedRuns}`,
+    `Только у старого (${r.onlyV1.length}): ${formatList(r.onlyV1.map((i) => `${i.barcode} (${i.v1})`))}`,
+    `Только у нового (${r.onlyV2.length}): ${formatList(r.onlyV2.map((i) => `${i.barcode} (${i.v2})`))}`,
+    `Подозрение на двойной счёт: ${extra.suspectedDoubleCounts}`,
+    `План записей за сутки (dry-run, баркодов/строк): Ozon ${plan("ozon")}, ЯМ ${plan("ym")}, KIT ${plan("kit")}`,
+    poolLine(extra.lastPoolOkAt, extra.now),
+    `Упавших прогонов за сутки: ${extra.failedRuns}, зависших (running > ${STUCK_RUN_MS / 60_000} мин): ${extra.stuckRuns}`,
   ].join("\n")
+  return text.length <= MAX_TELEGRAM_TEXT ? text : text.slice(0, MAX_TELEGRAM_TEXT - TRUNCATED_MARK.length) + TRUNCATED_MARK
 }
 
 /** Леджер JSON старого синка. Файла нет или он битый — ошибка, а не пустой пул по умолчанию: сверка вслепую хуже, чем её отсутствие. */
@@ -103,24 +158,44 @@ function readLedger(path: string): V1Ledger {
 }
 
 /**
- * Сверка пула sync2 с леджером старого синка + сводка за сутки (упавшие
- * прогоны, план записей по площадкам) — раз в сутки в Telegram.
+ * Сверка пула sync2 с леджером старого синка + сводка за сутки (упавшие и зависшие
+ * прогоны, план записей по площадкам, свежесть пула, шум двойного счёта) — раз в
+ * сутки в Telegram. Сводка не доставлена — ошибка: иначе джоба ok, а владелец
+ * ничего не получил.
  */
 export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier: Notifier; now: () => Date }): Promise<{
   same: number
   diff: number
   onlyV1: number
   onlyV2: number
+  suspectedDoubleCounts: number
+  stuckRuns: number
 }> {
-  const since = new Date(deps.now().getTime() - COMPARE_WINDOW_MS).toISOString()
-  const [{ items }, ledger, failedRuns, planned] = await Promise.all([
-    loadPoolState(deps.db),
-    Promise.resolve(readLedger(deps.ledgerPath)),
-    countFailedRunsSince(deps.db, since),
-    plannedWritesSince(deps.db, since),
+  const { db } = deps
+  const now = deps.now()
+  const ago = (ms: number) => new Date(now.getTime() - ms).toISOString()
+  const since = ago(COMPARE_WINDOW_MS)
+  // Леджер — до запросов к базе: нет леджера — нет и сверки.
+  const ledger = readLedger(deps.ledgerPath)
+  const [{ items }, failedRuns, stuckRuns, planned, lastPoolOkAt, recentOrderBarcodes, suspectedDoubleCounts] = await Promise.all([
+    loadPoolState(db),
+    countFailedRunsSince(db, since),
+    countStuckRunsSince(db, since, ago(STUCK_RUN_MS)),
+    plannedWritesSince(db, since),
+    lastOkRunAt(db, "pool"),
+    mirrorOrderBarcodesSince(db, ago(DOUBLE_COUNT_WINDOW_MINUTES * 60_000)),
+    countSuspectedDoubleCounts(db, since),
   ])
 
   const result = comparePools(items.map((i) => ({ barcode: i.barcode, base: i.base })), ledger)
-  await deps.notifier.send(formatComparison(result, { failedRuns, planned }))
-  return { same: result.same, diff: result.diff.length, onlyV1: result.onlyV1.length, onlyV2: result.onlyV2.length }
+  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolOkAt, recentOrderBarcodes, suspectedDoubleCounts })
+  if (!(await deps.notifier.send(text))) throw new Error("сводка сверки не доставлена в Telegram (бот не настроен или Telegram отказал)")
+  return {
+    same: result.same,
+    diff: result.diff.length,
+    onlyV1: result.onlyV1.length,
+    onlyV2: result.onlyV2.length,
+    suspectedDoubleCounts,
+    stuckRuns,
+  }
 }

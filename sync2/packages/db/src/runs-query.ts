@@ -1,7 +1,8 @@
-import { and, count, desc, eq, gte, inArray, sql } from "drizzle-orm"
+import { and, count, countDistinct, desc, eq, gte, inArray, lt, max, sql } from "drizzle-orm"
 import { CHANNELS, isChannel, type Channel } from "@sync2/shared"
 import type { Db } from "./client"
 import { channels, runs, writes } from "./schema"
+import { toIsoOrNull } from "./time"
 
 /**
  * Значение счётчика из последнего успешного (ok/partial) запуска джобы, в счётчиках
@@ -59,15 +60,46 @@ export async function countFailedRunsSince(db: Db, sinceIso: string): Promise<nu
   return row?.n ?? 0
 }
 
-/** Число запланированных записей (строк `writes`) начиная с sinceIso, по площадкам; без строк — 0. */
-export async function plannedWritesSince(db: Db, sinceIso: string): Promise<Record<Channel, number>> {
-  const out = Object.fromEntries(CHANNELS.map((c) => [c, 0])) as Record<Channel, number>
+/** План записей по площадке: разных баркодов и строк журнала `writes`. */
+export interface PlannedWrites {
+  barcodes: number
+  rows: number
+}
+
+/**
+ * План записей в dry-run начиная с sinceIso, по площадкам; без строк — нули.
+ * Главное число — разные баркоды: пока зеркало не выровняли, одна и та же запись
+ * планируется каждым тиком, и строк за сутки в разы больше, чем изменений.
+ */
+export async function plannedWritesSince(db: Db, sinceIso: string): Promise<Record<Channel, PlannedWrites>> {
+  const out = Object.fromEntries(CHANNELS.map((c) => [c, { barcodes: 0, rows: 0 }])) as Record<Channel, PlannedWrites>
   const rows = await db
-    .select({ code: channels.code, n: count() })
+    .select({ code: channels.code, barcodes: countDistinct(writes.barcode), rows: count() })
     .from(writes)
     .innerJoin(channels, eq(writes.channelId, channels.id))
-    .where(gte(writes.createdAt, sinceIso))
+    .where(and(gte(writes.createdAt, sinceIso), eq(writes.mode, "dry-run")))
     .groupBy(channels.code)
-  for (const r of rows) if (isChannel(r.code)) out[r.code] = r.n
+  for (const r of rows) if (isChannel(r.code)) out[r.code] = { barcodes: r.barcodes, rows: r.rows }
   return out
+}
+
+/** Начало последнего ok-прогона джобы (ISO); ни одного — null. */
+export async function lastOkRunAt(db: Db, job: string): Promise<string | null> {
+  const [row] = await db
+    .select({ at: max(runs.startedAt) })
+    .from(runs)
+    .where(and(eq(runs.job, job), eq(runs.status, "ok")))
+  return toIsoOrNull(row?.at ?? null)
+}
+
+/**
+ * «Зависшие» прогоны: начаты с sinceIso, но раньше startedBeforeIso и до сих пор
+ * `running` — процесс убит (OOM-киллер, перезагрузка) и закрывающей записи не будет.
+ */
+export async function countStuckRunsSince(db: Db, sinceIso: string, startedBeforeIso: string): Promise<number> {
+  const [row] = await db
+    .select({ n: count() })
+    .from(runs)
+    .where(and(eq(runs.status, "running"), gte(runs.startedAt, sinceIso), lt(runs.startedAt, startedBeforeIso)))
+  return row?.n ?? 0
 }
