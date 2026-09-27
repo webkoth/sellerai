@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { comparePools, formatComparison, MAX_TELEGRAM_TEXT, type SummaryExtra } from "./compare-v1"
+import type { Db } from "@sync2/db"
+import { comparePools, formatComparison, MAX_TELEGRAM_TEXT, runCompareV1, type SummaryExtra } from "./compare-v1"
 
 describe("comparePools", () => {
   it("совпадения, расхождения и товары только в одном пуле", () => {
@@ -94,5 +95,26 @@ describe("formatComparison", () => {
     expect(MAX_TELEGRAM_TEXT).toBe(4000)
     expect(text.length).toBeLessThanOrEqual(4000)
     expect(text).toMatch(/сводка обрезана/)
+  })
+})
+
+describe("runCompareV1", () => {
+  it("леджер не читается — ошибка до единого обращения к базе, Telegram не вызван", async () => {
+    // Любое обращение к базе (db.select, db.selectDistinct, …) записывается и бросает.
+    const touched: string[] = []
+    const db = new Proxy(
+      {},
+      {
+        get: (_t, prop) => {
+          touched.push(String(prop))
+          throw new Error("к базе обратились")
+        },
+      },
+    ) as unknown as Db
+    const sent: string[] = []
+    const notifier = { send: async (t: string) => (sent.push(t), true) }
+    await expect(runCompareV1({ db, ledgerPath: "/нет/такого/inventory.json", notifier, now: () => now })).rejects.toThrow(/не читается/)
+    expect(touched).toEqual([])
+    expect(sent).toEqual([])
   })
 })

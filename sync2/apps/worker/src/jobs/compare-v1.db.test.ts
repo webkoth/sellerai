@@ -31,9 +31,4 @@ describe.skipIf(!TEST_DATABASE_URL)("runCompareV1", () => {
     const notifier = { send: async () => false }
     await expect(runCompareV1({ db: h.db, ledgerPath, notifier, now })).rejects.toThrow(/не доставлена/)
   })
-
-  it("леджер не читается — ошибка до запросов к базе", async () => {
-    const notifier = { send: async () => true }
-    await expect(runCompareV1({ db: h.db, ledgerPath: "/нет/такого/inventory.json", notifier, now })).rejects.toThrow(/не читается/)
-  })
 })
