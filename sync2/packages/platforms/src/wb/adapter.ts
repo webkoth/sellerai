@@ -95,7 +95,10 @@ export function createWbAdapter(
     for (const warehouse of warehouses) {
       const warehouseStocks = await fetchFbsStocks(token, warehouse.id, skus)
       const { stocks: mapped } = mapFbsStocks(warehouseStocks, cardsForMapper)
-      for (const row of mapped) stocks.push({ ...row, warehouse: warehouse.name })
+      // Id склада, а не имя: продавец может переименовать склад в личном
+      // кабинете в любой момент — id остаётся устойчивым ключом группировки
+      // (ревью 1.3a).
+      for (const row of mapped) stocks.push({ ...row, warehouse: String(warehouse.id) })
     }
 
     return { stocks, skippedNoWbBarcode: [] }

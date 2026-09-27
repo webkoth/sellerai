@@ -33,4 +33,25 @@ describe("loadChannelsConfig", () => {
   it("не хватает ключа — ошибка с именем переменной", () => {
     expect(() => loadChannelsConfig({ ...env, YAKIT_API_TOKEN: "" })).toThrow(/YAKIT_API_TOKEN/)
   })
+
+  describe("YM_WAREHOUSE_IDS — непустой список положительных целых", () => {
+    it("только запятая — пустой список после разбора — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "," })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+    it("не число — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "abc" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+    it("ноль — не положительное число — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "0" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+    it("отрицательное число — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "-5" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+    it("дробное число — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "2369574.5" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+    it("один из списка не число — ошибка целиком, а не частичный список", () => {
+      expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "2369574,abc" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+  })
 })

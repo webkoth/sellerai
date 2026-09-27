@@ -28,18 +28,35 @@ function formatSkipped(channel: string, skipped: string[]): string | null {
   return `${channel} | пропусков без штрихкода WB: ${skipped.length} — ${shown.join(", ")}${rest}`
 }
 
+/** Заказы по жизненному циклу одной строкой: `open=.., shipped=.., …`. */
+function lifecycleBreakdown(orders: ChannelOrder[]): string {
+  const byLifecycle = Object.fromEntries(ORDER_LIFECYCLES.map((l) => [l, 0])) as Record<(typeof ORDER_LIFECYCLES)[number], number>
+  for (const order of orders) byLifecycle[order.lifecycle]++
+  return ORDER_LIFECYCLES.map((l) => `${l}=${byLifecycle[l]}`).join(", ")
+}
+
 /**
  * Одна строка сводки на площадку: заказы по жизненному циклу, снимок остатков.
  * Формат — план, задача 7, Step 3.
  */
 function printChannelSummary(channel: string, orders: ChannelOrder[], stocks: { stocks: { quantity: number }[]; skippedNoWbBarcode: string[] }): void {
-  const byLifecycle = Object.fromEntries(ORDER_LIFECYCLES.map((l) => [l, 0])) as Record<(typeof ORDER_LIFECYCLES)[number], number>
-  for (const order of orders) byLifecycle[order.lifecycle]++
-  const lifecycleText = ORDER_LIFECYCLES.map((l) => `${l}=${byLifecycle[l]}`).join(", ")
   const totalQty = stocks.stocks.reduce((sum, s) => sum + s.quantity, 0)
   const inStock = stocks.stocks.filter((s) => s.quantity > 0).length
   console.log(
-    `${channel} | заказов: ${orders.length} (${lifecycleText}) | строк остатков: ${stocks.stocks.length} | штук: ${totalQty} | в наличии: ${inStock} | пропусков без штрихкода WB: ${stocks.skippedNoWbBarcode.length}`,
+    `${channel} | заказов: ${orders.length} (${lifecycleBreakdown(orders)}) | строк остатков: ${stocks.stocks.length} | штук: ${totalQty} | в наличии: ${inStock} | пропусков без штрихкода WB: ${stocks.skippedNoWbBarcode.length}`,
+  )
+}
+
+/**
+ * WB-каталог не прочитался — у Ozon/ЯМ/KIT нет индекса штрихкодов WB, и
+ * `resolveWbBarcode` не сопоставит почти ничего: печатать остатки в этом
+ * состоянии как настоящие значит выдать почти пустой (или бессмысленный)
+ * снимок за реальный. Остатки поэтому не запрашиваются вовсе, заказы —
+ * запрашиваются и печатаются как обычно (они не зависят от каталога WB).
+ */
+function printChannelSummaryWithoutWbCatalog(channel: string, orders: ChannelOrder[]): void {
+  console.log(
+    `${channel} | заказов: ${orders.length} (${lifecycleBreakdown(orders)}) (без каталога WB — остатки не сопоставлены) | остатки: пропущены`,
   )
 }
 
@@ -50,7 +67,17 @@ function printChannelSummary(channel: string, orders: ChannelOrder[], stocks: { 
  * каждая обёрнута в свой try/catch, итоговый код выхода 1, если сбоила хоть одна.
  */
 async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
-  const config = loadChannelsConfig(env)
+  // Битый или неполный конфиг — не запуск с частичными площадками и не
+  // необработанный отказ промиса со стек-трейсом: понятная строка в stderr
+  // и код выхода 2 (как у неизвестной команды), отдельно от кода 1 сбоя
+  // конкретной площадки при живом чтении ниже.
+  let config: ReturnType<typeof loadChannelsConfig>
+  try {
+    config = loadChannelsConfig(env)
+  } catch (e) {
+    console.error(`ОШИБКА конфига: ${errorText(e)}`)
+    return 2
+  }
   const since = new Date(Date.now() - PROBE_WINDOW_MS).toISOString()
   let exitCode = 0
 
@@ -80,9 +107,16 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   for (const { channel, adapter } of channels) {
     try {
       const orders = await adapter.fetchOrders(since)
-      const stocks = await adapter.fetchStocks()
-      printChannelSummary(channel, orders, stocks)
-      skippedByChannel.set(channel, stocks.skippedNoWbBarcode)
+      if (wbCatalogOk) {
+        const stocks = await adapter.fetchStocks()
+        printChannelSummary(channel, orders, stocks)
+        skippedByChannel.set(channel, stocks.skippedNoWbBarcode)
+      } else {
+        // wb сюда не попадает (см. выше) — это всегда Ozon/ЯМ/KIT: без
+        // каталога WB их остатки не сопоставятся, поэтому не запрашиваются
+        // и не печатаются как настоящие.
+        printChannelSummaryWithoutWbCatalog(channel, orders)
+      }
     } catch (e) {
       console.log(`${channel} | ОШИБКА ${errorText(e)}`)
       exitCode = 1

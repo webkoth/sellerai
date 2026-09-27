@@ -142,9 +142,13 @@ describe("createWbAdapter — fetchStocks", () => {
     // packages/domain/src/stock.test.ts) — здесь по штрихкоду должно быть
     // ДВЕ строки, по одной на склад, а их сумма всё равно 5: второй склад
     // не потерян, только не свёрнут заранее.
+    //
+    // `warehouse` — id склада (строкой), а не имя: имя продавец может
+    // переименовать в личном кабинете в любой момент, а id — устойчивый ключ
+    // склада (ревью 1.3a).
     const rowsForBarcode = result.stocks.filter((s) => s.barcode === "111")
     expect(rowsForBarcode).toHaveLength(2)
-    expect(rowsForBarcode.map((s) => s.warehouse).sort()).toEqual(["Второй склад", "Мой склад Краснодар"])
+    expect(rowsForBarcode.map((s) => s.warehouse).sort()).toEqual(["1408913", "2000000"])
     const total = rowsForBarcode.reduce((sum, s) => sum + s.quantity, 0)
     expect(total).toBe(5)
     expect(total).not.toBe(2)

@@ -24,13 +24,26 @@ function required(env: Record<string, string | undefined>, name: string): string
   return value
 }
 
-/** Список чисел через запятую — склады ЯМ (у KIT и WB склад/токен всегда один). */
-function requiredNumberList(env: Record<string, string | undefined>, name: string): number[] {
-  return required(env, name)
+/**
+ * Список складов ЯМ через запятую — непустой список положительных целых
+ * (у KIT и WB склад/токен всегда один, отдельного разбора не требуют).
+ * Пустой список после разбора (например, одна запятая), не-число, ноль,
+ * отрицательное или дробное значение — ошибка с именем переменной: тихая
+ * подстановка `NaN`/пустого списка означала бы читать несуществующий склад
+ * или не читать ни одного молча.
+ */
+function requiredWarehouseIds(env: Record<string, string | undefined>, name: string): number[] {
+  const parts = required(env, name)
     .split(",")
     .map((part) => part.trim())
     .filter(Boolean)
-    .map(Number)
+  const ids = parts.map((part) => {
+    const n = Number(part)
+    if (!Number.isInteger(n) || n <= 0) throw new Error(`${name}: "${part}" — не целое положительное число`)
+    return n
+  })
+  if (ids.length === 0) throw new Error(`${name} не задан`)
+  return ids
 }
 
 export function loadChannelsConfig(env: Record<string, string | undefined>): ChannelsConfig {
@@ -41,7 +54,7 @@ export function loadChannelsConfig(env: Record<string, string | undefined>): Cha
       apiKey: required(env, "YM_API_TOKEN"),
       businessId: required(env, "YM_BUSINESS_ID"),
       campaignId: required(env, "YM_CAMPAIGN_ID"),
-      warehouseIds: requiredNumberList(env, "YM_WAREHOUSE_IDS"),
+      warehouseIds: requiredWarehouseIds(env, "YM_WAREHOUSE_IDS"),
     },
     kit: { token: required(env, "YAKIT_API_TOKEN"), warehouseId: required(env, "KIT_WAREHOUSE_ID") },
   }
