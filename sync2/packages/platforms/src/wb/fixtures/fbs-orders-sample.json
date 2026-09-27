@@ -1,0 +1,104 @@
+[
+  {
+    "id": 5140921178,
+    "rid": "ecB.r5b8b1a3d5dc0485eb2e8e67a59395126.0.0",
+    "nmId": 1002814727,
+    "skus": [
+      "2050943817188"
+    ],
+    "price": 406100,
+    "chrtId": 1498917266,
+    "address": null,
+    "article": "6567454343",
+    "comment": "",
+    "offices": [
+      "Краснодар"
+    ],
+    "options": {
+      "isB2B": false
+    },
+    "officeId": 30,
+    "orderUid": "r5b8b1a3d5dc0485eb2e8e67a59395126",
+    "supplyId": "WB-GI-243631283",
+    "cargoType": 1,
+    "colorCode": "",
+    "createdAt": "2026-06-03T09:35:17Z",
+    "scanPrice": 1500,
+    "isZeroOrder": false,
+    "warehouseId": 1408913,
+    "currencyCode": 643,
+    "deliveryType": "fbs",
+    "convertedPrice": 406100,
+    "crossBorderType": 0,
+    "convertedCurrencyCode": 643,
+    "isPickupPointShipmentAllowed": false
+  },
+  {
+    "id": 5144812207,
+    "rid": "eQ.if5595cb7da02513645427851bc66c62d.0.0",
+    "nmId": 434077004,
+    "skus": [
+      "2044276494512"
+    ],
+    "price": 798600,
+    "chrtId": 616469229,
+    "address": null,
+    "article": "9458398674",
+    "comment": "",
+    "offices": [
+      "Краснодар"
+    ],
+    "options": {
+      "isB2B": false
+    },
+    "officeId": 30,
+    "orderUid": "if5595cb7da02513645427851bc66c62d",
+    "supplyId": "WB-GI-243815942",
+    "cargoType": 1,
+    "colorCode": "",
+    "createdAt": "2026-06-04T05:36:16Z",
+    "scanPrice": 1500,
+    "isZeroOrder": false,
+    "warehouseId": 1408913,
+    "currencyCode": 643,
+    "deliveryType": "fbs",
+    "convertedPrice": 798600,
+    "crossBorderType": 0,
+    "convertedCurrencyCode": 643,
+    "isPickupPointShipmentAllowed": false
+  },
+  {
+    "id": 5152432392,
+    "rid": "eA3.i958e38f1a3d0e911eddd86956198979e.0.0",
+    "nmId": 387711805,
+    "skus": [
+      "2043603985655"
+    ],
+    "price": 716800,
+    "chrtId": 562668360,
+    "address": null,
+    "article": "JW-NB-AGT-M-0112",
+    "comment": "",
+    "offices": [
+      "Краснодар"
+    ],
+    "options": {
+      "isB2B": false
+    },
+    "officeId": 30,
+    "orderUid": "i958e38f1a3d0e911eddd86956198979e",
+    "supplyId": "WB-GI-244355358",
+    "cargoType": 1,
+    "colorCode": "",
+    "createdAt": "2026-06-05T17:52:47Z",
+    "scanPrice": 1500,
+    "isZeroOrder": false,
+    "warehouseId": 1408913,
+    "currencyCode": 643,
+    "deliveryType": "fbs",
+    "convertedPrice": 716800,
+    "crossBorderType": 0,
+    "convertedCurrencyCode": 643,
+    "isPickupPointShipmentAllowed": false
+  }
+]
