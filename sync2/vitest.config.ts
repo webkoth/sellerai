@@ -5,7 +5,9 @@ const pkg = (name: string) => fileURLToPath(new URL(`./packages/${name}/src/inde
 
 // Пакеты воркспейса лежат в node_modules симлинком, а node_modules Vitest не
 // преобразует. Псевдонимы прямо на исходники снимают вопрос целиком (как в finstock).
+// "@sync2/db/test-db" — ДО "@sync2/db": более короткий псевдоним перехватывает подпуть (урок finstock).
 const alias = {
+  "@sync2/db/test-db": fileURLToPath(new URL("./packages/db/src/test-db.ts", import.meta.url)),
   "@sync2/shared": pkg("shared"),
   "@sync2/db": pkg("db"),
   "@sync2/domain": pkg("domain"),
