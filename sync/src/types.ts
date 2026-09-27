@@ -2,7 +2,7 @@
  * Общие типы слоя авто-синхронизации.
  */
 
-export type Marketplace = 'wb' | 'ozon' | 'ym';
+export type Marketplace = 'wb' | 'ozon' | 'ym' | 'kit';
 
 /** Текущий остаток оффера на площадке (ключ — barcode). */
 export interface PlatformStock {
@@ -28,7 +28,7 @@ export interface LedgerEntry {
   base: number; // физический остаток — источник истины
   wbBaseline: number; // что мы последний раз выставили на WB (детект пополнения)
   appliedOrders: string[]; // id заказов, уже вычтенных из base (идемпотентность)
-  lastPushed: { wb?: number; ozon?: number; ym?: number };
+  lastPushed: { wb?: number; ozon?: number; ym?: number; kit?: number };
   title?: string;
   vendorCode?: string;
   category?: string; // WB subjectName — для комиссии и k при расчёте прибыли

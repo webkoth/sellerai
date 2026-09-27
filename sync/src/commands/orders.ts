@@ -1,10 +1,11 @@
 /**
  * Подкоманда `orders` — быстрый order-loop (cron каждую минуту).
  * Тянет ТОЛЬКО заказы (лёгкий запрос, без полного каталога), ловит новые,
- * уменьшает остаток в пуле и пушит на все 3 МП, шлёт алерт в Telegram по каждому заказу.
+ * уменьшает остаток в пуле и пушит на все площадки (WB, Ozon, ЯМ, KIT), шлёт алерт в Telegram по каждому заказу.
  * Тяжёлый full-reconcile (пополнения/выравнивание) делает подкоманда `stocks`.
  */
 import { collectOpenOrders, writeWbStock, writeOzonStock, writeYmStock } from '../clients.js';
+import { listKitVariants, writeKitStock } from '../kit.js';
 import { loadLedger, saveLedger } from '../inventory.js';
 import { costsMap } from '../costs.js';
 import { pricing, SKIP_OZON } from '../config.js';
@@ -18,11 +19,12 @@ import type { Marketplace } from '../types.js';
 // то есть больше двух тиков подряд; один скип по flock или задержка тика алерт не даёт.
 const GAP_ALERT_MIN = 40;
 
-const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ' };
+const MP_NAME: Record<Marketplace, string> = { wb: 'WB', ozon: 'Ozon', ym: 'ЯМ', kit: 'KIT' };
 const round10 = (n: number): number => Math.ceil(n / 10) * 10;
 const rub = (n: number): string => Math.round(n).toLocaleString('ru-RU') + ' ₽';
 // комиссия по умолчанию (бижутерия), если категория не определена
-const DEFAULT_TAKE: Record<string, number> = { wb: 0.32, ozon: 0.53, ym: 0.52 };
+// KIT — без комиссии площадки, только эквайринг (~2%).
+const DEFAULT_TAKE: Record<string, number> = { wb: 0.32, ozon: 0.53, ym: 0.52, kit: 0.02 };
 
 interface OrderAlert {
   mp: Marketplace;
@@ -64,8 +66,16 @@ export async function runOrders(apply: boolean): Promise<void> {
   for (const [bc, e] of Object.entries(ledger.items)) if (e.vendorCode) vendorToBarcode.set(e.vendorCode, bc);
   const resolve = (k: string): string | null => (ledger.items[k] ? k : vendorToBarcode.get(k) ?? null);
 
-  // окно 2 дня — заказы обрабатываются за минуты, незачем тянуть 30 дней
-  const { orders, errors } = await collectOpenOrders(2);
+  // окно 2 дня — заказы обрабатываются за минуты, незачем тянуть 30 дней.
+  // Варианты KIT читаются один раз: они нужны и заказам (вариант → штрихкод), и записи остатка.
+  let kitVariants: Awaited<ReturnType<typeof listKitVariants>> | undefined;
+  try {
+    kitVariants = await listKitVariants();
+  } catch (e) {
+    log(`🟡 order-loop: KIT не отдал варианты — пропуск тика: ${(e as Error).message.slice(0, 160)}`);
+    return;
+  }
+  const { orders, errors } = await collectOpenOrders(2, kitVariants);
   if (errors.length) {
     log(`🟡 order-loop: сбой тянучки заказов (${errors.join(', ')}) — пропуск тика`);
     return;
@@ -90,7 +100,7 @@ export async function runOrders(apply: boolean): Promise<void> {
     e.base = Math.max(0, e.base - o.qty);
     e.appliedOrders.push(o.orderId);
     e.wbBaseline = e.base;
-    e.lastPushed = { wb: e.base, ozon: e.base, ym: e.base };
+    e.lastPushed = { wb: e.base, ozon: e.base, ym: e.base, kit: e.base };
     e.updatedAt = new Date().toISOString();
     affected.set(bc, e.base);
 
@@ -142,8 +152,15 @@ export async function runOrders(apply: boolean): Promise<void> {
   await writeWbStock(changes);
   const ozRes = await writeOzonStock(mirror(true));
   const ymRes = await writeYmStock(mirror(false));
+  // KIT — по штрихкоду; товары, которых в KIT нет, пропускаются без ошибки.
+  let kitOk = 0;
+  try {
+    kitOk = (await writeKitStock(changes, kitVariants)).ok;
+  } catch (e) {
+    log(`🟡 order-loop: KIT не принял остатки — выровняет ближайшая сверка: ${(e as Error).message.slice(0, 160)}`);
+  }
   saveLedger(ledger);
-  log(`order-loop: применено по ${changes.length} товарам (Ozon принято ${ozRes.ok}, ЯМ принято ${ymRes.ok})`);
+  log(`order-loop: применено по ${changes.length} товарам (Ozon принято ${ozRes.ok}, ЯМ принято ${ymRes.ok}, KIT ${kitOk})`);
   if (changes.length && ozRes.ok === 0 && !changes.every((c) => skipOzon.has(c.key))) {
     log(`🟡 order-loop: Ozon не принял ни один ключ: ${ozRes.errors.slice(0, 6).join(', ')}`);
   }

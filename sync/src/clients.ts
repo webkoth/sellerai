@@ -17,6 +17,7 @@ import { apiRequest as ymApiRequest } from '../../mcp/ym-mcp/dist/api/client.js'
 
 import { OZ_WAREHOUSE, YM_WAREHOUSE, YM_CAMPAIGN, YM_BUSINESS, SKIP_OZON } from './config.js';
 import type { Marketplace, OpenOrder } from './types.js';
+import { listKitOrders, type KitVariant } from './kit.js';
 
 const daysAgoISO = (n: number): string => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
 const isCancelled = (s: string): boolean => /cancel|отмен|reject|return|возврат/i.test(s || '');
@@ -389,8 +390,8 @@ async function listWbFbsOrders(daysWindow: number): Promise<OpenOrder[]> {
   return out;
 }
 
-/** Собрать заказы (потребляющие + видимые отмены) по всем 3 МП за окно daysWindow, плоско по позициям. */
-export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> {
+/** Собрать заказы (потребляющие + видимые отмены) по WB, Ozon, ЯМ и KIT за окно daysWindow, плоско по позициям. */
+export async function collectOpenOrders(daysWindow = 30, kitVariants?: KitVariant[]): Promise<OrdersResult> {
   const orders: OpenOrder[] = [];
   const errors: Marketplace[] = [];
   const dateFrom = daysAgoISO(daysWindow);
@@ -429,6 +430,11 @@ export async function collectOpenOrders(daysWindow = 30): Promise<OrdersResult> 
       }
     }
   } catch (e) { errors.push('ym'); console.error(`[collectOpenOrders] ym: ${(e as Error).message.slice(0, 220)}`); }
+
+  try {
+    // KIT (с 2026-09-26): заказ своего магазина снимает единицу с WB/Ozon/ЯМ, как заказ зеркала.
+    for (const o of await listKitOrders(daysWindow, kitVariants)) orders.push(o);
+  } catch (e) { errors.push('kit'); console.error(`[collectOpenOrders] kit: ${(e as Error).message.slice(0, 220)}`); }
 
   return { orders, errors };
 }
