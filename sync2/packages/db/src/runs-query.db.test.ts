@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { loadChannels } from "./channels"
 import { seedChannels } from "./channels-seed"
 import { drizzleRunStore } from "./run-store"
-import { countFailedRunsSince, countStuckRunsSince, lastRunWithCounterAt, lastRunStatus, nonOkStreak, plannedWritesSince } from "./runs-query"
+import { countFailedRunsSince, countStuckRunsSince, lastRunWithCounterAt, lastRunStatus, plannedWritesSince, sameStatusStreak } from "./runs-query"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 import { drizzleWriteStore } from "./writes-store"
 
@@ -81,17 +81,23 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     expect(await lastRunStatus(h.db, "streak")).toBe("failed")
   })
 
-  it("серия не-ok: завершённые прогоны после последнего ok; running не считается; другие джобы — тоже", async () => {
-    expect(await nonOkStreak(h.db, "нет-такой-джобы")).toBe(0)
-    // После a1 (ok): a3 partial, a2 failed; a4 running не в счёт.
-    expect(await nonOkStreak(h.db, "streak")).toBe(2)
-    await run("streak", "a5", "2026-09-27T10:40:00.000Z", "ok")
-    expect(await nonOkStreak(h.db, "streak")).toBe(0)
+  it("серия: завершённые прогоны подряд с тем же статусом, считая от последнего; partial и failed не смешиваются", async () => {
+    expect(await sameStatusStreak(h.db, "нет-такой-джобы", "failed")).toBe(0)
+    // a1 ok 10:00, a3 partial 10:10, a2 failed 10:20, a4 running 10:30 (не в счёт).
+    expect(await sameStatusStreak(h.db, "streak", "failed")).toBe(1)
+    await run("streak", "a5", "2026-09-27T10:40:00.000Z", "failed")
+    expect(await sameStatusStreak(h.db, "streak", "failed")).toBe(2)
+    // Качели: partial после failed — серия partial начинается заново, a3 не в счёт.
     await run("streak", "a6", "2026-09-27T10:50:00.000Z", "partial")
-    await run("other", "a7", "2026-09-27T10:55:00.000Z", "failed")
-    expect(await nonOkStreak(h.db, "streak")).toBe(1)
-    // Ни одного ok — все не-ok подряд.
-    expect(await nonOkStreak(h.db, "other")).toBe(1)
+    expect(await sameStatusStreak(h.db, "streak", "partial")).toBe(1)
+    await run("streak", "a7", "2026-09-27T11:00:00.000Z", "partial")
+    expect(await sameStatusStreak(h.db, "streak", "partial")).toBe(2)
+    // Последний прогон — не этого статуса: серии нет.
+    expect(await sameStatusStreak(h.db, "streak", "failed")).toBe(0)
+    // Другая джоба не мешает.
+    await run("other", "a8", "2026-09-27T11:05:00.000Z", "partial")
+    expect(await sameStatusStreak(h.db, "other", "partial")).toBe(1)
+    expect(await sameStatusStreak(h.db, "streak", "partial")).toBe(2)
   })
 
   it("время последнего завершённого прогона с ключом счётчика: partial с events в счёт, partial с noFreshWb — нет", async () => {

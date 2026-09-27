@@ -33,19 +33,21 @@ export async function lastRunStatus(db: Db, job: string): Promise<"ok" | "partia
 }
 
 /**
- * Число завершённых не-ok (partial/failed) запусков джобы после её последнего ok
- * (ok ни разу не было — все её не-ok). Открытые (`running`) не считаются.
- * Для напоминаний о затянувшемся сбое — см. decideNotification в worker.
+ * Серия: сколько последних завершённых (ok/partial/failed) запусков джобы подряд
+ * имеют статус status — от самого последнего назад до первого с другим статусом.
+ * Последний запуск не этого статуса — 0. Открытые (`running`) не считаются и серию
+ * не прерывают. partial и failed — разные серии: напоминание о затянувшемся сбое
+ * (decideNotification в worker) считает прогоны одного и того же состояния.
  */
-export async function nonOkStreak(db: Db, job: string): Promise<number> {
+export async function sameStatusStreak(db: Db, job: string, status: "ok" | "partial" | "failed"): Promise<number> {
   const [row] = await db
     .select({ n: count() })
     .from(runs)
     .where(
       and(
         eq(runs.job, job),
-        inArray(runs.status, ["partial", "failed"]),
-        sql`${runs.startedAt} > coalesce((select max(r.started_at) from runs r where r.job = ${job} and r.status = 'ok'), '-infinity'::timestamptz)`,
+        eq(runs.status, status),
+        sql`${runs.startedAt} > coalesce((select max(r.started_at) from runs r where r.job = ${job} and r.status in ('ok', 'partial', 'failed') and r.status <> ${status}), '-infinity'::timestamptz)`,
       ),
     )
   return row?.n ?? 0

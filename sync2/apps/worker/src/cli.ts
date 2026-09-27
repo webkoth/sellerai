@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm"
-import { channels, createDb, drizzleRunStore, lastRunStatus, nonOkStreak, runs, seedChannels, type Db } from "@sync2/db"
+import { channels, createDb, drizzleRunStore, lastRunStatus, runs, sameStatusStreak, seedChannels, type Db } from "@sync2/db"
 import {
   createKitAdapter,
   createOzonAdapter,
@@ -165,8 +165,8 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
  * переход не должен теряться молча.
  */
 async function notifyTransition(db: Db, log: Logger, notifier: Notifier, job: string, prev: RunOutcome["status"] | null, outcome: RunOutcome): Promise<void> {
-  const streak = outcome.status === "ok" ? 0 : await nonOkStreak(db, job)
-  const text = decideNotification({ job, prev, cur: { status: outcome.status, detail: describeOutcome(outcome) }, nonOkStreak: streak })
+  const streak = outcome.status === "ok" ? 0 : await sameStatusStreak(db, job, outcome.status)
+  const text = decideNotification({ job, prev, cur: { status: outcome.status, detail: describeOutcome(outcome) }, streak })
   if (text === null) return
   if (!(await notifier.send(text))) log.warn({ job, text }, "уведомление в Telegram не доставлено")
 }

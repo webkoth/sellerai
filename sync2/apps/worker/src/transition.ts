@@ -21,20 +21,22 @@ export function describeOutcome(outcome: Pick<RunOutcome, "error" | "counters">)
  *   partial/failed и partial ↔ failed), — предупреждение;
  * - не ok → ok — «снова в норме»;
  * - тот же не-ok подряд — молчим, но каждые REMIND_EVERY_RUNS прогонов серии
- *   (nonOkStreak — не-ok прогонов подряд, включая текущий) — напоминание:
- *   иначе затянувшийся сбой виден только в первом сообщении.
+ *   (streak — прогонов подряд с тем же статусом, что текущий, включая его;
+ *   partial и failed не смешиваются) — напоминание: иначе затянувшийся сбой
+ *   виден только в первом сообщении. Качели partial ↔ failed уведомляют на
+ *   каждой смене — это смена статуса.
  */
 export function decideNotification(input: {
   job: string
   prev: DoneStatus | null
   cur: { status: DoneStatus; detail: string }
-  nonOkStreak: number
+  streak: number
 }): string | null {
-  const { job, prev, cur, nonOkStreak } = input
+  const { job, prev, cur, streak } = input
   if (cur.status === "ok") return prev !== null && prev !== "ok" ? `✅ sync2 ${job} снова в норме` : null
   if (prev !== cur.status) return `⚠️ sync2 ${job}: ${cur.status} — ${cur.detail}`
-  if (nonOkStreak > 0 && nonOkStreak % REMIND_EVERY_RUNS === 0) {
-    return `⚠️ sync2 ${job}: всё ещё ${cur.status} (${nonOkStreak} прогонов подряд) — ${cur.detail}`
+  if (streak > 0 && streak % REMIND_EVERY_RUNS === 0) {
+    return `⚠️ sync2 ${job}: всё ещё ${cur.status} (${streak} прогонов подряд) — ${cur.detail}`
   }
   return null
 }

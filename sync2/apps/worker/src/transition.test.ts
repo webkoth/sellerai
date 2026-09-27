@@ -15,17 +15,17 @@ describe("decideNotification", () => {
     ["partial → ok", "partial", cur("ok"), 0, "✅ sync2 ingest снова в норме"],
     ["ok → ok", "ok", cur("ok"), 0, null],
     ["partial → partial, серия 2: молчим", "partial", cur("partial"), 2, null],
-  ] as const)("%s", (_name, prev, c, nonOkStreak, expected) => {
-    expect(decideNotification({ job: "ingest", prev, cur: c, nonOkStreak })).toBe(expected)
+  ] as const)("%s", (_name, prev, c, streak, expected) => {
+    expect(decideNotification({ job: "ingest", prev, cur: c, streak })).toBe(expected)
   })
 
   it("partial → partial, серия кратна 36 (≈6 ч при тике 10 мин): напоминание", () => {
     expect(REMIND_EVERY_RUNS).toBe(36)
     for (const streak of [36, 72]) {
-      const text = decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), nonOkStreak: streak })
+      const text = decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak })
       expect(text).toBe(`⚠️ sync2 pool: всё ещё partial (${streak} прогонов подряд) — ozon остатки: 500`)
     }
-    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), nonOkStreak: 37 })).toBeNull()
+    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak: 37 })).toBeNull()
   })
 })
 
