@@ -20,23 +20,24 @@ const SHIPPED_STATUSES = new Set([
  * Жизненный цикл отправления Ozon по его статусу и признаку `cancellation.
  * cancelled_after_ship`.
  *
- * Отмена (`status === "cancelled"`) различается по тому, успел ли товар
- * уехать: `cancelled_after_ship: true` — единица уже была отгружена и едет
- * назад, это `returned` (владелец увидит её через WB после осмотра);
- * `false` или отсутствие поля (документация Ozon не гарантирует его
- * наличие на всех статусах) — отмена до отгрузки, `cancelled_before_ship`.
- * Правило выбора при сомнении (план, «Правила жизненного цикла»): при любой
- * неопределённости — `returned`, а не `cancelled_before_ship`, ошибка в эту
- * сторону даёт лишь недосчёт одной единицы, а не продажу несуществующей —
- * поэтому строгое равенство `=== true`, а не «всё, что не false».
+ * Отмена (`status === "cancelled"`) различается по тому, успел ли товар уехать.
+ * До отгрузки — только когда Ozon прямо говорит `cancelled_after_ship: false`:
+ * тогда единица на полке и возвращается в пул. Во всех остальных случаях
+ * (`true` или признака нет) — `returned`: товар мог уехать и едет назад, владелец
+ * добавит его через WB после осмотра. Правило плана «при сомнении — returned»:
+ * ошибка в эту сторону — недосчёт одной единицы, в обратную — продажа несуществующей.
  *
- * `SHIPPED_STATUSES` — статусы, при которых отправление уже в пути или у
- * покупателя, включая арбитраж (спор об уже отгруженном товаре — товар всё
- * ещё физически не в пуле продавца). Всё остальное — `open`.
+ * `cancelled_from_split_pending` — Ozon разделил отправление на новые. Новые
+ * отправления приходят отдельными заказами и списывают единицу сами; если
+ * держать исходное открытым, единица спишется дважды. Поэтому — отмена до отгрузки.
+ *
+ * `SHIPPED_STATUSES` — отправление уже в пути или у покупателя, включая арбитраж.
+ * Всё остальное — `open`.
  */
 export function ozonLifecycle(posting: Pick<OzonPosting, "status" | "cancellation">): OrderLifecycle {
+  if (posting.status === "cancelled_from_split_pending") return "cancelled_before_ship"
   if (posting.status === "cancelled") {
-    return posting.cancellation?.cancelled_after_ship === true ? "returned" : "cancelled_before_ship"
+    return posting.cancellation?.cancelled_after_ship === false ? "cancelled_before_ship" : "returned"
   }
   if (SHIPPED_STATUSES.has(posting.status)) return "shipped"
   return "open"

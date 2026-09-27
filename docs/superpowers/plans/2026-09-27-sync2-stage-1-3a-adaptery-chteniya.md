@@ -20,7 +20,7 @@
 | Площадка | `cancelled_before_ship` | `returned` | `shipped` | `open` |
 |---|---|---|---|---|
 | WB (FBS) | `isCancelledStatus(status)` из finstock | — (возвраты WB приходят сигналом снимка; в пул заказы WB не идут) | `supplierStatus = "complete"` | остальное |
-| Ozon | `status = "cancelled"` и `cancellation.cancelled_after_ship` ≠ true | `status = "cancelled"` и `cancelled_after_ship = true` | `delivering`, `driver_pickup`, `delivered`, `sent_by_seller`, `arbitration`, `client_arbitration` | остальное |
+| Ozon | `status = "cancelled"` и `cancellation.cancelled_after_ship = false` (явно); `cancelled_from_split_pending` — разделено на новые отправления | `status = "cancelled"` и `cancelled_after_ship` = true **или признака нет** | `delivering`, `driver_pickup`, `delivered`, `sent_by_seller`, `arbitration`, `client_arbitration` | остальное |
 | ЯМ | `CANCELLED`, подстатус **не** из списка «после отправки» | `RETURNED`, `PARTIALLY_RETURNED`; `CANCELLED` с подстатусом из списка «после отправки» | `DELIVERY`, `PICKUP`, `DELIVERED` | остальное |
 | KIT | `CANCELLED`, `DELIVERY_CANCELLED` | `FULL_REFUND`, `PARTIAL_REFUND` | `WAIT_FOR_DELIVERY`, `DELIVERED`, `COMPLETED` | остальное |
 
@@ -330,7 +330,8 @@ const p = (status: string, cancelled_after_ship?: boolean) =>
 
 describe("ozonLifecycle", () => {
   it("отмена до отгрузки — cancelled_before_ship", () => expect(ozonLifecycle(p("cancelled", false))).toBe("cancelled_before_ship"))
-  it("отмена без данных об отгрузке — до отгрузки", () => expect(ozonLifecycle(p("cancelled"))).toBe("cancelled_before_ship"))
+  it("отмена без данных об отгрузке — returned: при сомнении не возвращаем единицу сами", () => expect(ozonLifecycle(p("cancelled"))).toBe("returned"))
+  it("разделено на новые отправления — cancelled_before_ship", () => expect(ozonLifecycle(p("cancelled_from_split_pending"))).toBe("cancelled_before_ship"))
   it("отмена после отгрузки — returned: товар едет назад", () => expect(ozonLifecycle(p("cancelled", true))).toBe("returned"))
   it("в доставке и доставлен — shipped", () => {
     for (const s of ["delivering", "driver_pickup", "delivered", "sent_by_seller", "arbitration", "client_arbitration"]) {
@@ -575,3 +576,10 @@ git commit -m "sync2: конфиг площадок и живая проверк
 ## Следующий план
 
 1.3b: джоба `ingest` (каталог WB → `products`, заказы → `upsertOrders`, снимки → `insertStockSnapshot`, по площадке с отдельной ошибкой), джоба `pool` (режим WB `external`, `planStockWrites` → `executeWrites` в `dry-run` → журнал `writes` в базе, пустой массив не вставлять), advisory lock в Postgres, `redact` в pino, выкладка на VPS (Postgres, `npm ci`, миграции, крон со сдвигом от старого синка), джоба `compare-v1` (пул sync2 против леджера `/opt/sellerai-sync/data/state/inventory.json`, сводка в Telegram раз в сутки), приёмка — 3 суток без необъяснённых расхождений.
+
+## Поправки при исполнении (27.09.2026)
+
+- Ozon: `cancelled_from_split_pending` → `cancelled_before_ship` (иначе исходное отправление держит единицу, а новые списывают её ещё раз); отмена без признака `cancelled_after_ship` → `returned` (правило «при сомнении — returned»). Исходная строка таблицы и тест задачи 4 были с ошибкой.
+- WB: остатки — строка на склад, суммирует домен; каталог строится из `fetchAllCards`.
+- ЯМ: `businessId`/`campaignId` в учётных данных — строки, как в finstock; `loadChannelsConfig` (задача 7) отдаёт их адаптеру строками.
+- 1.3b: снимок WB, в котором карточек заметно меньше, чем в прошлом принятом, не принимается (частичный каталог иначе читается как массовая продажа на WB).
