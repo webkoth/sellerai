@@ -261,7 +261,11 @@ async function main(argv: string[]): Promise<number> {
           console.error(`неизвестный режим записи: ${arg2} (ожидается ${WRITE_MODES.join(" | ")})\n\n${USAGE}`)
           return 2
         }
-        await db.update(channels).set({ writeMode: arg2 }).where(eq(channels.code, arg))
+        const updated = await db.update(channels).set({ writeMode: arg2 }).where(eq(channels.code, arg)).returning({ code: channels.code })
+        if (updated.length === 0) {
+          console.error(`площадка ${arg} не заведена в базе — выполните seed-channels`)
+          return 2
+        }
         const rows = await db.select({ code: channels.code, writeMode: channels.writeMode }).from(channels).orderBy(channels.code)
         for (const r of rows) console.log(`${r.code}\t${r.writeMode}`)
         return 0
