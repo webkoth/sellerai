@@ -4,7 +4,7 @@ import {
   countStuckRunsSince,
   countSuspectedDoubleCounts,
   DOUBLE_COUNT_WINDOW_MINUTES,
-  lastOkRunAt,
+  lastRunWithCounterAt,
   loadPoolState,
   mirrorOrderBarcodesSince,
   plannedWritesSince,
@@ -98,18 +98,18 @@ export interface SummaryExtra {
   /** `running` старше STUCK_RUN_MS за сутки. */
   stuckRuns: number
   planned: Record<Channel, PlannedWrites>
-  /** Начало последнего ok-прогона pool; ни одного — null. */
-  lastPoolOkAt: string | null
+  /** Начало последнего прогона pool, пересчитавшего пул (есть счётчик events); ни одного — null. */
+  lastPoolRecalcAt: string | null
   /** Баркоды с заказом/отменой зеркала за последние DOUBLE_COUNT_WINDOW_MINUTES — пометка у строк diff. */
   recentOrderBarcodes: ReadonlySet<string>
   suspectedDoubleCounts: number
 }
 
-function poolLine(lastOkAt: string | null, now: Date): string {
-  if (lastOkAt === null) return "Пул: ⚠️ пул ни разу не пересчитан"
-  const ageMs = now.getTime() - Date.parse(lastOkAt)
+function poolLine(recalcAt: string | null, now: Date): string {
+  if (recalcAt === null) return "Пул: ⚠️ пул ни разу не пересчитан"
+  const ageMs = now.getTime() - Date.parse(recalcAt)
   const stale = ageMs > POOL_STALE_MS ? ` ⚠️ пул не пересчитывался ${Math.floor(ageMs / 3_600_000)} ч` : ""
-  return `Пул пересчитан: ${formatMsk(lastOkAt)}${stale}`
+  return `Пул пересчитан: ${formatMsk(recalcAt)}${stale}`
 }
 
 /**
@@ -132,7 +132,7 @@ export function formatComparison(r: ComparisonResult, extra: SummaryExtra): stri
     `Только у нового (${r.onlyV2.length}): ${formatList(r.onlyV2.map((i) => `${i.barcode} (${i.v2})`))}`,
     `Подозрение на двойной счёт: ${extra.suspectedDoubleCounts}`,
     `План записей за сутки (dry-run, баркодов/строк): Ozon ${plan("ozon")}, ЯМ ${plan("ym")}, KIT ${plan("kit")}`,
-    poolLine(extra.lastPoolOkAt, extra.now),
+    poolLine(extra.lastPoolRecalcAt, extra.now),
     `Упавших прогонов за сутки: ${extra.failedRuns}, зависших (running > ${STUCK_RUN_MS / 60_000} мин): ${extra.stuckRuns}`,
   ].join("\n")
   return text.length <= MAX_TELEGRAM_TEXT ? text : text.slice(0, MAX_TELEGRAM_TEXT - TRUNCATED_MARK.length) + TRUNCATED_MARK
@@ -177,18 +177,18 @@ export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier:
   const since = ago(COMPARE_WINDOW_MS)
   // Леджер — до запросов к базе: нет леджера — нет и сверки.
   const ledger = readLedger(deps.ledgerPath)
-  const [{ items }, failedRuns, stuckRuns, planned, lastPoolOkAt, recentOrderBarcodes, suspectedDoubleCounts] = await Promise.all([
+  const [{ items }, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts] = await Promise.all([
     loadPoolState(db),
     countFailedRunsSince(db, since),
     countStuckRunsSince(db, since, ago(STUCK_RUN_MS)),
     plannedWritesSince(db, since),
-    lastOkRunAt(db, "pool"),
+    lastRunWithCounterAt(db, "pool", "events"),
     mirrorOrderBarcodesSince(db, ago(DOUBLE_COUNT_WINDOW_MINUTES * 60_000)),
     countSuspectedDoubleCounts(db, since),
   ])
 
   const result = comparePools(items.map((i) => ({ barcode: i.barcode, base: i.base })), ledger)
-  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolOkAt, recentOrderBarcodes, suspectedDoubleCounts })
+  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts })
   if (!(await deps.notifier.send(text))) throw new Error("сводка сверки не доставлена в Telegram (бот не настроен или Telegram отказал)")
   return {
     same: result.same,

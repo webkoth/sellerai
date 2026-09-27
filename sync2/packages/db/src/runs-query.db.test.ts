@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { loadChannels } from "./channels"
 import { seedChannels } from "./channels-seed"
 import { drizzleRunStore } from "./run-store"
-import { countFailedRunsSince, countStuckRunsSince, lastOkRunAt, lastRunStatus, nonOkStreak, plannedWritesSince } from "./runs-query"
+import { countFailedRunsSince, countStuckRunsSince, lastRunWithCounterAt, lastRunStatus, nonOkStreak, plannedWritesSince } from "./runs-query"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 import { drizzleWriteStore } from "./writes-store"
 
@@ -66,11 +66,11 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
   })
 
   /** Запуск джобы в журнале; status "running" — открыт и не закрыт (идёт или убит). */
-  const run = async (job: string, id: string, at: string, status: "running" | "ok" | "partial" | "failed") => {
+  const run = async (job: string, id: string, at: string, status: "running" | "ok" | "partial" | "failed", counters: Record<string, number> = {}) => {
     const store = drizzleRunStore(h.db)
     const runId = `00000000-0000-4000-8000-${id.padStart(12, "0")}`
     await store.start({ runId, job, writeMode: "dry-run", startedAt: at })
-    if (status !== "running") await store.finish(runId, { status, finishedAt: at, counters: {}, error: null })
+    if (status !== "running") await store.finish(runId, { status, finishedAt: at, counters, error: null })
   }
 
   it("статус последнего запуска: из нескольких побеждает последний по времени, running пропускается", async () => {
@@ -94,10 +94,17 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     expect(await nonOkStreak(h.db, "other")).toBe(1)
   })
 
-  it("время последнего ok-прогона джобы; ни одного — null", async () => {
-    expect(await lastOkRunAt(h.db, "нет-такой-джобы")).toBeNull()
-    // a1 10:00 и a5 10:40 — ok; a6 10:50 partial позже.
-    expect(await lastOkRunAt(h.db, "streak")).toBe("2026-09-27T10:40:00.000Z")
+  it("время последнего завершённого прогона с ключом счётчика: partial с events в счёт, partial с noFreshWb — нет", async () => {
+    expect(await lastRunWithCounterAt(h.db, "pool", "events")).toBeNull()
+    await run("pool", "c1", "2026-09-27T10:00:00.000Z", "ok", { events: 2 })
+    // Пул пересчитан, но план упёрся в предохранитель — partial, events есть.
+    await run("pool", "c2", "2026-09-27T10:10:00.000Z", "partial", { events: 0, aborted_to_zero: 25 })
+    // Снимка WB нет — пул не пересчитан.
+    await run("pool", "c3", "2026-09-27T10:20:00.000Z", "partial", { noFreshWb: 1 })
+    // Упавший и открытый — не в счёт, даже с ключом.
+    await run("pool", "c4", "2026-09-27T10:30:00.000Z", "failed", { events: 1 })
+    await run("pool", "c5", "2026-09-27T11:45:00.000Z", "running")
+    expect(await lastRunWithCounterAt(h.db, "pool", "events")).toBe("2026-09-27T10:10:00.000Z")
   })
 
   it("зависшие прогоны: running старше порога в окне; свежий running и закрытые — нет", async () => {

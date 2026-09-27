@@ -83,12 +83,17 @@ export async function plannedWritesSince(db: Db, sinceIso: string): Promise<Reco
   return out
 }
 
-/** Начало последнего ok-прогона джобы (ISO); ни одного — null. */
-export async function lastOkRunAt(db: Db, job: string): Promise<string | null> {
+/**
+ * Начало последнего завершённого (ok/partial) прогона джобы, в счётчиках которого
+ * есть key (ISO); ни одного — null. Для pool ключ `events` значит «пул пересчитан»:
+ * partial из-за предохранителя плана или ошибок записи пул пересчитал, а partial без
+ * свежего снимка WB (`noFreshWb`) — нет.
+ */
+export async function lastRunWithCounterAt(db: Db, job: string, key: string): Promise<string | null> {
   const [row] = await db
     .select({ at: max(runs.startedAt) })
     .from(runs)
-    .where(and(eq(runs.job, job), eq(runs.status, "ok")))
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial"]), sql`${runs.counters} ->> ${key} is not null`))
   return toIsoOrNull(row?.at ?? null)
 }
 

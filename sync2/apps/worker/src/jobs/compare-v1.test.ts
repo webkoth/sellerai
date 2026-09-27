@@ -30,7 +30,7 @@ const extra = (over: Partial<SummaryExtra> = {}): SummaryExtra => ({
   failedRuns: 0,
   stuckRuns: 0,
   planned,
-  lastPoolOkAt: "2026-09-27T11:50:00.000Z",
+  lastPoolRecalcAt: "2026-09-27T11:50:00.000Z",
   recentOrderBarcodes: new Set(),
   suspectedDoubleCounts: 0,
   ...over,
@@ -82,8 +82,8 @@ describe("formatComparison", () => {
 
   it("пул давно не пересчитывался или ни разу — предупреждение", () => {
     const empty = { same: 0, diff: [], onlyV1: [], onlyV2: [] }
-    expect(formatComparison(empty, extra({ lastPoolOkAt: "2026-09-27T09:30:00.000Z" }))).toContain("⚠️ пул не пересчитывался 2 ч")
-    expect(formatComparison(empty, extra({ lastPoolOkAt: null }))).toContain("⚠️ пул ни разу не пересчитан")
+    expect(formatComparison(empty, extra({ lastPoolRecalcAt: "2026-09-27T09:30:00.000Z" }))).toContain("⚠️ пул не пересчитывался 2 ч")
+    expect(formatComparison(empty, extra({ lastPoolRecalcAt: null }))).toContain("⚠️ пул ни разу не пересчитан")
   })
 
   it("длинные баркоды — текст всё равно не длиннее лимита Telegram, с пометкой об обрезке", () => {
