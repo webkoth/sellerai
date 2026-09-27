@@ -157,8 +157,13 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
   (заказы или остатки) не роняет остальные — джоба заканчивается `partial` с текстом ошибок в `runs.error`.
 - `sync2 pool` — пересчёт пула (`reconcilePool`) и план записей по зеркалам (`planStockWrites` → `executeWrites`)
   в режиме WB `external`: WB пишет старый синк, `sync2` в 1.3b только считает (`apps/worker/src/jobs/pool.ts`).
-  Без свежего снимка WB (не старше `SNAPSHOT_FRESH_MINUTES = 20`) пул не пересчитывается — `partial`,
-  `noFreshWb: 1`. Отправителя на площадки физически нет: любая попытка `apply` бросает ошибку
+  Площадки не заведены — джоба падает (`failed`) с «площадки не заведены — выполните seed-channels». Без свежего
+  снимка WB (не старше `SNAPSHOT_FRESH_MINUTES = 20`) пул не пересчитывается — `partial`, `noFreshWb: 1`.
+  Холодный старт (пул пуст) — только после `ok` у последнего `ingest`: он считает все открытые заказы зеркал уже
+  учтёнными, и база от неполной картины осталась бы навсегда; иначе `partial`, `coldStartRefused: 1`. Счётчики:
+  `wbSnapshotAgeMin` (возраст использованного снимка WB), `noBase` (заказы по баркодам без базы — ни в пуле, ни у
+  WB), `events`, `ordersNoBarcode`, `staleSnapshots`, `<площадка>Planned`. Ошибки в итогах `executeWrites` —
+  `partial`, `writeErrors: N`, первые пять — в `runs.error`. Отправителя на площадки физически нет: любая попытка `apply` бросает ошибку
   «запись на площадки подключается на этапе 1.4» — в 1.3b `channels.write_mode` у ozon/ym/kit держится `dry-run`,
   у wb/site — `off`, поэтому джоба до отправителя не доходит.
 - `sync2 tick` — `ingest`, затем `pool`; это два отдельных запуска в журнале `runs`. `pool` выполняется и после
@@ -182,4 +187,5 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
   Telegram не принял сообщение (или бот не настроен) — `warn` в лог с текстом уведомления.
 - Коды выхода `ingest`/`pool`/`tick`/`compare-v1`: исключение внутри джобы (`withRun` перехватывает и пишет
   `failed`) → 1; `partial` — штатная работа, а не авария → 0.
-- Локальная проверка на пустой базе без ключей площадок: `npm run cli -- pool` → `partial`, `noFreshWb: 1`, код 0.
+- Локальная проверка на пустой базе без ключей площадок: после `npm run cli -- seed-channels`
+  `npm run cli -- pool` → `partial`, `noFreshWb: 1`, код 0 (без `seed-channels` — `failed`, код 1).

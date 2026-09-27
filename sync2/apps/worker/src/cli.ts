@@ -188,7 +188,7 @@ async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Not
   const prevStatus = await lastRunStatus(db, "pool")
   const outcome = await withRun("pool", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
     const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode })
-    return { status: result.status, counters: result.counters }
+    return { status: result.status, counters: result.counters, error: result.error }
   })
   await notifyTransition(db, log, notifier, "pool", prevStatus, outcome)
   return outcome
