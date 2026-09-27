@@ -54,3 +54,50 @@ npm run test:db   # тесты на живой базе sync2_test (схема �
 - `packages/db`: `upsertOrders`/`loadOrdersSince`, `insertStockSnapshot`/`latestStockSnapshots`,
   `loadPoolState`/`savePoolRun` (одна транзакция). Время из базы — `toIso`: Postgres отдаёт текст, домен живёт в ISO.
 - Приёмка: `packages/db/src/pool-cycle.db.test.ts` — вся история товара на живой базе.
+
+## Адаптеры чтения (этап 1.3a)
+
+- `packages/platforms/src/adapter.ts` — интерфейс `ChannelAdapter`: `fetchOrders(since)` (заказы, созданные не раньше
+  `since`, ISO 8601 — окно, а не курсор) и `fetchStocks()` (`StockFetch`: `stocks: NormalizedStock[]` +
+  `skippedNoWbBarcode: string[]`). Только чтение — запись на площадку идёт исключительно через `executeWrites`
+  (`writer.ts`), в `packages/platforms` нет ни одного пишущего запроса.
+- WB, Ozon и ЯМ перенесены из `finstock/packages/platforms/src` (27.09.2026) с живыми образцами ответов и тестами;
+  финансовое (`fetchRealization*`, `fetchTariffs*`) убрано целиком. KIT написан по образцу `sync/src/kit.ts`
+  (старый синк) — этой площадки в finstock не было. `createWbAdapter(token)` даёт ещё и `fetchCatalog()` (каталог
+  WB нужен как индекс для Ozon/ЯМ); `createOzonAdapter(credentials, wbIndex)` и
+  `createYmAdapter(credentials, wbIndex, warehouseIds)` принимают этот индекс снаружи — его строит WB-адаптер в
+  том же прогоне; `createKitAdapter({ token, warehouseId })` — свои штрихкоды WB, `wbIndex` не нужен.
+- Ключ товара во всём синке — **штрихкод WB**. `resolveWbBarcode` (`packages/shared/src/catalog.ts`) сопоставляет
+  штрихкод площадки со штрихкодом WB, а если его нет — по артикулу (offer_id = артикул WB); не сопоставилось —
+  `null`, строка в снимок остатков не попадает и уходит в `skippedNoWbBarcode` (заказ с `barcode: null` — идёт).
+- Контракт снимка остатков: строки по всем существующим карточкам площадки, включая нулевые;
+  `quantity ≥ 0` (Ozon `present − reserved` бывает минус — обрезается снизу); склад — атрибут строки, сумма по
+  складам — дело домена (`aggregateStockByBarcode`); у ЯМ строки только по складам магазина из конфига
+  (`warehouseIds`, отсекает, в частности, склад возвратов Маркета).
+- Жизненный цикл заказа — общий тип `OrderLifecycle` (`open | shipped | cancelled_before_ship | returned`),
+  площадка переводит в него свой сырой статус чистой функцией `<площадка>Lifecycle`:
+
+  | Площадка | `cancelled_before_ship` | `returned` | `shipped` | `open` |
+  |---|---|---|---|---|
+  | WB (FBS) | `isCancelledStatus(status)` | — (возвраты WB — сигнал снимка, в пул заказы WB не идут) | `supplierStatus = "complete"` | остальное |
+  | Ozon | `status = "cancelled"` явно с `cancelled_after_ship = false`; `cancelled_from_split_pending` | `status = "cancelled"` с `cancelled_after_ship = true` **или без этого признака** | `delivering`, `driver_pickup`, `delivered`, `sent_by_seller`, `arbitration`, `client_arbitration` | остальное |
+  | ЯМ | `CANCELLED` с подстатусом из разрешающего списка `YM_BEFORE_SHIP_SUBSTATUSES` (34 шт. — товар точно не покидал склад) | `RETURNED`, `PARTIALLY_RETURNED`; `CANCELLED` с любым другим (в т.ч. неизвестным/пустым) подстатусом | `DELIVERY`, `PICKUP`, `DELIVERED` | остальное |
+  | KIT | `CANCELLED`, `DELIVERY_CANCELLED` | `FULL_REFUND`, `PARTIAL_REFUND` | `WAIT_FOR_DELIVERY`, `DELIVERED`, `COMPLETED` | остальное |
+
+  Правило при сомнении — `returned`, а не `cancelled_before_ship`: ошибка в эту сторону даёт недосчёт одной
+  единицы (владелец вернёт её через WB), в обратную — продажу несуществующей. У ЯМ поэтому список подстатусов
+  «до отправки» — разрешающий, а не запрещающий: у большинства подстатусов ЯМ нет описания в документации, и
+  запрещающий список ошибался бы в опасную сторону.
+- `apps/worker/src/channels-config.ts` — `loadChannelsConfig(env)`: ключи и склады четырёх площадок из окружения
+  (см. `.env.example`), чистая функция, тестируется без `process.env`.
+- Команда `sync2 probe` (`apps/worker/src/cli.ts`) — живая приёмка без базы и без единой записи: не вызывает
+  `loadConfig`/`createDb`, не требует `DATABASE_URL`. Порядок: WB `fetchCatalog` → индекс → WB, Ozon, ЯМ, KIT —
+  `fetchOrders(now − 60 дней)` и `fetchStocks()` **последовательно** (не параллельно — общие с работающим старым
+  синком (`/opt/sellerai-sync`) лимиты площадок). На каждую площадку — строка сводки (заказы по жизненному циклу,
+  строки/штуки/наличие остатков, пропуски без штрихкода WB), затем — списки `skippedNoWbBarcode` (первые 20 +
+  счёт). Сбой площадки печатает `канал | ОШИБКА <errorText>` и даёт код выхода 1 в конце — остальные площадки всё
+  равно читаются (Ozon/ЯМ — с пустым индексом WB, если не прочитался каталог WB).
+
+  ```bash
+  npm run cli -- probe
+  ```

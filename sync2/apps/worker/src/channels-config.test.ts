@@ -1,0 +1,36 @@
+import { describe, expect, it } from "vitest"
+import { loadChannelsConfig } from "./channels-config"
+
+// businessId/campaignId — строки: YmCredentials (@sync2/platforms/ym/client.ts)
+// принимает их строками, а не числами, как в исходном тексте плана
+// («Поправки при исполнении», 27.09.2026).
+const env = {
+  WB_API_TOKEN: "wb",
+  OZON_CLIENT_ID: "5332036",
+  OZON_API_TOKEN: "oz",
+  YM_API_TOKEN: "ym",
+  YM_BUSINESS_ID: "191766894",
+  YM_CAMPAIGN_ID: "149197829",
+  YM_WAREHOUSE_IDS: "2369574",
+  YAKIT_API_TOKEN: "kit",
+  KIT_WAREHOUSE_ID: "01980d4c-1b53-7aa1-ab23-1b7c23604704",
+}
+
+describe("loadChannelsConfig", () => {
+  it("собирает ключи и склады четырёх площадок", () => {
+    expect(loadChannelsConfig(env)).toEqual({
+      wb: { token: "wb" },
+      ozon: { clientId: "5332036", apiKey: "oz" },
+      ym: { apiKey: "ym", businessId: "191766894", campaignId: "149197829", warehouseIds: [2369574] },
+      kit: { token: "kit", warehouseId: "01980d4c-1b53-7aa1-ab23-1b7c23604704" },
+    })
+  })
+  it("несколько складов ЯМ через запятую", () => {
+    expect(loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "2369574,1872191" }).ym.warehouseIds).toEqual([
+      2369574, 1872191,
+    ])
+  })
+  it("не хватает ключа — ошибка с именем переменной", () => {
+    expect(() => loadChannelsConfig({ ...env, YAKIT_API_TOKEN: "" })).toThrow(/YAKIT_API_TOKEN/)
+  })
+})
