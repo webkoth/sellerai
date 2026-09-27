@@ -285,4 +285,13 @@ describe("requestJson", () => {
     ).rejects.toMatchObject({ status: 0 })
     expect(fetchMock).toHaveBeenCalledTimes(2)
   })
+
+  it("тело ответа не дочиталось до таймаута — повтор, затем PlatformApiError со статусом 0", async () => {
+    const bodyTimeout = () =>
+      ({ ok: true, status: 200, headers: new Headers(), text: () => Promise.reject(new DOMException("t", "TimeoutError")) }) as unknown as Response
+    const fetchMock = vi.fn(async () => bodyTimeout())
+    vi.stubGlobal("fetch", fetchMock)
+    await expect(requestJson("kit", "https://api.kit.yandex.net/v1/orders", { token: "t", retryDelaysMs: [0] })).rejects.toMatchObject({ status: 0 })
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
 })
