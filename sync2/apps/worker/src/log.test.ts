@@ -28,4 +28,19 @@ describe("createLogger", () => {
     createLogger("info", dest).info({ token: "SECRET1", cfg: { apiKey: "SECRET2", token: "SECRET3" }, headers: { Authorization: "Bearer SECRET4" } }, "x")
     expect(lines[0]).not.toMatch(/SECRET/)
   })
+
+  it("секреты глубже второго уровня, пароли и заголовки Ozon/строчные — тоже скрыты; Client-Id не секрет", () => {
+    const { lines, dest } = capture()
+    createLogger("info", dest).info(
+      {
+        password: "SECRET0",
+        cfg: { ozon: { apiKey: "SECRET1", token: "SECRET2", password: "SECRET3" }, db: { password: "SECRET4" } },
+        headers: { "Api-Key": "SECRET5", "Client-Id": "12345", authorization: "Bearer SECRET6" },
+        req: { headers: { "api-key": "SECRET7", authorization: "SECRET8", Authorization: "SECRET9" } },
+      },
+      "x",
+    )
+    expect(lines[0]).not.toMatch(/SECRET/)
+    expect(JSON.parse(lines[0]!).headers["Client-Id"]).toBe("12345")
+  })
 })
