@@ -11,6 +11,8 @@ export interface JobResult {
   /** Не указано — ok. partial — джоба что-то пропустила; путать с ok нельзя. */
   status?: "ok" | "partial"
   counters: Record<string, number>
+  /** Тексты ошибок отдельных площадок (join("; ")) — пишутся в runs.error при partial. */
+  error?: string
 }
 
 export interface RunDeps {
@@ -55,7 +57,7 @@ export async function withRun(
   let outcome: RunOutcome
   try {
     const result = await fn({ runId, log })
-    outcome = { runId, status: result.status ?? "ok", counters: result.counters, error: null }
+    outcome = { runId, status: result.status ?? "ok", counters: result.counters, error: result.error ?? null }
   } catch (e: unknown) {
     const error = errorText(e)
     // Ошибка записи площадок (WriteJournalError из @sync2/platforms) несёт итоги по

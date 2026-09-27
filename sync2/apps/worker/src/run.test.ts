@@ -48,6 +48,17 @@ describe("withRun", () => {
     expect(m.finished[0]!.status).toBe("partial")
   })
 
+  it("джоба partial с текстом ошибок площадок — пишется в runs.error", async () => {
+    const m = memoryStore()
+    const r = await withRun("ingest", deps(m.store), async () => ({
+      status: "partial",
+      counters: { ozonOrders: 1 },
+      error: "ozon: 429; kit: таймаут",
+    }))
+    expect(r).toMatchObject({ status: "partial", error: "ozon: 429; kit: таймаут" })
+    expect(m.finished[0]).toMatchObject({ status: "partial", error: "ozon: 429; kit: таймаут" })
+  })
+
   it("джоба упала — failed с текстом, исключение наружу не летит", async () => {
     const m = memoryStore()
     const r = await withRun("orders", deps(m.store), async () => {

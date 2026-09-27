@@ -143,3 +143,34 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
 Сходится: WB «в наличии» 83 = «WB-товаров 83» у старого синка; Ozon «строк остатков» 81 = `ozon_get_stocks count: 81`
 из его же лога; KIT 393 строки и ровно 2 заказа `cancelled_before_ship` — как и ожидалось (два тестовых отменённых
 заказа в кабинете на эту дату).
+
+## Джобы `ingest`/`pool`, команда `tick`, сверка `compare-v1` (этап 1.3b)
+
+- `sync2 ingest` — каталог WB → `products`, заказы и снимки остатков всех площадок → `orders_raw`/
+  `stock_snapshots_raw` (`apps/worker/src/jobs/ingest.ts`). Каталог WB — ворота: не прочитался — вся джоба падает
+  (`failed`); прочитался, но короче 90 % прошлого принятого (`lastCounter(db, "ingest", "wbCatalog")`) — товары
+  пишутся, а снимки и заказы зеркал в этом прогоне нет (`partial`, `catalogRejected: 1`). Сбой отдельной площадки
+  (заказы или остатки) не роняет остальные — джоба заканчивается `partial` с текстом ошибок в `runs.error`.
+- `sync2 pool` — пересчёт пула (`reconcilePool`) и план записей по зеркалам (`planStockWrites` → `executeWrites`)
+  в режиме WB `external`: WB пишет старый синк, `sync2` в 1.3b только считает (`apps/worker/src/jobs/pool.ts`).
+  Без свежего снимка WB (не старше `SNAPSHOT_FRESH_MINUTES = 20`) пул не пересчитывается — `partial`,
+  `noFreshWb: 1`. Отправителя на площадки физически нет: любая попытка `apply` бросает ошибку
+  «запись на площадки подключается на этапе 1.4» — в 1.3b `channels.write_mode` у ozon/ym/kit держится `dry-run`,
+  у wb/site — `off`, поэтому джоба до отправителя не доходит.
+- `sync2 tick` — `ingest`, затем `pool`; это два отдельных запуска в журнале `runs`. `pool` выполняется и после
+  `partial` у `ingest` (частичные данные лучше, чем никакие), но не после `failed`.
+- `sync2 compare-v1` — пул sync2 (`pool_items`) против леджера старого синка (`V1_LEDGER_PATH`, по умолчанию
+  `/opt/sellerai-sync/data/state/inventory.json`) + сводка за сутки (упавшие прогоны, план записей по площадкам)
+  в Telegram (`apps/worker/src/jobs/compare-v1.ts`: чистые `comparePools`/`formatComparison` + `runCompareV1`).
+  Леджера нет или он битый — джоба падает (`failed`), сверка вслепую хуже, чем её отсутствие. Нулевая база у
+  товара, которого нет в другом пуле, — не расхождение (не хранится вечно ни там, ни там).
+- `sync2 write-mode <площадка> <off|dry-run|apply>` — меняет `channels.write_mode` одной площадки и печатает все
+  пять. `apply` в 1.3b отклоняется с понятной ошибкой и кодом выхода 2 — физического отправителя ещё нет.
+- Уведомления в Telegram (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) для `ingest`/`pool` — только при смене
+  состояния джобы: прошлый запуск был `ok`, этот `partial`/`failed` → `⚠️ sync2 <job>: <ошибки/счётчики>`;
+  прошлый был не `ok` (и хоть один запуск уже был), этот `ok` → `✅ sync2 <job> снова в норме`. Повтор одного
+  состояния молчит; самый первый запуск джобы ни в какую сторону не считается переходом
+  (`apps/worker/src/cli.ts`: `notifyTransition`, `lastRunStatus` в `packages/db/src/runs-query.ts`).
+- Коды выхода `ingest`/`pool`/`tick`/`compare-v1`: исключение внутри джобы (`withRun` перехватывает и пишет
+  `failed`) → 1; `partial` — штатная работа, а не авария → 0.
+- Локальная проверка на пустой базе без ключей площадок: `npm run cli -- pool` → `partial`, `noFreshWb: 1`, код 0.

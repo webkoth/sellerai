@@ -1,5 +1,5 @@
-import { desc } from "drizzle-orm"
-import { createDb, drizzleRunStore, runs, seedChannels } from "@sync2/db"
+import { desc, eq } from "drizzle-orm"
+import { channels, createDb, drizzleRunStore, lastCounter, lastRunStatus, runs, seedChannels, type Db } from "@sync2/db"
 import {
   createKitAdapter,
   createOzonAdapter,
@@ -7,18 +7,40 @@ import {
   createYmAdapter,
   type ChannelAdapter,
 } from "@sync2/platforms"
-import { buildWbCatalogIndex, errorText, loadConfig, ORDER_LIFECYCLES, type ChannelOrder, type WbCatalogIndex } from "@sync2/shared"
+import {
+  buildWbCatalogIndex,
+  errorText,
+  isChannel,
+  loadConfig,
+  ORDER_LIFECYCLES,
+  WRITE_MODES,
+  type ChannelOrder,
+  type Config,
+  type WbCatalogIndex,
+} from "@sync2/shared"
+import { buildAdapters } from "./adapters"
 import { loadChannelsConfig } from "./channels-config"
-import { createLogger } from "./log"
-import { withRun } from "./run"
+import { runCompareV1 } from "./jobs/compare-v1"
+import { runIngest } from "./jobs/ingest"
+import { runPool } from "./jobs/pool"
+import { createLogger, type Logger } from "./log"
+import { createNotifier, type Notifier } from "./notify"
+import { withRun, type RunOutcome } from "./run"
 
 const USAGE = `sync2 <команда>
-  seed-channels   завести пять площадок (режим записи не трогается)
-  runs [N]        последние N запусков (по умолчанию 20)
-  ping            пустая джоба: проверка конфига, базы и журнала
-  probe           живое чтение четырёх площадок (WB, Ozon, ЯМ, KIT) без базы и записи`
+  seed-channels          завести пять площадок (режим записи не трогается)
+  runs [N]               последние N запусков (по умолчанию 20)
+  ping                   пустая джоба: проверка конфига, базы и журнала
+  probe                  живое чтение четырёх площадок (WB, Ozon, ЯМ, KIT) без базы и записи
+  ingest                 каталог WB, заказы и снимки остатков всех площадок в базу
+  pool                   пересчёт пула и план записей (dry-run в этапе 1.3b)
+  tick                   ingest, затем pool (pool — если ingest не failed)
+  compare-v1             сверка пула с леджером старого синка, сводка в Telegram
+  write-mode <площадка> <off|dry-run|apply>   режим записи одной площадки (apply отклонён в 1.3b)`
 
 const PROBE_WINDOW_MS = 60 * 24 * 60 * 60 * 1000
+/** Путь по умолчанию к леджеру старого синка на VPS (план 1.3b, задача 6). */
+const DEFAULT_V1_LEDGER_PATH = "/opt/sellerai-sync/data/state/inventory.json"
 
 /** Первые 20 штрихкодов/артикулов без штрихкода WB — остальное только счётом (план, задача 7). */
 function formatSkipped(channel: string, skipped: string[]): string | null {
@@ -131,8 +153,54 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   return exitCode
 }
 
+/** Короткое описание исхода запуска для Telegram: текст ошибок площадок, иначе — счётчики. */
+function describeOutcome(outcome: RunOutcome): string {
+  if (outcome.error) return outcome.error
+  const entries = Object.entries(outcome.counters)
+  return entries.length ? entries.map(([k, v]) => `${k}=${v}`).join(", ") : "без деталей"
+}
+
+/**
+ * Telegram — только при смене состояния джобы: был ok, стал partial/failed → предупреждение;
+ * был не ok (и был хоть один запуск), стал ok → «снова в норме». Повтор одного состояния молчит.
+ * Самый первый запуск джобы (prevStatus === null) не считается переходом ни в одну из сторон.
+ */
+async function notifyTransition(notifier: Notifier, job: string, prevStatus: "ok" | "partial" | "failed" | null, outcome: RunOutcome): Promise<void> {
+  const wasOk = prevStatus === "ok"
+  const nowOk = outcome.status === "ok"
+  if (wasOk && !nowOk) {
+    await notifier.send(`⚠️ sync2 ${job}: ${describeOutcome(outcome)}`)
+  } else if (!wasOk && nowOk && prevStatus !== null) {
+    await notifier.send(`✅ sync2 ${job} снова в норме`)
+  }
+}
+
+/** Джоба `ingest` внутри `withRun`, с уведомлением о смене состояния. */
+async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: Notifier): Promise<RunOutcome> {
+  const prevStatus = await lastRunStatus(db, "ingest")
+  const outcome = await withRun("ingest", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
+    const adapters = buildAdapters(loadChannelsConfig(process.env))
+    const previousCatalog = await lastCounter(db, "ingest", "wbCatalog")
+    const result = await runIngest({ db, now: () => new Date(), runId: ctx.runId, adapters, previousCatalog })
+    return { status: result.status, counters: result.counters, error: result.errors.length ? result.errors.join("; ") : undefined }
+  })
+  await notifyTransition(notifier, "ingest", prevStatus, outcome)
+  return outcome
+}
+
+/** Джоба `pool` внутри `withRun`, с уведомлением о смене состояния. */
+async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Notifier): Promise<RunOutcome> {
+  const prevStatus = await lastRunStatus(db, "pool")
+  const outcome = await withRun("pool", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
+    const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode })
+    return { status: result.status, counters: result.counters }
+  })
+  await notifyTransition(notifier, "pool", prevStatus, outcome)
+  return outcome
+}
+
 async function main(argv: string[]): Promise<number> {
-  const [cmd, arg] = argv
+  const [cmd, arg, arg2] = argv
   if (!cmd || cmd === "help") {
     console.log(USAGE)
     return cmd ? 0 : 2
@@ -145,12 +213,55 @@ async function main(argv: string[]): Promise<number> {
   const config = loadConfig(process.env)
   const log = createLogger(config.logLevel)
   const { db, close } = createDb(config.databaseUrl)
+  const notifier = createNotifier({ token: process.env.TELEGRAM_BOT_TOKEN ?? "", chatId: process.env.TELEGRAM_CHAT_ID ?? "" })
   try {
     switch (cmd) {
       case "seed-channels":
         await seedChannels(db)
         log.info("площадки заведены")
         return 0
+      case "ingest": {
+        const outcome = await runIngestCommand(db, log, config, notifier)
+        return outcome.status === "failed" ? 1 : 0
+      }
+      case "pool": {
+        const outcome = await runPoolCommand(db, log, config, notifier)
+        return outcome.status === "failed" ? 1 : 0
+      }
+      case "tick": {
+        // pool пересчитывается и после partial у ingest (частичные данные лучше, чем никакие),
+        // но не после failed: без записи в базу пул считать не от чего.
+        const ingestOutcome = await runIngestCommand(db, log, config, notifier)
+        if (ingestOutcome.status === "failed") return 1
+        const poolOutcome = await runPoolCommand(db, log, config, notifier)
+        return poolOutcome.status === "failed" ? 1 : 0
+      }
+      case "compare-v1": {
+        const outcome = await withRun("compare-v1", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => {
+          const ledgerPath = process.env.V1_LEDGER_PATH?.trim() || DEFAULT_V1_LEDGER_PATH
+          const result = await runCompareV1({ db, ledgerPath, notifier, now: () => new Date() })
+          return { counters: { same: result.same, diff: result.diff, onlyV1: result.onlyV1, onlyV2: result.onlyV2 } }
+        })
+        return outcome.status === "failed" ? 1 : 0
+      }
+      case "write-mode": {
+        if (!arg || !isChannel(arg)) {
+          console.error(`неизвестная площадка: ${arg}\n\n${USAGE}`)
+          return 2
+        }
+        if (arg2 === "apply") {
+          console.error("apply отклонён: запись на площадки подключается на этапе 1.4")
+          return 2
+        }
+        if (arg2 !== "off" && arg2 !== "dry-run") {
+          console.error(`неизвестный режим записи: ${arg2} (ожидается ${WRITE_MODES.join(" | ")})\n\n${USAGE}`)
+          return 2
+        }
+        await db.update(channels).set({ writeMode: arg2 }).where(eq(channels.code, arg))
+        const rows = await db.select({ code: channels.code, writeMode: channels.writeMode }).from(channels).orderBy(channels.code)
+        for (const r of rows) console.log(`${r.code}\t${r.writeMode}`)
+        return 0
+      }
       case "runs": {
         // Number(undefined) = NaN, а не 20 — подставляем значение по умолчанию до Number().
         const limit = Number(arg ?? 20)
