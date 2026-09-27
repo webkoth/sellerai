@@ -32,7 +32,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
    * берётся из прошлых прогонов в базе. У каждого прогона своя минута: снимок уникален
    * по паре «площадка + момент».
    */
-  const ingest = (catalog: WbCatalogEntry[], opts: { mirrorsFail?: boolean; acceptCatalog?: boolean } = {}) => {
+  const ingest = (catalog: WbCatalogEntry[] | Error, opts: { mirrorsFail?: boolean; acceptCatalog?: boolean } = {}) => {
     const at = new Date(Date.parse("2026-09-27T10:00:00.000Z") + ++n * 60_000)
     return withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
       const r = await runIngest({
@@ -42,7 +42,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
         log: ctx.log,
         acceptCatalog: opts.acceptCatalog ?? false,
         adapters: {
-          wb: { ...fake("wb", [order("W1")]), fetchCatalog: async () => catalog },
+          wb: { ...fake("wb", [order("W1")]), fetchCatalog: async () => (catalog instanceof Error ? Promise.reject(catalog) : catalog) },
           mirrors: () => [fake("ozon", [order("O1"), order("O0", 0)], opts.mirrorsFail), fake("kit", [order("K1")])],
         },
       })
@@ -50,6 +50,23 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     })
   }
   const accepted = () => lastCounter(h.db, "ingest", "wbCatalogAccepted")
+
+  it("каталог WB не получен — failed: без индекса остатки зеркал не сопоставить", async () => {
+    const r = await ingest(new Error("wb: 500 — боль"))
+    expect(r).toMatchObject({ status: "failed", counters: {} })
+    expect(r.error).toContain("wb: 500")
+    expect(await countProducts(h.db)).toBe(0)
+  })
+
+  it("пустой каталог WB отклоняется даже без эталона: пустой ответ — сбой чтения, а не магазин без товаров", async () => {
+    const r = await ingest([])
+    expect(r).toMatchObject({ status: "partial", counters: { wbCatalog: 0, catalogRejected: 1 } })
+    expect(r.counters).not.toHaveProperty("wbCatalogAccepted")
+    expect(r.error).toMatch(/каталог WB пуст/)
+    expect(r.error).toContain("flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ingest --accept-catalog")
+    expect(await accepted()).toBeNull()
+    expect(await loadOrdersSince(h.db, "2026-09-01T00:00:00.000Z")).toEqual([])
+  })
 
   it("пишет товары, заказы и снимки; строки с количеством 0 отбрасываются; первый каталог принят", async () => {
     const r = await ingest(cat(10))
@@ -75,7 +92,8 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     const r = await ingest(cat(8))
     expect(r).toMatchObject({ status: "partial", counters: { wbCatalog: 8, catalogRejected: 1 } })
     expect(r.counters).not.toHaveProperty("wbCatalogAccepted")
-    expect(r.error).toMatch(/--accept-catalog/)
+    expect(r.error).toMatch(/каталог WB 8 при прошлом принятом 10/)
+    expect(r.error).toContain("flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ingest --accept-catalog")
     expect((await loadOrdersSince(h.db, "2026-09-01T00:00:00.000Z")).length).toBe(before)
     // Отклонённый прогон не сдвигает эталон.
     expect(await accepted()).toBe(10)
@@ -97,5 +115,13 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     expect(warnings.map((w) => JSON.parse(w).msg).join("\n")).toMatch(/без проверки/)
     // Следующий обычный тик сравнивает уже с 8.
     expect((await ingest(cat(8))).status).toBe("ok")
+  })
+
+  it("пустой каталог при эталоне — отклонён; с --accept-catalog — принят", async () => {
+    expect(await ingest([])).toMatchObject({ status: "partial", counters: { catalogRejected: 1 } })
+    expect(await accepted()).toBe(8)
+    const r = await ingest([], { acceptCatalog: true })
+    expect(r).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 0, catalogForced: 1 } })
+    expect(await accepted()).toBe(0)
   })
 })

@@ -14,6 +14,12 @@ export const MIN_CATALOG_SHARE = 0.9
  * короткий каталог стал бы эталоном уже на следующем тике.
  */
 export const CATALOG_ACCEPTED_KEY = "wbCatalogAccepted"
+/**
+ * Ручное принятие каталога на VPS — под той же блокировкой, что и крон: иначе ingest
+ * руками и tick крона пишут в базу одновременно.
+ */
+export const ACCEPT_CATALOG_HINT =
+  "cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ingest --accept-catalog"
 
 export interface IngestResult {
   status: "ok" | "partial"
@@ -33,8 +39,8 @@ const toUpsert = (o: ChannelOrder): OrderUpsert => ({
 
 /**
  * Заказы и остатки всех площадок в базу. Каталог WB — ворота: не получен — джоба падает
- * (без индекса остатки зеркал не сопоставить); короче MIN_CATALOG_SHARE последнего
- * принятого — пишутся только товары, снимки и заказы зеркал пропускаются. Настоящую
+ * (без индекса остатки зеркал не сопоставить); пуст или короче MIN_CATALOG_SHARE
+ * последнего принятого — пишутся только товары, снимки и заказы зеркал пропускаются. Настоящую
  * усадку каталога принимает `acceptCatalog` (`--accept-catalog` в cli) — без проверки
  * доли, с предупреждением в лог. Сбой отдельной площадки не роняет остальные.
  */
@@ -56,16 +62,16 @@ export async function runIngest(deps: {
   const catalog = await deps.adapters.wb.fetchCatalog()
   counters.wbCatalog = catalog.length
   await upsertProducts(db, catalog)
-  const shrunk = previous !== null && catalog.length < previous * MIN_CATALOG_SHARE
+  // Пустой каталог отклоняется всегда, даже без эталона: у живого магазина это сбой
+  // чтения WB, и принять его значит обнулить эталон и все зеркала.
+  const empty = catalog.length === 0
+  const shrunk = empty || (previous !== null && catalog.length < previous * MIN_CATALOG_SHARE)
   if (shrunk && !deps.acceptCatalog) {
     counters.catalogRejected = 1
-    return {
-      status: "partial",
-      counters,
-      errors: [
-        `каталог WB ${catalog.length} при прошлом принятом ${previous} (меньше ${MIN_CATALOG_SHARE * 100}%) — снимки и заказы зеркал пропущены; если усадка настоящая: ingest --accept-catalog`,
-      ],
-    }
+    const why = empty
+      ? "каталог WB пуст"
+      : `каталог WB ${catalog.length} при прошлом принятом ${previous} (меньше ${MIN_CATALOG_SHARE * 100}%)`
+    return { status: "partial", counters, errors: [`${why} — снимки и заказы зеркал пропущены; если это правда: ${ACCEPT_CATALOG_HINT}`] }
   }
   if (deps.acceptCatalog) {
     deps.log.warn({ wbCatalog: catalog.length, previousAccepted: previous }, "каталог WB принят без проверки доли (--accept-catalog)")
