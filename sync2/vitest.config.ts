@@ -29,7 +29,7 @@ export default defineConfig({
         resolve: { alias },
         test: {
           name: "db",
-          include: ["packages/**/src/**/*.db.test.ts"],
+          include: ["packages/**/src/**/*.db.test.ts", "apps/**/src/**/*.db.test.ts"],
           environment: "node",
           // Тесты базы делят одну тестовую базу — параллельно нельзя.
           fileParallelism: false,
