@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm"
-import { channels, createDb, drizzleRunStore, lastRunStatus, runs, seedChannels, type Db } from "@sync2/db"
+import { channels, createDb, drizzleRunStore, lastRunStatus, nonOkStreak, runs, seedChannels, type Db } from "@sync2/db"
 import {
   createKitAdapter,
   createOzonAdapter,
@@ -26,6 +26,7 @@ import { runPool } from "./jobs/pool"
 import { createLogger, type Logger } from "./log"
 import { createNotifier, type Notifier } from "./notify"
 import { withRun, type RunOutcome } from "./run"
+import { decideNotification, describeOutcome } from "./transition"
 
 const USAGE = `sync2 <команда>
   seed-channels          завести пять площадок (режим записи не трогается)
@@ -158,26 +159,16 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   return exitCode
 }
 
-/** Короткое описание исхода запуска для Telegram: текст ошибок площадок, иначе — счётчики. */
-function describeOutcome(outcome: RunOutcome): string {
-  if (outcome.error) return outcome.error
-  const entries = Object.entries(outcome.counters)
-  return entries.length ? entries.map(([k, v]) => `${k}=${v}`).join(", ") : "без деталей"
-}
-
 /**
- * Telegram — только при смене состояния джобы: был ok, стал partial/failed → предупреждение;
- * был не ok (и был хоть один запуск), стал ok → «снова в норме». Повтор одного состояния молчит.
- * Самый первый запуск джобы (prevStatus === null) не считается переходом ни в одну из сторон.
+ * Уведомление о прогоне джобы — решение в decideNotification (transition.ts),
+ * здесь только данные из журнала и отправка. Не доставлено — warn в лог:
+ * переход не должен теряться молча.
  */
-async function notifyTransition(notifier: Notifier, job: string, prevStatus: "ok" | "partial" | "failed" | null, outcome: RunOutcome): Promise<void> {
-  const wasOk = prevStatus === "ok"
-  const nowOk = outcome.status === "ok"
-  if (wasOk && !nowOk) {
-    await notifier.send(`⚠️ sync2 ${job}: ${describeOutcome(outcome)}`)
-  } else if (!wasOk && nowOk && prevStatus !== null) {
-    await notifier.send(`✅ sync2 ${job} снова в норме`)
-  }
+async function notifyTransition(db: Db, log: Logger, notifier: Notifier, job: string, prev: RunOutcome["status"] | null, outcome: RunOutcome): Promise<void> {
+  const streak = outcome.status === "ok" ? 0 : await nonOkStreak(db, job)
+  const text = decideNotification({ job, prev, cur: { status: outcome.status, detail: describeOutcome(outcome) }, nonOkStreak: streak })
+  if (text === null) return
+  if (!(await notifier.send(text))) log.warn({ job, text }, "уведомление в Telegram не доставлено")
 }
 
 /** Джоба `ingest` внутри `withRun`, с уведомлением о смене состояния. */
@@ -188,7 +179,7 @@ async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: N
     const result = await runIngest({ db, now: () => new Date(), runId: ctx.runId, adapters, acceptCatalog, log: ctx.log })
     return { status: result.status, counters: result.counters, error: result.errors.length ? result.errors.join("; ") : undefined }
   })
-  await notifyTransition(notifier, "ingest", prevStatus, outcome)
+  await notifyTransition(db, log, notifier, "ingest", prevStatus, outcome)
   return outcome
 }
 
@@ -199,7 +190,7 @@ async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Not
     const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode })
     return { status: result.status, counters: result.counters }
   })
-  await notifyTransition(notifier, "pool", prevStatus, outcome)
+  await notifyTransition(db, log, notifier, "pool", prevStatus, outcome)
   return outcome
 }
 

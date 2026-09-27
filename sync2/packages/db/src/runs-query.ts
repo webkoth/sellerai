@@ -31,6 +31,25 @@ export async function lastRunStatus(db: Db, job: string): Promise<"ok" | "partia
   return (row?.status as "ok" | "partial" | "failed" | undefined) ?? null
 }
 
+/**
+ * Число завершённых не-ok (partial/failed) запусков джобы после её последнего ok
+ * (ok ни разу не было — все её не-ok). Открытые (`running`) не считаются.
+ * Для напоминаний о затянувшемся сбое — см. decideNotification в worker.
+ */
+export async function nonOkStreak(db: Db, job: string): Promise<number> {
+  const [row] = await db
+    .select({ n: count() })
+    .from(runs)
+    .where(
+      and(
+        eq(runs.job, job),
+        inArray(runs.status, ["partial", "failed"]),
+        sql`${runs.startedAt} > coalesce((select max(r.started_at) from runs r where r.job = ${job} and r.status = 'ok'), '-infinity'::timestamptz)`,
+      ),
+    )
+  return row?.n ?? 0
+}
+
 /** Число запусков со статусом failed начиная с sinceIso — для сводки compare-v1. */
 export async function countFailedRunsSince(db: Db, sinceIso: string): Promise<number> {
   const [row] = await db

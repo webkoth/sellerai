@@ -170,11 +170,16 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
   товара, которого нет в другом пуле, — не расхождение (не хранится вечно ни там, ни там).
 - `sync2 write-mode <площадка> <off|dry-run|apply>` — меняет `channels.write_mode` одной площадки и печатает все
   пять. `apply` в 1.3b отклоняется с понятной ошибкой и кодом выхода 2 — физического отправителя ещё нет.
-- Уведомления в Telegram (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) для `ingest`/`pool` — только при смене
-  состояния джобы: прошлый запуск был `ok`, этот `partial`/`failed` → `⚠️ sync2 <job>: <ошибки/счётчики>`;
-  прошлый был не `ok` (и хоть один запуск уже был), этот `ok` → `✅ sync2 <job> снова в норме`. Повтор одного
-  состояния молчит; самый первый запуск джобы ни в какую сторону не считается переходом
-  (`apps/worker/src/cli.ts`: `notifyTransition`, `lastRunStatus` в `packages/db/src/runs-query.ts`).
+- Уведомления в Telegram (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) для `ingest`/`pool` — решение принимает чистая
+  `decideNotification` (`apps/worker/src/transition.ts`), по статусу прошлого завершённого прогона
+  (`lastRunStatus`, `running` пропускается) и текущего:
+  - первый прогон джобы в `ok` — молчим;
+  - любая смена статуса, где текущий не `ok` (включая первый прогон сразу в `partial`/`failed`, `partial` ↔
+    `failed`), → `⚠️ sync2 <job>: <статус> — <ошибки/счётчики>`;
+  - не `ok` → `ok` → `✅ sync2 <job> снова в норме`;
+  - тот же не-`ok` подряд — молчим, но каждые 36 прогонов серии (≈6 ч при тике раз в 10 минут; серия —
+    `nonOkStreak` в `packages/db/src/runs-query.ts`) — напоминание `⚠️ … всё ещё <статус> (N прогонов подряд)`.
+  Telegram не принял сообщение (или бот не настроен) — `warn` в лог с текстом уведомления.
 - Коды выхода `ingest`/`pool`/`tick`/`compare-v1`: исключение внутри джобы (`withRun` перехватывает и пишет
   `failed`) → 1; `partial` — штатная работа, а не авария → 0.
 - Локальная проверка на пустой базе без ключей площадок: `npm run cli -- pool` → `partial`, `noFreshWb: 1`, код 0.
