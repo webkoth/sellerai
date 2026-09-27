@@ -1,0 +1,69 @@
+{
+  "status": "OK",
+  "result": {
+    "paging": {},
+    "warehouses": [
+      {
+        "warehouseId": 2369574,
+        "offers": [
+          {
+            "offerId": "03982907587",
+            "stocks": [
+              {
+                "type": "FIT",
+                "count": 1
+              },
+              {
+                "type": "AVAILABLE",
+                "count": 1
+              }
+            ],
+            "updatedAt": "2026-08-31T16:21:10.792274+03:00"
+          },
+          {
+            "offerId": "097976675675454",
+            "stocks": [
+              {
+                "type": "FIT",
+                "count": 1
+              },
+              {
+                "type": "AVAILABLE",
+                "count": 1
+              }
+            ],
+            "updatedAt": "2026-08-31T16:21:10.792278+03:00"
+          },
+          {
+            "offerId": "098876674",
+            "stocks": [
+              {
+                "type": "FIT",
+                "count": 1
+              },
+              {
+                "type": "AVAILABLE",
+                "count": 1
+              }
+            ],
+            "updatedAt": "2026-08-31T16:21:10.829933+03:00"
+          },
+          {
+            "offerId": "224235677890",
+            "stocks": [
+              {
+                "type": "FIT",
+                "count": 1
+              },
+              {
+                "type": "AVAILABLE",
+                "count": 1
+              }
+            ],
+            "updatedAt": "2026-08-31T16:21:10.850497+03:00"
+          }
+        ]
+      }
+    ]
+  }
+}
