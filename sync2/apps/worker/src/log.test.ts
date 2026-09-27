@@ -22,4 +22,10 @@ describe("createLogger", () => {
     log.warn("должно")
     expect(lines).toHaveLength(1)
   })
+
+  it("секреты в лог не попадают", () => {
+    const { lines, dest } = capture()
+    createLogger("info", dest).info({ token: "SECRET1", cfg: { apiKey: "SECRET2", token: "SECRET3" }, headers: { Authorization: "Bearer SECRET4" } }, "x")
+    expect(lines[0]).not.toMatch(/SECRET/)
+  })
 })
