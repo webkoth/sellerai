@@ -1,0 +1,62 @@
+{
+  "cursor": "",
+  "total": 63,
+  "items": [
+    {
+      "product_id": 5555717681,
+      "offer_id": "8787676543",
+      "stocks": [
+        {
+          "type": "fbs",
+          "present": 1,
+          "reserved": 0,
+          "sku": 5125270344,
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "warehouse_ids": []
+        }
+      ]
+    },
+    {
+      "product_id": 5555721948,
+      "offer_id": "03982907587",
+      "stocks": [
+        {
+          "type": "fbs",
+          "present": 1,
+          "reserved": 0,
+          "sku": 5125272096,
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "warehouse_ids": []
+        }
+      ]
+    },
+    {
+      "product_id": 5555722500,
+      "offer_id": "097976675675454",
+      "stocks": [
+        {
+          "type": "fbs",
+          "present": 1,
+          "reserved": 0,
+          "sku": 5125272641,
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "warehouse_ids": []
+        }
+      ]
+    },
+    {
+      "product_id": 5555722782,
+      "offer_id": "098876674",
+      "stocks": [
+        {
+          "type": "fbs",
+          "present": 1,
+          "reserved": 0,
+          "sku": 5125273834,
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "warehouse_ids": []
+        }
+      ]
+    }
+  ]
+}

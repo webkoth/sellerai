@@ -1,0 +1,563 @@
+{
+  "items": [
+    {
+      "id": 5555717681,
+      "name": "Метеорит Каньон Дьябло - коллекционный образец: 14,2 гр.",
+      "offer_id": "8787676543",
+      "is_archived": false,
+      "is_autoarchived": false,
+      "barcodes": [
+        "2052706439774"
+      ],
+      "description_category_id": 17028994,
+      "type_id": 970801724,
+      "created_at": "2026-07-18T17:35:12.967854Z",
+      "images": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-u/11880979086.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-a/11880979462.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-q/11880977498.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-5/11880977261.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-j/8657800831.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-5/8657800709.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-4/8657801032.jpg"
+      ],
+      "currency_code": "RUB",
+      "min_price": "16391.00",
+      "old_price": "22350.00",
+      "price": "17490.00",
+      "sources": [
+        {
+          "sku": 5125270344,
+          "source": "sds",
+          "created_at": "2026-07-18T17:37:25.927944Z",
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "quant_code": ""
+        }
+      ],
+      "model_info": {
+        "model_id": 5905882258,
+        "count": 1
+      },
+      "commissions": [
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 115,
+          "sale_schema": "FBO",
+          "value": 8745
+        },
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 229,
+          "sale_schema": "FBS",
+          "value": 8745
+        },
+        {
+          "percent": 50,
+          "sale_schema": "RFBS",
+          "value": 8745
+        },
+        {
+          "percent": 50,
+          "sale_schema": "FBP",
+          "value": 8745
+        }
+      ],
+      "is_prepayment_allowed": true,
+      "volume_weight": 0.2,
+      "has_discounted_fbo_item": false,
+      "is_discounted": false,
+      "discounted_fbo_stocks": 0,
+      "stocks": {
+        "has_stock": true,
+        "stocks": [
+          {
+            "present": 1,
+            "reserved": 0,
+            "sku": 5125270344,
+            "source": "fbs"
+          }
+        ]
+      },
+      "errors": [],
+      "updated_at": "2026-07-19T10:54:34.291500Z",
+      "vat": "0.00",
+      "visibility_details": {
+        "has_price": true,
+        "has_stock": true
+      },
+      "price_indexes": {
+        "color_index": "COLOR_INDEX_WITHOUT_INDEX",
+        "external_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "ozon_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "self_marketplaces_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        }
+      },
+      "images360": [],
+      "is_kgt": false,
+      "color_image": [],
+      "primary_image": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-l/11880977601.jpg"
+      ],
+      "statuses": {
+        "status": "price_sent",
+        "status_failed": "",
+        "moderate_status": "approved",
+        "validation_status": "success",
+        "status_name": "Продается",
+        "status_description": "",
+        "is_created": true,
+        "status_tooltip": "",
+        "status_updated_at": "2026-07-19T10:55:46.374696Z"
+      },
+      "is_super": false,
+      "is_seasonal": false,
+      "promotions": [
+        {
+          "is_enabled": false,
+          "type": "REVIEWS_PROMO"
+        }
+      ],
+      "sku": 5125270344,
+      "availabilities": [
+        {
+          "availability": "AVAILABLE",
+          "reasons": [],
+          "sku": 5125270344,
+          "source": "sds"
+        }
+      ]
+    },
+    {
+      "id": 5555721948,
+      "name": "Метеорит Сихотэ-Алинь железный, образец 55,7 гр, оберег",
+      "offer_id": "03982907587",
+      "is_archived": false,
+      "is_autoarchived": false,
+      "barcodes": [
+        "2049387876936"
+      ],
+      "description_category_id": 17028994,
+      "type_id": 970801724,
+      "created_at": "2026-07-18T17:36:35.941362Z",
+      "images": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-6/9980717442.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-t/9980717789.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-j/9980717707.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-5/8657800709.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-j/8657800831.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-4/8657801032.jpg"
+      ],
+      "currency_code": "RUB",
+      "min_price": "32208.00",
+      "old_price": "67954.00",
+      "price": "34390.00",
+      "sources": [
+        {
+          "sku": 5125272096,
+          "source": "sds",
+          "created_at": "2026-07-18T17:38:07.602627Z",
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "quant_code": ""
+        }
+      ],
+      "model_info": {
+        "model_id": 5905882255,
+        "count": 1
+      },
+      "commissions": [
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 115,
+          "sale_schema": "FBO",
+          "value": 17195
+        },
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 254,
+          "sale_schema": "FBS",
+          "value": 17195
+        },
+        {
+          "percent": 50,
+          "sale_schema": "RFBS",
+          "value": 17195
+        },
+        {
+          "percent": 50,
+          "sale_schema": "FBP",
+          "value": 17195
+        }
+      ],
+      "is_prepayment_allowed": true,
+      "volume_weight": 0.3,
+      "has_discounted_fbo_item": false,
+      "is_discounted": false,
+      "discounted_fbo_stocks": 0,
+      "stocks": {
+        "has_stock": true,
+        "stocks": [
+          {
+            "present": 1,
+            "reserved": 0,
+            "sku": 5125272096,
+            "source": "fbs"
+          }
+        ]
+      },
+      "errors": [],
+      "updated_at": "2026-07-19T10:54:34.282689Z",
+      "vat": "0.00",
+      "visibility_details": {
+        "has_price": true,
+        "has_stock": true
+      },
+      "price_indexes": {
+        "color_index": "COLOR_INDEX_WITHOUT_INDEX",
+        "external_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "ozon_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "self_marketplaces_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        }
+      },
+      "images360": [],
+      "is_kgt": false,
+      "color_image": [],
+      "primary_image": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-z/9980717543.jpg"
+      ],
+      "statuses": {
+        "status": "price_sent",
+        "status_failed": "",
+        "moderate_status": "approved",
+        "validation_status": "success",
+        "status_name": "Продается",
+        "status_description": "",
+        "is_created": true,
+        "status_tooltip": "",
+        "status_updated_at": "2026-07-19T10:55:43.960018Z"
+      },
+      "is_super": false,
+      "is_seasonal": false,
+      "promotions": [
+        {
+          "is_enabled": true,
+          "type": "REVIEWS_PROMO"
+        }
+      ],
+      "sku": 5125272096,
+      "availabilities": [
+        {
+          "availability": "AVAILABLE",
+          "reasons": [],
+          "sku": 5125272096,
+          "source": "sds"
+        }
+      ]
+    },
+    {
+      "id": 5555722500,
+      "name": "Метеорит Дронино железный, коллекционный образец 62,1 гр",
+      "offer_id": "097976675675454",
+      "is_archived": false,
+      "is_autoarchived": false,
+      "barcodes": [
+        "2048907296230"
+      ],
+      "description_category_id": 17028994,
+      "type_id": 970801724,
+      "created_at": "2026-07-18T17:36:43.758384Z",
+      "images": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-g/9980717812.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-c/9980717592.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-h/8657800721.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-5/8657800709.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-6/8657800710.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-0/8657800704.jpg"
+      ],
+      "currency_code": "RUB",
+      "min_price": "41600.00",
+      "old_price": "61440.00",
+      "price": "44390.00",
+      "sources": [
+        {
+          "sku": 5125272641,
+          "source": "sds",
+          "created_at": "2026-07-18T17:38:17.868735Z",
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "quant_code": ""
+        }
+      ],
+      "model_info": {
+        "model_id": 5905882261,
+        "count": 1
+      },
+      "commissions": [
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 115,
+          "sale_schema": "FBO",
+          "value": 22195
+        },
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 254,
+          "sale_schema": "FBS",
+          "value": 22195
+        },
+        {
+          "percent": 50,
+          "sale_schema": "RFBS",
+          "value": 22195
+        },
+        {
+          "percent": 50,
+          "sale_schema": "FBP",
+          "value": 22195
+        }
+      ],
+      "is_prepayment_allowed": true,
+      "volume_weight": 0.3,
+      "has_discounted_fbo_item": false,
+      "is_discounted": false,
+      "discounted_fbo_stocks": 0,
+      "stocks": {
+        "has_stock": true,
+        "stocks": [
+          {
+            "present": 1,
+            "reserved": 0,
+            "sku": 5125272641,
+            "source": "fbs"
+          }
+        ]
+      },
+      "errors": [],
+      "updated_at": "2026-07-19T10:54:33.893743Z",
+      "vat": "0.00",
+      "visibility_details": {
+        "has_price": true,
+        "has_stock": true
+      },
+      "price_indexes": {
+        "color_index": "COLOR_INDEX_WITHOUT_INDEX",
+        "external_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "ozon_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "self_marketplaces_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        }
+      },
+      "images360": [],
+      "is_kgt": false,
+      "color_image": [],
+      "primary_image": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-c/9980717628.jpg"
+      ],
+      "statuses": {
+        "status": "price_sent",
+        "status_failed": "",
+        "moderate_status": "approved",
+        "validation_status": "success",
+        "status_name": "Продается",
+        "status_description": "",
+        "is_created": true,
+        "status_tooltip": "",
+        "status_updated_at": "2026-07-19T10:55:44.814985Z"
+      },
+      "is_super": false,
+      "is_seasonal": false,
+      "promotions": [
+        {
+          "is_enabled": true,
+          "type": "REVIEWS_PROMO"
+        }
+      ],
+      "sku": 5125272641,
+      "availabilities": [
+        {
+          "availability": "AVAILABLE",
+          "reasons": [],
+          "sku": 5125272641,
+          "source": "sds"
+        }
+      ]
+    },
+    {
+      "id": 5555722782,
+      "name": "Метеорит Сихотэ-Алинь коллекционный образец 24 гр, оберег",
+      "offer_id": "098876674",
+      "is_archived": false,
+      "is_autoarchived": false,
+      "barcodes": [
+        "2044462241173"
+      ],
+      "description_category_id": 17028994,
+      "type_id": 970801724,
+      "created_at": "2026-07-18T17:36:50.281135Z",
+      "images": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-7/8657800783.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-d/8657800789.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-o/8657800908.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-l/8657800833.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-h/8657800721.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-5/8657800709.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-6/8657800710.jpg",
+        "https://ir-3.ozone.ru/s3/multimedia-1-0/8657800704.jpg"
+      ],
+      "currency_code": "RUB",
+      "min_price": "27501.00",
+      "old_price": "37500.00",
+      "price": "29390.00",
+      "sources": [
+        {
+          "sku": 5125273834,
+          "source": "sds",
+          "created_at": "2026-07-18T17:38:45.971179Z",
+          "shipment_type": "SHIPMENT_TYPE_GENERAL",
+          "quant_code": ""
+        }
+      ],
+      "model_info": {
+        "model_id": 5905884458,
+        "count": 1
+      },
+      "commissions": [
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 115,
+          "sale_schema": "FBO",
+          "value": 14695
+        },
+        {
+          "delivery_amount": 25,
+          "percent": 50,
+          "return_amount": 229,
+          "sale_schema": "FBS",
+          "value": 14695
+        },
+        {
+          "percent": 50,
+          "sale_schema": "RFBS",
+          "value": 14695
+        },
+        {
+          "percent": 50,
+          "sale_schema": "FBP",
+          "value": 14695
+        }
+      ],
+      "is_prepayment_allowed": true,
+      "volume_weight": 0.2,
+      "has_discounted_fbo_item": false,
+      "is_discounted": false,
+      "discounted_fbo_stocks": 0,
+      "stocks": {
+        "has_stock": true,
+        "stocks": [
+          {
+            "present": 1,
+            "reserved": 0,
+            "sku": 5125273834,
+            "source": "fbs"
+          }
+        ]
+      },
+      "errors": [],
+      "updated_at": "2026-07-19T10:54:33.945620Z",
+      "vat": "0.00",
+      "visibility_details": {
+        "has_price": true,
+        "has_stock": true
+      },
+      "price_indexes": {
+        "color_index": "COLOR_INDEX_WITHOUT_INDEX",
+        "external_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "ozon_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        },
+        "self_marketplaces_index_data": {
+          "minimal_price": "",
+          "minimal_price_currency": "",
+          "price_index_value": 0
+        }
+      },
+      "images360": [],
+      "is_kgt": false,
+      "color_image": [],
+      "primary_image": [
+        "https://ir-3.ozone.ru/s3/multimedia-1-c/8657801076.jpg"
+      ],
+      "statuses": {
+        "status": "price_sent",
+        "status_failed": "",
+        "moderate_status": "approved",
+        "validation_status": "success",
+        "status_name": "Продается",
+        "status_description": "",
+        "is_created": true,
+        "status_tooltip": "",
+        "status_updated_at": "2026-07-19T10:56:12.515837Z"
+      },
+      "is_super": false,
+      "is_seasonal": false,
+      "promotions": [
+        {
+          "is_enabled": true,
+          "type": "REVIEWS_PROMO"
+        }
+      ],
+      "sku": 5125273834,
+      "availabilities": [
+        {
+          "availability": "AVAILABLE",
+          "reasons": [],
+          "sku": 5125273834,
+          "source": "sds"
+        }
+      ]
+    }
+  ]
+}

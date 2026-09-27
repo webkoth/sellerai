@@ -1,0 +1,370 @@
+{
+  "cursor": "",
+  "has_next": false,
+  "postings": [
+    {
+      "posting_number": "0250428400-0013-1",
+      "order_id": 37242767152,
+      "order_number": "0250428400-0013",
+      "pickup_code_verified_at": null,
+      "status": "cancelled",
+      "substatus": "posting_canceled",
+      "delivery_method": {
+        "id": 1020005023618600,
+        "name": "Доставка Ozon самостоятельно, Краснодар",
+        "warehouse_id": 1020005023618600,
+        "warehouse": "Склад Краснодар",
+        "tpl_provider_id": 24,
+        "tpl_provider": "Доставка Ozon"
+      },
+      "delivery_schema": "fbs",
+      "tracking_number": "",
+      "tpl_integration_type": "ozon",
+      "in_process_at": "2026-07-23T13:08:51Z",
+      "shipment_date": "2026-07-24T09:00:00Z",
+      "shipment_date_without_delay": "2026-07-24T16:59:00Z",
+      "optional": {
+        "products_with_possible_mandatory_mark": []
+      },
+      "cancellation": {
+        "cancel_reason_id": 537,
+        "cancel_reason": "Покупатель не забрал заказ",
+        "cancellation_type": "client",
+        "cancelled_after_ship": true,
+        "affect_cancellation_rating": false,
+        "cancellation_initiator": "Клиент"
+      },
+      "customer": null,
+      "products": [
+        {
+          "is_blr_traceable": false,
+          "is_marketplace_buyout": true,
+          "offer_id": "9983472963937675",
+          "name": "Кулон Лик Будды из метеорита Алетай, амулет оберег резной",
+          "sku": 5125287993,
+          "quantity": 1,
+          "imei": [],
+          "weight": 0.09,
+          "product_color": "серебристый",
+          "price": {
+            "amount": "44390",
+            "currency": "RUB"
+          }
+        }
+      ],
+      "addressee": null,
+      "barcodes": null,
+      "analytics_data": null,
+      "destination_place_id": 0,
+      "destination_place_name": "",
+      "financial_data": null,
+      "is_express": false,
+      "legal_info": null,
+      "quantum_id": 0,
+      "require_blr_traceable_attrs": false,
+      "requirements": {
+        "products_requiring_gtd": [],
+        "products_requiring_country": [],
+        "products_requiring_mandatory_mark": [],
+        "products_requiring_rnpt": [],
+        "products_requiring_jw_uin": [],
+        "products_requiring_change_country": [],
+        "products_requiring_imei": [],
+        "products_requiring_weight": []
+      },
+      "tariffication": null,
+      "external_order": {
+        "is_external": false,
+        "platform_name": ""
+      },
+      "volume_weight": 0,
+      "is_click_and_collect": false,
+      "delivering_date": "2026-07-24T13:26:42Z",
+      "is_multibox": false,
+      "multi_box_qty": 1,
+      "is_presortable": false,
+      "prr_option": "",
+      "parent_posting_number": "",
+      "available_actions": [],
+      "tariffication_steps": [],
+      "container_sort_type": "sort",
+      "container": null,
+      "integration_type_flow": "ozon",
+      "sorting_center": null,
+      "received_at_sorting_center": "1970-01-01T00:00:00Z"
+    },
+    {
+      "posting_number": "0194396659-0098-1",
+      "order_id": 37860330499,
+      "order_number": "0194396659-0098",
+      "pickup_code_verified_at": null,
+      "status": "delivered",
+      "substatus": "posting_received",
+      "delivery_method": {
+        "id": 1020005023618600,
+        "name": "Доставка Ozon самостоятельно, Краснодар",
+        "warehouse_id": 1020005023618600,
+        "warehouse": "Склад Краснодар",
+        "tpl_provider_id": 24,
+        "tpl_provider": "Доставка Ozon"
+      },
+      "delivery_schema": "fbs",
+      "tracking_number": "",
+      "tpl_integration_type": "ozon",
+      "in_process_at": "2026-07-24T17:27:03Z",
+      "shipment_date": "2026-07-25T09:00:00Z",
+      "shipment_date_without_delay": "2026-07-25T16:59:00Z",
+      "optional": {
+        "products_with_possible_mandatory_mark": []
+      },
+      "cancellation": {
+        "cancel_reason_id": 0,
+        "cancel_reason": "",
+        "cancellation_type": "",
+        "cancelled_after_ship": false,
+        "affect_cancellation_rating": false,
+        "cancellation_initiator": ""
+      },
+      "customer": null,
+      "products": [
+        {
+          "is_blr_traceable": false,
+          "is_marketplace_buyout": false,
+          "offer_id": "65653542342",
+          "name": "Кулон Пи Яо из метеорита Муонионалуста",
+          "sku": 5125277461,
+          "quantity": 1,
+          "imei": [],
+          "weight": 0.2,
+          "product_color": "серебристый",
+          "price": {
+            "amount": "92990",
+            "currency": "RUB"
+          }
+        }
+      ],
+      "addressee": null,
+      "barcodes": null,
+      "analytics_data": null,
+      "destination_place_id": 0,
+      "destination_place_name": "",
+      "financial_data": null,
+      "is_express": false,
+      "legal_info": null,
+      "quantum_id": 0,
+      "require_blr_traceable_attrs": false,
+      "requirements": {
+        "products_requiring_gtd": [],
+        "products_requiring_country": [],
+        "products_requiring_mandatory_mark": [],
+        "products_requiring_rnpt": [],
+        "products_requiring_jw_uin": [],
+        "products_requiring_change_country": [],
+        "products_requiring_imei": [],
+        "products_requiring_weight": []
+      },
+      "tariffication": null,
+      "external_order": {
+        "is_external": false,
+        "platform_name": ""
+      },
+      "volume_weight": 0,
+      "is_click_and_collect": false,
+      "delivering_date": "2026-07-25T08:00:52Z",
+      "is_multibox": false,
+      "multi_box_qty": 1,
+      "is_presortable": false,
+      "prr_option": "",
+      "parent_posting_number": "",
+      "available_actions": [],
+      "tariffication_steps": [],
+      "container_sort_type": "sort",
+      "container": null,
+      "integration_type_flow": "ozon",
+      "sorting_center": null,
+      "received_at_sorting_center": "1970-01-01T00:00:00Z"
+    },
+    {
+      "posting_number": "46692704-0162-1",
+      "order_id": 37785226496,
+      "order_number": "46692704-0162",
+      "pickup_code_verified_at": null,
+      "status": "delivered",
+      "substatus": "posting_received",
+      "delivery_method": {
+        "id": 1020005023618600,
+        "name": "Доставка Ozon самостоятельно, Краснодар",
+        "warehouse_id": 1020005023618600,
+        "warehouse": "Склад Краснодар",
+        "tpl_provider_id": 24,
+        "tpl_provider": "Доставка Ozon"
+      },
+      "delivery_schema": "fbs",
+      "tracking_number": "",
+      "tpl_integration_type": "ozon",
+      "in_process_at": "2026-08-01T15:15:11Z",
+      "shipment_date": "2026-08-02T09:00:00Z",
+      "shipment_date_without_delay": "2026-08-02T16:59:00Z",
+      "optional": {
+        "products_with_possible_mandatory_mark": []
+      },
+      "cancellation": {
+        "cancel_reason_id": 0,
+        "cancel_reason": "",
+        "cancellation_type": "",
+        "cancelled_after_ship": false,
+        "affect_cancellation_rating": false,
+        "cancellation_initiator": ""
+      },
+      "customer": null,
+      "products": [
+        {
+          "is_blr_traceable": false,
+          "is_marketplace_buyout": false,
+          "offer_id": "JW-NB-AGT-M-0041",
+          "name": "Браслет Вершитель с метеоритом Муонионалуста и лабрадоритом",
+          "sku": 5125291434,
+          "quantity": 1,
+          "imei": [],
+          "weight": 0.1,
+          "product_color": "золотой",
+          "price": {
+            "amount": "14590",
+            "currency": "RUB"
+          }
+        }
+      ],
+      "addressee": null,
+      "barcodes": null,
+      "analytics_data": null,
+      "destination_place_id": 0,
+      "destination_place_name": "",
+      "financial_data": null,
+      "is_express": false,
+      "legal_info": null,
+      "quantum_id": 0,
+      "require_blr_traceable_attrs": false,
+      "requirements": {
+        "products_requiring_gtd": [],
+        "products_requiring_country": [],
+        "products_requiring_mandatory_mark": [],
+        "products_requiring_rnpt": [],
+        "products_requiring_jw_uin": [],
+        "products_requiring_change_country": [],
+        "products_requiring_imei": [],
+        "products_requiring_weight": []
+      },
+      "tariffication": null,
+      "external_order": {
+        "is_external": false,
+        "platform_name": ""
+      },
+      "volume_weight": 0,
+      "is_click_and_collect": false,
+      "delivering_date": "2026-08-01T16:28:06Z",
+      "is_multibox": false,
+      "multi_box_qty": 1,
+      "is_presortable": false,
+      "prr_option": "",
+      "parent_posting_number": "",
+      "available_actions": [],
+      "tariffication_steps": [],
+      "container_sort_type": "sort",
+      "container": null,
+      "integration_type_flow": "ozon",
+      "sorting_center": null,
+      "received_at_sorting_center": "1970-01-01T00:00:00Z"
+    },
+    {
+      "posting_number": "86909928-0209-1",
+      "order_id": 37712731000,
+      "order_number": "86909928-0209",
+      "pickup_code_verified_at": null,
+      "status": "delivered",
+      "substatus": "posting_received",
+      "delivery_method": {
+        "id": 1020005023618600,
+        "name": "Доставка Ozon самостоятельно, Краснодар",
+        "warehouse_id": 1020005023618600,
+        "warehouse": "Склад Краснодар",
+        "tpl_provider_id": 24,
+        "tpl_provider": "Доставка Ozon"
+      },
+      "delivery_schema": "fbs",
+      "tracking_number": "",
+      "tpl_integration_type": "ozon",
+      "in_process_at": "2026-08-08T14:40:57Z",
+      "shipment_date": "2026-08-09T09:00:00Z",
+      "shipment_date_without_delay": "2026-08-09T16:59:00Z",
+      "optional": {
+        "products_with_possible_mandatory_mark": []
+      },
+      "cancellation": {
+        "cancel_reason_id": 0,
+        "cancel_reason": "",
+        "cancellation_type": "",
+        "cancelled_after_ship": false,
+        "affect_cancellation_rating": false,
+        "cancellation_initiator": ""
+      },
+      "customer": null,
+      "products": [
+        {
+          "is_blr_traceable": false,
+          "is_marketplace_buyout": false,
+          "offer_id": "JW-NB-AGT-M-0041",
+          "name": "Браслет Вершитель с метеоритом Муонионалуста и лабрадоритом",
+          "sku": 5125291434,
+          "quantity": 1,
+          "imei": [],
+          "weight": 0.1,
+          "product_color": "золотой",
+          "price": {
+            "amount": "14590",
+            "currency": "RUB"
+          }
+        }
+      ],
+      "addressee": null,
+      "barcodes": null,
+      "analytics_data": null,
+      "destination_place_id": 0,
+      "destination_place_name": "",
+      "financial_data": null,
+      "is_express": false,
+      "legal_info": null,
+      "quantum_id": 0,
+      "require_blr_traceable_attrs": false,
+      "requirements": {
+        "products_requiring_gtd": [],
+        "products_requiring_country": [],
+        "products_requiring_mandatory_mark": [],
+        "products_requiring_rnpt": [],
+        "products_requiring_jw_uin": [],
+        "products_requiring_change_country": [],
+        "products_requiring_imei": [],
+        "products_requiring_weight": []
+      },
+      "tariffication": null,
+      "external_order": {
+        "is_external": false,
+        "platform_name": ""
+      },
+      "volume_weight": 0,
+      "is_click_and_collect": false,
+      "delivering_date": "2026-08-08T17:29:26Z",
+      "is_multibox": false,
+      "multi_box_qty": 1,
+      "is_presortable": false,
+      "prr_option": "",
+      "parent_posting_number": "",
+      "available_actions": [],
+      "tariffication_steps": [],
+      "container_sort_type": "sort",
+      "container": null,
+      "integration_type_flow": "ozon",
+      "sorting_center": null,
+      "received_at_sorting_center": "1970-01-01T00:00:00Z"
+    }
+  ]
+}
