@@ -14,3 +14,4 @@ export { writeOzonStocks, type OzonStockWriterConfig } from "./ozon/stock-writer
 export { writeYmStocks, ymStocksBody, type YmStockWriterConfig } from "./ym/stock-writer"
 export { writeKitStocks, type KitStockWriterConfig } from "./kit/stock-writer"
 export { SITE_UNKNOWN_BARCODE, writeSiteStocks } from "./site/stock-writer"
+export { fetchYmBarcodes, fetchYmOfferStock, type YmCredentials, type YmStockEntry } from "./ym/client"

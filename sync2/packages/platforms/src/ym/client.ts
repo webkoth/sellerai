@@ -269,6 +269,22 @@ export async function fetchYmStocks(credentials: YmCredentials): Promise<YmWareh
   throw new Error(`ЯМ остатки: больше ${MAX_PAGES} страниц — список неполный`)
 }
 
+/**
+ * Записи остатка ОДНОГО оффера на одном складе, `POST /v2/campaigns/{campaignId}/offers/stocks` с фильтром
+ * `offerIds` (спецификация: с ним limit/page_token не передаются, список отдаётся целиком). Для живой
+ * проверки тела записи ЯМ (`ym-check`, решение владельца 28.09, п. 6). Оффера на складе нет — null.
+ */
+export async function fetchYmOfferStock(credentials: YmCredentials, offerId: string, warehouseId: number): Promise<YmStockEntry[] | null> {
+  const body = await requestJson<YmStocksResponse>("ym", `${BASE}/v2/campaigns/${credentials.campaignId}/offers/stocks`, {
+    ...ymAuth(credentials),
+    method: "POST",
+    body: { offerIds: [offerId] },
+  })
+  const warehouse = (body.result?.warehouses ?? []).find((w) => w.warehouseId === warehouseId)
+  const offer = warehouse?.offers.find((o) => o.offerId === offerId)
+  return offer ? (offer.stocks ?? []) : null
+}
+
 interface YmCampaignOffersResponse {
   status: string
   result?: {

@@ -146,7 +146,19 @@ ssh root@147.45.171.40 'cd /opt/sync2 && T="node_modules/.bin/tsx --env-file=.en
 
 Одному офферу ЯМ записать его текущий остаток (значение не меняется) телом, которое формирует отправитель sync2
 (`ymStocksBody`, `packages/platforms/src/ym/stock-writer.ts`); успех — `status: OK` и тот же остаток при чтении.
-Выполнять с предпросмотром тела и «да» владельца в момент шага.
+Нужен глобальный `SYNC_WRITE_MODE=apply` (шаг A); режим ЯМ в `channels` не меняется — команда пишет только этот
+оффер. Сначала предпросмотр, затем — с «да» владельца — запись:
+
+```bash
+# предпросмотр: текущий остаток оффера на складе записи и тело запроса; в сеть ничего не пишется (код 0; 2 — оффера нет)
+ssh root@147.45.171.40 'cd /opt/sync2 && node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ym-check <offerId>'
+# запись того же числа тем же телом и чтение обратно: код 0 — status OK и число не изменилось, 1 — нет
+ssh root@147.45.171.40 'cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ym-check <offerId> --confirm'
+```
+
+Оффер — с ненулевым остатком, без заказов в работе. Прогон — в `runs` (job `ym-check`), запись — в `writes`
+(`mode = apply`, `before = after`). Код 1 — шаг B не начинать, разобрать ответ ЯМ (тело по спецификации без
+`warehouseId`/`type` — только после отдельного решения).
 
 ### Шаг B — WB, Ozon, ЯМ, KIT разом
 

@@ -43,6 +43,7 @@ import { runDrift, wbDriftNow } from "./jobs/drift"
 import { runIngest } from "./jobs/ingest"
 import { runPool } from "./jobs/pool"
 import { runSitePushAll } from "./jobs/site-push-all"
+import { runYmCheck } from "./jobs/ym-check"
 import { createLogger, type Logger } from "./log"
 import { createNotifier, type Notifier } from "./notify"
 import { withRun, type RunOutcome } from "./run"
@@ -68,6 +69,9 @@ const USAGE = `sync2 <команда>
                          весь пул на сайт (шаг A этапа 1.4)
   drift [--print]        пул ↔ последние снимки площадок, записи за сутки (Telegram; --print — в терминал)
   check-wb               снимок WB последнего тика = пул? код 0 — да, 3 — нет (шаг B этапа 1.4)
+  ym-check <offerId> [--confirm]
+                         живая проверка тела записи ЯМ на одном оффере: без --confirm — остаток и тело запроса;
+                         с --confirm — запись того же остатка и чтение обратно (перед шагом B этапа 1.4)
   prune                  ретенция: writes off/dry-run > 14 дн, apply > 90 дн; снимки > 7 дн (кроме последнего)`
 
 /** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки доли. */
@@ -82,6 +86,7 @@ const ALLOWED_FLAGS: Record<string, readonly string[]> = {
   tick: [ACCEPT_CATALOG_FLAG],
   "write-mode": [CONFIRM_FLAG],
   "site-push-all": [CONFIRM_FLAG],
+  "ym-check": [CONFIRM_FLAG],
   drift: [PRINT_FLAG],
 }
 const PROBE_WINDOW_MS = 60 * 24 * 60 * 60 * 1000
@@ -408,6 +413,35 @@ async function main(argv: string[]): Promise<number> {
         })
         console.log(`${outcome.status} ${JSON.stringify(outcome.counters)}${outcome.error ? ` — ${outcome.error}` : ""}`)
         return outcome.status === "ok" ? 0 : 1
+      }
+      case "ym-check": {
+        if (!arg) {
+          console.error(`не указан offerId\n\n${USAGE}`)
+          return 2
+        }
+        const cfg = loadChannelsConfig(process.env)
+        const warehouseId = cfg.ym.warehouseIds[0]
+        if (warehouseId === undefined) {
+          console.error("YM_WAREHOUSE_IDS пуст — склада записи ЯМ нет")
+          return 2
+        }
+        let code: 0 | 1 | 2 = 1
+        const outcome = await withRun("ym-check", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
+          const r = await runYmCheck({
+            db,
+            runId: ctx.runId,
+            globalMode: config.writeMode,
+            now: () => new Date(),
+            cfg: { apiKey: cfg.ym.apiKey, businessId: cfg.ym.businessId, campaignId: cfg.ym.campaignId, warehouseId },
+            offerId: arg,
+            confirm: flags.includes(CONFIRM_FLAG),
+            print: (line) => console.log(line),
+          })
+          code = r.code
+          return { status: r.status, counters: r.counters, error: r.error }
+        })
+        if (outcome.error) console.error(outcome.error)
+        return outcome.status === "failed" ? 1 : code
       }
       case "drift": {
         const print = flags.includes(PRINT_FLAG)

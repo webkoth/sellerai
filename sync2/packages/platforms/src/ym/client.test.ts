@@ -2,7 +2,7 @@
 // Без изменений логики: клиент не содержит ничего финансового, тесты
 // переносятся как есть (график выплат в тестах и не участвовал).
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { creationWindows, fetchYmBarcodes, fetchYmCampaignOfferIds, fetchYmOrders, fetchYmStocks } from "./client"
+import { creationWindows, fetchYmBarcodes, fetchYmCampaignOfferIds, fetchYmOfferStock, fetchYmOrders, fetchYmStocks } from "./client"
 import type { YmOrder } from "./client"
 
 afterEach(() => {
@@ -232,5 +232,31 @@ describe("fetchYmBarcodes", () => {
   it("товар без штрихкодов — пустой список, а не отсутствие ключа", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({ status: "OK", result: { paging: {}, offerMappings: [{ offer: { offerId: "A" }, mapping: {} }] } })))
     expect((await fetchYmBarcodes(CREDS, ["A"])).get("A")).toEqual([])
+  })
+})
+
+describe("fetchYmOfferStock — остаток одного оффера на складе (ym-check)", () => {
+  const body = (warehouses: unknown[]) => response({ status: "OK", result: { warehouses } })
+
+  it("фильтр offerIds без limit/pageToken (спецификация: такой список — только целиком); записи остатка склада", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      body([
+        { warehouseId: 999, offers: [{ offerId: "JW-A", stocks: [{ type: "FIT", count: 7 }] }] },
+        { warehouseId: 2369574, offers: [{ offerId: "JW-A", stocks: [{ type: "FIT", count: 2 }, { type: "AVAILABLE", count: 2 }] }] },
+      ]),
+    )
+    vi.stubGlobal("fetch", fetchMock)
+    expect(await fetchYmOfferStock(CREDS, "JW-A", 2369574)).toEqual([
+      { type: "FIT", count: 2 },
+      { type: "AVAILABLE", count: 2 },
+    ])
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+    expect(url).toBe("https://api.partner.market.yandex.ru/v2/campaigns/222/offers/stocks")
+    expect(JSON.parse(init.body as string)).toEqual({ offerIds: ["JW-A"] })
+  })
+
+  it("оффера на складе записи нет — null", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(body([{ warehouseId: 999, offers: [{ offerId: "JW-A", stocks: [] }] }])))
+    expect(await fetchYmOfferStock(CREDS, "JW-A", 2369574)).toBeNull()
   })
 })
