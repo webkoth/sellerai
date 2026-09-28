@@ -216,6 +216,15 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
     counters[counter] = 1
     problems.push(text)
   }
+  /**
+   * Блок по складам записи: в apply — как block; площадка в dry-run — только счётчик, без текста и partial:
+   * так «чужой склад»/«не задан склад записи» видно в plan/drift ещё до переключения (шаг B).
+   */
+  const blockWarehouse = (c: Channel, counter: string, text: string) => {
+    if (configured[c] === "off") return
+    if (modes[c] === "apply") block([c], counter, text)
+    else counters[counter] = 1
+  }
   const ingestCounters = (await lastRunCounters(db, "ingest")) ?? {}
   const failedOrders = ORDER_CHANNELS.filter((c) => ingestCounters[`${c}OrdersFailed`] === 1)
   if (failedOrders.length > 0) counters.mirrorOrdersFailed = failedOrders.length
@@ -223,13 +232,19 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
     block(CHANNELS, "writesBlockedCatalog", "запись остатков не делалась: каталог WB отклонён в последнем ingest — заказы и снимки не прочитаны")
   }
   if (ingestCounters.siteSourcePool !== 1) {
-    block([SITE], "siteWriteBlocked", "сайт: витрина берёт остаток не из пула (STOCK_SOURCE≠pool) — запись сайта не делалась")
+    block(
+      [SITE],
+      "siteWriteBlocked",
+      ingestCounters.siteSourcePool === undefined
+        ? "сайт: снимок витрины не прочитан в последнем ingest — источник остатка витрины неизвестен, запись сайта не делалась"
+        : "сайт: витрина берёт остаток не из пула (STOCK_SOURCE≠pool) — запись сайта не делалась",
+    )
   }
   const wbWarehouseId = deps.wbWarehouseId ?? null
   const foreign = foreignWarehouses(wb.stocks, wbWarehouseId)
   if (foreign.length > 0) {
-    block(
-      ["wb"],
+    blockWarehouse(
+      "wb",
       "wbForeignWarehouse",
       wbWarehouseId === null
         ? "WB: не задан WB_WAREHOUSE_ID — запись WB не делалась"
@@ -239,12 +254,12 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   const ozonSnap = snaps.get(channelId("ozon"))
   const ozonWarehouseId = deps.ozonWarehouseId ?? null
   if (ozonWarehouseId === null) {
-    block(["ozon"], "ozonForeignWarehouse", "Ozon: не задан OZON_WAREHOUSE_ID — запись Ozon не делалась")
+    blockWarehouse("ozon", "ozonForeignWarehouse", "Ozon: не задан OZON_WAREHOUSE_ID — запись Ozon не делалась")
   } else if (ozonSnap && fresh(ozonSnap.takenAt)) {
     const ozonForeign = ozonForeignWarehouses(ozonSnap.stocks, ozonWarehouseId)
     if (ozonForeign.length > 0) {
-      block(
-        ["ozon"],
+      blockWarehouse(
+        "ozon",
         "ozonForeignWarehouse",
         `Ozon: в снимке склады FBS ${ozonForeign.join(", ")} помимо склада записи ${ozonWarehouseId} — запись Ozon не делалась`,
       )
@@ -254,8 +269,8 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   const ymWarehouseId = deps.ymWarehouseId ?? null
   const ymForeign = ymSnap && fresh(ymSnap.takenAt) ? foreignWarehouses(ymSnap.stocks, ymWarehouseId) : []
   if (ymForeign.length > 0) {
-    block(
-      ["ym"],
+    blockWarehouse(
+      "ym",
       "ymForeignWarehouse",
       ymWarehouseId === null
         ? "ЯМ: не задан склад записи (YM_WAREHOUSE_IDS) — запись ЯМ не делалась"

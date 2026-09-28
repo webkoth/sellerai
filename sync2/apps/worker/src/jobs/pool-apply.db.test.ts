@@ -122,6 +122,16 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — запись на площад�
     await mode("site", "off")
   })
 
+  it("сайт в apply, а снимок витрины не прочитан (нет siteSourcePool) — запись сайта не делается, причина — «не прочитан»", async () => {
+    await mode("site", "apply")
+    await ingestRun("2026-09-28T10:16:30.000Z")
+    await snap("wb", "2026-09-28T10:16:30.000Z", [s("A", 3), s("B", 1)])
+    const { r } = await pool("2026-09-28T10:16:40.000Z", okSend())
+    expect(r).toMatchObject({ status: "partial", counters: { siteWriteBlocked: 1 } })
+    expect(r.error).toMatch(/сайт: снимок витрины не прочитан/)
+    await mode("site", "off")
+  })
+
   it("сайт в apply и витрина на пуле — пишется по штрихкоду", async () => {
     await mode("site", "apply")
     await ingestRun("2026-09-28T10:17:00.000Z", { siteSourcePool: 1 })
@@ -288,7 +298,17 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — dry-run как на VPS до п
     await snap("site", "2026-09-28T12:05:00.000Z", [s("A", 5), s("B", 1)])
     const send = okSend()
     const pid = await runId()
-    const r = await runPool({ db: ctx.h.db, now: () => new Date("2026-09-28T12:05:30.000Z"), runId: pid, globalMode: "dry-run", send })
+    // Склады записи — как их передаёт CLI (writeTargets).
+    const r = await runPool({
+      db: ctx.h.db,
+      now: () => new Date("2026-09-28T12:05:30.000Z"),
+      runId: pid,
+      globalMode: "dry-run",
+      send,
+      wbWarehouseId: 1408913,
+      ozonWarehouseId: 1020005023618600,
+      ymWarehouseId: 2369574,
+    })
     expect(send).not.toHaveBeenCalled()
     expect(r.status).toBe("ok")
     expect(r.error).toBeUndefined()
@@ -299,6 +319,26 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — dry-run как на VPS до п
     expect(await logged(pid, "ozon")).toEqual([["A", 2, 3, "dry-run", false]])
     expect(await logged(pid, "site")).toEqual([["A", 5, 3, "off", false]])
     expect(await logged(pid, "wb")).toEqual([])
+  })
+
+  it("чужой склад и не заданный склад записи в dry-run — только счётчик (видно до шага B), без текста и partial", async () => {
+    await mode("wb", "dry-run")
+    await ingestRun("2026-09-28T12:10:00.000Z")
+    await snap("wb", "2026-09-28T12:10:00.000Z", [s("A", 3, null, "1408913"), s("A", 0, null, "777"), s("B", 1, null, "1408913")])
+    await snap("ozon", "2026-09-28T12:10:00.000Z", [s("A", 3, "JW-A", "fbs:22,1020005023618600"), s("B", 1, "JW-B", "fbs")])
+    const r = await runPool({
+      db: ctx.h.db,
+      now: () => new Date("2026-09-28T12:10:30.000Z"),
+      runId: await runId(),
+      globalMode: "dry-run",
+      wbWarehouseId: 1408913,
+      ozonWarehouseId: 1020005023618600,
+    })
+    expect(r).toMatchObject({ status: "ok", counters: { wbForeignWarehouse: 1, ozonForeignWarehouse: 1 } })
+    expect(r.error).toBeUndefined()
+    const noWh = await runPool({ db: ctx.h.db, now: () => new Date("2026-09-28T12:10:40.000Z"), runId: await runId(), globalMode: "dry-run" })
+    expect(noWh).toMatchObject({ status: "ok", counters: { wbForeignWarehouse: 1, ozonForeignWarehouse: 1 } })
+    await mode("wb", "off")
   })
 })
 
