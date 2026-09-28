@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest"
+import { afterEach, describe, expect, it, vi } from "vitest"
 import { PlatformApiError, RateLimitError } from "./errors"
+import { requestJson } from "./http"
 import { chunk, failed, isUncertain, splitByKey, succeeded } from "./stock-write"
 import type { WriteOp } from "./writer"
 
@@ -43,5 +44,62 @@ describe("isUncertain — могла ли запись дойти", () => {
     expect(isUncertain(new RateLimitError("wb", 8, "429"))).toBe(false)
     expect(isUncertain(new PlatformApiError("wb", 409, "conflict"))).toBe(false)
     expect(isUncertain(new TypeError("x is undefined"))).toBe(true)
+  })
+})
+
+describe("isUncertain — по всем попыткам запроса, а не только по последней (http.ts повторяет сам)", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  /** Ошибка, которой кончился запрос записи с заданной последовательностью ответов. */
+  async function failureOf(...steps: Array<Response | Error>): Promise<unknown> {
+    const fetchMock = vi.fn()
+    for (const step of steps) {
+      if (step instanceof Error) fetchMock.mockRejectedValueOnce(step)
+      else fetchMock.mockResolvedValueOnce(step)
+    }
+    vi.stubGlobal("fetch", fetchMock)
+    const delays = steps.slice(1).map(() => 0)
+    return requestJson("wb", "https://example.test/write", { token: "t", method: "PUT", body: { x: 1 }, retryDelaysMs: delays }).then(
+      () => {
+        throw new Error("ожидалась ошибка")
+      },
+      (e: unknown) => e,
+    )
+  }
+
+  it("502, затем 429 — первая попытка могла примениться: итог неизвестен", async () => {
+    const e = await failureOf(new Response("oops", { status: 502 }), new Response("limit", { status: 429 }))
+    expect(e).toBeInstanceOf(RateLimitError)
+    expect(isUncertain(e)).toBe(true)
+  })
+
+  it("таймаут, затем 400 — первая попытка могла примениться: итог неизвестен", async () => {
+    const timeout = new DOMException("The operation was aborted due to timeout", "TimeoutError")
+    const e = await failureOf(timeout as unknown as Error, new Response("bad", { status: 400 }))
+    expect(e).toMatchObject({ status: 400 })
+    expect(isUncertain(e)).toBe(true)
+  })
+
+  it("400 с первой попытки — отказ, итог известен", async () => {
+    const e = await failureOf(new Response("bad", { status: 400 }))
+    expect(isUncertain(e)).toBe(false)
+  })
+
+  it("429 с первой попытки и после повтора — лимит, итог известен", async () => {
+    const e = await failureOf(new Response("limit", { status: 429 }), new Response("limit", { status: 429 }))
+    expect(isUncertain(e)).toBe(false)
+  })
+
+  it("пустой 200 — площадка ответила успехом, а тела нет: итог неизвестен", async () => {
+    const e = await failureOf(new Response("", { status: 200 }))
+    expect(e).toMatchObject({ status: 200 })
+    expect(isUncertain(e)).toBe(true)
+  })
+
+  it("битое тело 200 — итог неизвестен", async () => {
+    const e = await failureOf(new Response("{не json", { status: 200 }))
+    expect(isUncertain(e)).toBe(true)
   })
 })

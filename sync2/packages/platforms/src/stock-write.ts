@@ -19,13 +19,20 @@ export function failed(op: WriteOp, error: string, opts: { uncertain?: boolean; 
 }
 
 /**
- * Могла ли запись дойти, если запрос кончился ошибкой. Сеть (статус 0) и 5xx после повторов —
- * могла: площадка могла принять тело и не успеть ответить. Лимит (429/420) и прочие 4xx — нет:
- * площадка отказала до применения. Не PlatformApiError — ошибка кода: считаем, что могла (безопаснее).
+ * Могла ли запись дойти, если запрос кончился ошибкой. Смотрим на ВСЕ попытки запроса, не только
+ * на последнюю: http.ts повторяет сам, и первая попытка, оборвавшаяся сетью/таймаутом/5xx, могла
+ * примениться, даже если повтор получил 429 или 4xx (`mayHaveBeenDelivered`).
+ * - сеть (статус 0) и 5xx — могла: площадка могла принять тело и не успеть ответить;
+ * - 2xx, брошенный как ошибка (requestJson: пустое тело 200/204), — могла: площадка ответила успехом;
+ * - лимит (429/420) и прочие 4xx на всех попытках — нет: площадка отказала до применения;
+ * - не PlatformApiError (битое тело 2xx — SyntaxError, ошибка кода) — считаем, что могла (безопаснее).
  */
 export function isUncertain(e: unknown): boolean {
-  if (e instanceof RateLimitError) return false
-  if (e instanceof PlatformApiError) return e.status === 0 || e.status >= 500
+  if (e instanceof PlatformApiError) {
+    if (e.mayHaveBeenDelivered) return true
+    if (e instanceof RateLimitError) return false
+    return e.status === 0 || (e.status >= 200 && e.status < 300) || e.status >= 500
+  }
   return true
 }
 

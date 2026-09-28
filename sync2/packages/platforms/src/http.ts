@@ -151,6 +151,13 @@ async function request<T>(
 ): Promise<{ status: number; body: T | null }> {
   const delays = options.retryDelaysMs ?? DEFAULT_RETRY_DELAYS_MS
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS
+  // Была ли попытка, после которой площадка могла принять тело (сеть, таймаут, 5xx). Уходит в
+  // брошенную ошибку: повтор записи, получивший 429/4xx, не делает первую попытку неприменённой.
+  let mayHaveBeenDelivered = false
+  const fail = (error: PlatformApiError): PlatformApiError => {
+    error.mayHaveBeenDelivered = mayHaveBeenDelivered
+    return error
+  }
 
   for (let attempt = 0; ; attempt++) {
     let response: Response
@@ -180,12 +187,13 @@ async function request<T>(
       // Расписание пауз то же, что у 429 и пятисотых: повторяем столько же
       // раз и с теми же задержками. Кончились попытки — падаем с понятным
       // текстом, а не с голым `terminated`.
+      mayHaveBeenDelivered = true
       if (attempt < delays.length) {
         await sleep(delays[attempt] ?? 0)
         continue
       }
       const message = error instanceof Error ? error.message : String(error)
-      throw new PlatformApiError(platform, 0, `сеть: ${message}`, null)
+      throw fail(new PlatformApiError(platform, 0, `сеть: ${message}`, null))
     }
 
     // 204 — «нет данных». Тела у такого ответа нет, и .json() на нём бросает
@@ -205,12 +213,13 @@ async function request<T>(
       try {
         text = await response.text()
       } catch (error: unknown) {
+        mayHaveBeenDelivered = true
         if (attempt < delays.length) {
           await sleep(delays[attempt] ?? 0)
           continue
         }
         const message = error instanceof Error ? error.message : String(error)
-        throw new PlatformApiError(platform, 0, `сеть: ${message}`, null)
+        throw fail(new PlatformApiError(platform, 0, `сеть: ${message}`, null))
       }
       return { status: response.status, body: text.length > 0 ? (JSON.parse(text) as T | null) : null }
     }
@@ -229,6 +238,7 @@ async function request<T>(
     // только retryable-ответам: у остальных решение о паузе не принимается,
     // а RateLimitError бросается только при лимите, который retryable всегда.
     const retryAfterSeconds = retryable ? parseRetryAfter(response.headers) : null
+    if (response.status >= 500) mayHaveBeenDelivered = true
 
     // Повтор POST/PUT записи (этап 1.4) безопасен только потому, что все писатели остатка шлют
     // АБСОЛЮТНЫЕ значения: повтор принятого тела ставит то же число. Писатель с дельтами (+1/−1)
@@ -259,19 +269,23 @@ async function request<T>(
       // лучше знать срок, чем гадать (см. YM_LIMIT_DEFAULT_RESET_SECONDS).
       const resetSeconds =
         retryAfterSeconds ?? (response.status === 420 ? YM_LIMIT_DEFAULT_RESET_SECONDS : null)
-      throw new RateLimitError(
-        platform,
-        resetSeconds,
-        `${platform}: упёрлись в лимит — ${text.slice(0, 200)}`,
-        body,
-        response.status,
+      throw fail(
+        new RateLimitError(
+          platform,
+          resetSeconds,
+          `${platform}: упёрлись в лимит — ${text.slice(0, 200)}`,
+          body,
+          response.status,
+        ),
       )
     }
-    throw new PlatformApiError(
-      platform,
-      response.status,
-      `${platform}: ${response.status} — ${text.slice(0, 200)}`,
-      body,
+    throw fail(
+      new PlatformApiError(
+        platform,
+        response.status,
+        `${platform}: ${response.status} — ${text.slice(0, 200)}`,
+        body,
+      ),
     )
   }
 }
