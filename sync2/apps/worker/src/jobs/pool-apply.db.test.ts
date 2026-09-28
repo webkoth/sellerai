@@ -45,7 +45,7 @@ function harness() {
       w.mode,
       w.applied,
     ])
-  const pool = async (at: string, send: ReturnType<typeof okSend>, warehouses: { wbWarehouseId?: number; ymWarehouseId?: number } = {}) => {
+  const pool = async (at: string, send: ReturnType<typeof okSend>, warehouses: { wbWarehouseId?: number; ymWarehouseId?: number; ozonWarehouseId?: number } = {}) => {
     const pid = await runId()
     const r = await runPool({ db: ctx.h.db, now: () => new Date(at), runId: pid, globalMode: "apply", send, ...warehouses })
     return { pid, r }
@@ -143,7 +143,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — запись на площад�
     await snap("kit", "2026-09-28T10:20:00.000Z", Array.from({ length: 21 }, (_, i) => s(`Z${i}`, 1, `var-Z${i}`)))
     await snap("ozon", "2026-09-28T10:20:00.000Z", [s("A", 2, "JW-A"), s("B", 1, "JW-B")])
     const send = okSend()
-    const { r } = await pool("2026-09-28T10:21:00.000Z", send)
+    const { r } = await pool("2026-09-28T10:21:00.000Z", send, { ozonWarehouseId: 1020005023618600 })
     expect(send.mock.calls.map((c) => c[0])).toEqual(["ozon"])
     expect(r.counters).toMatchObject({ kitAborted_to_zero: 21, kitPlanned: 0, ozonApplied: 1 })
     expect(r.error).toMatch(/KIT: план отклонён предохранителем \(to_zero: 21 при пределе 20\)/)
@@ -171,6 +171,22 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — запись на площад�
     const again = await pool("2026-09-28T10:21:50.000Z", okSend())
     expect(again.r.error).toMatch(/ЯМ: не задан склад записи/)
     await mode("ym", "off")
+  })
+
+  it("Ozon: остаток на втором FBS-складе — запись Ozon не делается; склад записи не передан — тоже", async () => {
+    await mode("ozon", "apply")
+    await ingestRun("2026-09-28T10:21:52.000Z")
+    await snap("wb", "2026-09-28T10:21:52.000Z", [s("A", 3), s("B", 1)])
+    await snap("kit", "2026-09-28T10:21:52.000Z", [s("A", 2, "var-A"), s("B", 1, "var-B")])
+    await snap("ozon", "2026-09-28T10:21:52.000Z", [s("A", 2, "JW-A", "fbs:22,1020005023618600"), s("B", 0, "JW-B", "fbs")])
+    const send = okSend()
+    const { r } = await pool("2026-09-28T10:21:53.000Z", send, { ozonWarehouseId: 1020005023618600 })
+    expect(send.mock.calls.map((c) => c[0])).toEqual(["kit"])
+    expect(r).toMatchObject({ status: "partial", counters: { ozonForeignWarehouse: 1 } })
+    expect(r.error).toMatch(/Ozon: в снимке склады FBS 22 помимо склада записи 1020005023618600/)
+    const again = await pool("2026-09-28T10:21:54.000Z", okSend())
+    expect(again.r.error).toMatch(/Ozon: не задан OZON_WAREHOUSE_ID/)
+    await mode("ozon", "dry-run")
   })
 
   it("штрихкод на двух товарах KIT — запись этого штрихкода не планируется, счётчик и текст; остальные пишутся", async () => {
@@ -219,7 +235,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — сбой заказов зер�
   it("холодный старт, затем заказ Ozon при сбое заказов всех зеркал — пишутся WB, Ozon, ЯМ, KIT, сайт", async () => {
     await ingestRun("2026-09-28T11:00:00.000Z", { siteSourcePool: 1 })
     await snap("wb", "2026-09-28T11:00:00.000Z", [s("A", 3, "JW-A", WH)])
-    const cold = await pool("2026-09-28T11:00:30.000Z", okSend(), { wbWarehouseId: 1408913, ymWarehouseId: 2369574 })
+    const cold = await pool("2026-09-28T11:00:30.000Z", okSend(), { wbWarehouseId: 1408913, ymWarehouseId: 2369574, ozonWarehouseId: 1020005023618600 })
     expect(cold.r.status).toBe("ok")
 
     await upsertOrders(ctx.h.db, ctx.ids.get("ozon")!.id, [
@@ -232,7 +248,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — сбой заказов зер�
     await snap("kit", "2026-09-28T11:05:00.000Z", [s("A", 3, "var-A")])
     await snap("site", "2026-09-28T11:05:00.000Z", [s("A", 3)])
     const send = okSend()
-    const { pid, r } = await pool("2026-09-28T11:05:30.000Z", send, { wbWarehouseId: 1408913, ymWarehouseId: 2369574 })
+    const { pid, r } = await pool("2026-09-28T11:05:30.000Z", send, { wbWarehouseId: 1408913, ymWarehouseId: 2369574, ozonWarehouseId: 1020005023618600 })
     // WB — первым: окно между перечитыванием остатка WB и записью короче.
     expect(send.mock.calls.map((c) => [c[0], c[1].map((o) => [o.barcode, o.before, o.after, o.externalSku])])).toEqual([
       ["wb", [["A", 3, 2, "7001"]]],

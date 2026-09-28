@@ -81,6 +81,10 @@ const FBS_WAREHOUSE_TYPE = "fbs"
  * через `resolveWbBarcode`), в снимок не попадает вовсе — его артикул уходит
  * в `skippedNoWbBarcode`: строка без ключа каталога сделала бы товар
  * невидимым «сиротой», а не отражала бы правду о его остатке.
+ *
+ * `warehouse` — склады FBS, где лежит товар (`warehouse_ids` записей fbs): «fbs:<id,…>» по возрастанию;
+ * площадка их не дала — «fbs». Остаток — сумма по всем FBS-складам, а sync2 пишет в один
+ * (OZON_WAREHOUSE_ID): pool по этому полю видит второй склад и не пишет Ozon (этап 1.4).
  */
 export function mapOzonStocks(items: OzonStockItem[], barcodes: BarcodeByOffer, wbIndex: WbCatalogIndex): StockFetch {
   const stocks: NormalizedStock[] = []
@@ -92,14 +96,14 @@ export function mapOzonStocks(items: OzonStockItem[], barcodes: BarcodeByOffer, 
       skippedNoWbBarcode.push(item.offer_id)
       continue
     }
-    const balance = item.stocks
-      .filter((entry) => entry.type === FBS_WAREHOUSE_TYPE)
-      .reduce((sum, entry) => sum + (entry.present - entry.reserved), 0)
+    const fbs = item.stocks.filter((entry) => entry.type === FBS_WAREHOUSE_TYPE)
+    const balance = fbs.reduce((sum, entry) => sum + (entry.present - entry.reserved), 0)
+    const warehouseIds = [...new Set(fbs.flatMap((entry) => entry.warehouse_ids ?? []))].sort((a, b) => a - b)
     stocks.push({
       barcode,
       externalSku: item.offer_id,
       quantity: Math.max(0, balance),
-      warehouse: FBS_WAREHOUSE_TYPE,
+      warehouse: warehouseIds.length > 0 ? `${FBS_WAREHOUSE_TYPE}:${warehouseIds.join(",")}` : FBS_WAREHOUSE_TYPE,
       raw: item,
     })
   }

@@ -222,9 +222,14 @@ async function notifyTransition(db: Db, log: Logger, notifier: Notifier, job: st
  * Отправитель и склады записи WB/ЯМ для pool (этап 1.4). Конфиг площадок битый — pool падает
  * (failed), как ingest: без конфига площадок нет ни чтения, ни записи.
  */
-function writeTargets(env: NodeJS.ProcessEnv): { send: Sender; wbWarehouseId: number | null; ymWarehouseId: number | null } {
+function writeTargets(env: NodeJS.ProcessEnv): { send: Sender; wbWarehouseId: number | null; ozonWarehouseId: number | null; ymWarehouseId: number | null } {
   const cfg = loadChannelsConfig(env)
-  return { send: buildSender(cfg), wbWarehouseId: cfg.wb.warehouseId, ymWarehouseId: cfg.ym.warehouseIds[0] ?? null }
+  return {
+    send: buildSender(cfg),
+    wbWarehouseId: cfg.wb.warehouseId,
+    ozonWarehouseId: cfg.ozon.warehouseId,
+    ymWarehouseId: cfg.ym.warehouseIds[0] ?? null,
+  }
 }
 
 /** План или итог записей прогона pool — для глаз владельца перед «да». */

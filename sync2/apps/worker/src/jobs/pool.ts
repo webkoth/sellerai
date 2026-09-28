@@ -81,6 +81,22 @@ export interface PoolDeps {
   wbWarehouseId?: number | null
   /** Склад ЯМ, на который пишет sync2 (первый из YM_WAREHOUSE_IDS); null или не передан — запись ЯМ невозможна. */
   ymWarehouseId?: number | null
+  /** FBS-склад Ozon, на который пишет sync2 (OZON_WAREHOUSE_ID); null или не передан — запись Ozon невозможна. */
+  ozonWarehouseId?: number | null
+}
+
+/**
+ * FBS-склады Ozon в снимке, кроме склада записи. Снимок Ozon несёт склады в поле warehouse
+ * («fbs:<id,…>», ozon/mapper.ts); «fbs» без списка — площадка склады не назвала, не чужой.
+ */
+export function ozonForeignWarehouses(stocks: NormalizedStock[], warehouseId: number): string[] {
+  const own = String(warehouseId)
+  const ids = new Set<string>()
+  for (const s of stocks) {
+    const list = s.warehouse?.startsWith("fbs:") ? s.warehouse.slice(4).split(",") : []
+    for (const id of list) if (id && id !== own) ids.add(id)
+  }
+  return [...ids].sort()
 }
 
 /**
@@ -221,6 +237,20 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
         ? "WB: не задан WB_WAREHOUSE_ID — запись WB не делалась"
         : `WB: в снимке склады ${foreign.join(", ")} помимо склада записи ${wbWarehouseId} — запись WB не делалась`,
     )
+  }
+  const ozonSnap = snaps.get(channelId("ozon"))
+  const ozonWarehouseId = deps.ozonWarehouseId ?? null
+  if (ozonWarehouseId === null) {
+    block(["ozon"], "ozonForeignWarehouse", "Ozon: не задан OZON_WAREHOUSE_ID — запись Ozon не делалась")
+  } else if (ozonSnap && fresh(ozonSnap.takenAt)) {
+    const ozonForeign = ozonForeignWarehouses(ozonSnap.stocks, ozonWarehouseId)
+    if (ozonForeign.length > 0) {
+      block(
+        ["ozon"],
+        "ozonForeignWarehouse",
+        `Ozon: в снимке склады FBS ${ozonForeign.join(", ")} помимо склада записи ${ozonWarehouseId} — запись Ozon не делалась`,
+      )
+    }
   }
   const ymSnap = snaps.get(channelId("ym"))
   const ymWarehouseId = deps.ymWarehouseId ?? null
