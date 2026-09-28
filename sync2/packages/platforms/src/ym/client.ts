@@ -38,6 +38,19 @@ const MAX_PAGES = 1000
  * запроса, а не в тело — `pagedUrl` собирает их отдельно от POST-тела.
  */
 
+/**
+ * Следующая страница СНИМКА (остатки, офферы магазина — этап 1.4) или конец списка. Оборванная
+ * пагинация — ошибка, а не тихий обрыв: неполный снимок выкинул бы офферы с хвоста списка, и план
+ * их не увидел бы (для остатков — хуже: сочёл бы невыставленными). Конец — только страница без
+ * токена; тот же токен повторно или пустая страница с токеном — площадка отдала список не целиком.
+ */
+function nextSnapshotPage(what: string, next: string | null | undefined, pageToken: string | undefined, count: number): string | undefined {
+  if (!next) return undefined
+  if (next === pageToken) throw new Error(`ЯМ ${what}: площадка повторила pageToken — список неполный`)
+  if (count === 0) throw new Error(`ЯМ ${what}: пустая страница с nextPageToken — список неполный`)
+  return next
+}
+
 function pagedUrl(path: string, limit: number, pageToken: string | undefined): string {
   const url = new URL(`${BASE}${path}`)
   url.searchParams.set("limit", String(limit))
@@ -249,12 +262,11 @@ export async function fetchYmStocks(credentials: YmCredentials): Promise<YmWareh
     )
     const warehouses = body.result?.warehouses ?? []
     all.push(...warehouses)
-    const next = body.result?.paging?.nextPageToken ?? undefined
-    if (!next || next === pageToken || warehouses.length === 0) break
+    const next = nextSnapshotPage("остатки", body.result?.paging?.nextPageToken, pageToken, warehouses.length)
+    if (!next) return all
     pageToken = next
   }
-
-  return all
+  throw new Error(`ЯМ остатки: больше ${MAX_PAGES} страниц — список неполный`)
 }
 
 interface YmCampaignOffersResponse {
@@ -284,11 +296,11 @@ export async function fetchYmCampaignOfferIds(credentials: YmCredentials): Promi
     )
     const offers = body.result?.offers ?? []
     for (const o of offers) if (o.offerId) ids.push(o.offerId)
-    const next = body.result?.paging?.nextPageToken ?? undefined
-    if (!next || next === pageToken || offers.length === 0) break
+    const next = nextSnapshotPage("офферы магазина", body.result?.paging?.nextPageToken, pageToken, offers.length)
+    if (!next) return ids
     pageToken = next
   }
-  return ids
+  throw new Error(`ЯМ офферы магазина: больше ${MAX_PAGES} страниц — список неполный`)
 }
 
 // ── Каталог: штрихкоды ───────────────────────────────────────────────────
