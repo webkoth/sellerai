@@ -98,6 +98,13 @@ export interface RequestOptions {
    */
   timeoutMs?: number
   /**
+   * Потолок паузы по заголовку площадки (Retry-After и т. п.), мс; по умолчанию RETRY_AFTER_CAP_MS.
+   * Писатели остатка (этап 1.4) передают WRITE_MAX_RETRY_AFTER_MS: пока запрос записи ждёт минуту,
+   * на площадке проходит продажа, и наше абсолютное число её затёрло бы — лучше сразу RateLimitError
+   * (отказ или «неизвестно» по mayHaveBeenDelivered), следующий тик повторит с новым перечитыванием.
+   */
+  maxRetryAfterMs?: number
+  /**
    * Режим переадресации fetch; не задан — поведение fetch по умолчанию (follow).
    * "manual" — 30x не выполняется и становится PlatformApiError с кодом 30x без
    * повторов: токен в заголовке не уйдёт за переадресацией на другой хост (сайт).
@@ -268,7 +275,7 @@ async function request<T>(
         continue
       }
       const retryAfterMs = retryAfterSeconds * 1000
-      if (retryAfterMs <= RETRY_AFTER_CAP_MS) {
+      if (retryAfterMs <= (options.maxRetryAfterMs ?? RETRY_AFTER_CAP_MS)) {
         await sleep(retryAfterMs)
         continue
       }

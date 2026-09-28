@@ -76,6 +76,27 @@ describe("requestJson", () => {
     await expect(promise).rejects.toMatchObject({ resetSeconds: 42 })
   })
 
+  it("запись (maxRetryAfterMs): Retry-After дольше потолка записи — сразу RateLimitError, без ожидания; чтение ждёт как раньше", async () => {
+    vi.useFakeTimers()
+    const fetchMock = vi.fn().mockResolvedValue(response(429, { error: "too many" }, { "retry-after": "60" }))
+    vi.stubGlobal("fetch", fetchMock)
+    const write = requestJson("wb", "https://example.test", { token: "t", method: "PUT", body: {}, retryDelaysMs: [2_000, 5_000], maxRetryAfterMs: 5_000 })
+    const caught = write.catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(0)
+    const e = await caught
+    expect(e).toBeInstanceOf(RateLimitError)
+    expect((e as RateLimitError).resetSeconds).toBe(60)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    fetchMock.mockReset()
+    fetchMock.mockResolvedValueOnce(response(429, { error: "too many" }, { "retry-after": "60" })).mockResolvedValueOnce(response(200, { ok: true }))
+    const read = requestJson("wb", "https://example.test", { token: "t", retryDelaysMs: [0] })
+    await vi.advanceTimersByTimeAsync(59_999)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    await vi.advanceTimersByTimeAsync(1)
+    await expect(read).resolves.toEqual({ ok: true })
+  })
+
   it("ждёт ровно столько, сколько указала площадка, даже если своё расписание короче", async () => {
     vi.useFakeTimers()
     const fetchMock = vi

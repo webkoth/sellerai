@@ -3,7 +3,7 @@
 import { errorText } from "@sync2/shared"
 import { PlatformApiError } from "../errors"
 import { requestJson } from "../http"
-import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
 import type { SendResult, WriteOp } from "../writer"
 import { BASE, ymAuth, type YmCredentials } from "./client"
 
@@ -71,6 +71,7 @@ async function sendBatch(cfg: YmStockWriterConfig, batch: Keyed[], updatedAt: st
       // Короткие повторы записи (stock-write.ts).
       retryDelaysMs: cfg.retryDelaysMs ?? [...WRITE_RETRY_DELAYS_MS],
       timeoutMs: WRITE_TIMEOUT_MS,
+      maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
     })
   } catch (e) {
     const uncertain = isUncertain(e)

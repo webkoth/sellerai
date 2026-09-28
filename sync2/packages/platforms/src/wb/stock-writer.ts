@@ -3,7 +3,7 @@
 import { errorText } from "@sync2/shared"
 import { PlatformApiError, RateLimitError } from "../errors"
 import { requestJsonOrNull } from "../http"
-import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
 import type { SendResult, WriteOp } from "../writer"
 import { fetchFbsStocks } from "./client"
 
@@ -156,6 +156,7 @@ async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[], retryWitho
       // Короткие повторы записи (stock-write.ts).
       retryDelaysMs: cfg.retryDelaysMs ?? [...WRITE_RETRY_DELAYS_MS],
       timeoutMs: WRITE_TIMEOUT_MS,
+      maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
     })
   } catch (e) {
     putError = e

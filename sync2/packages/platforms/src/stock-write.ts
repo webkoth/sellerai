@@ -9,6 +9,8 @@ import type { SendResult, WriteOp } from "./writer"
  */
 export const WRITE_RETRY_DELAYS_MS: readonly number[] = [2_000, 5_000]
 export const WRITE_TIMEOUT_MS = 20_000
+/** Потолок паузы по Retry-After площадки для записи — не дольше последней паузы WRITE_RETRY_DELAYS_MS (http.ts). */
+export const WRITE_MAX_RETRY_AFTER_MS = 5_000
 
 /** Пачки по size, порядок сохраняется. */
 export function chunk<T>(items: readonly T[], size: number): T[][] {

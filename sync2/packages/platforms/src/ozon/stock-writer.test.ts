@@ -81,4 +81,17 @@ describe("writeOzonStocks", () => {
       vi.useRealTimers()
     }
   })
+
+  it("429 с Retry-After дольше потолка записи — сразу отказ, без минутного ожидания", async () => {
+    vi.useFakeTimers()
+    try {
+      const fetchMock = stub(() => new Response(JSON.stringify({ message: "limit" }), { status: 429, headers: { "retry-after": "60" } }))
+      const promise = writeOzonStocks(cfg, [op("A", "JW-A", 2)])
+      await vi.advanceTimersByTimeAsync(0)
+      await expect(promise).resolves.toEqual([expect.objectContaining({ ok: false, uncertain: false })])
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

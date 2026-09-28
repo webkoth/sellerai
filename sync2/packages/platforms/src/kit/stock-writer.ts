@@ -2,7 +2,7 @@
 // образец sync/src/kit.ts (writeKitStock) и kit-swagger.openapi.json.
 import { errorText } from "@sync2/shared"
 import { PlatformApiError } from "../errors"
-import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
 import type { SendResult, WriteOp } from "../writer"
 import { kitRequestOrNull, type KitCredentials } from "./client"
 
@@ -36,6 +36,7 @@ async function sendBatch(cfg: KitStockWriterConfig, batch: Keyed[], retryWithout
       // (kitRequestOrNull): пауза 2 с и больше темпа 1,1 с, запросы не пересекаются.
       retryDelaysMs: cfg.retryDelaysMs ?? [...WRITE_RETRY_DELAYS_MS],
       timeoutMs: WRITE_TIMEOUT_MS,
+      maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
     })
     return batch.map(({ op, key }) => succeeded(op, { variant_id: key, quantity: op.after }))
   } catch (e) {

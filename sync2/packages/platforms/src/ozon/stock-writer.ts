@@ -2,7 +2,7 @@
 // sync/src/clients.ts (writeOzonStock) и описание метода в swagger_ozon.json.
 import { errorText } from "@sync2/shared"
 import { requestJsonWithMeta } from "../http"
-import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
 import type { SendResult, WriteOp } from "../writer"
 import { BASE, ozonAuth, type OzonCredentials } from "./client"
 
@@ -45,6 +45,7 @@ export async function writeOzonStocks(cfg: OzonStockWriterConfig, ops: WriteOp[]
         body: { stocks: batch.map(({ op, key }) => ({ offer_id: key, stock: op.after, warehouse_id: cfg.warehouseId })) },
         retryDelaysMs: cfg.retryDelaysMs ?? [...WRITE_RETRY_DELAYS_MS],
         timeoutMs: WRITE_TIMEOUT_MS,
+        maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
       })
       rows = r.body.result ?? []
       mayHaveBeenDelivered = r.mayHaveBeenDelivered

@@ -4,7 +4,7 @@
 // requestJson (../http.ts) — как у остальных площадок: повтор на 5xx и сетевых
 // сбоях, 401/400 не повторяются.
 import { requestJson, type RequestOptions } from "../http"
-import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS } from "../stock-write"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS } from "../stock-write"
 
 export interface SiteCredentials {
   /** Корень сайта без завершающего слэша, например https://kotelnikovartifact.ru. */
@@ -125,6 +125,7 @@ export async function putSiteStocks(credentials: SiteCredentials, items: SiteSto
       body: { items: chunk },
       retryDelaysMs: [...WRITE_RETRY_DELAYS_MS],
       timeoutMs: WRITE_TIMEOUT_MS,
+      maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
     })
     if (!isSiteStockSource(r.source)) throw new Error(`сайт: неизвестный источник остатка «${String(r.source)}» в ответе записи`)
     result.updated += r.updated ?? 0
