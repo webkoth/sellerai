@@ -19,8 +19,8 @@ const env = {
 describe("loadChannelsConfig", () => {
   it("собирает ключи и склады четырёх площадок", () => {
     expect(loadChannelsConfig(env)).toEqual({
-      wb: { token: "wb" },
-      ozon: { clientId: "5332036", apiKey: "oz" },
+      wb: { token: "wb", warehouseId: null },
+      ozon: { clientId: "5332036", apiKey: "oz", warehouseId: null },
       ym: { apiKey: "ym", businessId: "191766894", campaignId: "149197829", warehouseIds: [2369574] },
       kit: { token: "kit", warehouseId: "01980d4c-1b53-7aa1-ab23-1b7c23604704" },
       site: null,
@@ -34,6 +34,17 @@ describe("loadChannelsConfig", () => {
   })
   it("не хватает ключа — ошибка с именем переменной", () => {
     expect(() => loadChannelsConfig({ ...env, YAKIT_API_TOKEN: "" })).toThrow(/YAKIT_API_TOKEN/)
+  })
+
+  describe("склады записи WB и Ozon — необязательны для чтения, целые положительные", () => {
+    it("заданы — числами", () => {
+      const c = loadChannelsConfig({ ...env, WB_WAREHOUSE_ID: "1408913", OZON_WAREHOUSE_ID: "1020005023618600" })
+      expect([c.wb.warehouseId, c.ozon.warehouseId]).toEqual([1408913, 1020005023618600])
+    })
+    it("мусор — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, WB_WAREHOUSE_ID: "склад" })).toThrow(/WB_WAREHOUSE_ID/)
+      expect(() => loadChannelsConfig({ ...env, OZON_WAREHOUSE_ID: "-1" })).toThrow(/OZON_WAREHOUSE_ID/)
+    })
   })
 
   describe("YM_WAREHOUSE_IDS — непустой список положительных целых", () => {

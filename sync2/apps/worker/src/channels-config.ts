@@ -22,8 +22,10 @@ const SITE_TOKEN_MIN_LENGTH = 32
  * исполнении»: исходный план ждал числа, но адаптер принимает строки.
  */
 export interface ChannelsConfig {
-  wb: { token: string }
-  ozon: { clientId: string; apiKey: string }
+  /** warehouseId — склад записи остатка (этап 1.4); null — запись этой площадки невозможна, чтение работает. */
+  wb: { token: string; warehouseId: number | null }
+  /** warehouseId — склад записи остатка FBS (этап 1.4); null — запись этой площадки невозможна, чтение работает. */
+  ozon: { clientId: string; apiKey: string; warehouseId: number | null }
   ym: { apiKey: string; businessId: string; campaignId: string; warehouseIds: number[] }
   kit: { token: string; warehouseId: string }
   site: SiteChannelConfig | null
@@ -85,6 +87,15 @@ function optionalSite(env: Record<string, string | undefined>): SiteChannelConfi
   return { baseUrl: `${url.origin}${url.pathname}`.replace(/\/+$/, ""), token }
 }
 
+/** Необязательное целое положительное (склады записи WB/Ozon, этап 1.4): пусто — null, мусор — ошибка с именем. */
+function optionalPositiveInt(env: Record<string, string | undefined>, name: string): number | null {
+  const raw = env[name]?.trim()
+  if (!raw) return null
+  const n = Number(raw)
+  if (!Number.isSafeInteger(n) || n <= 0) throw new Error(`${name}: "${raw}" — не целое положительное число`)
+  return n
+}
+
 export function loadChannelsConfig(env: Record<string, string | undefined>): ChannelsConfig {
   let site: SiteChannelConfig | null = null
   let siteError: string | null = null
@@ -94,8 +105,12 @@ export function loadChannelsConfig(env: Record<string, string | undefined>): Cha
     siteError = e instanceof Error ? e.message : String(e)
   }
   return {
-    wb: { token: required(env, "WB_API_TOKEN") },
-    ozon: { clientId: required(env, "OZON_CLIENT_ID"), apiKey: required(env, "OZON_API_TOKEN") },
+    wb: { token: required(env, "WB_API_TOKEN"), warehouseId: optionalPositiveInt(env, "WB_WAREHOUSE_ID") },
+    ozon: {
+      clientId: required(env, "OZON_CLIENT_ID"),
+      apiKey: required(env, "OZON_API_TOKEN"),
+      warehouseId: optionalPositiveInt(env, "OZON_WAREHOUSE_ID"),
+    },
     ym: {
       apiKey: required(env, "YM_API_TOKEN"),
       businessId: required(env, "YM_BUSINESS_ID"),
