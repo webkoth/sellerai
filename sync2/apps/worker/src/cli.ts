@@ -7,6 +7,7 @@ import {
   latestRun,
   runs,
   sameStatusStreak,
+  pruneJournal,
   seedChannels,
   writesOfRun,
   type Db,
@@ -37,6 +38,7 @@ import { buildAdapters } from "./adapters"
 import { checkApplyPreview } from "./apply-preview"
 import { loadChannelsConfig } from "./channels-config"
 import { runCompareV1 } from "./jobs/compare-v1"
+import { runDrift, wbDriftNow } from "./jobs/drift"
 import { runIngest } from "./jobs/ingest"
 import { runPool } from "./jobs/pool"
 import { runSitePushAll } from "./jobs/site-push-all"
@@ -62,18 +64,24 @@ const USAGE = `sync2 <команда>
                          режим записи площадки; apply — только после плана последнего тика и с --confirm
   plan [<площадка>]      план/итог записей последнего прогона pool
   site-push-all --confirm
-                         весь пул на сайт (шаг A этапа 1.4)`
+                         весь пул на сайт (шаг A этапа 1.4)
+  drift [--print]        пул ↔ последние снимки площадок, записи за сутки (Telegram; --print — в терминал)
+  check-wb               снимок WB последнего тика = пул? код 0 — да, 3 — нет (шаг B этапа 1.4)
+  prune                  ретенция: writes off/dry-run > 14 дн, apply > 90 дн; снимки > 7 дн (кроме последнего)`
 
 /** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки доли. */
 const ACCEPT_CATALOG_FLAG = "--accept-catalog"
 /** Подтверждение необратимого шага (этап 1.4): write-mode … apply, site-push-all. */
 const CONFIRM_FLAG = "--confirm"
+/** drift: сводка в терминал, а не в Telegram. */
+const PRINT_FLAG = "--print"
 /** Какие флаги принимает какая команда; остальные — ошибка использования. */
 const ALLOWED_FLAGS: Record<string, readonly string[]> = {
   ingest: [ACCEPT_CATALOG_FLAG],
   tick: [ACCEPT_CATALOG_FLAG],
   "write-mode": [CONFIRM_FLAG],
   "site-push-all": [CONFIRM_FLAG],
+  drift: [PRINT_FLAG],
 }
 const PROBE_WINDOW_MS = 60 * 24 * 60 * 60 * 1000
 /** Путь по умолчанию к леджеру старого синка на VPS (план 1.3b, задача 6). */
@@ -387,6 +395,30 @@ async function main(argv: string[]): Promise<number> {
         })
         console.log(`${outcome.status} ${JSON.stringify(outcome.counters)}${outcome.error ? ` — ${outcome.error}` : ""}`)
         return outcome.status === "ok" ? 0 : 1
+      }
+      case "drift": {
+        const print = flags.includes(PRINT_FLAG)
+        const outcome = await withRun("drift", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => ({
+          counters: await runDrift({ db, notifier, now: () => new Date(), print }),
+        }))
+        return outcome.status === "failed" ? 1 : 0
+      }
+      case "check-wb": {
+        // Шаг B этапа 1.4: переключать WB можно, только когда снимок WB последнего тика = пул.
+        const d = await wbDriftNow(db)
+        if (!d) {
+          console.error("снимка WB нет — сначала tick")
+          return 3
+        }
+        console.log(`WB: снимок ${d.takenAt}, сравнено ${d.compared}, расходится ${d.mismatches.length}, в пути ${d.inFlight}`)
+        for (const m of d.mismatches.slice(0, 20)) console.log(`${m.barcode}\tпул ${m.pool}\tWB ${m.actual}`)
+        return d.mismatches.length === 0 ? 0 : 3
+      }
+      case "prune": {
+        const outcome = await withRun("prune", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => ({
+          counters: { ...(await pruneJournal(db, new Date().toISOString())) },
+        }))
+        return outcome.status === "failed" ? 1 : 0
       }
       default:
         console.error(`неизвестная команда: ${cmd}\n\n${USAGE}`)

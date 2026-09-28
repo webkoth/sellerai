@@ -19,7 +19,7 @@ import type { Notifier } from "../notify"
 export const COMPARE_WINDOW_MS = 24 * 60 * 60 * 1000
 /** Прогон `running` дольше этого — «зависший»: процесс убит, закрывающей записи не будет. */
 export const STUCK_RUN_MS = 30 * 60 * 1000
-/** Пул не пересчитывался дольше этого — пометка в сводке (тик — раз в 10 минут). */
+/** Пул не пересчитывался дольше этого — пометка в сводке (тик — раз в 5 минут, этап 1.4). */
 export const POOL_STALE_MS = 60 * 60 * 1000
 /** Лимит Telegram — 4096 символов; с запасом. */
 export const MAX_TELEGRAM_TEXT = 4000
@@ -87,7 +87,7 @@ function formatList(items: string[]): string {
 }
 
 /** Время для владельца: «27.09 14:50 МСК» (Москва — UTC+3 без перехода на летнее). */
-function formatMsk(iso: string): string {
+export function formatMsk(iso: string): string {
   const t = new Date(Date.parse(iso) + 3 * 60 * 60 * 1000).toISOString()
   return `${t.slice(8, 10)}.${t.slice(5, 7)} ${t.slice(11, 16)} МСК`
 }

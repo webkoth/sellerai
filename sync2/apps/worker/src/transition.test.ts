@@ -19,13 +19,13 @@ describe("decideNotification", () => {
     expect(decideNotification({ job: "ingest", prev, cur: c, streak })).toBe(expected)
   })
 
-  it("partial → partial, серия кратна 36 (≈6 ч при тике 10 мин): напоминание", () => {
-    expect(REMIND_EVERY_RUNS).toBe(36)
-    for (const streak of [36, 72]) {
+  it("partial → partial, серия кратна 72 (≈6 ч при тике раз в 5 минут): напоминание", () => {
+    expect(REMIND_EVERY_RUNS).toBe(72)
+    for (const streak of [72, 144]) {
       const text = decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak })
       expect(text).toBe(`⚠️ sync2 pool: всё ещё partial (${streak} прогонов подряд) — ozon остатки: 500`)
     }
-    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak: 37 })).toBeNull()
+    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak: 36 })).toBeNull()
   })
 })
 

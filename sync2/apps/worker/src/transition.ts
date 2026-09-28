@@ -2,8 +2,8 @@ import type { RunOutcome } from "./run"
 
 type DoneStatus = RunOutcome["status"]
 
-/** Напоминание о затянувшемся не-ok — каждые 36 прогонов подряд (≈6 ч при тике раз в 10 минут). */
-export const REMIND_EVERY_RUNS = 36
+/** Напоминание о затянувшемся не-ok — каждые 72 прогона подряд (≈6 ч при тике раз в 5 минут, этап 1.4). */
+export const REMIND_EVERY_RUNS = 72
 
 /** Короткое описание исхода запуска для Telegram: текст ошибок площадок, иначе — счётчики. */
 export function describeOutcome(outcome: Pick<RunOutcome, "error" | "counters">): string {
