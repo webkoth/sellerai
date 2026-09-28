@@ -61,4 +61,17 @@ describe("writeKitStocks", () => {
     stub(() => new Response(JSON.stringify({ code: "INTERNAL", message: "x", trace_id: "0" }), { status: 500 }))
     expect((await writeKitStocks(cfg, [op("A", "v-A", 2)]))[0]).toMatchObject({ ok: false, uncertain: true })
   })
+
+  it("по умолчанию — короткие повторы записи (2 с), а не минутные паузы чтения", async () => {
+    vi.useFakeTimers()
+    try {
+      let calls = 0
+      stub(() => (++calls === 1 ? new Response("oops", { status: 502 }) : new Response(null, { status: 204 })))
+      const promise = writeKitStocks({ token: "t", warehouseId: WH }, [op("A", "v-A", 2)])
+      await vi.advanceTimersByTimeAsync(2_000)
+      await expect(promise).resolves.toEqual([expect.objectContaining({ ok: true })])
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

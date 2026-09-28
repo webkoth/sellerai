@@ -30,4 +30,20 @@ describe("writeSiteStocks", () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "validation" }), { status: 400 })))
     expect((await writeSiteStocks(cfg, [op("A", 2)]))[0]).toMatchObject({ ok: false, uncertain: false })
   })
+
+  it("по умолчанию — короткие повторы записи (2 с), а не минутные паузы чтения", async () => {
+    vi.useFakeTimers()
+    try {
+      let calls = 0
+      vi.stubGlobal(
+        "fetch",
+        vi.fn(async () => (++calls === 1 ? new Response("oops", { status: 502 }) : new Response(JSON.stringify({ updated: 1, unknown: [], source: "pool" }), { status: 200 }))),
+      )
+      const promise = writeSiteStocks(cfg, [op("A", 2)])
+      await vi.advanceTimersByTimeAsync(2_000)
+      await expect(promise).resolves.toEqual([expect.objectContaining({ ok: true })])
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })
