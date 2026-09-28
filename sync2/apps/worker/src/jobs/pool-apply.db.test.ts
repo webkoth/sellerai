@@ -45,9 +45,9 @@ function harness() {
       w.mode,
       w.applied,
     ])
-  const pool = async (at: string, send: ReturnType<typeof okSend>, wbWarehouseId?: number) => {
+  const pool = async (at: string, send: ReturnType<typeof okSend>, warehouses: { wbWarehouseId?: number; ymWarehouseId?: number } = {}) => {
     const pid = await runId()
-    const r = await runPool({ db: ctx.h.db, now: () => new Date(at), runId: pid, globalMode: "apply", send, ...(wbWarehouseId ? { wbWarehouseId } : {}) })
+    const r = await runPool({ db: ctx.h.db, now: () => new Date(at), runId: pid, globalMode: "apply", send, ...warehouses })
     return { pid, r }
   }
   const setup = async () => {
@@ -150,6 +150,29 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — запись на площад�
     await mode("ozon", "dry-run")
   })
 
+  it("ЯМ: остаток в снимке не только на складе записи — запись ЯМ не делается, остальные пишутся", async () => {
+    await mode("ym", "apply")
+    await ingestRun("2026-09-28T10:21:30.000Z")
+    await snap("wb", "2026-09-28T10:21:30.000Z", [s("A", 3), s("B", 1)])
+    await snap("kit", "2026-09-28T10:21:30.000Z", [s("A", 2, "var-A"), s("B", 1, "var-B")])
+    // Два склада магазина в YM_WAREHOUSE_IDS: снимок суммирует оба, а пишем мы в первый.
+    await snap("ym", "2026-09-28T10:21:30.000Z", [s("A", 1, "JW-A", "2369574"), s("A", 1, "JW-A", "1872191"), s("B", 0, "JW-B", "2369574")])
+    const send = okSend()
+    const { pid, r } = await pool("2026-09-28T10:21:45.000Z", send, { ymWarehouseId: 2369574 })
+    expect(send.mock.calls.map((c) => c[0])).toEqual(["kit"])
+    expect(await logged(pid, "ym")).toEqual([
+      ["A", 2, 3, "dry-run", false],
+      ["B", 0, 1, "dry-run", false],
+    ])
+    expect(r).toMatchObject({ status: "partial", counters: { ymForeignWarehouse: 1 } })
+    expect(r.error).toMatch(/ЯМ: в снимке склады 1872191 помимо склада записи 2369574/)
+
+    // Склад записи ЯМ не передан — тоже блок с понятной причиной.
+    const again = await pool("2026-09-28T10:21:50.000Z", okSend())
+    expect(again.r.error).toMatch(/ЯМ: не задан склад записи/)
+    await mode("ym", "off")
+  })
+
   it("итог «неизвестно» и ключ площадки — в журнал writes отдельно от отказа", async () => {
     await ingestRun("2026-09-28T10:22:00.000Z")
     await snap("wb", "2026-09-28T10:22:00.000Z", [s("A", 3), s("B", 1)])
@@ -185,7 +208,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — сбой заказов зер�
   it("холодный старт, затем заказ Ozon при сбое заказов всех зеркал — пишутся WB, Ozon, ЯМ, KIT, сайт", async () => {
     await ingestRun("2026-09-28T11:00:00.000Z", { siteSourcePool: 1 })
     await snap("wb", "2026-09-28T11:00:00.000Z", [s("A", 3, "JW-A", WH)])
-    const cold = await pool("2026-09-28T11:00:30.000Z", okSend(), 1408913)
+    const cold = await pool("2026-09-28T11:00:30.000Z", okSend(), { wbWarehouseId: 1408913, ymWarehouseId: 2369574 })
     expect(cold.r.status).toBe("ok")
 
     await upsertOrders(ctx.h.db, ctx.ids.get("ozon")!.id, [
@@ -194,11 +217,11 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — сбой заказов зер�
     await ingestRun("2026-09-28T11:05:00.000Z", { siteSourcePool: 1, ozonOrdersFailed: 1, ymOrdersFailed: 1, kitOrdersFailed: 1, siteOrdersFailed: 1 })
     await snap("wb", "2026-09-28T11:05:00.000Z", [s("A", 3, "JW-A", WH)])
     await snap("ozon", "2026-09-28T11:05:00.000Z", [s("A", 3, "JW-A")])
-    await snap("ym", "2026-09-28T11:05:00.000Z", [s("A", 3, "JW-A")])
+    await snap("ym", "2026-09-28T11:05:00.000Z", [s("A", 3, "JW-A", "2369574")])
     await snap("kit", "2026-09-28T11:05:00.000Z", [s("A", 3, "var-A")])
     await snap("site", "2026-09-28T11:05:00.000Z", [s("A", 3)])
     const send = okSend()
-    const { pid, r } = await pool("2026-09-28T11:05:30.000Z", send, 1408913)
+    const { pid, r } = await pool("2026-09-28T11:05:30.000Z", send, { wbWarehouseId: 1408913, ymWarehouseId: 2369574 })
     // WB — первым: окно между перечитыванием остатка WB и записью короче.
     expect(send.mock.calls.map((c) => [c[0], c[1].map((o) => [o.barcode, o.before, o.after, o.externalSku])])).toEqual([
       ["wb", [["A", 3, 2, "7001"]]],

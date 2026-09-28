@@ -74,17 +74,23 @@ export interface PoolDeps {
   send?: Sender
   /** Склад WB, на который пишет sync2 (WB_WAREHOUSE_ID); null или не передан — запись WB невозможна. */
   wbWarehouseId?: number | null
+  /** Склад ЯМ, на который пишет sync2 (первый из YM_WAREHOUSE_IDS); null или не передан — запись ЯМ невозможна. */
+  ymWarehouseId?: number | null
 }
 
 /**
- * Склады WB в снимке, кроме склада записи. Остаток WB в пуле — сумма всех складов продавца,
- * а пишем мы на один: при втором складе цель «пул» на одном складе дала бы сумму больше пула.
- * Склад записи не задан — чужие все склады снимка.
+ * Склады в снимке площадки, кроме склада записи. Остаток площадки в плане — сумма её складов в
+ * снимке (WB — все склады продавца, ЯМ — все склады из YM_WAREHOUSE_IDS), а пишем мы на один: при
+ * втором складе цель «пул» на одном складе дала бы сумму больше пула. Склад записи не задан — чужие
+ * все склады снимка.
  */
-export function wbForeignWarehouses(stocks: NormalizedStock[], warehouseId: number | null): string[] {
+export function foreignWarehouses(stocks: NormalizedStock[], warehouseId: number | null): string[] {
   const own = warehouseId === null ? null : String(warehouseId)
   return [...new Set(stocks.map((s) => s.warehouse ?? "без склада"))].filter((w) => w !== own).sort()
 }
+
+/** Склады WB в снимке, кроме склада записи (см. foreignWarehouses). */
+export const wbForeignWarehouses = foreignWarehouses
 
 /**
  * WB-позиции без ключа записи (chrtId) отказываются здесь, до отправителя: причина в журнале —
@@ -201,7 +207,7 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
     block([SITE], "siteWriteBlocked", "сайт: витрина берёт остаток не из пула (STOCK_SOURCE≠pool) — запись сайта не делалась")
   }
   const wbWarehouseId = deps.wbWarehouseId ?? null
-  const foreign = wbForeignWarehouses(wb.stocks, wbWarehouseId)
+  const foreign = foreignWarehouses(wb.stocks, wbWarehouseId)
   if (foreign.length > 0) {
     block(
       ["wb"],
@@ -209,6 +215,18 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
       wbWarehouseId === null
         ? "WB: не задан WB_WAREHOUSE_ID — запись WB не делалась"
         : `WB: в снимке склады ${foreign.join(", ")} помимо склада записи ${wbWarehouseId} — запись WB не делалась`,
+    )
+  }
+  const ymSnap = snaps.get(channelId("ym"))
+  const ymWarehouseId = deps.ymWarehouseId ?? null
+  const ymForeign = ymSnap && fresh(ymSnap.takenAt) ? foreignWarehouses(ymSnap.stocks, ymWarehouseId) : []
+  if (ymForeign.length > 0) {
+    block(
+      ["ym"],
+      "ymForeignWarehouse",
+      ymWarehouseId === null
+        ? "ЯМ: не задан склад записи (YM_WAREHOUSE_IDS) — запись ЯМ не делалась"
+        : `ЯМ: в снимке склады ${ymForeign.join(", ")} помимо склада записи ${ymWarehouseId} — запись ЯМ не делалась`,
     )
   }
 
