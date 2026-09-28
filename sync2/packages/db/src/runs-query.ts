@@ -35,6 +35,26 @@ export async function lastRunCounters(db: Db, job: string): Promise<Record<strin
   return (row?.counters as Record<string, unknown> | undefined) ?? null
 }
 
+export interface RunInfo {
+  runId: string
+  status: string
+  /** ISO 8601. */
+  startedAt: string
+  counters: Record<string, unknown>
+}
+
+/** Последний завершённый (ok/partial/failed) запуск джобы; ни одного — null. */
+export async function latestRun(db: Db, job: string): Promise<RunInfo | null> {
+  const [row] = await db
+    .select({ runId: runs.runId, status: runs.status, startedAt: runs.startedAt, counters: runs.counters })
+    .from(runs)
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial", "failed"])))
+    .orderBy(desc(runs.startedAt))
+    .limit(1)
+  if (!row) return null
+  return { runId: row.runId, status: row.status, startedAt: toIsoOrNull(row.startedAt)!, counters: (row.counters as Record<string, unknown> | null) ?? {} }
+}
+
 /** Статус последнего завершённого (ok/partial/failed) запуска джобы; ни одного — null. */
 export async function lastRunStatus(db: Db, job: string): Promise<"ok" | "partial" | "failed" | null> {
   const [row] = await db
