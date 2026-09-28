@@ -62,4 +62,48 @@ describe("writeYmStocks", () => {
     stub(() => json({ status: "ERROR", errors: [{ code: "BAD_REQUEST" }] }, 400))
     expect((await writeYmStocks(cfg, [op("A", "JW-A", 2)]))[0]).toMatchObject({ ok: false, uncertain: false })
   })
+
+  it("200 без status OK — итог неизвестен", async () => {
+    stub(() => json({ status: "ERROR" }))
+    expect((await writeYmStocks(cfg, [op("A", "JW-A", 2)]))[0]).toMatchObject({ ok: false, uncertain: true })
+  })
+
+  it("400, называющий оффер, — ему отказ, остальные — один повтор без него", async () => {
+    const bodies: unknown[] = []
+    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
+      bodies.push(JSON.parse(String(init?.body)))
+      return bodies.length === 1
+        ? json({ status: "ERROR", errors: [{ code: "BAD_REQUEST", message: "Offer 'JW-B' not found" }] }, 400)
+        : json({ status: "OK" })
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    const r = await writeYmStocks(cfg, [op("A", "JW-A", 2), op("B", "JW-B", 1)])
+    expect(r.map((x) => [x.barcode, x.ok, x.uncertain ?? false])).toEqual([
+      ["B", false, false],
+      ["A", true, false],
+    ])
+    expect(r[0]!.error).toMatch(/BAD_REQUEST/)
+    expect(bodies.map((b) => (b as { skus: Array<{ sku: string }> }).skus.map((x) => x.sku))).toEqual([["JW-A", "JW-B"], ["JW-A"]])
+  })
+
+  it("400 без названных офферов — отказ пачке, повтора нет; «JW-1» не путается с «JW-12»", async () => {
+    const fetchMock = stub(() => json({ status: "ERROR", errors: [{ code: "BAD_REQUEST", message: "Offer JW-12 not found" }] }, 400))
+    const r = await writeYmStocks(cfg, [op("A", "JW-1", 2)])
+    expect(r[0]).toMatchObject({ ok: false, uncertain: false })
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("по умолчанию — короткие повторы записи (2 с), а не минутные паузы чтения", async () => {
+    vi.useFakeTimers()
+    try {
+      let calls = 0
+      stub(() => (++calls === 1 ? json({ status: "ERROR" }, 502) : json({ status: "OK" })))
+      const { retryDelaysMs: _omit, ...noRetry } = cfg
+      const promise = writeYmStocks(noRetry, [op("A", "JW-A", 2)])
+      await vi.advanceTimersByTimeAsync(2_000)
+      await expect(promise).resolves.toEqual([expect.objectContaining({ ok: true })])
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })
