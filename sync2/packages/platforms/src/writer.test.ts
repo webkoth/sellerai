@@ -87,7 +87,7 @@ describe("executeWrites", () => {
   it("площадка не вернула результат по позиции — это ошибка, а не успех", async () => {
     const send = vi.fn(async (): Promise<SendResult[]> => [])
     const { outcomes } = await run([op("kit", "A", 1)], "apply", allModes("apply"), send)
-    expect(outcomes[0]).toMatchObject({ applied: false, error: "площадка не вернула результат по позиции" })
+    expect(outcomes[0]).toMatchObject({ applied: false, error: "площадка не вернула результат по позиции", uncertain: true })
   })
 
   it("вызов площадки упал — все её позиции с ошибкой, другие площадки пишутся", async () => {
@@ -193,6 +193,12 @@ describe("executeWrites", () => {
     ])
     const { outcomes } = await run([op("wb", "A", 1), op("wb", "B", 1)], "apply", allModes("apply"), send)
     expect(outcomes.map((o) => [o.barcode, o.uncertain])).toEqual([["A", false], ["B", true]])
+  })
+
+  it("успех с пометкой «неизвестно» — итог известен: применено", async () => {
+    const send = vi.fn(async (): Promise<SendResult[]> => [{ barcode: "A", field: "stock", ok: true, uncertain: true }])
+    const { outcomes } = await run([op("wb", "A", 1)], "apply", allModes("apply"), send)
+    expect(outcomes[0]).toMatchObject({ applied: true, error: null, uncertain: false })
   })
 
   it("вне apply — итог известен: ничего не отправлялось", async () => {

@@ -55,6 +55,19 @@ describe("mapCards на придуманных данных — согласов
     ])
   })
 
+  it("chrtID не целое положительное (0, отрицательное, дробное) — строки без поля: ключ записи не выдумываем", () => {
+    const cards = mapCards([
+      {
+        nmID: 6,
+        vendorCode: "S",
+        title: "С",
+        subjectName: null,
+        sizes: [{ chrtID: 0, skus: ["1"] }, { chrtID: -5, skus: ["2"] }, { chrtID: 1.5, skus: ["3"] }],
+      },
+    ])
+    expect(cards.map((c) => "chrtId" in c)).toEqual([false, false, false])
+  })
+
   it("карточка без размеров или без skus не даёт строк; пустой title заменяется артикулом", () => {
     const cards = mapCards([
       { nmID: 1, vendorCode: "A", title: "", subjectName: "Кулоны", sizes: [{ skus: ["111"] }] },

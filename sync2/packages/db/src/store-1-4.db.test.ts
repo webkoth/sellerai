@@ -22,6 +22,12 @@ describe.skipIf(!TEST_DATABASE_URL)("хранилище этапа 1.4 — chrtI
     expect(await loadWbChrtIds(h.db)).toEqual(new Map([["A", 440206878]]))
   })
 
+  it("новый chrtId из каталога заменяет старый (размер пересоздан на WB)", async () => {
+    await upsertProducts(h.db, [{ barcode: "N", vendorCode: "R", nmId: 1, title: "", subject: null, chrtId: 111 }])
+    await upsertProducts(h.db, [{ barcode: "N", vendorCode: "R", nmId: 1, title: "", subject: null, chrtId: 222 }])
+    expect((await loadWbChrtIds(h.db)).get("N")).toBe(222)
+  })
+
   it("журнал записей хранит ключ площадки и «итог неизвестен» отдельно от отказа", async () => {
     await seedChannels(h.db)
     const runId = "00000000-0000-4000-8000-000000001401"

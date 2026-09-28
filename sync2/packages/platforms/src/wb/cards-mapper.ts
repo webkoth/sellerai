@@ -4,6 +4,9 @@
 import type { WbCatalogEntry } from "@sync2/shared"
 import type { WbCardListItem } from "./client"
 
+/** chrtId размера — целое положительное; иначе это не ключ записи. */
+const isChrtId = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) > 0
+
 /**
  * Перечень карточек площадки → плоский список по штрихкодам — мастер-каталог
  * WB для всего синка (`buildWbCatalogIndex`/`resolveWbBarcode` в
@@ -41,7 +44,8 @@ export function mapCards(items: WbCardListItem[]): WbCatalogEntry[] {
           title,
           subject,
           // chrtId размера — ключ записи остатка WB (этап 1.4); у всех штрихкодов размера один.
-          ...(typeof size.chrtID === "number" ? { chrtId: size.chrtID } : {}),
+          // Только целое положительное: иначе поле не ставим — ключ записи не выдумываем.
+          ...(isChrtId(size.chrtID) ? { chrtId: size.chrtID } : {}),
         })
       }
     }
