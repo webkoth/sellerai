@@ -173,6 +173,17 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — запись на площад�
     await mode("ym", "off")
   })
 
+  it("штрихкод на двух товарах KIT — запись этого штрихкода не планируется, счётчик и текст; остальные пишутся", async () => {
+    await ingestRun("2026-09-28T10:21:55.000Z")
+    await snap("wb", "2026-09-28T10:21:55.000Z", [s("A", 3), s("B", 1)])
+    await snap("kit", "2026-09-28T10:21:55.000Z", [s("A", 1, "var-A"), s("A", 0, "var-A2"), s("B", 0, "var-B")])
+    const send = okSend()
+    const { r } = await pool("2026-09-28T10:21:58.000Z", send)
+    expect(send).toHaveBeenCalledWith("kit", [{ channel: "kit", barcode: "B", field: "stock", before: 0, after: 1, externalSku: "var-B" }])
+    expect(r).toMatchObject({ status: "partial", counters: { kitDupKey: 1 } })
+    expect(r.error).toMatch(/KIT: штрихкод на нескольких товарах площадки — запись не делается: A \(var-A, var-A2\)/)
+  })
+
   it("итог «неизвестно» и ключ площадки — в журнал writes отдельно от отказа", async () => {
     await ingestRun("2026-09-28T10:22:00.000Z")
     await snap("wb", "2026-09-28T10:22:00.000Z", [s("A", 3), s("B", 1)])

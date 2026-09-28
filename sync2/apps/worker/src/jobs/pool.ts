@@ -18,6 +18,7 @@ import {
   WB_SETTLE_MINUTES_SELF,
   aggregateStockByBarcode,
   applyWbWriteOutcomes,
+  barcodesWithSeveralKeys,
   planStockWrites,
   reconcilePool,
   toPoolOrders,
@@ -252,7 +253,21 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   const limits = { maxChanges: MAX_STOCK_CHANGES_PER_RUN, maxToZero: MAX_STOCK_TO_ZERO_PER_RUN }
   const changes: StockChange[] = []
   for (const t of targets) {
-    const plan = planStockWrites(result.items, [t], t.channel === "wb" ? { ...limits, hold: gate.hold } : limits)
+    // Штрихкод на нескольких товарах зеркала — не пишем (ключ WB — chrtId из каталога, сайт — штрихкод).
+    let hold: Map<Channel, ReadonlySet<string>> | undefined = t.channel === "wb" ? gate.hold : undefined
+    if (t.channel !== "wb" && t.channel !== SITE) {
+      const dup = barcodesWithSeveralKeys(t.stocks)
+      if (dup.size > 0) {
+        hold = new Map([[t.channel, new Set(dup.keys())]])
+        counters[`${t.channel}DupKey`] = dup.size
+        if (configured[t.channel] === "apply") {
+          const shown = [...dup].slice(0, MAX_WRITE_ERRORS_SHOWN).map(([barcode, keys]) => `${barcode} (${keys.join(", ")})`)
+          const rest = dup.size > shown.length ? `, … ещё ${dup.size - shown.length}` : ""
+          problems.push(`${LABEL[t.channel]}: штрихкод на нескольких товарах площадки — запись не делается: ${shown.join(", ")}${rest}`)
+        }
+      }
+    }
+    const plan = planStockWrites(result.items, [t], hold ? { ...limits, hold } : limits)
     if (plan.aborted) {
       counters[`${t.channel}Aborted_${plan.aborted.reason}`] = plan.aborted.count
       problems.push(`${LABEL[t.channel]}: план отклонён предохранителем (${plan.aborted.reason}: ${plan.aborted.count} при пределе ${plan.aborted.max})`)

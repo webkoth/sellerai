@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import type { NormalizedStock } from "@sync2/shared"
-import { aggregateStockByBarcode } from "./stock"
+import { aggregateStockByBarcode, barcodesWithSeveralKeys } from "./stock"
 
 const row = (barcode: string, quantity: number, patch: Partial<NormalizedStock> = {}): NormalizedStock => ({
   barcode,
@@ -29,5 +29,13 @@ describe("aggregateStockByBarcode", () => {
 
   it("пустой снимок — пустой результат", () => {
     expect(aggregateStockByBarcode([]).size).toBe(0)
+  })
+})
+
+describe("barcodesWithSeveralKeys", () => {
+  const row = (barcode: string, externalSku: string | null) => ({ barcode, externalSku, quantity: 1, warehouse: null })
+  it("штрихкод на двух разных ключах площадки — в карте с ключами по порядку; один ключ на нескольких складах и null — нет", () => {
+    const r = barcodesWithSeveralKeys([row("A", "JW-A"), row("A", "JW-A2"), row("B", "JW-B"), row("B", "JW-B"), row("C", null), row("C", "JW-C")])
+    expect(r).toEqual(new Map([["A", ["JW-A", "JW-A2"]]]))
   })
 })
