@@ -23,6 +23,7 @@ describe("loadChannelsConfig", () => {
       ozon: { clientId: "5332036", apiKey: "oz" },
       ym: { apiKey: "ym", businessId: "191766894", campaignId: "149197829", warehouseIds: [2369574] },
       kit: { token: "kit", warehouseId: "01980d4c-1b53-7aa1-ab23-1b7c23604704" },
+      site: null,
     })
   })
   it("несколько складов ЯМ через запятую", () => {
@@ -52,6 +53,29 @@ describe("loadChannelsConfig", () => {
     })
     it("один из списка не число — ошибка целиком, а не частичный список", () => {
       expect(() => loadChannelsConfig({ ...env, YM_WAREHOUSE_IDS: "2369574,abc" })).toThrow(/YM_WAREHOUSE_IDS/)
+    })
+  })
+
+  describe("сайт — только при заданном SITE_API_TOKEN", () => {
+    const token = "s".repeat(64)
+    it("токена нет — сайт не подключается", () => {
+      expect(loadChannelsConfig(env).site).toBeNull()
+    })
+    it("токен есть — адрес по умолчанию", () => {
+      expect(loadChannelsConfig({ ...env, SITE_API_TOKEN: token }).site).toEqual({ baseUrl: "https://kotelnikovartifact.ru", token })
+    })
+    it("свой адрес — без завершающего слэша", () => {
+      expect(loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "https://staging.example.ru/" }).site?.baseUrl).toBe("https://staging.example.ru")
+    })
+    it("http — только для localhost: токен уходит в заголовке", () => {
+      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "http://kotelnikovartifact.ru" })).toThrow(/SITE_API_URL/)
+      expect(loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "http://localhost:3050" }).site?.baseUrl).toBe("http://localhost:3050")
+    })
+    it("не URL — ошибка с именем переменной", () => {
+      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "kotelnikovartifact" })).toThrow(/SITE_API_URL/)
+    })
+    it("токен короче 32 символов — ошибка", () => {
+      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: "short" })).toThrow(/SITE_API_TOKEN/)
     })
   })
 })

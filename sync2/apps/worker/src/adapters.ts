@@ -1,4 +1,11 @@
-import { createKitAdapter, createOzonAdapter, createWbAdapter, createYmAdapter, type ChannelAdapter } from "@sync2/platforms"
+import {
+  createKitAdapter,
+  createOzonAdapter,
+  createSiteAdapter,
+  createWbAdapter,
+  createYmAdapter,
+  type ChannelAdapter,
+} from "@sync2/platforms"
 import type { WbCatalogEntry, WbCatalogIndex } from "@sync2/shared"
 import type { ChannelsConfig } from "./channels-config"
 
@@ -16,6 +23,8 @@ export function buildAdapters(cfg: ChannelsConfig): Adapters {
       createOzonAdapter(cfg.ozon, index),
       createYmAdapter(cfg.ym, index, cfg.ym.warehouseIds),
       createKitAdapter(cfg.kit, index),
+      // Сайт — пятая площадка (этап 1.3c), только при заданном SITE_API_TOKEN.
+      ...(cfg.site ? [createSiteAdapter(cfg.site, index)] : []),
     ],
   }
 }

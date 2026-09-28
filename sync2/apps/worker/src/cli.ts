@@ -3,6 +3,7 @@ import { channels, createDb, drizzleRunStore, lastRunStatus, runs, sameStatusStr
 import {
   createKitAdapter,
   createOzonAdapter,
+  createSiteAdapter,
   createWbAdapter,
   createYmAdapter,
   type ChannelAdapter,
@@ -32,7 +33,7 @@ const USAGE = `sync2 <команда>
   seed-channels          завести пять площадок (режим записи не трогается)
   runs [N]               последние N запусков (по умолчанию 20)
   ping                   пустая джоба: проверка конфига, базы и журнала
-  probe                  живое чтение четырёх площадок (WB, Ozon, ЯМ, KIT) без базы и записи
+  probe                  живое чтение площадок (WB, Ozon, ЯМ, KIT; сайт — если задан SITE_API_TOKEN) без базы и записи
   ingest [--accept-catalog]
                          каталог WB, заказы и снимки остатков всех площадок в базу;
                          --accept-catalog — принять каталог WB без проверки усадки (усадка настоящая)
@@ -89,7 +90,7 @@ function printChannelSummaryWithoutWbCatalog(channel: string, orders: ChannelOrd
 }
 
 /**
- * `probe` — живое чтение четырёх площадок без базы и без единой записи.
+ * `probe` — живое чтение площадок без базы и без единой записи.
  * Последовательно, не параллельно: общие лимиты с работающим старым синком
  * (план, задача 7, Step 3). Сбой одной площадки не останавливает остальные —
  * каждая обёрнута в свой try/catch, итоговый код выхода 1, если сбоила хоть одна.
@@ -130,6 +131,9 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   channels.push({ channel: "ozon", adapter: createOzonAdapter(config.ozon, wbIndex) })
   channels.push({ channel: "ym", adapter: createYmAdapter(config.ym, wbIndex, config.ym.warehouseIds) })
   channels.push({ channel: "kit", adapter: createKitAdapter(config.kit, wbIndex) })
+  // Сайт — пятая площадка (этап 1.3c), только при заданном SITE_API_TOKEN.
+  if (config.site) channels.push({ channel: "site", adapter: createSiteAdapter(config.site, wbIndex) })
+  else console.log("site | пропущен: SITE_API_TOKEN не задан")
 
   const skippedByChannel = new Map<string, string[]>()
   for (const { channel, adapter } of channels) {
@@ -138,6 +142,7 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
       if (wbCatalogOk) {
         const stocks = await adapter.fetchStocks()
         printChannelSummary(channel, orders, stocks)
+        if ("source" in stocks) console.log(`${channel} | источник остатка витрины: ${String(stocks.source)}`)
         skippedByChannel.set(channel, stocks.skippedNoWbBarcode)
       } else {
         // wb сюда не попадает (см. выше) — это всегда Ozon/ЯМ/KIT: без
