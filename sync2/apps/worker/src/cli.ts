@@ -77,7 +77,7 @@ function printChannelSummary(channel: string, orders: ChannelOrder[], stocks: { 
 }
 
 /**
- * WB-каталог не прочитался — у Ozon/ЯМ/KIT нет индекса штрихкодов WB, и
+ * WB-каталог не прочитался — у зеркал (Ozon/ЯМ/KIT, сайт) нет индекса штрихкодов WB, и
  * `resolveWbBarcode` не сопоставит почти ничего: печатать остатки в этом
  * состоянии как настоящие значит выдать почти пустой (или бессмысленный)
  * снимок за реальный. Остатки поэтому не запрашиваются вовсе, заказы —
@@ -148,9 +148,9 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
         if ("source" in stocks) console.log(`${channel} | источник остатка витрины: ${String(stocks.source)}`)
         skippedByChannel.set(channel, stocks.skippedNoWbBarcode)
       } else {
-        // wb сюда не попадает (см. выше) — это всегда Ozon/ЯМ/KIT: без
-        // каталога WB их остатки не сопоставятся, поэтому не запрашиваются
-        // и не печатаются как настоящие.
+        // wb сюда не попадает (см. выше) — это всегда зеркала (Ozon/ЯМ/KIT и
+        // сайт, если подключён): без каталога WB их остатки не сопоставятся,
+        // поэтому не запрашиваются и не печатаются как настоящие.
         printChannelSummaryWithoutWbCatalog(channel, orders)
       }
     } catch (e) {
