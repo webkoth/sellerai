@@ -61,7 +61,14 @@ export function mapKitStocks(variants: KitVariant[], warehouseId: string, wbInde
       externalSku: variant.id,
       quantity: Math.max(0, quantity),
       warehouse: warehouseId,
-      raw: variant,
+      // Только то, что нужно для разбора споров: вариант целиком (описания, картинки) раздувал
+      // stock_snapshots_raw — 185 МБ снимков KIT за первые сутки (28.09), а тик теперь раз в 5 минут.
+      raw: {
+        id: variant.id,
+        barcode: variant.barcode,
+        sku: variant.sku ?? null,
+        stocks: (variant.stocks ?? []).filter((entry) => entry.warehouse_id === warehouseId),
+      },
     })
   }
 

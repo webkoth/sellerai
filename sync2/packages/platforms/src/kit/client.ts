@@ -2,7 +2,7 @@
 // проверена на живом магазине kit42191) — не перенос из finstock: там
 // площадки KIT не было вовсе. requestJson (../http.ts) взят как есть —
 // откат при лимитах и сетевых сбоях у KIT тот же, что у остальных площадок.
-import { requestJson, type RequestOptions } from "../http"
+import { requestJson, requestJsonOrNull, type RequestOptions } from "../http"
 
 export const BASE = "https://api.kit.yandex.net"
 
@@ -76,20 +76,38 @@ export function resetKitPaceForTests(): void {
   lastCallAt = 0
 }
 
+/** Один запрос в очереди модуля: пауза темпа и сам запрос вместе (см. комментарий у `queue`). */
+function enqueue<T>(fn: () => Promise<T>): Promise<T> {
+  const run = queue.then(pace).then(fn)
+  queue = run.then(noop, noop)
+  return run
+}
+
 /**
  * Запрос к KIT поверх `requestJson` — единственный вход в сеть у этого
- * клиента, чтобы темп и последовательность не смогли случайно нарушиться
- * в новом методе. См. комментарий у `queue`: следующий вызов ждёт не только
- * паузу темпа, но и ЗАВЕРШЕНИЯ этого запроса целиком.
+ * клиента (вместе с `kitRequestOrNull`, через ту же очередь), чтобы темп и
+ * последовательность не смогли случайно нарушиться в новом методе. См.
+ * комментарий у `queue`: следующий вызов ждёт не только паузу темпа, но и
+ * ЗАВЕРШЕНИЯ этого запроса целиком.
  */
 export function kitRequest<T = unknown>(
   credentials: KitCredentials,
   path: string,
   options: Omit<RequestOptions, "token" | "authHeader"> = {},
 ): Promise<T> {
-  const run = queue.then(pace).then(() => requestJson<T>("kit", `${BASE}${path}`, { ...kitAuth(credentials), ...options }))
-  queue = run.then(noop, noop)
-  return run
+  return enqueue(() => requestJson<T>("kit", `${BASE}${path}`, { ...kitAuth(credentials), ...options }))
+}
+
+/**
+ * То же для методов записи, у которых успех — 204 или пустое 200 (`bulk_update`, наблюдение старого
+ * синка): `requestJson` счёл бы пустой ответ ошибкой. Та же очередь — запись не обгоняет чтение.
+ */
+export function kitRequestOrNull<T = unknown>(
+  credentials: KitCredentials,
+  path: string,
+  options: Omit<RequestOptions, "token" | "authHeader"> = {},
+): Promise<T | null> {
+  return enqueue(() => requestJsonOrNull<T>("kit", `${BASE}${path}`, { ...kitAuth(credentials), ...options }))
 }
 
 // ── Варианты (каталог продавца в KIT) ───────────────────────────────────────
