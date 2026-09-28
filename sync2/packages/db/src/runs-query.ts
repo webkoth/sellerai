@@ -1,5 +1,5 @@
 import { and, count, countDistinct, desc, eq, gte, inArray, lt, max, sql } from "drizzle-orm"
-import { CHANNELS, isChannel, type Channel } from "@sync2/shared"
+import { CHANNELS, isChannel, type Channel, type WriteMode } from "@sync2/shared"
 import type { Db } from "./client"
 import { channels, runs, writes } from "./schema"
 import { toIsoOrNull } from "./time"
@@ -69,17 +69,23 @@ export interface PlannedWrites {
 }
 
 /**
- * План записей в dry-run начиная с sinceIso, по площадкам; без строк — нули.
- * Главное число — разные баркоды: пока зеркало не выровняли, одна и та же запись
- * планируется каждым тиком, и строк за сутки в разы больше, чем изменений.
+ * План записей начиная с sinceIso, по площадкам; без строк — нули. По умолчанию
+ * только dry-run; ["off"] — план площадок с выключенной записью (сайт в 1.3c):
+ * это расхождение их остатка с пулом, а не записи. Главное число — разные
+ * баркоды: пока площадку не выровняли, одна и та же запись планируется каждым
+ * тиком, и строк за сутки в разы больше, чем изменений.
  */
-export async function plannedWritesSince(db: Db, sinceIso: string): Promise<Record<Channel, PlannedWrites>> {
+export async function plannedWritesSince(
+  db: Db,
+  sinceIso: string,
+  modes: readonly WriteMode[] = ["dry-run"],
+): Promise<Record<Channel, PlannedWrites>> {
   const out = Object.fromEntries(CHANNELS.map((c) => [c, { barcodes: 0, rows: 0 }])) as Record<Channel, PlannedWrites>
   const rows = await db
     .select({ code: channels.code, barcodes: countDistinct(writes.barcode), rows: count() })
     .from(writes)
     .innerJoin(channels, eq(writes.channelId, channels.id))
-    .where(and(gte(writes.createdAt, sinceIso), eq(writes.mode, "dry-run")))
+    .where(and(gte(writes.createdAt, sinceIso), inArray(writes.mode, [...modes])))
     .groupBy(channels.code)
   for (const r of rows) if (isChannel(r.code)) out[r.code] = { barcodes: r.barcodes, rows: r.rows }
   return out

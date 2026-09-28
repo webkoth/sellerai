@@ -1,5 +1,13 @@
 import { drizzleWriteStore, lastRunStatus, latestStockSnapshots, loadChannels, loadOrdersSince, loadPoolState, savePoolRun, type Db } from "@sync2/db"
-import { MAX_STOCK_CHANGES_PER_RUN, MAX_STOCK_TO_ZERO_PER_RUN, WB_SETTLE_MINUTES, planStockWrites, reconcilePool, toPoolOrders } from "@sync2/domain"
+import {
+  MAX_STOCK_CHANGES_PER_RUN,
+  MAX_STOCK_TO_ZERO_PER_RUN,
+  WB_SETTLE_MINUTES,
+  planStockWrites,
+  reconcilePool,
+  toPoolOrders,
+  type StockChange,
+} from "@sync2/domain"
 import { executeWrites, type WriteOp } from "@sync2/platforms"
 import { CHANNELS, type Channel, type WriteMode } from "@sync2/shared"
 import { ORDERS_WINDOW_DAYS } from "./ingest"
@@ -10,6 +18,20 @@ export const SNAPSHOT_FRESH_MINUTES = 20
 const MAX_WRITE_ERRORS_SHOWN = 5
 
 const MIRRORS = ["ozon", "ym", "kit"] as const
+
+/**
+ * Сайт планируется отдельно от зеркал (этап 1.3c): его остаток в 1.3c — витрина
+ * с источником WB (синк сайта раз в 3 часа), и расхождение с пулом там обычно.
+ * В общем вызове planStockWrites баркоды сайта считались бы вместе с Ozon/ЯМ/KIT,
+ * и сайт мог бы отклонить план всех зеркал. Отдельный вызов — свои пределы и свой
+ * отказ. Режим записи сайта в 1.3c — off: строки плана попадают в журнал с
+ * mode = 'off' — это и есть расхождение витрины с пулом (сводка compare-v1).
+ *
+ * Снимков сайта нет вовсе — сайт не подключён (SITE_API_TOKEN не задан, ingest
+ * его не читает): счётчиков сайта нет, пул ведёт себя как до 1.3c. Снимок есть,
+ * но старый — siteStale.
+ */
+const SITE = "site" as const
 
 /** Отправителя на площадки в 1.3b нет: запись подключается при переключении (1.4). */
 const noSender = async (): Promise<never> => {
@@ -27,7 +49,7 @@ export async function runPool(deps: { db: Db; now: () => Date; runId: string; gl
   const now = deps.now()
   const counters: Record<string, number> = {}
   const channels = await loadChannels(db)
-  const missing = (["wb", ...MIRRORS] as const).filter((c) => !channels.has(c))
+  const missing = (["wb", ...MIRRORS, SITE] as const).filter((c) => !channels.has(c))
   if (missing.length > 0) throw new Error(`площадки не заведены — выполните seed-channels (нет: ${missing.join(", ")})`)
   const channelId = (c: Channel) => channels.get(c)!.id
 
@@ -76,22 +98,43 @@ export async function runPool(deps: { db: Db; now: () => Date; runId: string; gl
   }
   counters.staleSnapshots = stale
 
-  const plan = planStockWrites(result.items, mirrors, { maxChanges: MAX_STOCK_CHANGES_PER_RUN, maxToZero: MAX_STOCK_TO_ZERO_PER_RUN })
+  const limits = { maxChanges: MAX_STOCK_CHANGES_PER_RUN, maxToZero: MAX_STOCK_TO_ZERO_PER_RUN }
+  const plan = planStockWrites(result.items, mirrors, limits)
   if (plan.aborted) {
     counters[`aborted_${plan.aborted.reason}`] = plan.aborted.count
     return { status: "partial", counters }
   }
-  const ops: WriteOp[] = plan.changes.map((c) => ({ channel: c.channel, barcode: c.barcode, field: "stock", before: c.before, after: c.after }))
+
+  let siteChanges: StockChange[] = []
+  let siteAborted: string | null = null
+  const siteSnap = snaps.get(channelId(SITE))
+  if (siteSnap && !fresh(siteSnap.takenAt)) {
+    counters.siteStale = 1
+  } else if (siteSnap) {
+    const sitePlan = planStockWrites(result.items, [{ channel: SITE, stocks: siteSnap.stocks }], limits)
+    if (sitePlan.aborted) {
+      counters[`siteAborted_${sitePlan.aborted.reason}`] = sitePlan.aborted.count
+      siteAborted = `сайт: план отклонён предохранителем (${sitePlan.aborted.reason}: ${sitePlan.aborted.count} при пределе ${sitePlan.aborted.max})`
+    } else {
+      siteChanges = sitePlan.changes
+    }
+  }
+
+  const ops: WriteOp[] = [...plan.changes, ...siteChanges].map((c) => ({ channel: c.channel, barcode: c.barcode, field: "stock", before: c.before, after: c.after }))
   const channelModes = Object.fromEntries(CHANNELS.map((c) => [c, channels.get(c)?.writeMode ?? "off"])) as Record<Channel, WriteMode>
   const outcomes = await executeWrites(ops, { globalMode: deps.globalMode, channelModes, send: noSender, record: drizzleWriteStore(db, runId, channels) })
   for (const c of MIRRORS) counters[`${c}Planned`] = outcomes.filter((o) => o.channel === c).length
+  if (siteSnap) counters[`${SITE}Planned`] = outcomes.filter((o) => o.channel === SITE).length
 
+  const problems: string[] = []
+  if (siteAborted) problems.push(siteAborted)
   const failed = outcomes.filter((o) => o.error !== null)
   if (failed.length > 0) {
     counters.writeErrors = failed.length
     const shown = failed.slice(0, MAX_WRITE_ERRORS_SHOWN).map((o) => `${o.channel} ${o.barcode}: ${o.error}`)
     const rest = failed.length > shown.length ? `; … ещё ${failed.length - shown.length}` : ""
-    return { status: "partial", counters, error: `ошибки записи: ${shown.join("; ")}${rest}` }
+    problems.push(`ошибки записи: ${shown.join("; ")}${rest}`)
   }
+  if (problems.length > 0) return { status: "partial", counters, error: problems.join("; ") }
   return { status: "ok", counters }
 }

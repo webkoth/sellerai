@@ -29,6 +29,15 @@ export interface PoolOrder {
   quantity: number
   cancelled: boolean
   occurredAt: string
+  /**
+   * Холодный старт по площадке (этап 1.3c): заказ впервые увиден базовым прогоном
+   * площадки, подключённой к уже живому пулу, — её прошлые заказы уже сняты с WB
+   * (старым синком или владельцем вручную), вычесть их значит списать дважды.
+   * Учитывается без вычитания, как заказы общего холодного старта. Критерий —
+   * «впервые увиден в базовом прогоне», а не время создания: заказ, созданный
+   * раньше, но отданный площадкой позже, для пула новый и списывается.
+   */
+  channelColdStart?: boolean
 }
 
 export interface PoolEvent {
@@ -94,7 +103,8 @@ export const WB_SETTLE_MINUTES = 20
  * 2. Сигнал WB: новый снимок, снятый не раньше чем через `settleMinutes`
  *    после последнего изменения ожидания, — дельта между снимком и
  *    ожиданием (продажа на WB, пополнение, ручная правка).
- * 3. Новые заказы зеркал — минус количество, один раз на заказ.
+ * 3. Новые заказы зеркал — минус количество, один раз на заказ; заказ холодного
+ *    старта по площадке (`channelColdStart`) — учтён без вычитания (delta 0).
  * 4. Отмены учтённых заказов — плюс количество, один раз на заказ.
  * 5. База не ниже нуля; ожидание равно базе.
  *
@@ -202,6 +212,23 @@ export function reconcilePool(input: ReconcilePoolInput): ReconcilePoolResult {
     let expectationChanged = false
     for (const order of ordersByBarcode.get(item.barcode) ?? []) {
       const isApplied = input.applied.has(order.orderId) || appliedNow.has(order.orderId)
+      if (!order.cancelled && !isApplied && order.channelColdStart) {
+        // Холодный старт по площадке: учтён, база и ожидание не меняются.
+        appliedNow.add(order.orderId)
+        events.push({
+          barcode: item.barcode,
+          kind: "order",
+          delta: 0,
+          baseBefore: item.base,
+          baseAfter: item.base,
+          channelId: order.channelId,
+          orderId: order.orderId,
+          snapshotAt: null,
+          occurredAt: now,
+          detail: { coldStart: "channel" },
+        })
+        continue
+      }
       if (!order.cancelled && !isApplied) {
         const baseBefore = item.base
         item.base = Math.max(0, item.base - order.quantity)

@@ -97,6 +97,14 @@ export interface RequestOptions {
    * крона.
    */
   timeoutMs?: number
+  /**
+   * Режим переадресации fetch; не задан — поведение fetch по умолчанию (follow).
+   * "manual" — 30x не выполняется и становится PlatformApiError с кодом 30x без
+   * повторов: токен в заголовке не уйдёт за переадресацией на другой хост (сайт).
+   * Не "error": его отказ fetch бросает как сетевой сбой, и он повторялся бы по
+   * расписанию пауз (минуты) ради заведомо того же ответа.
+   */
+  redirect?: RequestInit["redirect"]
 }
 
 const DEFAULT_TIMEOUT_MS = 60_000
@@ -156,6 +164,7 @@ async function request<T>(
         },
         body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
         signal: AbortSignal.timeout(timeoutMs),
+        ...(options.redirect ? { redirect: options.redirect } : {}),
       })
     } catch (error: unknown) {
       // Обрыв соединения — не ответ площадки, а сеть: `fetch` бросает, и до

@@ -1,4 +1,4 @@
-import { insertStockSnapshot, lastCounter, loadChannels, upsertOrders, upsertProducts, type Db, type OrderUpsert } from "@sync2/db"
+import { ingestChannelOrders, insertStockSnapshot, lastCounter, loadChannels, upsertProducts, type Db, type OrderUpsert } from "@sync2/db"
 import { buildWbCatalogIndex, errorText, type ChannelOrder } from "@sync2/shared"
 import type { ChannelAdapter } from "@sync2/platforms"
 import type { Adapters } from "../adapters"
@@ -79,6 +79,8 @@ export async function runIngest(deps: {
   }
   counters[CATALOG_ACCEPTED_KEY] = catalog.length
 
+  // Битый конфиг необязательной площадки (сайта) — она пропущена, остальные читаются.
+  errors.push(...(deps.adapters.configErrors ?? []))
   const all: ChannelAdapter[] = [deps.adapters.wb, ...deps.adapters.mirrors(buildWbCatalogIndex(catalog))]
   for (const a of all) {
     const ch = channels.get(a.channel)
@@ -88,7 +90,11 @@ export async function runIngest(deps: {
     }
     try {
       const rows = (await a.fetchOrders(since)).filter((o) => o.quantity > 0).map(toUpsert)
-      counters[`${a.channel}Orders`] = await upsertOrders(db, ch.id, rows)
+      // Первое чтение площадки ставит её базовую точку: заказы этого прогона пул примет
+      // холодным стартом по площадке (ingestChannelOrders, этап 1.3c).
+      const r = await ingestChannelOrders(db, { channelId: ch.id, code: a.channel, runId, rows })
+      counters[`${a.channel}Orders`] = r.written
+      if (r.baselineSet) counters[`${a.channel}OrdersBaseline`] = 1
     } catch (e) {
       errors.push(`${a.channel} заказы: ${errorText(e)}`)
     }

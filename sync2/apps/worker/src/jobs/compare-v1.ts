@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs"
 import {
+  channelsWithSnapshotSince,
   countFailedRunsSince,
   countStuckRunsSince,
   countSuspectedDoubleCounts,
@@ -103,6 +104,12 @@ export interface SummaryExtra {
   /** Баркоды с заказом/отменой зеркала за последние DOUBLE_COUNT_WINDOW_MINUTES — пометка у строк diff. */
   recentOrderBarcodes: ReadonlySet<string>
   suspectedDoubleCounts: number
+  /**
+   * Расхождение витрины сайта с пулом за сутки: план сайта в журнале с mode = 'off'
+   * (этап 1.3c) или 'dry-run' (1.4). null — сайт не подключён: за сутки ни снимка
+   * сайта, ни строк его плана.
+   */
+  siteDiff: PlannedWrites | null
 }
 
 function poolLine(recalcAt: string | null, now: Date): string {
@@ -132,6 +139,9 @@ export function formatComparison(r: ComparisonResult, extra: SummaryExtra): stri
     `Только у нового (${r.onlyV2.length}): ${formatList(r.onlyV2.map((i) => `${i.barcode} (${i.v2})`))}`,
     `Подозрение на двойной счёт: ${extra.suspectedDoubleCounts}`,
     `План записей за сутки (dry-run, баркодов/строк): Ozon ${plan("ozon")}, ЯМ ${plan("ym")}, KIT ${plan("kit")}`,
+    extra.siteDiff === null
+      ? "Сайт ↔ пул за сутки: не подключён"
+      : `Сайт ↔ пул за сутки (витрина не меняется, записи off/dry-run; баркодов/строк): ${extra.siteDiff.barcodes}/${extra.siteDiff.rows}`,
     poolLine(extra.lastPoolRecalcAt, extra.now),
     `Упавших прогонов за сутки: ${extra.failedRuns}, зависших (running > ${STUCK_RUN_MS / 60_000} мин): ${extra.stuckRuns}`,
   ].join("\n")
@@ -177,7 +187,7 @@ export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier:
   const since = ago(COMPARE_WINDOW_MS)
   // Леджер — до запросов к базе: нет леджера — нет и сверки.
   const ledger = readLedger(deps.ledgerPath)
-  const [{ items }, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts] = await Promise.all([
+  const [{ items }, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts, sitePlanned, withSnapshot] = await Promise.all([
     loadPoolState(db),
     countFailedRunsSince(db, since),
     countStuckRunsSince(db, since, ago(STUCK_RUN_MS)),
@@ -185,10 +195,14 @@ export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier:
     lastRunWithCounterAt(db, "pool", "events"),
     mirrorOrderBarcodesSince(db, ago(DOUBLE_COUNT_WINDOW_MINUTES * 60_000)),
     countSuspectedDoubleCounts(db, since),
+    // Режим записи сайта в 1.3c — off, в 1.4 — dry-run перед apply: считаются оба.
+    plannedWritesSince(db, since, ["off", "dry-run"]),
+    channelsWithSnapshotSince(db, since),
   ])
+  const siteDiff = withSnapshot.has("site") || sitePlanned.site.rows > 0 ? sitePlanned.site : null
 
   const result = comparePools(items.map((i) => ({ barcode: i.barcode, base: i.base })), ledger)
-  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts })
+  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts, siteDiff })
   if (!(await deps.notifier.send(text))) throw new Error("сводка сверки не доставлена в Telegram (бот не настроен или Telegram отказал)")
   return {
     same: result.same,

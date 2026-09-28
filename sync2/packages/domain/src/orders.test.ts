@@ -40,6 +40,14 @@ describe("toPoolOrders", () => {
     expect(skipped.master).toBe(1)
   })
 
+  it("заказ базового прогона новой площадки несёт признак холодного старта по площадке", () => {
+    const { orders } = toPoolOrders([row({ id: 1, channelColdStart: true }), row({ id: 2 })], WB)
+    expect(orders.map((o) => [o.orderId, o.channelColdStart])).toEqual([
+      [1, true],
+      [2, undefined],
+    ])
+  })
+
   it("строка без баркода пропускается и считается", () => {
     const { orders, skipped } = toPoolOrders([row({ barcode: null })], WB)
     expect(orders).toEqual([])

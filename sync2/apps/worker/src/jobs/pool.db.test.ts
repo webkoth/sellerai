@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { channels, drizzleRunStore, insertStockSnapshot, loadChannels, loadPoolState, seedChannels, upsertOrders, writes } from "@sync2/db"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "@sync2/db/test-db"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { runPool } from "./pool"
 
 const s = (barcode: string, quantity: number) => ({ barcode, externalSku: null, quantity, warehouse: null })
@@ -85,6 +85,9 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool", () => {
       const r = await runPool({ db: h.db, now: () => new Date("2026-09-27T10:40:00.000Z"), runId: pid, globalMode: "dry-run" })
       expect(r.status).toBe("ok")
       expect(r.counters).toMatchObject({ staleSnapshots: 3, kitPlanned: 0 })
+      // Снимков сайта нет вовсе — сайт не подключён (нет SITE_API_TOKEN): пул ведёт себя как до 1.3c.
+      expect(r.counters).not.toHaveProperty("siteStale")
+      expect(r.counters).not.toHaveProperty("sitePlanned")
     })
 
     it("ошибки в итогах записи — partial с текстом, а не ok", async () => {
@@ -98,6 +101,43 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool", () => {
       expect(r.status).toBe("partial")
       expect(r.counters).toMatchObject({ writeErrors: 1 })
       expect(r.error).toMatch(/kit A: запись на площадки подключается на этапе 1\.4/)
+    })
+
+    it("сайт — отдельный план: свежий снимок сайта в журнале с режимом off, на площадки ничего", async () => {
+      const sid = await runId()
+      await insertStockSnapshot(h.db, { channelId: ids.get("wb")!.id, runId: sid, takenAt: "2026-09-27T10:55:00.000Z", stocks: [s("A", 3), s("B", 1)] })
+      await insertStockSnapshot(h.db, { channelId: ids.get("site")!.id, runId: sid, takenAt: "2026-09-27T10:55:00.000Z", stocks: [s("A", 5), s("B", 1)] })
+      const pid = await runId()
+      const r = await runPool({ db: h.db, now: () => new Date("2026-09-27T11:00:00.000Z"), runId: pid, globalMode: "dry-run" })
+      expect(r.status).toBe("ok")
+      expect(r.counters).toMatchObject({ sitePlanned: 1 })
+      expect(r.counters).not.toHaveProperty("siteStale")
+      const logged = await h.db.select().from(writes).where(and(eq(writes.runId, pid), eq(writes.channelId, ids.get("site")!.id)))
+      expect(logged.map((w) => [w.barcode, w.before, w.after, w.mode, w.applied])).toEqual([["A", 5, 3, "off", false]])
+    })
+
+    it("сайт упёрся в предохранитель — план сайта отклонён, план KIT всё равно записан, partial", async () => {
+      const sid = await runId()
+      await insertStockSnapshot(h.db, { channelId: ids.get("wb")!.id, runId: sid, takenAt: "2026-09-27T11:05:00.000Z", stocks: [s("A", 3), s("B", 1)] })
+      await insertStockSnapshot(h.db, { channelId: ids.get("kit")!.id, runId: sid, takenAt: "2026-09-27T11:05:00.000Z", stocks: [s("A", 1), s("B", 1)] })
+      // 21 баркод сайта, которых нет в пуле, с остатком — 21 «в ноль» при пределе 20.
+      const orphans = Array.from({ length: 21 }, (_, i) => s(`Z${i}`, 1))
+      await insertStockSnapshot(h.db, { channelId: ids.get("site")!.id, runId: sid, takenAt: "2026-09-27T11:05:00.000Z", stocks: orphans })
+      const r = await runPool({ db: h.db, now: () => new Date("2026-09-27T11:10:00.000Z"), runId: await runId(), globalMode: "dry-run" })
+      expect(r.status).toBe("partial")
+      expect(r.counters).toMatchObject({ siteAborted_to_zero: 21, kitPlanned: 1, sitePlanned: 0 })
+      expect(r.error).toMatch(/сайт: план отклонён предохранителем/)
+    })
+
+    it("снимок сайта устарел — siteStale, строк сайта в журнале нет, статус ok", async () => {
+      const sid = await runId()
+      await insertStockSnapshot(h.db, { channelId: ids.get("wb")!.id, runId: sid, takenAt: "2026-09-27T11:30:00.000Z", stocks: [s("A", 3), s("B", 1)] })
+      const pid = await runId()
+      const r = await runPool({ db: h.db, now: () => new Date("2026-09-27T11:35:00.000Z"), runId: pid, globalMode: "dry-run" })
+      expect(r.status).toBe("ok")
+      expect(r.counters).toMatchObject({ siteStale: 1, sitePlanned: 0 })
+      const logged = await h.db.select().from(writes).where(and(eq(writes.runId, pid), eq(writes.channelId, ids.get("site")!.id)))
+      expect(logged).toEqual([])
     })
   })
 })

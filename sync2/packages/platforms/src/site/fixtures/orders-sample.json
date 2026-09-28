@@ -1,0 +1,29 @@
+{
+  "orders": [
+    {
+      "id": "1001",
+      "number": "ORD-TEST0001",
+      "status": "new",
+      "createdAt": "2026-09-26T07:53:00.000Z",
+      "items": [
+        { "lineId": "5001", "barcode": "2041383032873", "quantity": 1, "priceKopecks": 189000 },
+        { "lineId": "5002", "barcode": null, "quantity": 2, "priceKopecks": 99000 }
+      ]
+    },
+    {
+      "id": "1002",
+      "number": "ORD-TEST0002",
+      "status": "cancelled",
+      "createdAt": "2026-09-27T09:00:00.000Z",
+      "items": [{ "lineId": "5003", "barcode": "2044473196868", "quantity": 1, "priceKopecks": 250000 }]
+    },
+    {
+      "id": "1003",
+      "number": "ORD-TEST0003",
+      "status": "new",
+      "createdAt": "2026-09-27T10:00:00.000Z",
+      "items": [{ "lineId": "5004", "barcode": "4600000000011", "quantity": 1, "priceKopecks": 100000 }]
+    }
+  ],
+  "truncated": false
+}

@@ -54,6 +54,9 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
       wb: { barcodes: 0, rows: 0 },
       site: { barcodes: 0, rows: 0 },
     })
+    // Режим off отдельно — так сводка показывает план сайта (его запись в 1.3c выключена).
+    const off = await plannedWritesSince(h.db, "2026-09-01T00:00:00.000Z", ["off"])
+    expect(off).toMatchObject({ ym: { barcodes: 1, rows: 1 }, ozon: { barcodes: 0, rows: 0 } })
   })
 
   it("статус последнего завершённого запуска джобы; ни одного — null", async () => {

@@ -15,6 +15,13 @@
       "when": 1790432338990,
       "tag": "0001_thankful_shen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790581438801,
+      "tag": "0002_fast_warlock",
+      "breakpoints": true
     }
   ]
 }

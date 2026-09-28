@@ -1,8 +1,18 @@
+/** Сайт — служебный API (этап 1.3c); null — SITE_API_TOKEN не задан, сайт не подключается. */
+export interface SiteChannelConfig {
+  baseUrl: string
+  token: string
+}
+
+export const DEFAULT_SITE_API_URL = "https://kotelnikovartifact.ru"
+/** Тот же предел, что у INTERNAL_API_TOKEN на стороне сайта. */
+const SITE_TOKEN_MIN_LENGTH = 32
+
 /**
- * Ключи и склады четырёх площадок из окружения — для адаптеров чтения
- * (`@sync2/platforms`), не для `Config`/`loadConfig` (`@sync2/shared`): там
- * только БД и режим записи, здесь — учётные данные, которые `probe` читает
- * без базы вовсе (план 1.3a, задача 7).
+ * Ключи и склады площадок (сайт — необязательный, этап 1.3c) из окружения —
+ * для адаптеров чтения (`@sync2/platforms`), не для `Config`/`loadConfig`
+ * (`@sync2/shared`): там только БД и режим записи, здесь — учётные данные,
+ * которые `probe` читает без базы вовсе (план 1.3a, задача 7).
  *
  * Функция чистая: окружение — параметр, а не `process.env`, тестируется без
  * побочных эффектов.
@@ -16,6 +26,13 @@ export interface ChannelsConfig {
   ozon: { clientId: string; apiKey: string }
   ym: { apiKey: string; businessId: string; campaignId: string; warehouseIds: number[] }
   kit: { token: string; warehouseId: string }
+  site: SiteChannelConfig | null
+  /**
+   * Конфиг сайта задан, но битый (не URL, http, короткий токен): сайт пропускается,
+   * текст — здесь. Сайт необязателен, и его ошибка не роняет ingest обязательных
+   * площадок — ingest уходит в partial с этим текстом.
+   */
+  siteError: string | null
 }
 
 function required(env: Record<string, string | undefined>, name: string): string {
@@ -46,7 +63,36 @@ function requiredWarehouseIds(env: Record<string, string | undefined>, name: str
   return ids
 }
 
+/**
+ * Сайт подключается, только если задан SITE_API_TOKEN (= INTERNAL_API_TOKEN
+ * сайта). Токен уходит в заголовке, поэтому адрес — только https (кроме
+ * localhost для разработки); короткий токен — ошибка, а не тихое отключение
+ * (её ловит loadChannelsConfig и кладёт в siteError).
+ */
+function optionalSite(env: Record<string, string | undefined>): SiteChannelConfig | null {
+  const token = env.SITE_API_TOKEN?.trim()
+  if (!token) return null
+  if (token.length < SITE_TOKEN_MIN_LENGTH) throw new Error(`SITE_API_TOKEN короче ${SITE_TOKEN_MIN_LENGTH} символов`)
+  const raw = env.SITE_API_URL?.trim() || DEFAULT_SITE_API_URL
+  let url: URL
+  try {
+    url = new URL(raw)
+  } catch {
+    throw new Error(`SITE_API_URL: "${raw}" — не URL`)
+  }
+  const local = url.hostname === "localhost" || url.hostname === "127.0.0.1"
+  if (url.protocol !== "https:" && !local) throw new Error(`SITE_API_URL: только https (кроме localhost), получено ${url.protocol}`)
+  return { baseUrl: `${url.origin}${url.pathname}`.replace(/\/+$/, ""), token }
+}
+
 export function loadChannelsConfig(env: Record<string, string | undefined>): ChannelsConfig {
+  let site: SiteChannelConfig | null = null
+  let siteError: string | null = null
+  try {
+    site = optionalSite(env)
+  } catch (e) {
+    siteError = e instanceof Error ? e.message : String(e)
+  }
   return {
     wb: { token: required(env, "WB_API_TOKEN") },
     ozon: { clientId: required(env, "OZON_CLIENT_ID"), apiKey: required(env, "OZON_API_TOKEN") },
@@ -57,5 +103,7 @@ export function loadChannelsConfig(env: Record<string, string | undefined>): Cha
       warehouseIds: requiredWarehouseIds(env, "YM_WAREHOUSE_IDS"),
     },
     kit: { token: required(env, "YAKIT_API_TOKEN"), warehouseId: required(env, "KIT_WAREHOUSE_ID") },
+    site,
+    siteError,
   }
 }
