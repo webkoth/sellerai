@@ -11,7 +11,7 @@ export interface WriteOp {
    * Ключ товара, по которому площадка принимает запись: chrtId размера WB (строкой), offer_id Ozon,
    * offerId (shopSku) ЯМ, id варианта KIT. Берётся из снимка площадки (StockChange.externalSku), кроме
    * WB: снимок WB несёт артикул, а не chrtId, — chrtId подставляет pool из products.wb_chrt_id (этап 1.4).
-   * Снимок сайта ключа не несёт (site/mapper.ts: null) — сайт пишется по штрихкоду, ключ ему не нужен.
+   * Сайт: снимок ключа не несёт (site/mapper.ts: null), pool ставит сам штрихкод — по нему сайт и пишется.
    * null там, где ключ нужен, — отправитель отказывает позиции до сети (stock-write.ts, splitByKey).
    */
   externalSku: string | null

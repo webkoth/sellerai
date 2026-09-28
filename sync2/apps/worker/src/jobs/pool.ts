@@ -1,15 +1,31 @@
-import { drizzleWriteStore, lastRunStatus, latestStockSnapshots, loadChannels, loadOrdersSince, loadPoolState, savePoolRun, type Db } from "@sync2/db"
+import {
+  drizzleWriteStore,
+  lastRunCounters,
+  lastRunStatus,
+  latestStockSnapshots,
+  loadChannels,
+  loadOrdersSince,
+  loadPoolState,
+  loadWbChrtIds,
+  savePoolRun,
+  type Db,
+} from "@sync2/db"
 import {
   MAX_STOCK_CHANGES_PER_RUN,
   MAX_STOCK_TO_ZERO_PER_RUN,
   WB_SETTLE_MINUTES,
+  WB_SETTLE_MINUTES_SELF,
+  aggregateStockByBarcode,
+  applyWbWriteOutcomes,
   planStockWrites,
   reconcilePool,
   toPoolOrders,
+  wbWriteGate,
   type StockChange,
+  type WbWriteResult,
 } from "@sync2/domain"
-import { executeWrites, type WriteOp } from "@sync2/platforms"
-import { CHANNELS, type Channel, type WriteMode } from "@sync2/shared"
+import { effectiveMode, executeWrites, failed, type SendResult, type Sender, type WriteOp } from "@sync2/platforms"
+import { CHANNELS, errorText, type Channel, type NormalizedStock, type WriteMode } from "@sync2/shared"
 import { ORDERS_WINDOW_DAYS } from "./ingest"
 
 /** Снимок старше этого в план не берётся: цель считалась бы от устаревшего остатка площадки. */
@@ -17,25 +33,30 @@ export const SNAPSHOT_FRESH_MINUTES = 20
 /** Ошибок записи в runs.error — не больше стольких, остальное счётом. */
 const MAX_WRITE_ERRORS_SHOWN = 5
 
+/** Зеркала, отсутствие или старость снимка которых считается в staleSnapshots (как в 1.3b). */
 const MIRRORS = ["ozon", "ym", "kit"] as const
 
 /**
- * Сайт планируется отдельно от зеркал (этап 1.3c): его остаток в 1.3c — витрина
- * с источником WB (синк сайта раз в 3 часа), и расхождение с пулом там обычно.
- * В общем вызове planStockWrites баркоды сайта считались бы вместе с Ozon/ЯМ/KIT,
- * и сайт мог бы отклонить план всех зеркал. Отдельный вызов — свои пределы и свой
- * отказ. Режим записи сайта в 1.3c — off: строки плана попадают в журнал с
- * mode = 'off' — это и есть расхождение витрины с пулом (сводка compare-v1).
- *
- * Снимков сайта нет вовсе — сайт не подключён (SITE_API_TOKEN не задан, ingest
- * его не читает): счётчиков сайта нет, пул ведёт себя как до 1.3c. Снимок есть,
- * но старый — siteStale.
+ * Сайт планируется своим вызовом, как и каждая площадка (этап 1.4). Снимков сайта нет вовсе —
+ * сайт не подключён (SITE_API_TOKEN не задан, ingest его не читает): счётчиков сайта нет, пул
+ * ведёт себя как до 1.3c. Снимок есть, но старый — siteStale.
  */
 const SITE = "site" as const
 
-/** Отправителя на площадки в 1.3b нет: запись подключается при переключении (1.4). */
-const noSender = async (): Promise<never> => {
-  throw new Error("запись на площадки подключается на этапе 1.4")
+/**
+ * Площадки, чьи заказы входят в пул. Сбой их чтения в последнем ingest запись НЕ блокирует
+ * (решение владельца 28.09, п. 1): заказы хранятся в базе, pool пишет по последним известным;
+ * уведомление шлёт переход ingest в partial. Здесь — только счётчик mirrorOrdersFailed.
+ */
+const ORDER_CHANNELS = ["ozon", "ym", "kit", "site"] as const
+const LABEL: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
+
+/** Текст отказа WB-позиции без chrtId в каталоге — до сети, в журнал writes. */
+export const WB_NO_CHRT_ID = "WB: нет chrtId размера в каталоге (products.wb_chrt_id) — запись невозможна, проверьте карточку WB"
+
+/** Отправитель по умолчанию: без переданного отправителя любая попытка записи — ошибка позиции в журнале. */
+export const noSender: Sender = async () => {
+  throw new Error("отправитель не передан — запись на площадки невозможна")
 }
 
 export interface PoolJobResult {
@@ -44,20 +65,87 @@ export interface PoolJobResult {
   error?: string
 }
 
-export async function runPool(deps: { db: Db; now: () => Date; runId: string; globalMode: WriteMode }): Promise<PoolJobResult> {
+export interface PoolDeps {
+  db: Db
+  now: () => Date
+  runId: string
+  globalMode: WriteMode
+  /** Отправка на площадки — buildSender (apps/worker/src/senders.ts). Не передан — запись невозможна. */
+  send?: Sender
+  /** Склад WB, на который пишет sync2 (WB_WAREHOUSE_ID); null или не передан — запись WB невозможна. */
+  wbWarehouseId?: number | null
+}
+
+/**
+ * Склады WB в снимке, кроме склада записи. Остаток WB в пуле — сумма всех складов продавца,
+ * а пишем мы на один: при втором складе цель «пул» на одном складе дала бы сумму больше пула.
+ * Склад записи не задан — чужие все склады снимка.
+ */
+export function wbForeignWarehouses(stocks: NormalizedStock[], warehouseId: number | null): string[] {
+  const own = warehouseId === null ? null : String(warehouseId)
+  return [...new Set(stocks.map((s) => s.warehouse ?? "без склада"))].filter((w) => w !== own).sort()
+}
+
+/**
+ * WB-позиции без ключа записи (chrtId) отказываются здесь, до отправителя: причина в журнале —
+ * понятная, а не общее «нет ключа», и отправитель WB не читает остаток ради заведомого отказа.
+ * Сбой отправителя по остальным — итог неизвестен у них, отказ без ключа остаётся отказом.
+ */
+function withWbKeyCheck(send: Sender): Sender {
+  return async (channel, ops) => {
+    if (channel !== "wb") return send(channel, ops)
+    const noKey = ops.filter((o) => o.externalSku === null)
+    const rest = ops.filter((o) => o.externalSku !== null)
+    const results: SendResult[] = noKey.map((o) => failed(o, WB_NO_CHRT_ID))
+    if (rest.length === 0) return results
+    try {
+      const sent = await send(channel, rest)
+      if (!Array.isArray(sent)) throw new Error("площадка вернула ответ не списком")
+      results.push(...sent)
+    } catch (e: unknown) {
+      for (const o of rest) results.push(failed(o, errorText(e), { uncertain: true }))
+    }
+    return results
+  }
+}
+
+/**
+ * Прогон пула (этап 1.4): пересчёт → план записей по каждой площадке отдельно → запись.
+ *
+ * WB пишет sync2 (режим self) ровно тогда, когда у WB действующий apply; иначе WB пишет старый
+ * синк (external, семантика finstock). В self: шлюз WB по состоянию ДО прогона, приём сигнала
+ * через WB_SETTLE_MINUTES_SELF, план WB с удержанием непринятых баркодов, и ожидание WB — по итогам
+ * записи (applyWbWriteOutcomes). Пул фиксируется ДО сети с итогом «неизвестно» для уходящих
+ * WB-позиций и второй раз — по фактическим итогам: процесс, убитый между записью и фиксацией
+ * (timeout крона, OOM), оставляет безопасное ожидание max(база, факт).
+ *
+ * Блокировки прогона (площадка в журнале как dry-run, в сеть не уходит, partial с текстом;
+ * действуют только на площадки в apply — в dry-run/off ничего не меняют):
+ * отклонённый каталог WB в последнем ingest — все площадки; витрина сайта не на пуле — сайт;
+ * второй склад WB или не задан склад записи — WB. Сбой чтения заказов зеркала — НЕ блокировка
+ * (решение владельца 28.09, п. 1), только счётчик mirrorOrdersFailed.
+ */
+export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   const { db, runId } = deps
   const now = deps.now()
+  const nowIso = now.toISOString()
   const counters: Record<string, number> = {}
   const channels = await loadChannels(db)
-  const missing = (["wb", ...MIRRORS, SITE] as const).filter((c) => !channels.has(c))
+  const missing = CHANNELS.filter((c) => !channels.has(c))
   if (missing.length > 0) throw new Error(`площадки не заведены — выполните seed-channels (нет: ${missing.join(", ")})`)
   const channelId = (c: Channel) => channels.get(c)!.id
+
+  // Действующий режим площадки — меньший из глобального и её собственного (как в executeWrites).
+  const configured = Object.fromEntries(CHANNELS.map((c) => [c, effectiveMode(deps.globalMode, channels.get(c)!.writeMode)])) as Record<Channel, WriteMode>
+  // Откат WB в dry-run возвращает семантику external сам, без отдельного переключателя.
+  const wbSelf = configured.wb === "apply"
+  const settle = wbSelf ? WB_SETTLE_MINUTES_SELF : WB_SETTLE_MINUTES
+  counters.wbSelf = wbSelf ? 1 : 0
 
   const snaps = await latestStockSnapshots(db)
   const fresh = (takenAt: string) => now.getTime() - Date.parse(takenAt) <= SNAPSHOT_FRESH_MINUTES * 60_000
 
-  const wbId = channelId("wb")
-  const wb = snaps.get(wbId)
+  const wb = snaps.get(channelId("wb"))
   if (!wb || !fresh(wb.takenAt)) {
     counters.noFreshWb = 1
     return { status: "partial", counters }
@@ -72,74 +160,138 @@ export async function runPool(deps: { db: Db; now: () => Date; runId: string; gl
     return { status: "partial", counters }
   }
 
+  // Шлюз WB — по состоянию ДО прогона (wb-expectation.ts).
+  const gate = wbWriteGate(state.items, wb, settle)
   const rows = await loadOrdersSince(db, new Date(now.getTime() - ORDERS_WINDOW_DAYS * 86_400_000).toISOString())
-  const { orders, skipped } = toPoolOrders(rows, wbId)
+  const { orders, skipped } = toPoolOrders(rows, channelId("wb"))
   const result = reconcilePool({
-    now: now.toISOString(),
+    now: nowIso,
     items: state.items,
     wbSnapshot: wb,
     orders,
     applied: state.applied,
     cancelledApplied: state.cancelledApplied,
-    settleMinutes: WB_SETTLE_MINUTES,
+    settleMinutes: settle,
   })
-  await savePoolRun(db, { runId, items: result.items, events: result.events })
   counters.events = result.events.length
   counters.ordersNoBarcode = skipped.noBarcode
   counters.noBase = result.skipped.noBase
 
-  // WB пишет старый синк (режим external) — в план только зеркала со свежим снимком.
-  const mirrors: Array<{ channel: Channel; stocks: typeof wb.stocks }> = []
+  // ── Блокировки записи этого прогона ──
+  const modes: Record<Channel, WriteMode> = { ...configured }
+  const problems: string[] = []
+  const block = (list: readonly Channel[], counter: string, text: string) => {
+    let hit = false
+    for (const c of list) {
+      if (modes[c] !== "apply") continue
+      modes[c] = "dry-run"
+      hit = true
+    }
+    if (!hit) return
+    counters[counter] = 1
+    problems.push(text)
+  }
+  const ingestCounters = (await lastRunCounters(db, "ingest")) ?? {}
+  const failedOrders = ORDER_CHANNELS.filter((c) => ingestCounters[`${c}OrdersFailed`] === 1)
+  if (failedOrders.length > 0) counters.mirrorOrdersFailed = failedOrders.length
+  if (ingestCounters.catalogRejected === 1) {
+    block(CHANNELS, "writesBlockedCatalog", "запись остатков не делалась: каталог WB отклонён в последнем ingest — заказы и снимки не прочитаны")
+  }
+  if (ingestCounters.siteSourcePool !== 1) {
+    block([SITE], "siteWriteBlocked", "сайт: витрина берёт остаток не из пула (STOCK_SOURCE≠pool) — запись сайта не делалась")
+  }
+  const wbWarehouseId = deps.wbWarehouseId ?? null
+  const foreign = wbForeignWarehouses(wb.stocks, wbWarehouseId)
+  if (foreign.length > 0) {
+    block(
+      ["wb"],
+      "wbForeignWarehouse",
+      wbWarehouseId === null
+        ? "WB: не задан WB_WAREHOUSE_ID — запись WB не делалась"
+        : `WB: в снимке склады ${foreign.join(", ")} помимо склада записи ${wbWarehouseId} — запись WB не делалась`,
+    )
+  }
+
+  // ── Планы: каждая площадка — отдельный вызов со своими предохранителями ──
+  // WB первым: окно между перечитыванием остатка WB в отправителе и записью короче.
+  const targets: Array<{ channel: Channel; stocks: NormalizedStock[] }> = []
+  if (configured.wb !== "off") targets.push({ channel: "wb", stocks: wb.stocks })
   let stale = 0
   for (const c of MIRRORS) {
     const snap = snaps.get(channelId(c))
-    if (snap && fresh(snap.takenAt)) mirrors.push({ channel: c, stocks: snap.stocks })
+    if (snap && fresh(snap.takenAt)) targets.push({ channel: c, stocks: snap.stocks })
     else stale++
   }
   counters.staleSnapshots = stale
+  const siteSnap = snaps.get(channelId(SITE))
+  if (siteSnap && !fresh(siteSnap.takenAt)) counters.siteStale = 1
+  else if (siteSnap) targets.push({ channel: SITE, stocks: siteSnap.stocks })
 
   const limits = { maxChanges: MAX_STOCK_CHANGES_PER_RUN, maxToZero: MAX_STOCK_TO_ZERO_PER_RUN }
-  const plan = planStockWrites(result.items, mirrors, limits)
-  if (plan.aborted) {
-    counters[`aborted_${plan.aborted.reason}`] = plan.aborted.count
-    return { status: "partial", counters }
-  }
-
-  let siteChanges: StockChange[] = []
-  let siteAborted: string | null = null
-  const siteSnap = snaps.get(channelId(SITE))
-  if (siteSnap && !fresh(siteSnap.takenAt)) {
-    counters.siteStale = 1
-  } else if (siteSnap) {
-    const sitePlan = planStockWrites(result.items, [{ channel: SITE, stocks: siteSnap.stocks }], limits)
-    if (sitePlan.aborted) {
-      counters[`siteAborted_${sitePlan.aborted.reason}`] = sitePlan.aborted.count
-      siteAborted = `сайт: план отклонён предохранителем (${sitePlan.aborted.reason}: ${sitePlan.aborted.count} при пределе ${sitePlan.aborted.max})`
-    } else {
-      siteChanges = sitePlan.changes
+  const changes: StockChange[] = []
+  for (const t of targets) {
+    const plan = planStockWrites(result.items, [t], t.channel === "wb" ? { ...limits, hold: gate.hold } : limits)
+    if (plan.aborted) {
+      counters[`${t.channel}Aborted_${plan.aborted.reason}`] = plan.aborted.count
+      problems.push(`${LABEL[t.channel]}: план отклонён предохранителем (${plan.aborted.reason}: ${plan.aborted.count} при пределе ${plan.aborted.max})`)
+      continue
     }
+    changes.push(...plan.changes)
   }
 
-  const ops: WriteOp[] = [...plan.changes, ...siteChanges].map((c) => ({
+  // Ключ записи: WB — chrtId размера из каталога (снимок WB несёт артикул, а не chrtId); сайт —
+  // сам штрихкод; остальные — ключ из снимка (offer_id Ozon, offerId ЯМ, id варианта KIT).
+  const chrtIds = changes.some((c) => c.channel === "wb") ? await loadWbChrtIds(db) : new Map<string, number>()
+  const ops: WriteOp[] = changes.map((c) => ({
     channel: c.channel,
     barcode: c.barcode,
     field: "stock",
     before: c.before,
     after: c.after,
-    externalSku: c.externalSku,
+    externalSku: c.channel === "wb" ? (chrtIds.get(c.barcode)?.toString() ?? null) : c.channel === SITE ? c.barcode : c.externalSku,
   }))
-  const channelModes = Object.fromEntries(CHANNELS.map((c) => [c, channels.get(c)?.writeMode ?? "off"])) as Record<Channel, WriteMode>
-  const outcomes = await executeWrites(ops, { globalMode: deps.globalMode, channelModes, send: noSender, record: drizzleWriteStore(db, runId, channels) })
+  const wbNoChrtId = ops.filter((o) => o.channel === "wb" && o.externalSku === null).length
+  if (wbNoChrtId > 0) counters.wbNoChrtId = wbNoChrtId
+
+  // ── Фиксация пула и запись ──
+  const wbActual = new Map([...aggregateStockByBarcode(wb.stocks)].map(([barcode, a]) => [barcode, a.quantity]))
+  const itemsAfter = (results: ReadonlyMap<string, WbWriteResult>) =>
+    wbSelf ? applyWbWriteOutcomes(result.items, state.items, gate.accepted, wbActual, results, nowIso) : result.items
+  // До сети: уходящие на WB позиции — «итог неизвестен». Позиции без chrtId в сеть не уйдут.
+  const pending = new Map<string, WbWriteResult>()
+  if (modes.wb === "apply") for (const o of ops) if (o.channel === "wb" && o.externalSku !== null) pending.set(o.barcode, "unknown")
+  await savePoolRun(db, { runId, items: itemsAfter(pending), events: result.events })
+
+  const outcomes = await executeWrites(ops, {
+    globalMode: deps.globalMode,
+    channelModes: modes,
+    send: withWbKeyCheck(deps.send ?? noSender),
+    record: drizzleWriteStore(db, runId, channels),
+  })
+
+  if (wbSelf) {
+    const results = new Map<string, WbWriteResult>()
+    for (const o of outcomes) {
+      if (o.channel !== "wb" || o.mode !== "apply") continue
+      results.set(o.barcode, o.applied ? "applied" : o.uncertain ? "unknown" : "failed")
+    }
+    await savePoolRun(db, { runId, items: itemsAfter(results), events: [] })
+    counters.wbWriteUnknown = [...results.values()].filter((r) => r === "unknown").length
+  }
+
+  if (configured.wb !== "off") counters.wbPlanned = outcomes.filter((o) => o.channel === "wb").length
   for (const c of MIRRORS) counters[`${c}Planned`] = outcomes.filter((o) => o.channel === c).length
   if (siteSnap) counters[`${SITE}Planned`] = outcomes.filter((o) => o.channel === SITE).length
+  for (const c of CHANNELS) {
+    const applied = outcomes.filter((o) => o.channel === c && o.applied).length
+    if (applied > 0) counters[`${c}Applied`] = applied
+  }
 
-  const problems: string[] = []
-  if (siteAborted) problems.push(siteAborted)
-  const failed = outcomes.filter((o) => o.error !== null)
-  if (failed.length > 0) {
-    counters.writeErrors = failed.length
-    const shown = failed.slice(0, MAX_WRITE_ERRORS_SHOWN).map((o) => `${o.channel} ${o.barcode}: ${o.error}`)
-    const rest = failed.length > shown.length ? `; … ещё ${failed.length - shown.length}` : ""
+  const failedOutcomes = outcomes.filter((o) => o.error !== null)
+  if (failedOutcomes.length > 0) {
+    counters.writeErrors = failedOutcomes.length
+    const shown = failedOutcomes.slice(0, MAX_WRITE_ERRORS_SHOWN).map((o) => `${o.channel} ${o.barcode}: ${o.error}`)
+    const rest = failedOutcomes.length > shown.length ? `; … ещё ${failedOutcomes.length - shown.length}` : ""
     problems.push(`ошибки записи: ${shown.join("; ")}${rest}`)
   }
   if (problems.length > 0) return { status: "partial", counters, error: problems.join("; ") }

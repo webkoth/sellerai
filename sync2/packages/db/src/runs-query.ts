@@ -21,6 +21,20 @@ export async function lastCounter(db: Db, job: string, key: string): Promise<num
   return typeof v === "number" ? v : null
 }
 
+/**
+ * Счётчики последнего завершённого (ok/partial) запуска джобы; ни одного — null. pool (этап 1.4)
+ * читает из последнего ingest сбои заказов, отклонённый каталог и источник витрины сайта.
+ */
+export async function lastRunCounters(db: Db, job: string): Promise<Record<string, unknown> | null> {
+  const [row] = await db
+    .select({ counters: runs.counters })
+    .from(runs)
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial"])))
+    .orderBy(desc(runs.startedAt))
+    .limit(1)
+  return (row?.counters as Record<string, unknown> | undefined) ?? null
+}
+
 /** Статус последнего завершённого (ok/partial/failed) запуска джобы; ни одного — null. */
 export async function lastRunStatus(db: Db, job: string): Promise<"ok" | "partial" | "failed" | null> {
   const [row] = await db

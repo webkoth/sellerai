@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { loadChannels } from "./channels"
 import { seedChannels } from "./channels-seed"
 import { drizzleRunStore } from "./run-store"
-import { countFailedRunsSince, countStuckRunsSince, lastRunWithCounterAt, lastRunStatus, plannedWritesSince, sameStatusStreak } from "./runs-query"
+import { countFailedRunsSince, countStuckRunsSince, lastRunCounters, lastRunWithCounterAt, lastRunStatus, plannedWritesSince, sameStatusStreak } from "./runs-query"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 import { drizzleWriteStore } from "./writes-store"
 
@@ -114,6 +114,15 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     await run("pool", "c4", "2026-09-27T10:30:00.000Z", "failed", { events: 1 })
     await run("pool", "c5", "2026-09-27T11:45:00.000Z", "running")
     expect(await lastRunWithCounterAt(h.db, "pool", "events")).toBe("2026-09-27T10:10:00.000Z")
+  })
+
+  it("счётчики последнего завершённого (ok/partial) прогона джобы; failed и running пропускаются; ни одного — null", async () => {
+    expect(await lastRunCounters(h.db, "counters-job")).toBeNull()
+    await run("counters-job", "d1", "2026-09-20T10:00:00.000Z", "ok", { siteSourcePool: 1 })
+    await run("counters-job", "d2", "2026-09-20T10:05:00.000Z", "partial", { ozonOrdersFailed: 1 })
+    await run("counters-job", "d3", "2026-09-20T10:10:00.000Z", "failed", { catalogRejected: 1 })
+    await run("counters-job", "d4", "2026-09-20T10:15:00.000Z", "running") // до окна зависших (27.09) — не мешает их счёту
+    expect(await lastRunCounters(h.db, "counters-job")).toEqual({ ozonOrdersFailed: 1 })
   })
 
   it("зависшие прогоны: running старше порога в окне; свежий running и закрытые — нет", async () => {
