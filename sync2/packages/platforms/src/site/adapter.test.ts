@@ -31,6 +31,8 @@ describe("createSiteAdapter", () => {
     expect(url).toBe("https://kotelnikovartifact.ru/api/internal/orders?since=2026-09-01T00%3A00%3A00.000Z")
     expect(init?.method).toBe("GET")
     expect((init?.headers as Record<string, string>).Authorization).toBe(`Bearer ${config.token}`)
+    // Bearer не должен уйти за переадресацией на другой хост: 30x — ошибка, а не переход.
+    expect(init?.redirect).toBe("manual")
   })
 
   it("неполный список заказов (truncated) — ошибка, а не молча урезанные заказы", async () => {

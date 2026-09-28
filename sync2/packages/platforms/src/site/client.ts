@@ -57,16 +57,18 @@ export const SITE_PUT_MAX_ITEMS = 5000
 
 /**
  * Без `authHeader` requestJson кладёт токен голым в `Authorization` — префикс
- * `Bearer` добавляется в значение, как у KIT (../kit/client.ts).
+ * `Bearer` добавляется в значение, как у KIT (../kit/client.ts). Переадресация
+ * не выполняется (`redirect: "manual"`): 30x — ошибка с кодом, а не переход, и
+ * Bearer не уйдёт на хост из заголовка Location.
  */
 function siteAuth(credentials: SiteCredentials) {
-  return { token: `Bearer ${credentials.token}`, authHeader: "Authorization" }
+  return { token: `Bearer ${credentials.token}`, authHeader: "Authorization", redirect: "manual" as const }
 }
 
 export function siteRequest<T = unknown>(
   credentials: SiteCredentials,
   path: string,
-  options: Omit<RequestOptions, "token" | "authHeader"> = {},
+  options: Omit<RequestOptions, "token" | "authHeader" | "redirect"> = {},
 ): Promise<T> {
   return requestJson<T>("site", `${credentials.baseUrl}${path}`, { ...siteAuth(credentials), ...options })
 }

@@ -1,3 +1,5 @@
+import { createServer } from "node:http"
+import type { AddressInfo } from "node:net"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { PlatformApiError, RateLimitError } from "./errors"
 import { requestJson, requestJsonOrNull } from "./http"
@@ -333,5 +335,36 @@ describe("requestJson", () => {
     vi.stubGlobal("fetch", fetchMock)
     await expect(requestJson("wb", "https://example.test", { token: "t", retryDelaysMs: [0] })).rejects.toThrow(SyntaxError)
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("requestJson — redirect", () => {
+  it("по умолчанию режим переадресации не задаётся — поведение fetch прежнее", async () => {
+    const fetchMock = vi.fn(async (_url: string, _init?: RequestInit) => response(200, {}))
+    vi.stubGlobal("fetch", fetchMock)
+    await requestJson("wb", "https://example.test", { token: "t" })
+    expect(fetchMock.mock.calls[0]![1]).not.toHaveProperty("redirect")
+  })
+
+  it("redirect manual: 30x не выполняется — токен не уходит на другой адрес, ошибка с кодом без повторов", async () => {
+    // Настоящий сервер: поведение переадресации — свойство fetch (undici), заглушкой его не проверить.
+    // Заглушка fetch из прошлых тестов снимается: afterEach этого файла снимает моки, а не глобальные подмены.
+    vi.unstubAllGlobals()
+    const hits: string[] = []
+    const server = createServer((req, res) => {
+      hits.push(`${req.url} ${req.headers.authorization ?? ""}`)
+      if (req.url === "/a") res.writeHead(302, { location: "/b" }).end()
+      else res.end("{}")
+    })
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve))
+    try {
+      const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/a`
+      const err = await requestJson("site", url, { token: "Bearer x", redirect: "manual", retryDelaysMs: [0, 0] }).catch((e: unknown) => e)
+      expect(err).toBeInstanceOf(PlatformApiError)
+      expect(err).toMatchObject({ platform: "site", status: 302 })
+      expect(hits).toEqual(["/a Bearer x"])
+    } finally {
+      await new Promise((resolve) => server.close(resolve))
+    }
   })
 })
