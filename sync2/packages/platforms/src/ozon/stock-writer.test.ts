@@ -53,4 +53,32 @@ describe("writeOzonStocks", () => {
     const r = await writeOzonStocks(cfg, [op("A", "JW-A", 2)])
     expect(r[0]).toMatchObject({ ok: false, uncertain: true })
   })
+
+  it("TOO_MANY_REQUESTS после повтора, который мог дойти (5xx на первой попытке), — итог неизвестен", async () => {
+    let calls = 0
+    stub(() => {
+      calls++
+      if (calls === 1) return json({ message: "gateway" }, 502)
+      return json({ result: [{ offer_id: "JW-A", updated: false, errors: [{ code: "TOO_MANY_REQUESTS", message: "wait" }] }] })
+    })
+    const r = await writeOzonStocks(cfg, [op("A", "JW-A", 2)])
+    expect(r[0]).toMatchObject({ ok: false, uncertain: true, error: expect.stringContaining("TOO_MANY_REQUESTS") })
+  })
+
+  it("по умолчанию — короткие повторы записи (2 с), а не минутные паузы чтения", async () => {
+    vi.useFakeTimers()
+    try {
+      let calls = 0
+      stub((b) => {
+        calls++
+        return calls === 1 ? json({ message: "gateway" }, 502) : updated(b)
+      })
+      const { retryDelaysMs: _omit, ...noRetry } = cfg
+      const promise = writeOzonStocks(noRetry, [op("A", "JW-A", 2)])
+      await vi.advanceTimersByTimeAsync(2_000)
+      await expect(promise).resolves.toEqual([expect.objectContaining({ ok: true })])
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

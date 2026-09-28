@@ -2,6 +2,14 @@
 import { PlatformApiError, RateLimitError } from "./errors"
 import type { SendResult, WriteOp } from "./writer"
 
+/**
+ * Повторы и таймаут запроса записи остатка (WB, Ozon, ЯМ): короткие. Пока запрос висит, на площадке
+ * может пройти продажа, и наше абсолютное число, принятое через минуту, затёрло бы её; длинные паузы
+ * чтения (http.ts, до минуты) здесь опаснее отказа — отказ повторит следующий тик.
+ */
+export const WRITE_RETRY_DELAYS_MS: readonly number[] = [2_000, 5_000]
+export const WRITE_TIMEOUT_MS = 20_000
+
 /** Пачки по size, порядок сохраняется. */
 export function chunk<T>(items: readonly T[], size: number): T[][] {
   if (!Number.isInteger(size) || size <= 0) throw new RangeError(`размер пачки: ${size}`)

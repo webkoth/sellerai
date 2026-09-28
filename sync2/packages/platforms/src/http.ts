@@ -123,6 +123,25 @@ export async function requestJsonOrNull<T = unknown>(
 }
 
 /**
+ * То же, что requestJson, плюс признак «какая-то из попыток могла дойти» (сеть, таймаут, 5xx до
+ * успешного повтора) — для записи (этап 1.4): отказ позиции в успешном ответе повтора (Ozon
+ * TOO_MANY_REQUESTS — пара уже записана первой попыткой) тогда не «точно не применилось».
+ */
+export async function requestJsonWithMeta<T = unknown>(
+  platform: ApiSource,
+  url: string,
+  options: RequestOptions,
+): Promise<{ body: T; mayHaveBeenDelivered: boolean }> {
+  const { status, body, mayHaveBeenDelivered } = await request<T>(platform, url, options)
+  if (body === null) {
+    const error = new PlatformApiError(platform, status, `${platform}: пустой ответ ${status} — ожидался JSON`, null)
+    error.mayHaveBeenDelivered = mayHaveBeenDelivered
+    throw error
+  }
+  return { body, mayHaveBeenDelivered }
+}
+
+/**
  * Запрос к API площадки, который обязан вернуть JSON. Пустой ответ (204,
  * пустое тело, литерал null) — PlatformApiError с кодом ответа, а не null,
  * который вызывающий разобрал бы как объект и упал бы на чтении поля.
@@ -148,7 +167,7 @@ async function request<T>(
   platform: ApiSource,
   url: string,
   options: RequestOptions,
-): Promise<{ status: number; body: T | null }> {
+): Promise<{ status: number; body: T | null; mayHaveBeenDelivered: boolean }> {
   const delays = options.retryDelaysMs ?? DEFAULT_RETRY_DELAYS_MS
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS
   // Была ли попытка, после которой площадка могла принять тело (сеть, таймаут, 5xx). Уходит в
@@ -200,7 +219,7 @@ async function request<T>(
     // SyntaxError. Новое финансовое API WB именно так сообщает конец
     // пагинации, то есть без этой ветки клиент падал бы на последней
     // странице каждого отчёта.
-    if (response.status === 204) return { status: 204, body: null }
+    if (response.status === 204) return { status: 204, body: null, mayHaveBeenDelivered }
     if (response.ok) {
       // Тело читается через .text(), а не response.json(), и в отдельном try:
       // любое отклонение чтения — сетевой сбой, как и обрыв самого fetch.
@@ -221,7 +240,7 @@ async function request<T>(
         const message = error instanceof Error ? error.message : String(error)
         throw fail(new PlatformApiError(platform, 0, `сеть: ${message}`, null))
       }
-      return { status: response.status, body: text.length > 0 ? (JSON.parse(text) as T | null) : null }
+      return { status: response.status, body: text.length > 0 ? (JSON.parse(text) as T | null) : null, mayHaveBeenDelivered }
     }
 
     // Число попыток всегда ограничено своим расписанием (delays.length) — это

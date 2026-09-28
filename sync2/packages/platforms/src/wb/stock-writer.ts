@@ -3,20 +3,13 @@
 import { errorText } from "@sync2/shared"
 import { PlatformApiError, RateLimitError } from "../errors"
 import { requestJsonOrNull } from "../http"
-import { chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
+import { WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS, chunk, failed, isUncertain, splitByKey, succeeded } from "../stock-write"
 import type { SendResult, WriteOp } from "../writer"
 import { fetchFbsStocks } from "./client"
 
 const MARKETPLACE = "https://marketplace-api.wildberries.ru"
 /** maxItems тела PUT /api/v3/stocks/{warehouseId}. */
 export const WB_STOCKS_PUT_MAX = 1000
-/**
- * Короткие повторы записи: пока запрос висит, на WB может пройти продажа, и наше абсолютное число,
- * принятое через минуту, затёрло бы её. Длинные паузы (http.ts, до минуты) здесь опаснее отказа —
- * отказ повторит следующий тик.
- */
-const WB_WRITE_RETRY_DELAYS_MS = [2_000, 5_000]
-const WB_WRITE_TIMEOUT_MS = 20_000
 /**
  * Пауза перед проверочным чтением после записи: WB применяет остаток не мгновенно, и чтение
  * сразу после 204 могло бы не увидеть только что записанное число (итог «неизвестно» без причины).
@@ -149,8 +142,9 @@ async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[], retryWitho
       token: cfg.token,
       method: "PUT",
       body: { stocks: batch.map((x) => ({ chrtId: x.chrtId, amount: x.op.after })) },
-      retryDelaysMs: cfg.retryDelaysMs ?? WB_WRITE_RETRY_DELAYS_MS,
-      timeoutMs: WB_WRITE_TIMEOUT_MS,
+      // Короткие повторы записи (stock-write.ts).
+      retryDelaysMs: cfg.retryDelaysMs ?? [...WRITE_RETRY_DELAYS_MS],
+      timeoutMs: WRITE_TIMEOUT_MS,
     })
   } catch (e) {
     putError = e
