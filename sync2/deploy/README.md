@@ -77,6 +77,36 @@ ssh root@147.45.171.40 'cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin
 **Выкладка кода** — обычная (`npm run deploy`, миграция 0003: `products.wb_chrt_id`, `writes.uncertain`,
 `writes.external_sku`). Без миграции новый код не пишет журнал `writes` и в dry-run.
 
+**Проверка chrtId после выкладки** — ручной тик под блокировкой крона и сверка с текущим каталогом WB (штрихкоды,
+обновлённые последним `ingest`; `products` хранит и снятые с WB карточки, поэтому не `count(products)`):
+
+```bash
+ssh root@147.45.171.40 'bash -s' <<'REMOTE'
+set -euo pipefail
+cd /opt/sync2
+T="node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts"
+flock /tmp/sync2.lock $T tick
+$T runs 2
+set -a; . ./.env; set +a
+psql "$DATABASE_URL" -X -A -F " | " <<'SQL'
+with last as (
+  select started_at, (counters->>'wbCatalog')::int as wb_catalog
+  from runs where job = 'ingest' and status in ('ok', 'partial') and counters->>'wbCatalog' is not null
+  order by started_at desc limit 1
+)
+select last.wb_catalog,
+       count(p.*) filter (where p.updated_at >= last.started_at) as in_catalog,
+       count(p.*) filter (where p.updated_at >= last.started_at and p.wb_chrt_id is not null) as with_chrt
+from last left join products p on true
+group by last.wb_catalog;
+SQL
+REMOTE
+```
+
+Ожидается `with_chrt = in_catalog = wb_catalog` (дубли штрихкода в каталоге схлопываются — `in_catalog` может быть
+чуть меньше `wb_catalog`). `with_chrt < in_catalog` — разобрать до шага B: запись WB этих штрихкодов получит отказ
+«нет chrtId размера» (`wbNoChrtId`).
+
 **`.env`** — склады записи (без них запись WB/Ozon невозможна, чтение работает):
 
 ```bash
@@ -93,20 +123,32 @@ REMOTE
 На шаге A — `SYNC_WRITE_MODE=apply` (площадки WB/Ozon/ЯМ/KIT до шага B защищены своим `dry-run` в `channels`).
 
 **Крон** — блок `sync2` заменяется целиком (tick раз в 5 минут, `compare-v1`, `drift`, `prune`); WB — в `dry-run`
-(план WB в журнале для предпросмотра шага B):
+(план WB в журнале для предпросмотра шага B). Блок в шаблоне `deploy/crontab.sync2.txt` обёрнут маркерами
+`# >>> sync2` / `# <<< sync2` — замена идемпотентна: `sed` удаляет прежний блок между маркерами. На VPS сейчас блок
+1.3b БЕЗ маркеров — его строки удаляет `grep -v` по старым шаблонам (все строки с `/opt/sync2` и три комментария
+1.3b); строк старого синка (`/opt/sellerai-sync`) это не касается. Повторный запуск той же команды ничего не
+дублирует:
 
 ```bash
 scp deploy/crontab.sync2.txt root@147.45.171.40:/opt/sync2/deploy/crontab.sync2.txt
 ssh root@147.45.171.40 'bash -s' <<'REMOTE'
 set -euo pipefail
 crontab -l > /opt/sync2/logs/crontab.before-1-4.txt
-crontab -l | grep -v -e '/opt/sync2' -e '^# sync2 (этап 1.3b' -e '^# timeout 9m: зависший' -e '^# сверка со старым синком — раз в сутки' > /tmp/cron.1-4
-cat /opt/sync2/deploy/crontab.sync2.txt >> /tmp/cron.1-4
+{
+  crontab -l \
+    | sed '/^# >>> sync2/,/^# <<< sync2/d' \
+    | grep -v -e '/opt/sync2' -e '^# sync2 (этап 1.3b' -e '^# timeout 9m: зависший прогон не держит flock и не глушит' -e '^# сверка со старым синком — раз в сутки'
+  cat /opt/sync2/deploy/crontab.sync2.txt
+} > /tmp/cron.1-4
 crontab /tmp/cron.1-4 && rm /tmp/cron.1-4
 crontab -l | grep -n -e 'sync2' -e 'orchestrator.js'
+test "$(crontab -l | grep -c '^# >>> sync2')" = 1
 cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts write-mode wb dry-run
 REMOTE
 ```
+
+После шага B `compare-v1` снимается и с крона, и из шаблона `deploy/crontab.sync2.txt` — иначе следующая замена блока
+вернёт его.
 
 Откат крона: `ssh root@147.45.171.40 'crontab /opt/sync2/logs/crontab.before-1-4.txt'`.
 
@@ -167,7 +209,9 @@ ssh root@147.45.171.40 'cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin
 
 Окно переключения — одно «да» на весь скрипт, сразу после тика `sync2`. Строки старого синка `orders --apply`,
 `stocks --apply` и `reconcile` (решение владельца 28.09, п. 2) закомментированы префиксом `#OFF-1.4`; `finance`
-остаётся. Не дошли до переключения — крон старого синка возвращается сам (`trap`):
+остаётся. WB переключается в `apply` ПОСЛЕДНИМ — после Ozon, ЯМ, KIT. Любой сбой до конца переключения (`trap`):
+сначала WB, Ozon, ЯМ, KIT возвращаются в `dry-run`, и только если это удалось — крон старого синка; иначе крон
+старого синка НЕ возвращается (два писателя WB хуже, чем ни одного) и печатается, что делать руками:
 
 ```bash
 ssh root@147.45.171.40 'bash -s' <<'REMOTE'
@@ -177,20 +221,38 @@ T="node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts"
 exec 9>/tmp/sync2.lock
 flock -w 600 9                                   # тики sync2 стоят до конца скрипта
 crontab -l > /opt/sync2/logs/crontab.before-1-4B.txt
-trap 'crontab /opt/sync2/logs/crontab.before-1-4B.txt; echo "СТОП: крон старого синка возвращён, sync2 в dry-run"' ERR
+rollback_b() {
+  set +e
+  local ok=1
+  for c in wb ozon ym kit; do
+    $T write-mode "$c" dry-run > /dev/null || { ok=0; echo "!!! write-mode $c dry-run не прошёл"; }
+  done
+  if [ "$ok" = 1 ]; then
+    crontab /opt/sync2/logs/crontab.before-1-4B.txt && echo "СТОП: sync2 WB/Ozon/ЯМ/KIT — dry-run, крон старого синка возвращён"
+  else
+    echo "СТОП: режимы sync2 не вернулись в dry-run — крон старого синка НЕ возвращён (иначе два писателя WB)."
+    echo "Руками: write-mode wb|ozon|ym|kit dry-run, затем crontab /opt/sync2/logs/crontab.before-1-4B.txt"
+  fi
+  exit 1                                         # set +e выше действует и после trap — без exit скрипт пошёл бы дальше
+}
+trap rollback_b ERR
 crontab -l | sed -E 's@^([^#].*orchestrator\.js (orders --apply|stocks --apply|reconcile).*)$@#OFF-1.4 \1@' | crontab -
 crontab -l | grep -n 'orchestrator.js'
 # Последний прогон заказов старого синка: заказы, которые он увидел, но ещё не записал на WB, — на WB.
 flock -w 120 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js orders --apply 2>&1 | tail -3
 $T tick
 $T check-wb                                      # код ≠ 0 — стоп: снимок WB расходится с пулом
-for c in wb ozon ym kit; do $T write-mode "$c" apply --confirm; done
+for c in ozon ym kit wb; do $T write-mode "$c" apply --confirm; done   # WB — последним
 trap - ERR
 $T tick                                          # первый боевой тик: WB в режиме self
 $T runs 2
 $T plan
 REMOTE
 ```
+
+Ожидается: `grep orchestrator.js` — `#OFF-1.4` у `orders --apply`, `stocks --apply` и `reconcile`, `finance` без
+изменений; `check-wb` — «расходится 0», код 0; `write-mode` ×4 печатает план и таблицу режимов; последний тик —
+`wbSelf: 1`, без `writeErrors`.
 
 Затем снять `compare-v1` с крона (леджер старого синка больше не обновляется):
 
@@ -238,10 +300,14 @@ cd /opt/sync2
 T="node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts"
 exec 9>/tmp/sync2.lock
 flock -w 600 9
-$T tick                                                   # последний тик с записью
+# последний тик с записью; не прошёл (сбой WB) — откат продолжается, заказы последних 10 минут сверить с WB руками
+$T tick || echo "!!! тик не прошёл — заказы последних 10 мин сверить с WB руками (pool_events)"
+# пересев не прошёл — стоп: sync2 остаётся единственным писателем (крон старого синка не трогали)
 flock -w 120 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/scripts/ledger-reseed-from-wb.mjs --apply | tail -3
 for c in wb ozon ym kit; do $T write-mode "$c" dry-run; done
-flock -w 120 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply | tail -5
+# первый stocks старого синка не прошёл (лимит, сеть) — не стоп: крон ниже вернётся и повторит его через 30 мин
+flock -w 120 /tmp/sai-ledger.lock /usr/bin/node /opt/sellerai-sync/sync/dist/orchestrator.js stocks --apply | tail -5 \
+  || echo "!!! stocks --apply не прошёл — крон старого синка повторит"
 crontab -l | sed -E 's@^#OFF-1\.4 @@' | crontab -          # orders, stocks и reconcile старого синка
 grep -q 'cli.ts compare-v1' <(crontab -l) || (crontab -l; echo '5 6 * * * cd /opt/sync2 && timeout 5m node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts compare-v1 >> logs/compare.log 2>&1') | crontab -
 crontab -l | grep -n -e 'orchestrator.js' -e 'compare-v1'
@@ -251,6 +317,17 @@ REMOTE
 Пересев — без `--no-wb-orders`: иначе заказы KIT не помечаются учтёнными и первый `stocks` вычтет их повторно.
 WB возвращается в `external` сам (действующий режим WB — `dry-run`). Владельцу: «продажи на сайте снова снимаем
 с WB руками».
+
+**Откат кода 1.4** — после вариантов B и A (площадки в `dry-run`/`off`, витрина на `wb`): прежний `main` →
+обычная выкладка. Схема 0003 совместима со старым кодом: новые колонки допускают null или имеют default
+(`writes.uncertain`, `writes.external_sku`, `products.wb_chrt_id`), старый код их не пишет и не читает; миграцию не
+откатывать. Крон — `crontab /opt/sync2/logs/crontab.before-1-4.txt` (тик раз в 10 минут, без `drift`/`prune`).
+
+```bash
+cd /Users/minas/projects/sai_kotelnikovartifact && git log --oneline -1 <коммит main до слияния 1.4>
+git worktree add /tmp/sync2-rollback <коммит main до слияния 1.4> && cd /tmp/sync2-rollback/sync2 && npx -y npm@11.16.0 ci && npm run deploy
+ssh root@147.45.171.40 'crontab /opt/sync2/logs/crontab.before-1-4.txt && crontab -l | grep -n sync2'
+```
 
 **Вариант «полный»** — вариант B, затем
 `ssh root@147.45.171.40 'sed -i "s/^SYNC_WRITE_MODE=.*/SYNC_WRITE_MODE=dry-run/" /opt/sync2/.env'`, затем вариант A.
