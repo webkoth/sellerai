@@ -25,7 +25,7 @@ import {
   type StockChange,
   type WbWriteResult,
 } from "@sync2/domain"
-import { effectiveMode, executeWrites, failed, type SendResult, type Sender, type WriteOp } from "@sync2/platforms"
+import { WriteJournalError, effectiveMode, executeWrites, failed, type SendResult, type Sender, type WriteOp, type WriteOutcome } from "@sync2/platforms"
 import { CHANNELS, errorText, type Channel, type NormalizedStock, type WriteMode } from "@sync2/shared"
 import { ORDERS_WINDOW_DAYS } from "./ingest"
 
@@ -51,14 +51,17 @@ const SITE = "site" as const
  */
 const ORDER_CHANNELS = ["ozon", "ym", "kit", "site"] as const
 const LABEL: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
+/** Порядок записи: WB первым — окно между перечитыванием остатка WB и записью короче, фиксация WB раньше. */
+const WRITE_ORDER: readonly Channel[] = ["wb", "ozon", "ym", "kit", "site"]
 
 /** Текст отказа WB-позиции без chrtId в каталоге — до сети, в журнал writes. */
 export const WB_NO_CHRT_ID = "WB: нет chrtId размера в каталоге (products.wb_chrt_id) — запись невозможна, проверьте карточку WB"
 
-/** Отправитель по умолчанию: без переданного отправителя любая попытка записи — ошибка позиции в журнале. */
-export const noSender: Sender = async () => {
-  throw new Error("отправитель не передан — запись на площадки невозможна")
-}
+/**
+ * Отправитель по умолчанию: без переданного отправителя любая попытка записи — отказ позиции в журнале.
+ * Именно отказ, а не «неизвестно»: в сеть ничего не уходило.
+ */
+export const noSender: Sender = async (_channel, ops) => ops.map((o) => failed(o, "отправитель не передан — запись на площадки невозможна"))
 
 export interface PoolJobResult {
   status: "ok" | "partial"
@@ -281,21 +284,37 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   if (modes.wb === "apply") for (const o of ops) if (o.channel === "wb" && o.externalSku !== null) pending.set(o.barcode, "unknown")
   await savePoolRun(db, { runId, items: itemsAfter(pending), events: result.events })
 
-  const outcomes = await executeWrites(ops, {
-    globalMode: deps.globalMode,
-    channelModes: modes,
-    send: withWbKeyCheck(deps.send ?? noSender),
-    record: drizzleWriteStore(db, runId, channels),
-  })
-
-  if (wbSelf) {
-    const results = new Map<string, WbWriteResult>()
-    for (const o of outcomes) {
-      if (o.channel !== "wb" || o.mode !== "apply") continue
-      results.set(o.barcode, o.applied ? "applied" : o.uncertain ? "unknown" : "failed")
+  // Запись — площадка за площадкой, WB первым, каждая своим executeWrites: журнал площадки пишется
+  // сразу после её записи, а итоги WB фиксируются в пуле до зеркал — зависший или упавший запрос
+  // зеркала и сбой журнала не задерживают и не теряют фиксацию WB (ревью ядра 1.4, I2).
+  const send = withWbKeyCheck(deps.send ?? noSender)
+  const record = drizzleWriteStore(db, runId, channels)
+  const outcomes: WriteOutcome[] = []
+  if (wbSelf) counters.wbWriteUnknown = 0
+  for (const c of WRITE_ORDER) {
+    const channelOps = ops.filter((o) => o.channel === c)
+    if (channelOps.length === 0) continue
+    let channelOutcomes: WriteOutcome[]
+    try {
+      channelOutcomes = await executeWrites(channelOps, { globalMode: deps.globalMode, channelModes: modes, send, record })
+    } catch (e: unknown) {
+      if (!(e instanceof WriteJournalError)) throw e
+      // На площадке изменения уже могли пройти — итоги едут вместе с ошибкой: по ним фиксируем пул,
+      // а строки журнала этой площадки потеряны — partial с текстом.
+      channelOutcomes = e.outcomes
+      counters.journalErrors = (counters.journalErrors ?? 0) + 1
+      problems.push(`журнал записей ${LABEL[c]} не сохранён: ${errorText(e.cause)}`)
     }
-    await savePoolRun(db, { runId, items: itemsAfter(results), events: [] })
-    counters.wbWriteUnknown = [...results.values()].filter((r) => r === "unknown").length
+    outcomes.push(...channelOutcomes)
+    if (c === "wb" && wbSelf) {
+      const results = new Map<string, WbWriteResult>()
+      for (const o of channelOutcomes) {
+        if (o.mode !== "apply") continue
+        results.set(o.barcode, o.applied ? "applied" : o.uncertain ? "unknown" : "failed")
+      }
+      await savePoolRun(db, { runId, items: itemsAfter(results), events: [] })
+      counters.wbWriteUnknown = [...results.values()].filter((r) => r === "unknown").length
+    }
   }
 
   if (configured.wb !== "off") counters.wbPlanned = outcomes.filter((o) => o.channel === "wb").length
