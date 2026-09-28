@@ -37,6 +37,14 @@ export const channels = pgTable(
     writeMode: text("write_mode").notNull().default("off"),
     /** Склад площадки, куда пишется остаток: id склада WB/Ozon/ЯМ, склад KIT. */
     warehouseRef: text("warehouse_ref"),
+    /**
+     * Базовая точка заказов площадки (этап 1.3c): прогон ingest, в котором площадка
+     * впервые отдала заказы. Заказы, впервые записанные этим прогоном, пул принимает
+     * холодным стартом по площадке (delta 0): площадка подключилась к живому пулу, и её
+     * прошлые заказы уже сняты с WB. null — площадка прошла общий холодный старт пула
+     * (живые до 1.3c Ozon/ЯМ/KIT) или ещё ни разу не читалась.
+     */
+    ordersBaselineRunId: uuid("orders_baseline_run_id").references(() => runs.runId),
     createdAt: ts("created_at").notNull().defaultNow(),
   },
   (t) => [
@@ -100,6 +108,8 @@ export const ordersRaw = pgTable(
     occurredAt: ts("occurred_at").notNull(),
     raw: jsonb("raw").notNull(),
     firstSeenAt: ts("first_seen_at").notNull().defaultNow(),
+    /** Прогон ingest, впервые записавший строку; не обновляется. null — строка старше 1.3c. */
+    firstRunId: uuid("first_run_id").references(() => runs.runId),
     updatedAt: ts("updated_at").notNull().defaultNow(),
   },
   (t) => [

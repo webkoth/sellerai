@@ -266,3 +266,53 @@ describe("reconcilePool — сигнал WB", () => {
     expect(result.items[0]?.base).toBe(3)
   })
 })
+
+describe("reconcilePool — холодный старт по площадке (этап 1.3c)", () => {
+  it("заказ базового прогона новой площадки — учтён без вычитания: delta 0, coldStart channel, ожидание не трогается", () => {
+    const r = reconcilePool(input({ items: [item()], orders: [order({ quantity: 2, channelColdStart: true })] }))
+    expect(r.items).toEqual([item()])
+    expect(r.events).toEqual([
+      {
+        barcode: "111",
+        kind: "order",
+        delta: 0,
+        baseBefore: 3,
+        baseAfter: 3,
+        channelId: OZON,
+        orderId: 1,
+        snapshotAt: null,
+        occurredAt: NOW,
+        detail: { coldStart: "channel" },
+      },
+    ])
+  })
+
+  it("уже учтённый заказ базового прогона — ни события, ни изменения", () => {
+    const r = reconcilePool(input({ items: [item()], orders: [order({ channelColdStart: true })], applied: new Set([1]) }))
+    expect(r.events).toEqual([])
+    expect(r.items).toEqual([item()])
+  })
+
+  it("отменённый до отправки заказ базового прогона не учитывается вовсе — и отмена его не вернёт", () => {
+    const r = reconcilePool(input({ items: [item()], orders: [order({ cancelled: true, channelColdStart: true })] }))
+    expect(r.events).toEqual([])
+    expect(r.items).toEqual([item()])
+  })
+
+  it("отмена учтённого холодным стартом заказа возвращает единицу, как у общего холодного старта", () => {
+    const r = reconcilePool(input({ items: [item()], orders: [order({ cancelled: true, channelColdStart: true })], applied: new Set([1]) }))
+    expect(r.events.map((e) => [e.kind, e.delta])).toEqual([["cancel", 1]])
+    expect(r.items[0]?.base).toBe(4)
+  })
+
+  it("обычный заказ рядом — списывается как прежде", () => {
+    const r = reconcilePool(
+      input({ items: [item()], orders: [order({ channelColdStart: true }), order({ orderId: 2, channelId: YM, quantity: 1 })] }),
+    )
+    expect(r.events.map((e) => [e.orderId, e.delta])).toEqual([
+      [1, 0],
+      [2, -1],
+    ])
+    expect(r.items[0]?.base).toBe(2)
+  })
+})

@@ -10,6 +10,8 @@ export interface OrderRowForPool {
   quantity: number
   lifecycle: OrderLifecycle
   occurredAt: string
+  /** Впервые записан базовым прогоном своей площадки (channels.orders_baseline_run_id) — см. PoolOrder. */
+  channelColdStart?: boolean
 }
 
 export interface ToPoolOrdersResult {
@@ -46,6 +48,7 @@ export function toPoolOrders(rows: OrderRowForPool[], masterChannelId: number): 
       quantity: r.quantity,
       cancelled: r.lifecycle === "cancelled_before_ship",
       occurredAt: r.occurredAt,
+      ...(r.channelColdStart ? { channelColdStart: true } : {}),
     })
   }
   return { orders, skipped }
