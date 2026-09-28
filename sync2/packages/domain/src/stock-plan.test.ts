@@ -147,4 +147,13 @@ describe("planStockWrites", () => {
     )
     expect(r.changes.map((c) => `${c.channel}:${c.barcode}`)).toEqual(["kit:A", "kit:B", "ozon:B"])
   })
+
+  it("многоразмерная карточка (решение п. 18, вариант б): в оффер — остаток размера, чей штрихкод стоит в оффере, а не сумма", () => {
+    // Два размера одного артикула в пуле; на Ozon один оффер на артикул, его штрихкод — второго размера.
+    const items = [item("2047852179018", 2), item("2047852183152", 0)]
+    const r = planStockWrites(items, [{ channel: "ozon", stocks: [s("2047852183152", 1, { externalSku: "JW-NB-AGT-M-0073" })] }], { maxChanges: 120 })
+    expect(r.changes).toEqual([
+      { channel: "ozon", barcode: "2047852183152", before: 1, after: 0, orphan: false, externalSku: "JW-NB-AGT-M-0073" },
+    ])
+  })
 })

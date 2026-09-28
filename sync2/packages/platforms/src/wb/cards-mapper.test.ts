@@ -37,9 +37,37 @@ describe("mapCards на настоящем ответе", () => {
   it("штрихкоды не повторяются", () => {
     expect(new Set(cards.map((c) => c.barcode)).size).toBe(cards.length)
   })
+
+  it("chrtId размера есть у каждой строки — ключ записи остатка WB", () => {
+    for (const card of cards) expect(typeof card.chrtId).toBe("number")
+  })
 })
 
 describe("mapCards на придуманных данных — согласованность со спецификацией", () => {
+  it("chrtId размера — в каждую строку его штрихкодов; размер без chrtID — строки без поля", () => {
+    const cards = mapCards([
+      { nmID: 5, vendorCode: "R", title: "Р", subjectName: "Кольца", sizes: [{ chrtID: 440206878, skus: ["1", "2"] }, { skus: ["3"] }] },
+    ])
+    expect(cards.map((c) => [c.barcode, c.chrtId])).toEqual([
+      ["1", 440206878],
+      ["2", 440206878],
+      ["3", undefined],
+    ])
+  })
+
+  it("chrtID не целое положительное (0, отрицательное, дробное) — строки без поля: ключ записи не выдумываем", () => {
+    const cards = mapCards([
+      {
+        nmID: 6,
+        vendorCode: "S",
+        title: "С",
+        subjectName: null,
+        sizes: [{ chrtID: 0, skus: ["1"] }, { chrtID: -5, skus: ["2"] }, { chrtID: 1.5, skus: ["3"] }],
+      },
+    ])
+    expect(cards.map((c) => "chrtId" in c)).toEqual([false, false, false])
+  })
+
   it("карточка без размеров или без skus не даёт строк; пустой title заменяется артикулом", () => {
     const cards = mapCards([
       { nmID: 1, vendorCode: "A", title: "", subjectName: "Кулоны", sizes: [{ skus: ["111"] }] },

@@ -1,9 +1,10 @@
+import { CHANNELS, CHANNEL_LABELS } from "@sync2/shared"
 import type { RunOutcome } from "./run"
 
 type DoneStatus = RunOutcome["status"]
 
-/** Напоминание о затянувшемся не-ok — каждые 36 прогонов подряд (≈6 ч при тике раз в 10 минут). */
-export const REMIND_EVERY_RUNS = 36
+/** Напоминание о затянувшемся не-ok — каждые 72 прогона подряд (≈6 ч при тике раз в 5 минут, этап 1.4). */
+export const REMIND_EVERY_RUNS = 72
 
 /** Короткое описание исхода запуска для Telegram: текст ошибок площадок, иначе — счётчики. */
 export function describeOutcome(outcome: Pick<RunOutcome, "error" | "counters">): string {
@@ -39,4 +40,42 @@ export function decideNotification(input: {
     return `⚠️ sync2 ${job}: всё ещё ${cur.status} (${streak} прогонов подряд) — ${cur.detail}`
   }
   return null
+}
+
+/** Запись площадки не проходит столько прогонов pool подряд — предупреждение (≈15 мин при тике раз в 5 минут). */
+export const WRITE_FAIL_ALERT_RUNS = 3
+
+
+/** «3 тика», «5 тиков», «72 тика» — для текста уведомления. */
+function ticks(n: number): string {
+  const d10 = n % 10
+  const d100 = n % 100
+  if (d10 === 1 && d100 !== 11) return `${n} тик`
+  if (d10 >= 2 && d10 <= 4 && (d100 < 12 || d100 > 14)) return `${n} тика`
+  return `${n} тиков`
+}
+
+/**
+ * Уведомления «площадка X: запись не проходит N тиков подряд» по счётчикам прогона pool
+ * (`<площадка>WriteFailed`, серия `<площадка>WriteFailedRuns`, `<площадка>WriteRecoveredAfter`; ревью 3–6, I2).
+ * Статус pool сам этого не покажет: он уже partial по другой причине, и смены статуса нет. Серия дошла до
+ * WRITE_FAIL_ALERT_RUNS — предупреждение, дальше — напоминание каждые REMIND_EVERY_RUNS прогонов; запись
+ * прошла после серии от порога — «снова проходит». Серию и «снова проходит» pool считает только по
+ * прогонам с попыткой записи площадки: ранний выход (noFreshWb) их не трогает. Чистая функция.
+ */
+export function writeFailureAlerts(cur: Record<string, number>): string[] {
+  const out: string[] = []
+  for (const c of CHANNELS) {
+    const runsNow = cur[`${c}WriteFailedRuns`] ?? 0
+    if (runsNow === WRITE_FAIL_ALERT_RUNS || (runsNow > WRITE_FAIL_ALERT_RUNS && runsNow % REMIND_EVERY_RUNS === 0)) {
+      out.push(
+        `⚠️ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись не проходит ${ticks(runsNow)} подряд (ошибок в последнем прогоне: ${cur[`${c}WriteFailed`] ?? 0}); подробности — plan ${c}`,
+      )
+    }
+    const recovered = cur[`${c}WriteRecoveredAfter`] ?? 0
+    if (recovered >= WRITE_FAIL_ALERT_RUNS) {
+      out.push(`✅ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись снова проходит (серия ошибок была ${ticks(recovered)})`)
+    }
+  }
+  return out
 }

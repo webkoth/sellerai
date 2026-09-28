@@ -189,6 +189,18 @@ describe("mapOzonStocks — правила", () => {
     expect(stocks[0]?.quantity).toBe(0)
   })
 
+  it("склады FBS из warehouse_ids — в поле warehouse («fbs:<id,…>»), без них — «fbs»: по нему pool видит второй склад", () => {
+    const one = mapOzonStocks([stockItem({ stocks: [{ type: "fbs", present: 1, reserved: 0, warehouse_ids: [1020005023618600] }] })], barcodes, wbIndex)
+    expect(one.stocks[0]?.warehouse).toBe("fbs:1020005023618600")
+    const two = mapOzonStocks(
+      [stockItem({ stocks: [{ type: "fbs", present: 2, reserved: 0, warehouse_ids: [22, 1020005023618600, 22] }, { type: "fbo", present: 1, reserved: 0, warehouse_ids: [5] }] })],
+      barcodes,
+      wbIndex,
+    )
+    expect(two.stocks[0]?.warehouse).toBe("fbs:22,1020005023618600")
+    expect(mapOzonStocks([stockItem()], barcodes, wbIndex).stocks[0]?.warehouse).toBe("fbs")
+  })
+
   it("склады других типов в количество не входят", () => {
     const { stocks } = mapOzonStocks(
       [stockItem({ stocks: [{ type: "fbo", present: 5, reserved: 0 }, { type: "fbs", present: 1, reserved: 0 }] })],

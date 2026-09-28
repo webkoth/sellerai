@@ -96,6 +96,9 @@ export async function runIngest(deps: {
       counters[`${a.channel}Orders`] = r.written
       if (r.baselineSet) counters[`${a.channel}OrdersBaseline`] = 1
     } catch (e) {
+      // Только сигнал: запись остатков этот счётчик НЕ блокирует (решение владельца 28.09, п. 1) —
+      // pool пишет по последним известным заказам из базы; переход ingest в partial шлёт уведомление.
+      counters[`${a.channel}OrdersFailed`] = 1
       errors.push(`${a.channel} заказы: ${errorText(e)}`)
     }
     try {
@@ -103,6 +106,8 @@ export async function runIngest(deps: {
       await insertStockSnapshot(db, { channelId: ch.id, runId, takenAt: deps.now().toISOString(), stocks: s.stocks })
       counters[`${a.channel}Stock`] = s.stocks.length
       counters[`${a.channel}Skipped`] = s.skippedNoWbBarcode.length
+      // Источник остатка витрины сайта: pool пишет сайт только при pool (этап 1.4, pool.ts).
+      if (a.channel === "site" && "source" in s) counters.siteSourcePool = s.source === "pool" ? 1 : 0
     } catch (e) {
       errors.push(`${a.channel} остатки: ${errorText(e)}`)
     }

@@ -32,7 +32,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
    * берётся из прошлых прогонов в базе. У каждого прогона своя минута: снимок уникален
    * по паре «площадка + момент».
    */
-  const ingest = (catalog: WbCatalogEntry[] | Error, opts: { mirrorsFail?: boolean; acceptCatalog?: boolean; configErrors?: string[] } = {}) => {
+  const ingest = (catalog: WbCatalogEntry[] | Error, opts: { mirrorsFail?: boolean; acceptCatalog?: boolean; configErrors?: string[]; site?: "wb" | "pool" } = {}) => {
     const at = new Date(Date.parse("2026-09-27T10:00:00.000Z") + ++n * 60_000)
     return withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
       const r = await runIngest({
@@ -43,7 +43,13 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
         acceptCatalog: opts.acceptCatalog ?? false,
         adapters: {
           wb: { ...fake("wb", [order("W1")]), fetchCatalog: async () => (catalog instanceof Error ? Promise.reject(catalog) : catalog) },
-          mirrors: () => [fake("ozon", [order("O1"), order("O0", 0)], opts.mirrorsFail), fake("kit", [order("K1")])],
+          mirrors: () => [
+            fake("ozon", [order("O1"), order("O0", 0)], opts.mirrorsFail),
+            fake("kit", [order("K1")]),
+            ...(opts.site
+              ? [{ ...fake("site", []), fetchStocks: async () => ({ stocks: [], skippedNoWbBarcode: [], source: opts.site! }) }]
+              : []),
+          ],
           ...(opts.configErrors ? { configErrors: opts.configErrors } : {}),
         },
       })
@@ -131,5 +137,13 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     expect(r.status).toBe("partial")
     expect(r.error).toContain("сайт пропущен: SITE_API_TOKEN")
     expect(r.counters).toMatchObject({ wbCatalogAccepted: 10, ozonOrders: 1, kitOrders: 1, kitStock: 1 })
+  })
+
+  it("сбой заказов площадки — <площадка>OrdersFailed; источник витрины сайта — siteSourcePool", async () => {
+    const r = await ingest(cat(10), { mirrorsFail: true, site: "pool", acceptCatalog: true })
+    expect(r.counters).toMatchObject({ ozonOrdersFailed: 1, siteSourcePool: 1 })
+    expect(r.counters).not.toHaveProperty("kitOrdersFailed")
+    const w = await ingest(cat(10), { site: "wb", acceptCatalog: true })
+    expect(w.counters).toMatchObject({ siteSourcePool: 0 })
   })
 })

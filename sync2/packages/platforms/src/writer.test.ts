@@ -16,6 +16,7 @@ const op = (channel: Channel, barcode: string, after: number): WriteOp => ({
   field: "stock",
   before: 0,
   after,
+  externalSku: `key-${barcode}`,
 })
 
 const okSender = () =>
@@ -86,7 +87,7 @@ describe("executeWrites", () => {
   it("площадка не вернула результат по позиции — это ошибка, а не успех", async () => {
     const send = vi.fn(async (): Promise<SendResult[]> => [])
     const { outcomes } = await run([op("kit", "A", 1)], "apply", allModes("apply"), send)
-    expect(outcomes[0]).toMatchObject({ applied: false, error: "площадка не вернула результат по позиции" })
+    expect(outcomes[0]).toMatchObject({ applied: false, error: "площадка не вернула результат по позиции", uncertain: true })
   })
 
   it("вызов площадки упал — все её позиции с ошибкой, другие площадки пишутся", async () => {
@@ -169,5 +170,39 @@ describe("executeWrites", () => {
     })
     const { outcomes } = await run([op("kit", "A", 1)], "apply", allModes("apply"), send)
     expect(outcomes[0]).toMatchObject({ applied: false, error: '{"code":429}' })
+  })
+
+  it("ключ площадки доходит до отправителя и в итог", async () => {
+    const { outcomes, send } = await run([op("kit", "A", 1)], "apply", allModes("apply"))
+    expect(send).toHaveBeenCalledWith("kit", [expect.objectContaining({ externalSku: "key-A" })])
+    expect(outcomes[0]).toMatchObject({ externalSku: "key-A", applied: true, uncertain: false })
+  })
+
+  it("отправитель упал целиком — итог неизвестен: что успело уйти в сеть, не знаем", async () => {
+    const send = vi.fn(async (): Promise<SendResult[]> => {
+      throw new Error("сеть: terminated")
+    })
+    const { outcomes } = await run([op("wb", "A", 1)], "apply", allModes("apply"), send)
+    expect(outcomes[0]).toMatchObject({ applied: false, uncertain: true, error: "сеть: terminated" })
+  })
+
+  it("отказ по позиции — неизвестен только если так сказал отправитель", async () => {
+    const send = vi.fn(async (_c: Channel, ops: WriteOp[]): Promise<SendResult[]> => [
+      { barcode: ops[0]!.barcode, field: "stock", ok: false, error: "409", uncertain: false },
+      { barcode: ops[1]!.barcode, field: "stock", ok: false, error: "таймаут", uncertain: true },
+    ])
+    const { outcomes } = await run([op("wb", "A", 1), op("wb", "B", 1)], "apply", allModes("apply"), send)
+    expect(outcomes.map((o) => [o.barcode, o.uncertain])).toEqual([["A", false], ["B", true]])
+  })
+
+  it("успех с пометкой «неизвестно» — итог известен: применено", async () => {
+    const send = vi.fn(async (): Promise<SendResult[]> => [{ barcode: "A", field: "stock", ok: true, uncertain: true }])
+    const { outcomes } = await run([op("wb", "A", 1)], "apply", allModes("apply"), send)
+    expect(outcomes[0]).toMatchObject({ applied: true, error: null, uncertain: false })
+  })
+
+  it("вне apply — итог известен: ничего не отправлялось", async () => {
+    const { outcomes } = await run([op("kit", "A", 1)], "dry-run", allModes("apply"))
+    expect(outcomes[0]).toMatchObject({ uncertain: false })
   })
 })

@@ -13,7 +13,7 @@ import ordersFixture from "./fixtures/orders-sample.json" with { type: "json" }
 import stocksFixture from "./fixtures/stocks-sample.json" with { type: "json" }
 import mappingsFixture from "./fixtures/offer-mappings-sample.json" with { type: "json" }
 import type { YmOrder, YmWarehouseStocks } from "./client"
-import { mapYmOrders, mapYmStocks, stockCount, unitPriceMinor } from "./mapper"
+import { mapYmOrders, mapYmStocks, stockCount, unitPriceMinor, withOffersWithoutStock } from "./mapper"
 import { ymLifecycle } from "./lifecycle"
 
 const orders = (ordersFixture as { orders: YmOrder[] }).orders
@@ -280,5 +280,20 @@ describe("mapYmStocks — правила", () => {
   it("raw несёт товар и идентификатор склада", () => {
     const { stocks } = mapYmStocks([{ warehouseId: 1, offers: [{ offerId: "A", stocks: [{ type: "FIT", count: 1 }] }] }], barcodes, wbIndex, [1])
     expect(stocks[0]?.raw).toMatchObject({ warehouseId: 1, offerId: "A" })
+  })
+})
+
+describe("withOffersWithoutStock", () => {
+  it("оффер магазина без записи остатка — пустой строкой на первом складе магазина; уже известный — не дублируется", () => {
+    const warehouses = [{ warehouseId: 7, offers: [{ offerId: "A", stocks: [{ type: "FIT", count: 1 }] }] }]
+    expect(withOffersWithoutStock(warehouses, ["A", "NEW", "NEW"], [7, 8])).toEqual([
+      ...warehouses,
+      { warehouseId: 7, offers: [{ offerId: "NEW", stocks: [] }] },
+    ])
+  })
+  it("все офферы уже в остатках или складов в конфиге нет — без изменений", () => {
+    const warehouses = [{ warehouseId: 7, offers: [{ offerId: "A", stocks: [] }] }]
+    expect(withOffersWithoutStock(warehouses, ["A"], [7])).toBe(warehouses)
+    expect(withOffersWithoutStock(warehouses, ["B"], [])).toBe(warehouses)
   })
 })

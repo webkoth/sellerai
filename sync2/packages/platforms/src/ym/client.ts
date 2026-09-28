@@ -38,6 +38,19 @@ const MAX_PAGES = 1000
  * запроса, а не в тело — `pagedUrl` собирает их отдельно от POST-тела.
  */
 
+/**
+ * Следующая страница СНИМКА (остатки, офферы магазина — этап 1.4) или конец списка. Оборванная
+ * пагинация — ошибка, а не тихий обрыв: неполный снимок выкинул бы офферы с хвоста списка, и план
+ * их не увидел бы (для остатков — хуже: сочёл бы невыставленными). Конец — только страница без
+ * токена; тот же токен повторно или пустая страница с токеном — площадка отдала список не целиком.
+ */
+function nextSnapshotPage(what: string, next: string | null | undefined, pageToken: string | undefined, count: number): string | undefined {
+  if (!next) return undefined
+  if (next === pageToken) throw new Error(`ЯМ ${what}: площадка повторила pageToken — список неполный`)
+  if (count === 0) throw new Error(`ЯМ ${what}: пустая страница с nextPageToken — список неполный`)
+  return next
+}
+
 function pagedUrl(path: string, limit: number, pageToken: string | undefined): string {
   const url = new URL(`${BASE}${path}`)
   url.searchParams.set("limit", String(limit))
@@ -249,12 +262,61 @@ export async function fetchYmStocks(credentials: YmCredentials): Promise<YmWareh
     )
     const warehouses = body.result?.warehouses ?? []
     all.push(...warehouses)
-    const next = body.result?.paging?.nextPageToken ?? undefined
-    if (!next || next === pageToken || warehouses.length === 0) break
+    const next = nextSnapshotPage("остатки", body.result?.paging?.nextPageToken, pageToken, warehouses.length)
+    if (!next) return all
     pageToken = next
   }
+  throw new Error(`ЯМ остатки: больше ${MAX_PAGES} страниц — список неполный`)
+}
 
-  return all
+/**
+ * Записи остатка ОДНОГО оффера на одном складе, `POST /v2/campaigns/{campaignId}/offers/stocks` с фильтром
+ * `offerIds` (спецификация: с ним limit/page_token не передаются, список отдаётся целиком). Для живой
+ * проверки тела записи ЯМ (`ym-check`, решение владельца 28.09, п. 6). Оффера на складе нет — null.
+ */
+export async function fetchYmOfferStock(credentials: YmCredentials, offerId: string, warehouseId: number): Promise<YmStockEntry[] | null> {
+  const body = await requestJson<YmStocksResponse>("ym", `${BASE}/v2/campaigns/${credentials.campaignId}/offers/stocks`, {
+    ...ymAuth(credentials),
+    method: "POST",
+    body: { offerIds: [offerId] },
+  })
+  const warehouse = (body.result?.warehouses ?? []).find((w) => w.warehouseId === warehouseId)
+  const offer = warehouse?.offers.find((o) => o.offerId === offerId)
+  return offer ? (offer.stocks ?? []) : null
+}
+
+interface YmCampaignOffersResponse {
+  status: string
+  result?: {
+    paging?: { nextPageToken?: string | null } | null
+    offers?: Array<{ offerId?: string | null }> | null
+  } | null
+}
+
+const CAMPAIGN_OFFERS_PAGE_LIMIT = 200
+
+/**
+ * Все офферы магазина, `POST /v2/campaigns/{campaignId}/offers`. Нужны снимку: оффер, которому остаток
+ * ни разу не выставляли (статус NO_STOCKS), в `/offers/stocks` не приходит вовсе — без него синк не
+ * узнал бы о карточке и никогда не выставил бы ей остаток (урок старого синка 04.09.2026: 11 живых
+ * офферов с ценами «потерялись» так же).
+ */
+export async function fetchYmCampaignOfferIds(credentials: YmCredentials): Promise<string[]> {
+  const ids: string[] = []
+  let pageToken: string | undefined
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const body = await requestJson<YmCampaignOffersResponse>(
+      "ym",
+      pagedUrl(`/v2/campaigns/${credentials.campaignId}/offers`, CAMPAIGN_OFFERS_PAGE_LIMIT, pageToken),
+      { ...ymAuth(credentials), method: "POST", body: {} },
+    )
+    const offers = body.result?.offers ?? []
+    for (const o of offers) if (o.offerId) ids.push(o.offerId)
+    const next = nextSnapshotPage("офферы магазина", body.result?.paging?.nextPageToken, pageToken, offers.length)
+    if (!next) return ids
+    pageToken = next
+  }
+  throw new Error(`ЯМ офферы магазина: больше ${MAX_PAGES} страниц — список неполный`)
 }
 
 // ── Каталог: штрихкоды ───────────────────────────────────────────────────

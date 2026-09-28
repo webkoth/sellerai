@@ -1,5 +1,19 @@
 import { desc, eq } from "drizzle-orm"
-import { channels, createDb, drizzleRunStore, lastRunStatus, runs, sameStatusStreak, seedChannels, type Db } from "@sync2/db"
+import {
+  channels,
+  createDb,
+  drizzleRunStore,
+  lastRunStatus,
+  latestRun,
+  runs,
+  sameStatusStreak,
+  pruneJournal,
+  seedChannels,
+  writesOfRun,
+  type Db,
+  type RunInfo,
+  type WriteRow,
+} from "@sync2/db"
 import {
   createKitAdapter,
   createOzonAdapter,
@@ -7,6 +21,7 @@ import {
   createWbAdapter,
   createYmAdapter,
   type ChannelAdapter,
+  type Sender,
 } from "@sync2/platforms"
 import {
   buildWbCatalogIndex,
@@ -20,14 +35,19 @@ import {
   type WbCatalogIndex,
 } from "@sync2/shared"
 import { buildAdapters } from "./adapters"
+import { checkApplyPreview } from "./apply-preview"
 import { loadChannelsConfig } from "./channels-config"
 import { runCompareV1 } from "./jobs/compare-v1"
+import { runDrift, wbDriftNow } from "./jobs/drift"
 import { runIngest } from "./jobs/ingest"
 import { runPool } from "./jobs/pool"
+import { runSitePushAll } from "./jobs/site-push-all"
+import { runYmCheck } from "./jobs/ym-check"
 import { createLogger, type Logger } from "./log"
 import { createNotifier, type Notifier } from "./notify"
 import { withRun, type RunOutcome } from "./run"
-import { decideNotification, describeOutcome } from "./transition"
+import { buildSender } from "./senders"
+import { decideNotification, describeOutcome, writeFailureAlerts } from "./transition"
 
 const USAGE = `sync2 <команда>
   seed-channels          завести пять площадок (режим записи не трогается)
@@ -37,14 +57,37 @@ const USAGE = `sync2 <команда>
   ingest [--accept-catalog]
                          каталог WB, заказы и снимки остатков всех площадок в базу;
                          --accept-catalog — принять каталог WB без проверки усадки (усадка настоящая)
-  pool                   пересчёт пула и план записей (dry-run в этапе 1.3b)
+  pool                   пересчёт пула и запись на площадки по режимам channels
   tick [--accept-catalog]
                          ingest, затем pool (pool — если ingest не failed)
   compare-v1             сверка пула с леджером старого синка, сводка в Telegram
-  write-mode <площадка> <off|dry-run|apply>   режим записи одной площадки (apply отклонён в 1.3b)`
+  write-mode <площадка> <off|dry-run|apply> [--confirm]
+                         режим записи площадки; apply — только после плана последнего тика и с --confirm
+  plan [<площадка>]      план/итог записей последнего прогона pool
+  site-push-all --confirm
+                         весь пул на сайт (шаг A этапа 1.4)
+  drift [--print]        пул ↔ последние снимки площадок, записи за сутки (Telegram; --print — в терминал)
+  check-wb               снимок WB последнего тика = пул? код 0 — да, 3 — нет (шаг B этапа 1.4)
+  ym-check <offerId> [--confirm]
+                         живая проверка тела записи ЯМ на одном оффере: без --confirm — остаток и тело запроса;
+                         с --confirm — запись того же остатка и чтение обратно (перед шагом B этапа 1.4)
+  prune                  ретенция: writes off/dry-run > 14 дн, apply > 90 дн; снимки > 7 дн (кроме последнего)`
 
 /** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки доли. */
 const ACCEPT_CATALOG_FLAG = "--accept-catalog"
+/** Подтверждение необратимого шага (этап 1.4): write-mode … apply, site-push-all. */
+const CONFIRM_FLAG = "--confirm"
+/** drift: сводка в терминал, а не в Telegram. */
+const PRINT_FLAG = "--print"
+/** Какие флаги принимает какая команда; остальные — ошибка использования. */
+const ALLOWED_FLAGS: Record<string, readonly string[]> = {
+  ingest: [ACCEPT_CATALOG_FLAG],
+  tick: [ACCEPT_CATALOG_FLAG],
+  "write-mode": [CONFIRM_FLAG],
+  "site-push-all": [CONFIRM_FLAG],
+  "ym-check": [CONFIRM_FLAG],
+  drift: [PRINT_FLAG],
+}
 const PROBE_WINDOW_MS = 60 * 24 * 60 * 60 * 1000
 /** Путь по умолчанию к леджеру старого синка на VPS (план 1.3b, задача 6). */
 const DEFAULT_V1_LEDGER_PATH = "/opt/sellerai-sync/data/state/inventory.json"
@@ -179,6 +222,33 @@ async function notifyTransition(db: Db, log: Logger, notifier: Notifier, job: st
   if (!(await notifier.send(text))) log.warn({ job, text }, "уведомление в Telegram не доставлено")
 }
 
+/**
+ * Отправитель и склады записи WB/ЯМ для pool (этап 1.4). Конфиг площадок битый — pool падает
+ * (failed), как ingest: без конфига площадок нет ни чтения, ни записи.
+ */
+function writeTargets(env: NodeJS.ProcessEnv): { send: Sender; wbWarehouseId: number | null; ozonWarehouseId: number | null; ymWarehouseId: number | null } {
+  const cfg = loadChannelsConfig(env)
+  return {
+    send: buildSender(cfg),
+    wbWarehouseId: cfg.wb.warehouseId,
+    ozonWarehouseId: cfg.ozon.warehouseId,
+    ymWarehouseId: cfg.ym.warehouseIds[0] ?? null,
+  }
+}
+
+/** План или итог записей прогона pool — для глаз владельца перед «да». */
+function printPlan(run: RunInfo, rows: WriteRow[]): void {
+  console.log(`pool ${run.startedAt} ${run.status} ${JSON.stringify(run.counters)}`)
+  if (rows.length === 0) {
+    console.log("записей в плане нет")
+    return
+  }
+  for (const w of rows) {
+    const state = w.applied ? "применено" : w.uncertain ? `итог неизвестен: ${w.error ?? ""}` : w.error ? `ошибка: ${w.error}` : w.mode
+    console.log([w.channel, w.barcode, w.vendorCode ?? "", w.externalSku ?? "—", `${w.before ?? "—"} → ${w.after}`, state, (w.title ?? "").slice(0, 40)].join("\t"))
+  }
+}
+
 /** Джоба `ingest` внутри `withRun`, с уведомлением о смене состояния. */
 async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: Notifier, acceptCatalog: boolean): Promise<RunOutcome> {
   const prevStatus = await lastRunStatus(db, "ingest")
@@ -195,10 +265,16 @@ async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: N
 async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Notifier): Promise<RunOutcome> {
   const prevStatus = await lastRunStatus(db, "pool")
   const outcome = await withRun("pool", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
-    const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode })
+    const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode, ...writeTargets(process.env) })
     return { status: result.status, counters: result.counters, error: result.error }
   })
   await notifyTransition(db, log, notifier, "pool", prevStatus, outcome)
+  // Запись площадки не проходит N тиков подряд — отдельно от смены статуса pool (ревью 3–6, I2).
+  if (outcome.status !== "failed") {
+    for (const text of writeFailureAlerts(outcome.counters)) {
+      if (!(await notifier.send(text))) log.warn({ job: "pool", text }, "уведомление в Telegram не доставлено")
+    }
+  }
   return outcome
 }
 
@@ -209,9 +285,8 @@ async function main(argv: string[]): Promise<number> {
     console.log(USAGE)
     return cmd ? 0 : 2
   }
-  // Единственный флаг — ручной обход ворот каталога WB, и только там, где есть ingest.
   for (const flag of flags) {
-    if (flag !== ACCEPT_CATALOG_FLAG || (cmd !== "ingest" && cmd !== "tick")) {
+    if (!(ALLOWED_FLAGS[cmd] ?? []).includes(flag)) {
       console.error(`неизвестный флаг для ${cmd}: ${flag}\n\n${USAGE}`)
       return 2
     }
@@ -261,12 +336,25 @@ async function main(argv: string[]): Promise<number> {
           console.error(`неизвестная площадка: ${arg}\n\n${USAGE}`)
           return 2
         }
-        if (arg2 === "apply") {
-          console.error("apply отклонён: запись на площадки подключается на этапе 1.4")
+        if (arg2 !== "off" && arg2 !== "dry-run" && arg2 !== "apply") {
+          console.error(`неизвестный режим записи: ${arg2} (ожидается ${WRITE_MODES.join(" | ")})\n\n${USAGE}`)
           return 2
         }
-        if (arg2 !== "off" && arg2 !== "dry-run") {
-          console.error(`неизвестный режим записи: ${arg2} (ожидается ${WRITE_MODES.join(" | ")})\n\n${USAGE}`)
+        if (arg2 === "apply") {
+          // Решение 4 плана 1.4: apply — только после просмотра плана последнего тика и с --confirm.
+          const run = await latestRun(db, "pool")
+          if (run) printPlan(run, (await writesOfRun(db, run.runId)).filter((w) => w.channel === arg))
+          const verdict = checkApplyPreview(run, arg, new Date())
+          if (!verdict.ok) {
+            console.error(`apply не включён: ${verdict.reason}`)
+            return 2
+          }
+          if (!flags.includes(CONFIRM_FLAG)) {
+            console.error(`apply не включён: посмотрите план ${arg} выше и повторите с ${CONFIRM_FLAG}`)
+            return 2
+          }
+        } else if (flags.includes(CONFIRM_FLAG)) {
+          console.error(`${CONFIRM_FLAG} нужен только для apply`)
           return 2
         }
         const updated = await db.update(channels).set({ writeMode: arg2 }).where(eq(channels.code, arg)).returning({ code: channels.code })
@@ -297,6 +385,85 @@ async function main(argv: string[]): Promise<number> {
           return { counters: {} }
         })
         return out.status === "failed" ? 1 : 0
+      }
+      case "plan": {
+        if (arg && !isChannel(arg)) {
+          console.error(`неизвестная площадка: ${arg}\n\n${USAGE}`)
+          return 2
+        }
+        const run = await latestRun(db, "pool")
+        if (!run) {
+          console.error("pool ещё не запускался")
+          return 2
+        }
+        const rows = await writesOfRun(db, run.runId)
+        printPlan(run, arg ? rows.filter((w) => w.channel === arg) : rows)
+        return 0
+      }
+      case "site-push-all": {
+        if (!flags.includes(CONFIRM_FLAG)) {
+          console.error(`site-push-all пишет весь пул на сайт — повторите с ${CONFIRM_FLAG}`)
+          return 2
+        }
+        const outcome = await withRun("site-push-all", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
+          const r = await runSitePushAll({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode, send: buildSender(loadChannelsConfig(process.env)) })
+          return { status: r.status, counters: r.counters, error: r.error }
+        })
+        console.log(`${outcome.status} ${JSON.stringify(outcome.counters)}${outcome.error ? ` — ${outcome.error}` : ""}`)
+        return outcome.status === "ok" ? 0 : 1
+      }
+      case "ym-check": {
+        if (!arg) {
+          console.error(`не указан offerId\n\n${USAGE}`)
+          return 2
+        }
+        const cfg = loadChannelsConfig(process.env)
+        const warehouseId = cfg.ym.warehouseIds[0]
+        if (warehouseId === undefined) {
+          console.error("YM_WAREHOUSE_IDS пуст — склада записи ЯМ нет")
+          return 2
+        }
+        let code: 0 | 1 | 2 = 1
+        const outcome = await withRun("ym-check", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
+          const r = await runYmCheck({
+            db,
+            runId: ctx.runId,
+            globalMode: config.writeMode,
+            now: () => new Date(),
+            cfg: { apiKey: cfg.ym.apiKey, businessId: cfg.ym.businessId, campaignId: cfg.ym.campaignId, warehouseId },
+            offerId: arg,
+            confirm: flags.includes(CONFIRM_FLAG),
+            print: (line) => console.log(line),
+          })
+          code = r.code
+          return { status: r.status, counters: r.counters, error: r.error }
+        })
+        if (outcome.error) console.error(outcome.error)
+        return outcome.status === "failed" ? 1 : code
+      }
+      case "drift": {
+        const print = flags.includes(PRINT_FLAG)
+        const outcome = await withRun("drift", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => ({
+          counters: await runDrift({ db, notifier, now: () => new Date(), print }),
+        }))
+        return outcome.status === "failed" ? 1 : 0
+      }
+      case "check-wb": {
+        // Шаг B этапа 1.4: переключать WB можно, только когда снимок WB последнего тика = пул.
+        const d = await wbDriftNow(db)
+        if (!d) {
+          console.error("снимка WB нет — сначала tick")
+          return 3
+        }
+        console.log(`WB: снимок ${d.takenAt}, сравнено ${d.compared}, расходится ${d.mismatches.length}, в пути ${d.inFlight}`)
+        for (const m of d.mismatches.slice(0, 20)) console.log(`${m.barcode}\tпул ${m.pool}\tWB ${m.actual}`)
+        return d.mismatches.length === 0 ? 0 : 3
+      }
+      case "prune": {
+        const outcome = await withRun("prune", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async () => ({
+          counters: { ...(await pruneJournal(db, new Date().toISOString())) },
+        }))
+        return outcome.status === "failed" ? 1 : 0
       }
       default:
         console.error(`неизвестная команда: ${cmd}\n\n${USAGE}`)

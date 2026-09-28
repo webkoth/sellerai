@@ -14,6 +14,14 @@ export type ApiSource = Channel
  * необязательный, чтобы существующие места создания ошибки не менялись.
  */
 export class PlatformApiError extends Error {
+  /**
+   * Какая-то из попыток этого запроса (http.ts повторяет сам) кончилась сетевым сбоем, таймаутом
+   * или 5xx — площадка могла принять тело и не успеть ответить. Для записи (этап 1.4) это «итог
+   * неизвестен», даже если последняя попытка получила 429 или 4xx (stock-write.ts, isUncertain).
+   * Ставит только http.ts; по умолчанию false.
+   */
+  mayHaveBeenDelivered = false
+
   constructor(
     readonly platform: ApiSource,
     readonly status: number,

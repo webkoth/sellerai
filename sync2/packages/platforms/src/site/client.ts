@@ -4,6 +4,7 @@
 // requestJson (../http.ts) — как у остальных площадок: повтор на 5xx и сетевых
 // сбоях, 401/400 не повторяются.
 import { requestJson, type RequestOptions } from "../http"
+import { WRITE_MAX_RETRY_AFTER_MS, WRITE_RETRY_DELAYS_MS, WRITE_TIMEOUT_MS } from "../stock-write"
 
 export interface SiteCredentials {
   /** Корень сайта без завершающего слэша, например https://kotelnikovartifact.ru. */
@@ -102,8 +103,8 @@ export async function fetchSiteStocks(credentials: SiteCredentials): Promise<Sit
 
 /**
  * Запись абсолютных остатков пула на сайт (`PUT /api/internal/stocks`), пачками
- * по SITE_PUT_MAX_ITEMS. Повтор безопасен — значения абсолютные. Этап 1.4:
- * в 1.3c к pool не подключается (отправитель — noSender). Дубль штрихкода и
+ * по SITE_PUT_MAX_ITEMS. Повтор безопасен — значения абсолютные; повторы — короткие, как у всех
+ * писателей остатка (stock-write.ts): заказ сайта во время долгой паузы затёрся бы. Дубль штрихкода и
  * остаток не целый/меньше нуля — ошибка до сети: сайт отклонил бы пачку целиком
  * (400), и часть пачек записалась бы, а часть нет.
  */
@@ -119,7 +120,13 @@ export async function putSiteStocks(credentials: SiteCredentials, items: SiteSto
   const result: SitePutResult = { updated: 0, unknown: [], source: null }
   for (let start = 0; start < items.length; start += SITE_PUT_MAX_ITEMS) {
     const chunk = items.slice(start, start + SITE_PUT_MAX_ITEMS)
-    const r = await siteRequest<Partial<SitePutResult>>(credentials, "/api/internal/stocks", { method: "PUT", body: { items: chunk } })
+    const r = await siteRequest<Partial<SitePutResult>>(credentials, "/api/internal/stocks", {
+      method: "PUT",
+      body: { items: chunk },
+      retryDelaysMs: [...WRITE_RETRY_DELAYS_MS],
+      timeoutMs: WRITE_TIMEOUT_MS,
+      maxRetryAfterMs: WRITE_MAX_RETRY_AFTER_MS,
+    })
     if (!isSiteStockSource(r.source)) throw new Error(`сайт: неизвестный источник остатка «${String(r.source)}» в ответе записи`)
     result.updated += r.updated ?? 0
     result.unknown.push(...(r.unknown ?? []))

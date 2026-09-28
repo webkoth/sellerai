@@ -76,6 +76,27 @@ describe("requestJson", () => {
     await expect(promise).rejects.toMatchObject({ resetSeconds: 42 })
   })
 
+  it("запись (maxRetryAfterMs): Retry-After дольше потолка записи — сразу RateLimitError, без ожидания; чтение ждёт как раньше", async () => {
+    vi.useFakeTimers()
+    const fetchMock = vi.fn().mockResolvedValue(response(429, { error: "too many" }, { "retry-after": "60" }))
+    vi.stubGlobal("fetch", fetchMock)
+    const write = requestJson("wb", "https://example.test", { token: "t", method: "PUT", body: {}, retryDelaysMs: [2_000, 5_000], maxRetryAfterMs: 5_000 })
+    const caught = write.catch((e: unknown) => e)
+    await vi.advanceTimersByTimeAsync(0)
+    const e = await caught
+    expect(e).toBeInstanceOf(RateLimitError)
+    expect((e as RateLimitError).resetSeconds).toBe(60)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+
+    fetchMock.mockReset()
+    fetchMock.mockResolvedValueOnce(response(429, { error: "too many" }, { "retry-after": "60" })).mockResolvedValueOnce(response(200, { ok: true }))
+    const read = requestJson("wb", "https://example.test", { token: "t", retryDelaysMs: [0] })
+    await vi.advanceTimersByTimeAsync(59_999)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    await vi.advanceTimersByTimeAsync(1)
+    await expect(read).resolves.toEqual({ ok: true })
+  })
+
   it("ждёт ровно столько, сколько указала площадка, даже если своё расписание короче", async () => {
     vi.useFakeTimers()
     const fetchMock = vi
@@ -335,6 +356,25 @@ describe("requestJson", () => {
     vi.stubGlobal("fetch", fetchMock)
     await expect(requestJson("wb", "https://example.test", { token: "t", retryDelaysMs: [0] })).rejects.toThrow(SyntaxError)
     expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("запись (PUT) повторяется на 5xx тем же телом — безопасно только потому, что остаток пишется абсолютным числом", async () => {
+    const bodies: string[] = []
+    const fetchMock = vi.fn(async (_url: string, init?: RequestInit) => {
+      bodies.push(String(init?.body))
+      return bodies.length === 1 ? new Response("oops", { status: 502 }) : new Response(null, { status: 204 })
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    await expect(
+      requestJsonOrNull("wb", "https://marketplace-api.wildberries.ru/api/v3/stocks/1408913", {
+        token: "t",
+        method: "PUT",
+        body: { stocks: [{ chrtId: 7001, amount: 2 }] },
+        retryDelaysMs: [0],
+      }),
+    ).resolves.toBeNull()
+    expect(bodies).toHaveLength(2)
+    expect(bodies[1]).toBe(bodies[0])
   })
 })
 

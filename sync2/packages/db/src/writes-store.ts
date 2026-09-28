@@ -14,6 +14,10 @@ export interface WriteRecord {
   applied: boolean
   response: unknown
   error: string | null
+  /** Итог записи неизвестен (запись могла примениться) — отдельно от отказа. */
+  uncertain: boolean
+  /** Ключ товара на площадке, по которому шла запись; null — площадка пишется по штрихкоду или ключа нет. */
+  externalSku: string | null
 }
 
 /** record для executeWrites: пишет журнал writes; пустой список не вставляется (drizzle бросает на .values([])). */
@@ -24,7 +28,20 @@ export function drizzleWriteStore(db: Db, runId: string, channelRows: ReadonlyMa
       outcomes.map((o) => {
         const ch = channelRows.get(o.channel)
         if (!ch) throw new Error(`площадки ${o.channel} нет в таблице channels`)
-        return { runId, channelId: ch.id, barcode: o.barcode, field: o.field, before: o.before, after: o.after, mode: o.mode, applied: o.applied, response: o.response ?? null, error: o.error }
+        return {
+          runId,
+          channelId: ch.id,
+          barcode: o.barcode,
+          field: o.field,
+          before: o.before,
+          after: o.after,
+          mode: o.mode,
+          applied: o.applied,
+          response: o.response ?? null,
+          error: o.error,
+          uncertain: o.uncertain,
+          externalSku: o.externalSku,
+        }
       }),
     )
   }

@@ -145,3 +145,23 @@ export function mapYmStocks(
 
   return { stocks, skippedNoWbBarcode }
 }
+
+/**
+ * Офферы магазина без записи остатка (NO_STOCKS) — пустой строкой на первом складе магазина из
+ * конфига: mapYmStocks даст им нулевую строку снимка («выставлен и пуст»), и план выставит остаток
+ * пула. Оффер, который уже есть на любом своём складе, не дублируется.
+ */
+export function withOffersWithoutStock(
+  warehouses: YmWarehouseStocks[],
+  campaignOfferIds: readonly string[],
+  warehouseIds: readonly number[],
+): YmWarehouseStocks[] {
+  const target = warehouseIds[0]
+  if (target === undefined) return warehouses
+  const own = new Set(warehouseIds)
+  const seen = new Set<string>()
+  for (const w of warehouses) if (own.has(w.warehouseId)) for (const o of w.offers) seen.add(o.offerId)
+  const missing = [...new Set(campaignOfferIds)].filter((id) => !seen.has(id))
+  if (missing.length === 0) return warehouses
+  return [...warehouses, { warehouseId: target, offers: missing.map((offerId) => ({ offerId, stocks: [] })) }]
+}

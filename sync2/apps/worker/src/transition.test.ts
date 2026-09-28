@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { decideNotification, describeOutcome, REMIND_EVERY_RUNS } from "./transition"
+import { decideNotification, describeOutcome, REMIND_EVERY_RUNS, WRITE_FAIL_ALERT_RUNS, writeFailureAlerts } from "./transition"
 
 const cur = (status: "ok" | "partial" | "failed", detail = "ozon остатки: 500") => ({ status, detail })
 
@@ -19,13 +19,13 @@ describe("decideNotification", () => {
     expect(decideNotification({ job: "ingest", prev, cur: c, streak })).toBe(expected)
   })
 
-  it("partial → partial, серия кратна 36 (≈6 ч при тике 10 мин): напоминание", () => {
-    expect(REMIND_EVERY_RUNS).toBe(36)
-    for (const streak of [36, 72]) {
+  it("partial → partial, серия кратна 72 (≈6 ч при тике раз в 5 минут): напоминание", () => {
+    expect(REMIND_EVERY_RUNS).toBe(72)
+    for (const streak of [72, 144]) {
       const text = decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak })
       expect(text).toBe(`⚠️ sync2 pool: всё ещё partial (${streak} прогонов подряд) — ozon остатки: 500`)
     }
-    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak: 37 })).toBeNull()
+    expect(decideNotification({ job: "pool", prev: "partial", cur: cur("partial"), streak: 36 })).toBeNull()
   })
 })
 
@@ -34,5 +34,26 @@ describe("describeOutcome", () => {
     expect(describeOutcome({ error: "бум", counters: { a: 1 } })).toBe("бум")
     expect(describeOutcome({ error: null, counters: { noFreshWb: 1, events: 0 } })).toBe("noFreshWb=1, events=0")
     expect(describeOutcome({ error: null, counters: {} })).toBe("без деталей")
+  })
+})
+
+describe("writeFailureAlerts — запись площадки не проходит N тиков подряд", () => {
+  it("серия дошла до порога — предупреждение; дальше — напоминание раз в REMIND_EVERY_RUNS; между — молчим", () => {
+    expect(WRITE_FAIL_ALERT_RUNS).toBe(3)
+    expect(writeFailureAlerts({ kitWriteFailed: 1, kitWriteFailedRuns: 3 })).toEqual([
+      "⚠️ sync2 pool: площадка KIT — запись не проходит 3 тика подряд (ошибок в последнем прогоне: 1); подробности — plan kit",
+    ])
+    expect(writeFailureAlerts({ ozonWriteFailed: 1, ozonWriteFailedRuns: 2 })).toEqual([])
+    expect(writeFailureAlerts({ ozonWriteFailed: 1, ozonWriteFailedRuns: 4 })).toEqual([])
+    expect(writeFailureAlerts({ wbWriteFailed: 2, wbWriteFailedRuns: REMIND_EVERY_RUNS })).toEqual([
+      `⚠️ sync2 pool: площадка WB — запись не проходит ${REMIND_EVERY_RUNS} тика подряд (ошибок в последнем прогоне: 2); подробности — plan wb`,
+    ])
+  })
+
+  it("запись снова прошла после серии от порога — «снова проходит»; короткая серия и прогон без попытки записи — молча", () => {
+    expect(writeFailureAlerts({ ymWriteAttempted: 3, ymWriteRecoveredAfter: 5 })).toEqual(["✅ sync2 pool: площадка ЯМ — запись снова проходит (серия ошибок была 5 тиков)"])
+    expect(writeFailureAlerts({ ymWriteAttempted: 1, ymWriteRecoveredAfter: 2 })).toEqual([])
+    // Ранний выход pool (noFreshWb, coldStartRefused): записи не было — ни серии, ни «снова проходит».
+    expect(writeFailureAlerts({ noFreshWb: 1 })).toEqual([])
   })
 })

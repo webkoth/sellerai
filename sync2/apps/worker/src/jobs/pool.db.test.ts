@@ -100,7 +100,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool", () => {
       const r = await runPool({ db: h.db, now: () => new Date("2026-09-27T10:50:00.000Z"), runId: await runId(), globalMode: "apply" })
       expect(r.status).toBe("partial")
       expect(r.counters).toMatchObject({ writeErrors: 1 })
-      expect(r.error).toMatch(/kit A: запись на площадки подключается на этапе 1\.4/)
+      expect(r.error).toMatch(/kit A: отправитель не передан/)
     })
 
     it("сайт — отдельный план: свежий снимок сайта в журнале с режимом off, на площадки ничего", async () => {

@@ -26,3 +26,20 @@ export function aggregateStockByBarcode(stocks: NormalizedStock[]): Map<string, 
   }
   return byBarcode
 }
+
+/**
+ * Штрихкоды, которые в снимке площадки стоят на нескольких РАЗНЫХ ключах площадки (offer_id Ozon,
+ * offerId ЯМ, id варианта KIT): штрихкод → ключи по порядку снимка. aggregateStockByBarcode берёт ключ
+ * первой строки, и запись ушла бы только в первый товар, а второй сохранил бы свой остаток — площадка
+ * продавала бы больше пула, и запись «не сходилась» бы каждый тик (ревью ядра 1.4, I3).
+ */
+export function barcodesWithSeveralKeys(stocks: NormalizedStock[]): Map<string, string[]> {
+  const keys = new Map<string, string[]>()
+  for (const s of stocks) {
+    if (s.externalSku === null) continue
+    const list = keys.get(s.barcode) ?? []
+    if (!list.includes(s.externalSku)) list.push(s.externalSku)
+    keys.set(s.barcode, list)
+  }
+  return new Map([...keys].filter(([, list]) => list.length > 1))
+}

@@ -61,6 +61,8 @@ export const products = pgTable("products", {
   nmId: bigint("nm_id", { mode: "number" }),
   title: text("title").notNull().default(""),
   wbSubject: text("wb_subject"),
+  /** chrtId размера WB — ключ записи остатка на склад продавца (этап 1.4); null — каталог его не дал. */
+  wbChrtId: bigint("wb_chrt_id", { mode: "number" }),
   updatedAt: ts("updated_at").notNull().defaultNow(),
 })
 
@@ -211,6 +213,10 @@ export const writes = pgTable(
     applied: boolean("applied").notNull(),
     response: jsonb("response"),
     error: text("error"),
+    /** Итог записи неизвестен (сеть, 5xx, проверка чтением не сошлась) — запись могла примениться; не путать с отказом (этап 1.4). */
+    uncertain: boolean("uncertain").notNull().default(false),
+    /** Ключ товара на площадке, по которому шла запись (chrtId WB, offer_id Ozon, offerId ЯМ, id варианта KIT). */
+    externalSku: text("external_sku"),
     createdAt: ts("created_at").notNull().defaultNow(),
   },
   (t) => [

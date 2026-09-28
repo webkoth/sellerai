@@ -21,6 +21,71 @@ export async function lastCounter(db: Db, job: string, key: string): Promise<num
   return typeof v === "number" ? v : null
 }
 
+/**
+ * Счётчики последнего завершённого (ok/partial) запуска джобы; ни одного — null. pool (этап 1.4)
+ * читает из последнего ingest сбои заказов, отклонённый каталог и источник витрины сайта.
+ */
+export async function lastRunCounters(db: Db, job: string): Promise<Record<string, unknown> | null> {
+  const [row] = await db
+    .select({ counters: runs.counters })
+    .from(runs)
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial"])))
+    .orderBy(desc(runs.startedAt))
+    .limit(1)
+  return (row?.counters as Record<string, unknown> | undefined) ?? null
+}
+
+/** Сколько последних прогонов просматривает counterStreak — с запасом больше суток при тике раз в 5 минут. */
+const STREAK_SCAN_RUNS = 1000
+
+/**
+ * Серия: сколько последних завершённых (ok/partial) прогонов джобы подряд несут счётчик key > 0 —
+ * от самого последнего назад до первого без него. failed (счётчиков нет — прогон упал) и running
+ * серию не прерывают и не считаются. `onlyWhen` — счётчик-условие: прогоны, где его нет (или он 0),
+ * пропускаются — ни считаются, ни обрывают серию (ранний выход pool без попытки записи). Для
+ * «запись площадки не проходит N тиков подряд» (этап 1.4).
+ */
+export async function counterStreak(db: Db, job: string, key: string, onlyWhen?: string): Promise<number> {
+  const rows = await db
+    .select({ counters: runs.counters })
+    .from(runs)
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial"])))
+    .orderBy(desc(runs.startedAt))
+    .limit(STREAK_SCAN_RUNS)
+  const positive = (counters: Record<string, unknown> | null, k: string) => {
+    const v = counters?.[k]
+    return typeof v === "number" && v > 0
+  }
+  let n = 0
+  for (const r of rows) {
+    const counters = r.counters as Record<string, unknown> | null
+    if (onlyWhen !== undefined && !positive(counters, onlyWhen)) continue
+    if (!positive(counters, key)) break
+    n++
+  }
+  return n
+}
+
+export interface RunInfo {
+  runId: string
+  status: string
+  /** ISO 8601. */
+  startedAt: string
+  counters: Record<string, unknown>
+}
+
+/** Последний завершённый (ok/partial/failed) запуск джобы; ни одного — null. */
+export async function latestRun(db: Db, job: string): Promise<RunInfo | null> {
+  const [row] = await db
+    .select({ runId: runs.runId, status: runs.status, startedAt: runs.startedAt, counters: runs.counters })
+    .from(runs)
+    .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial", "failed"])))
+    .orderBy(desc(runs.startedAt))
+    .limit(1)
+  if (!row) return null
+  return { runId: row.runId, status: row.status, startedAt: toIsoOrNull(row.startedAt)!, counters: (row.counters as Record<string, unknown> | null) ?? {} }
+}
+
 /** Статус последнего завершённого (ok/partial/failed) запуска джобы; ни одного — null. */
 export async function lastRunStatus(db: Db, job: string): Promise<"ok" | "partial" | "failed" | null> {
   const [row] = await db

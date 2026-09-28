@@ -35,8 +35,8 @@ describe.skipIf(!TEST_DATABASE_URL)("runCompareV1", () => {
     const ids = await loadChannels(h.db)
     await insertStockSnapshot(h.db, { channelId: ids.get("site")!.id, runId, takenAt: "2026-09-27T11:50:00.000Z", stocks: [] })
     await drizzleWriteStore(h.db, runId, ids)([
-      { channel: "site", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null },
-      { channel: "site", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null },
+      { channel: "site", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null, uncertain: false, externalSku: null },
+      { channel: "site", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
     ])
     const sent: string[] = []
     await runCompareV1({ db: h.db, ledgerPath, notifier: { send: async (t: string) => (sent.push(t), true) }, now })

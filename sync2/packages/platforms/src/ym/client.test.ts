@@ -2,7 +2,7 @@
 // Без изменений логики: клиент не содержит ничего финансового, тесты
 // переносятся как есть (график выплат в тестах и не участвовал).
 import { afterEach, describe, expect, it, vi } from "vitest"
-import { creationWindows, fetchYmBarcodes, fetchYmOrders, fetchYmStocks } from "./client"
+import { creationWindows, fetchYmBarcodes, fetchYmCampaignOfferIds, fetchYmOfferStock, fetchYmOrders, fetchYmStocks } from "./client"
 import type { YmOrder } from "./client"
 
 afterEach(() => {
@@ -155,6 +155,46 @@ describe("fetchYmStocks", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({ status: "OK", result: { paging: {}, warehouses: [] } })))
     expect(await fetchYmStocks(CREDS)).toEqual([])
   })
+
+  // Оборванная пагинация — ошибка снимка, а не тихо неполный снимок: офферы с хвоста списка
+  // иначе выпали бы из снимка, и план их не увидел бы (этап 1.4, ревью M7).
+  const stocksPage = (next?: string, empty = false) =>
+    response({ status: "OK", result: { paging: next ? { nextPageToken: next } : {}, warehouses: empty ? [] : [{ warehouseId: 1, offers: [] }] } })
+
+  it("тот же pageToken повторно — ошибка", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(stocksPage("p2")).mockResolvedValueOnce(stocksPage("p2")))
+    await expect(fetchYmStocks(CREDS)).rejects.toThrow(/повторила pageToken/)
+  })
+
+  it("пустая страница с nextPageToken — ошибка", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(stocksPage("p2", true)))
+    await expect(fetchYmStocks(CREDS)).rejects.toThrow(/пустая страница/)
+  })
+
+  it("страниц больше потолка — ошибка, а не обрыв", async () => {
+    let i = 0
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async () => stocksPage(`p${++i}`)))
+    await expect(fetchYmStocks(CREDS)).rejects.toThrow(/больше 1000 страниц/)
+  })
+})
+
+describe("fetchYmCampaignOfferIds", () => {
+  const offersPage = (ids: string[], next?: string) => response({ status: "OK", result: { paging: next ? { nextPageToken: next } : {}, offers: ids.map((offerId) => ({ offerId })) } })
+
+  it("POST по кампании, страницы по pageToken, офферы всех страниц", async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(offersPage(["A"], "p2")).mockResolvedValueOnce(offersPage(["B"]))
+    vi.stubGlobal("fetch", fetchMock)
+    expect(await fetchYmCampaignOfferIds(CREDS)).toEqual(["A", "B"])
+    expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.partner.market.yandex.ru/v2/campaigns/222/offers?limit=200")
+    expect(new URL(fetchMock.mock.calls[1]?.[0] as string).searchParams.get("pageToken")).toBe("p2")
+  })
+
+  it("оборванная пагинация — ошибка: повтор токена, пустая страница с токеном", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(offersPage(["A"], "p2")).mockResolvedValueOnce(offersPage(["B"], "p2")))
+    await expect(fetchYmCampaignOfferIds(CREDS)).rejects.toThrow(/повторила pageToken/)
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(offersPage([], "p2")))
+    await expect(fetchYmCampaignOfferIds(CREDS)).rejects.toThrow(/пустая страница/)
+  })
 })
 
 describe("fetchYmBarcodes", () => {
@@ -192,5 +232,31 @@ describe("fetchYmBarcodes", () => {
   it("товар без штрихкодов — пустой список, а не отсутствие ключа", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response({ status: "OK", result: { paging: {}, offerMappings: [{ offer: { offerId: "A" }, mapping: {} }] } })))
     expect((await fetchYmBarcodes(CREDS, ["A"])).get("A")).toEqual([])
+  })
+})
+
+describe("fetchYmOfferStock — остаток одного оффера на складе (ym-check)", () => {
+  const body = (warehouses: unknown[]) => response({ status: "OK", result: { warehouses } })
+
+  it("фильтр offerIds без limit/pageToken (спецификация: такой список — только целиком); записи остатка склада", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      body([
+        { warehouseId: 999, offers: [{ offerId: "JW-A", stocks: [{ type: "FIT", count: 7 }] }] },
+        { warehouseId: 2369574, offers: [{ offerId: "JW-A", stocks: [{ type: "FIT", count: 2 }, { type: "AVAILABLE", count: 2 }] }] },
+      ]),
+    )
+    vi.stubGlobal("fetch", fetchMock)
+    expect(await fetchYmOfferStock(CREDS, "JW-A", 2369574)).toEqual([
+      { type: "FIT", count: 2 },
+      { type: "AVAILABLE", count: 2 },
+    ])
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit]
+    expect(url).toBe("https://api.partner.market.yandex.ru/v2/campaigns/222/offers/stocks")
+    expect(JSON.parse(init.body as string)).toEqual({ offerIds: ["JW-A"] })
+  })
+
+  it("оффера на складе записи нет — null", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(body([{ warehouseId: 999, offers: [{ offerId: "JW-A", stocks: [] }] }])))
+    expect(await fetchYmOfferStock(CREDS, "JW-A", 2369574)).toBeNull()
   })
 })

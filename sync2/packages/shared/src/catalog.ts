@@ -5,6 +5,11 @@ export interface WbCatalogEntry {
   nmId: number | null
   title: string
   subject: string | null
+  /**
+   * chrtId размера WB — ключ записи остатка (`PUT /api/v3/stocks/{warehouseId}`, этап 1.4). Необязателен:
+   * его нет у записей, собранных не из карточек WB (тесты, сверки).
+   */
+  chrtId?: number | null
 }
 
 export interface WbCatalogIndex {

@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { loadChannels } from "./channels"
 import { seedChannels } from "./channels-seed"
 import { drizzleRunStore } from "./run-store"
-import { countFailedRunsSince, countStuckRunsSince, lastRunWithCounterAt, lastRunStatus, plannedWritesSince, sameStatusStreak } from "./runs-query"
+import { counterStreak, countFailedRunsSince, countStuckRunsSince, lastRunCounters, lastRunWithCounterAt, lastRunStatus, plannedWritesSince, sameStatusStreak } from "./runs-query"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 import { drizzleWriteStore } from "./writes-store"
 
@@ -34,17 +34,17 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     const ids = await loadChannels(h.db)
     const record = drizzleWriteStore(h.db, runId, ids)
     await record([
-      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
-      { channel: "ozon", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null },
-      { channel: "kit", barcode: "A", field: "stock", before: 3, after: 2, mode: "dry-run", applied: false, response: null, error: null },
+      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
+      { channel: "ozon", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
+      { channel: "kit", barcode: "A", field: "stock", before: 3, after: 2, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
       // Режим off — не план dry-run, в сводку не попадает.
-      { channel: "ym", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null },
+      { channel: "ym", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null, uncertain: false, externalSku: null },
     ])
     // Тот же баркод в следующем прогоне (план держится, пока зеркало не выровняли) — строк больше, баркодов столько же.
     const runId2 = "00000000-0000-4000-8000-0000000000f6"
     await insertRun(h.db, runId2)
     await drizzleWriteStore(h.db, runId2, ids)([
-      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
+      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
     ])
     const planned = await plannedWritesSince(h.db, "2026-09-01T00:00:00.000Z")
     expect(planned).toMatchObject({
@@ -114,6 +114,36 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     await run("pool", "c4", "2026-09-27T10:30:00.000Z", "failed", { events: 1 })
     await run("pool", "c5", "2026-09-27T11:45:00.000Z", "running")
     expect(await lastRunWithCounterAt(h.db, "pool", "events")).toBe("2026-09-27T10:10:00.000Z")
+  })
+
+  it("счётчики последнего завершённого (ok/partial) прогона джобы; failed и running пропускаются; ни одного — null", async () => {
+    expect(await lastRunCounters(h.db, "counters-job")).toBeNull()
+    await run("counters-job", "d1", "2026-09-20T10:00:00.000Z", "ok", { siteSourcePool: 1 })
+    await run("counters-job", "d2", "2026-09-20T10:05:00.000Z", "partial", { ozonOrdersFailed: 1 })
+    await run("counters-job", "d3", "2026-09-20T10:10:00.000Z", "failed", { catalogRejected: 1 })
+    await run("counters-job", "d4", "2026-09-20T10:15:00.000Z", "running") // до окна зависших (27.09) — не мешает их счёту
+    expect(await lastRunCounters(h.db, "counters-job")).toEqual({ ozonOrdersFailed: 1 })
+  })
+
+  it("серия прогонов с ненулевым счётчиком — от последнего назад; failed и running пропускаются, ноль или нет ключа — конец", async () => {
+    expect(await counterStreak(h.db, "streak-job", "kitWriteFailed")).toBe(0)
+    await run("streak-job", "e1", "2026-09-19T10:00:00.000Z", "partial", { kitWriteFailed: 2 })
+    await run("streak-job", "e2", "2026-09-19T10:05:00.000Z", "ok", { events: 0 })
+    await run("streak-job", "e3", "2026-09-19T10:10:00.000Z", "partial", { kitWriteFailed: 1 })
+    await run("streak-job", "e4", "2026-09-19T10:15:00.000Z", "failed")
+    await run("streak-job", "e5", "2026-09-19T10:20:00.000Z", "partial", { kitWriteFailed: 3 })
+    expect(await counterStreak(h.db, "streak-job", "kitWriteFailed")).toBe(2)
+    expect(await counterStreak(h.db, "streak-job", "ozonWriteFailed")).toBe(0)
+  })
+
+  it("серия с условием: прогоны без счётчика-условия пропускаются, а не обрывают серию", async () => {
+    await run("streak-cond", "c1f1", "2026-09-18T10:00:00.000Z", "partial", { kitWriteAttempted: 1, kitWriteFailed: 1 })
+    await run("streak-cond", "c1f2", "2026-09-18T10:05:00.000Z", "partial", { noFreshWb: 1 })
+    await run("streak-cond", "c1f3", "2026-09-18T10:10:00.000Z", "partial", { kitWriteAttempted: 1, kitWriteFailed: 1 })
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed")).toBe(1)
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed", "kitWriteAttempted")).toBe(2)
+    await run("streak-cond", "c1f4", "2026-09-18T10:15:00.000Z", "ok", { kitWriteAttempted: 1 })
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed", "kitWriteAttempted")).toBe(0)
   })
 
   it("зависшие прогоны: running старше порога в окне; свежий running и закрытые — нет", async () => {

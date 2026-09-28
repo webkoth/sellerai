@@ -5,8 +5,8 @@
 // `keepNettingRow` был их вспомогательной функцией и тоже не переносится).
 import type { ChannelOrder, WbCatalogIndex } from "@sync2/shared"
 import type { ChannelAdapter, StockFetch } from "../adapter"
-import { fetchYmBarcodes, fetchYmOrders, fetchYmStocks, type YmCredentials } from "./client"
-import { mapYmOrders, mapYmStocks } from "./mapper"
+import { fetchYmBarcodes, fetchYmCampaignOfferIds, fetchYmOrders, fetchYmStocks, type YmCredentials } from "./client"
+import { mapYmOrders, mapYmStocks, withOffersWithoutStock } from "./mapper"
 
 /**
  * Адаптер Яндекс.Маркета: заказы и остатки.
@@ -33,7 +33,8 @@ export function createYmAdapter(credentials: YmCredentials, wbIndex: WbCatalogIn
   }
 
   async function fetchStocks(): Promise<StockFetch> {
-    const warehouses = await fetchYmStocks(credentials)
+    // Офферы без записи остатка (NO_STOCKS) в /offers/stocks не приходят — добираем списком офферов магазина.
+    const warehouses = withOffersWithoutStock(await fetchYmStocks(credentials), await fetchYmCampaignOfferIds(credentials), warehouseIds)
     const offerIds = warehouses.flatMap((w) => w.offers.map((offer) => offer.offerId))
     const barcodes = await fetchYmBarcodes(credentials, offerIds)
     return mapYmStocks(warehouses, barcodes, wbIndex, warehouseIds)
