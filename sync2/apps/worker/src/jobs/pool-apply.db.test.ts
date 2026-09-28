@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
-import { channels, drizzleRunStore, insertStockSnapshot, loadChannels, seedChannels, upsertOrders, upsertProducts, writes } from "@sync2/db"
+import { channels, drizzleRunStore, insertStockSnapshot, loadChannels, runs as runsTable, seedChannels, upsertOrders, upsertProducts, writes } from "@sync2/db"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "@sync2/db/test-db"
 import type { SendResult, WriteOp } from "@sync2/platforms"
 import type { Channel, NormalizedStock, WriteMode } from "@sync2/shared"
@@ -272,5 +272,41 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — dry-run как на VPS до п
     expect(await logged(pid, "ozon")).toEqual([["A", 2, 3, "dry-run", false]])
     expect(await logged(pid, "site")).toEqual([["A", 5, 3, "off", false]])
     expect(await logged(pid, "wb")).toEqual([])
+  })
+})
+
+/** Серия прогонов, где запись площадки не проходит (ревью 3–6, I2): счётчики для уведомления. */
+describe.skipIf(!TEST_DATABASE_URL)("runPool — серия неудачных записей площадки", () => {
+  const { ctx, ingestRun, snap, mode, setup, runId } = harness()
+
+  beforeAll(async () => {
+    await setup()
+    await mode("kit", "apply")
+  })
+  afterAll(async () => ctx.h?.close())
+
+  /** Прогон pool в журнале runs, как в CLI: счётчики серии считаются по прошлым прогонам. */
+  const poolRun = async (at: string, send: ReturnType<typeof okSend>) => {
+    const id = await runId()
+    const r = await runPool({ db: ctx.h.db, now: () => new Date(at), runId: id, globalMode: "apply", send })
+    // runId уже заведён insertRun как job "test" — отметим его прогоном pool с итогом.
+    await ctx.h.db.update(runsTable).set({ job: "pool", status: r.status, counters: r.counters, startedAt: at, finishedAt: at }).where(eq(runsTable.runId, id))
+    return r
+  }
+  const failing = () => vi.fn(async (_c: Channel, ops: WriteOp[]): Promise<SendResult[]> => ops.map((o) => ({ barcode: o.barcode, field: o.field, ok: false, error: "409" })))
+
+  it("счётчик прогонов подряд с ошибками записи площадки; запись прошла — серии нет", async () => {
+    await ingestRun("2026-09-28T13:00:00.000Z")
+    const tick = async (m: string, send: ReturnType<typeof okSend>) => {
+      await snap("wb", `2026-09-28T13:${m}:00.000Z`, [s("A", 3)])
+      await snap("kit", `2026-09-28T13:${m}:00.000Z`, [s("A", 1, "var-A")])
+      return poolRun(`2026-09-28T13:${m}:30.000Z`, send)
+    }
+    expect((await tick("00", failing())).counters).toMatchObject({ kitWriteFailed: 1, kitWriteFailedRuns: 1 })
+    expect((await tick("05", failing())).counters).toMatchObject({ kitWriteFailed: 1, kitWriteFailedRuns: 2 })
+    expect((await tick("10", failing())).counters).toMatchObject({ kitWriteFailedRuns: 3 })
+    const ok = await tick("15", okSend())
+    expect(ok.counters).not.toHaveProperty("kitWriteFailed")
+    expect(ok.counters).not.toHaveProperty("kitWriteFailedRuns")
   })
 })

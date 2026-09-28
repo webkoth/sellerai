@@ -1,4 +1,5 @@
 import {
+  counterStreak,
   drizzleWriteStore,
   lastRunCounters,
   lastRunStatus,
@@ -303,6 +304,13 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
   for (const c of CHANNELS) {
     const applied = outcomes.filter((o) => o.channel === c && o.applied).length
     if (applied > 0) counters[`${c}Applied`] = applied
+    // Запись площадки не проходит (отказ или итог неизвестен) — счётчик и длина серии прогонов подряд:
+    // по ней CLI шлёт «площадка X: запись не проходит N тиков подряд» (transition.ts, writeFailureAlerts).
+    const writeFailed = outcomes.filter((o) => o.channel === c && o.mode === "apply" && o.error !== null).length
+    if (writeFailed > 0) {
+      counters[`${c}WriteFailed`] = writeFailed
+      counters[`${c}WriteFailedRuns`] = (await counterStreak(db, "pool", `${c}WriteFailed`)) + 1
+    }
   }
 
   const failedOutcomes = outcomes.filter((o) => o.error !== null)

@@ -3,6 +3,7 @@ import {
   channels,
   createDb,
   drizzleRunStore,
+  lastRunCounters,
   lastRunStatus,
   latestRun,
   runs,
@@ -46,7 +47,7 @@ import { createLogger, type Logger } from "./log"
 import { createNotifier, type Notifier } from "./notify"
 import { withRun, type RunOutcome } from "./run"
 import { buildSender } from "./senders"
-import { decideNotification, describeOutcome } from "./transition"
+import { decideNotification, describeOutcome, writeFailureAlerts } from "./transition"
 
 const USAGE = `sync2 <команда>
   seed-channels          завести пять площадок (режим записи не трогается)
@@ -254,11 +255,18 @@ async function runIngestCommand(db: Db, log: Logger, config: Config, notifier: N
 /** Джоба `pool` внутри `withRun`, с уведомлением о смене состояния. */
 async function runPoolCommand(db: Db, log: Logger, config: Config, notifier: Notifier): Promise<RunOutcome> {
   const prevStatus = await lastRunStatus(db, "pool")
+  const prevCounters = await lastRunCounters(db, "pool")
   const outcome = await withRun("pool", { store: drizzleRunStore(db), log, writeMode: config.writeMode }, async (ctx) => {
     const result = await runPool({ db, now: () => new Date(), runId: ctx.runId, globalMode: config.writeMode, ...writeTargets(process.env) })
     return { status: result.status, counters: result.counters, error: result.error }
   })
   await notifyTransition(db, log, notifier, "pool", prevStatus, outcome)
+  // Запись площадки не проходит N тиков подряд — отдельно от смены статуса pool (ревью 3–6, I2).
+  if (outcome.status !== "failed") {
+    for (const text of writeFailureAlerts(prevCounters, outcome.counters)) {
+      if (!(await notifier.send(text))) log.warn({ job: "pool", text }, "уведомление в Telegram не доставлено")
+    }
+  }
   return outcome
 }
 
