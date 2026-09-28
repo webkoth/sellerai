@@ -7,6 +7,12 @@ export interface WriteOp {
   field: "stock" | "price"
   before: number | null
   after: number
+  /**
+   * Ключ товара, по которому площадка принимает запись: chrtId размера WB (строкой), offer_id Ozon,
+   * offerId (shopSku) ЯМ, id варианта KIT; у сайта null — он пишется по штрихкоду. null там, где ключ
+   * нужен, — отправитель отказывает позиции до сети (stock-write.ts, splitByKey).
+   */
+  externalSku: string | null
 }
 
 /** Ответ площадки по одной позиции. Адаптер обязан вернуть по строке на каждую отправленную. */
@@ -16,6 +22,11 @@ export interface SendResult {
   ok: boolean
   response?: unknown
   error?: string
+  /**
+   * Итог неизвестен: сеть оборвалась, 5xx после повторов, проверка после записи не сошлась —
+   * запись могла примениться. Для WB в режиме self это «unknown» (domain/wb-expectation.ts).
+   */
+  uncertain?: boolean
 }
 
 /** Сетевой вызов площадки. Передаётся адаптером; сам выключатель в сеть не ходит. */
@@ -26,6 +37,8 @@ export interface WriteOutcome extends WriteOp {
   applied: boolean
   response: unknown
   error: string | null
+  /** true — итог записи неизвестен (см. SendResult.uncertain); вне apply — всегда false. */
+  uncertain: boolean
 }
 
 export interface WriteDeps {
@@ -86,7 +99,7 @@ export async function executeWrites(ops: WriteOp[], deps: WriteDeps): Promise<Wr
     // Площадка, которой нет в списке известных, не должна попасть в сеть ни при каких режимах.
     const mode: WriteMode = isChannel(channel) ? effectiveMode(globalMode, safeChannelMode) : "off"
     if (mode !== "apply") {
-      for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error: null })
+      for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error: null, uncertain: false })
       continue
     }
     let results: SendResult[]
@@ -95,8 +108,9 @@ export async function executeWrites(ops: WriteOp[], deps: WriteDeps): Promise<Wr
       if (!Array.isArray(raw)) throw new Error("площадка вернула ответ не списком")
       results = raw
     } catch (e: unknown) {
+      // Отправитель упал целиком — какие пачки успели уйти в сеть, неизвестно.
       const error = errorText(e)
-      for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error })
+      for (const o of channelOps) outcomes.push({ ...o, mode, applied: false, response: null, error, uncertain: true })
       continue
     }
     const key = (barcode: string, field: string) => `${barcode}\u0000${field}`
@@ -104,9 +118,16 @@ export async function executeWrites(ops: WriteOp[], deps: WriteDeps): Promise<Wr
     for (const o of channelOps) {
       const r = byKey.get(key(o.barcode, o.field))
       if (!r) {
-        outcomes.push({ ...o, mode, applied: false, response: null, error: "площадка не вернула результат по позиции" })
+        outcomes.push({ ...o, mode, applied: false, response: null, error: "площадка не вернула результат по позиции", uncertain: true })
       } else {
-        outcomes.push({ ...o, mode, applied: r.ok, response: r.response ?? null, error: r.ok ? null : (r.error ?? "отказ без текста") })
+        outcomes.push({
+          ...o,
+          mode,
+          applied: r.ok,
+          response: r.response ?? null,
+          error: r.ok ? null : (r.error ?? "отказ без текста"),
+          uncertain: !r.ok && r.uncertain === true,
+        })
       }
     }
   }

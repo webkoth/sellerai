@@ -120,7 +120,14 @@ export async function runPool(deps: { db: Db; now: () => Date; runId: string; gl
     }
   }
 
-  const ops: WriteOp[] = [...plan.changes, ...siteChanges].map((c) => ({ channel: c.channel, barcode: c.barcode, field: "stock", before: c.before, after: c.after }))
+  const ops: WriteOp[] = [...plan.changes, ...siteChanges].map((c) => ({
+    channel: c.channel,
+    barcode: c.barcode,
+    field: "stock",
+    before: c.before,
+    after: c.after,
+    externalSku: c.externalSku,
+  }))
   const channelModes = Object.fromEntries(CHANNELS.map((c) => [c, channels.get(c)?.writeMode ?? "off"])) as Record<Channel, WriteMode>
   const outcomes = await executeWrites(ops, { globalMode: deps.globalMode, channelModes, send: noSender, record: drizzleWriteStore(db, runId, channels) })
   for (const c of MIRRORS) counters[`${c}Planned`] = outcomes.filter((o) => o.channel === c).length

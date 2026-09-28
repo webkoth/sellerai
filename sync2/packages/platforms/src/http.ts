@@ -230,6 +230,9 @@ async function request<T>(
     // а RateLimitError бросается только при лимите, который retryable всегда.
     const retryAfterSeconds = retryable ? parseRetryAfter(response.headers) : null
 
+    // Повтор POST/PUT записи (этап 1.4) безопасен только потому, что все писатели остатка шлют
+    // АБСОЛЮТНЫЕ значения: повтор принятого тела ставит то же число. Писатель с дельтами (+1/−1)
+    // через этот повтор пускать нельзя — обрыв после применения удвоил бы изменение.
     if (retryable && attempt < delays.length) {
       if (retryAfterSeconds === null) {
         await sleep(delays[attempt] ?? 0)
