@@ -50,6 +50,12 @@ export interface SiteStocksResponse {
 export interface SitePutResult {
   updated: number
   unknown: string[]
+  /** Источник остатка витрины из ответа сайта: `wb` — запись витрину не меняет; null — запросов не было. */
+  source: SiteStockSource | null
+}
+
+function isSiteStockSource(value: unknown): value is SiteStockSource {
+  return value === "wb" || value === "pool"
 }
 
 /** Позиций в одном PUT — предел схемы на стороне сайта (app/api/internal/stocks). */
@@ -87,7 +93,7 @@ export async function fetchSiteOrders(credentials: SiteCredentials, since: strin
 
 export async function fetchSiteStocks(credentials: SiteCredentials): Promise<SiteStocksResponse> {
   const body = await siteRequest<Partial<SiteStocksResponse>>(credentials, "/api/internal/stocks")
-  if (body.source !== "wb" && body.source !== "pool") {
+  if (!isSiteStockSource(body.source)) {
     throw new Error(`сайт: неизвестный источник остатка «${String(body.source)}»`)
   }
   if (!Array.isArray(body.items)) throw new Error("сайт: ответ остатков без списка items")
@@ -97,20 +103,27 @@ export async function fetchSiteStocks(credentials: SiteCredentials): Promise<Sit
 /**
  * Запись абсолютных остатков пула на сайт (`PUT /api/internal/stocks`), пачками
  * по SITE_PUT_MAX_ITEMS. Повтор безопасен — значения абсолютные. Этап 1.4:
- * в 1.3c к pool не подключается (отправитель — noSender).
+ * в 1.3c к pool не подключается (отправитель — noSender). Дубль штрихкода и
+ * остаток не целый/меньше нуля — ошибка до сети: сайт отклонил бы пачку целиком
+ * (400), и часть пачек записалась бы, а часть нет.
  */
 export async function putSiteStocks(credentials: SiteCredentials, items: SiteStockItem[]): Promise<SitePutResult> {
   const seen = new Set<string>()
   for (const item of items) {
     if (seen.has(item.barcode)) throw new Error(`сайт: дубль штрихкода в записи остатков: ${item.barcode}`)
+    if (!Number.isInteger(item.quantity) || item.quantity < 0) {
+      throw new Error(`сайт: остаток ${item.barcode} — не целое неотрицательное число: ${item.quantity}`)
+    }
     seen.add(item.barcode)
   }
-  const result: SitePutResult = { updated: 0, unknown: [] }
+  const result: SitePutResult = { updated: 0, unknown: [], source: null }
   for (let start = 0; start < items.length; start += SITE_PUT_MAX_ITEMS) {
     const chunk = items.slice(start, start + SITE_PUT_MAX_ITEMS)
-    const r = await siteRequest<SitePutResult>(credentials, "/api/internal/stocks", { method: "PUT", body: { items: chunk } })
-    result.updated += r.updated
-    result.unknown.push(...r.unknown)
+    const r = await siteRequest<Partial<SitePutResult>>(credentials, "/api/internal/stocks", { method: "PUT", body: { items: chunk } })
+    if (!isSiteStockSource(r.source)) throw new Error(`сайт: неизвестный источник остатка «${String(r.source)}» в ответе записи`)
+    result.updated += r.updated ?? 0
+    result.unknown.push(...(r.unknown ?? []))
+    result.source = r.source
   }
   return result
 }

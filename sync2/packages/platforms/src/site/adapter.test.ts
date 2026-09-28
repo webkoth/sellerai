@@ -76,7 +76,7 @@ describe("putSiteStocks", () => {
     })
     vi.stubGlobal("fetch", fetchMock)
     const items = Array.from({ length: SITE_PUT_MAX_ITEMS + 1 }, (_, i) => ({ barcode: `B${i}`, quantity: i % 3 }))
-    await expect(putSiteStocks(config, items)).resolves.toEqual({ updated: SITE_PUT_MAX_ITEMS + 1, unknown: ["X"] })
+    await expect(putSiteStocks(config, items)).resolves.toEqual({ updated: SITE_PUT_MAX_ITEMS + 1, unknown: ["X"], source: "wb" })
     expect(fetchMock).toHaveBeenCalledTimes(2)
     const [url, init] = fetchMock.mock.calls[0]!
     expect(url).toBe("https://kotelnikovartifact.ru/api/internal/stocks")
@@ -90,10 +90,29 @@ describe("putSiteStocks", () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
+  it("остаток не целый или меньше нуля — ошибка до сети: сайт отклонил бы всю пачку", async () => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal("fetch", fetchMock)
+    for (const quantity of [-1, 1.5, Number.NaN]) {
+      await expect(putSiteStocks(config, [{ barcode: "A", quantity }])).rejects.toThrow(/остаток/)
+    }
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("источник остатка витрины из ответа — в итоге: видно, повлияла ли запись на витрину", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ updated: 1, unknown: [], source: "pool" })))
+    await expect(putSiteStocks(config, [{ barcode: "A", quantity: 1 }])).resolves.toEqual({ updated: 1, unknown: [], source: "pool" })
+  })
+
+  it("неизвестный источник в ответе — ошибка", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ updated: 1, unknown: [], source: "что-то" })))
+    await expect(putSiteStocks(config, [{ barcode: "A", quantity: 1 }])).rejects.toThrow(/источник остатка/)
+  })
+
   it("пустой список — ни одного запроса", async () => {
     const fetchMock = vi.fn()
     vi.stubGlobal("fetch", fetchMock)
-    await expect(putSiteStocks(config, [])).resolves.toEqual({ updated: 0, unknown: [] })
+    await expect(putSiteStocks(config, [])).resolves.toEqual({ updated: 0, unknown: [], source: null })
     expect(fetchMock).not.toHaveBeenCalled()
   })
 })
