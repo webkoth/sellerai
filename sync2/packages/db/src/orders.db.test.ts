@@ -1,6 +1,7 @@
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { seedChannels } from "./channels-seed"
+import { createDb, type Db } from "./client"
 import { ingestChannelOrders, loadOrdersSince, upsertOrders, type OrderUpsert } from "./orders"
 import { drizzleRunStore } from "./run-store"
 import { channels, ordersRaw } from "./schema"
@@ -144,5 +145,64 @@ describe.skipIf(!TEST_DATABASE_URL)("базовая точка заказов п
     await ingestChannelOrders(h.db, { channelId: ids.get("ozon")!, code: "ozon", runId: r2, rows: [o("OZ-9")] })
     expect(await baseline("ozon")).toBe(r1)
     expect(Object.values(await cold("ozon"))).toEqual([false])
+  })
+})
+
+describe.skipIf(!TEST_DATABASE_URL)("базовая точка: два параллельных первых ingest одной площадки", () => {
+  let h: Awaited<ReturnType<typeof freshTestDb>>
+  let other: ReturnType<typeof createDb>
+  let locker: ReturnType<typeof createDb>
+  let site: number
+  beforeAll(async () => {
+    h = await freshTestDb()
+    await seedChannels(h.db)
+    other = createDb(TEST_DATABASE_URL!, { max: 1 })
+    locker = createDb(TEST_DATABASE_URL!, { max: 1 })
+    await other.db.execute(sql`select 1`)
+    site = (await h.db.select().from(channels).where(eq(channels.code, "site")))[0]!.id
+  })
+  afterAll(async () => {
+    await other?.close()
+    await locker?.close()
+    await h?.close()
+  })
+
+  /** Ждёт, пока столько-то соединений встанут в ожидание блокировки: гонка разыгрывается детерминированно. */
+  const waitForLockWaiters = async (q: Pick<Db, "execute">, n: number) => {
+    for (let i = 0; i < 200; i++) {
+      const [row] = await q.execute<{ n: number }>(
+        sql`select count(*)::int as n from pg_stat_activity where datname = current_database() and wait_event_type = 'Lock'`,
+      )
+      if ((row?.n ?? 0) >= n) return
+      await new Promise((r) => setTimeout(r, 10))
+    }
+    throw new Error(`не дождались ${n} ожидающих блокировку`)
+  }
+
+  it("точка — тот прогон, чей first_run_id у строк: второй ждёт блокировку строки площадки и видит точку", async () => {
+    const a = "00000000-0000-4000-8000-0000000000d1"
+    const b = "00000000-0000-4000-8000-0000000000d2"
+    await insertRun(h.db, a)
+    await insertRun(h.db, b)
+    const rows = [o("S1"), o("S2"), o("S3")]
+    // Два соединения — две транзакции одновременно, как два тика без общей блокировки. Третье
+    // держит orders_raw от вставки: обе транзакции проходят проверки и встают — без блокировки
+    // строки площадки обе увидели бы «точки нет», и вторая перезаписала бы точку своим прогоном.
+    let started: Promise<Array<{ written: number; baselineSet: boolean }>> | undefined
+    await locker.db.transaction(async (tx) => {
+      await tx.execute(sql`lock table orders_raw in share row exclusive mode`)
+      started = Promise.all([
+        ingestChannelOrders(h.db, { channelId: site, code: "site", runId: a, rows }),
+        ingestChannelOrders(other.db, { channelId: site, code: "site", runId: b, rows }),
+      ])
+      // Запрос — через ту же транзакцию: у h.db одно соединение, и его держит первая транзакция.
+      await waitForLockWaiters(tx, 2)
+    })
+    const results = await started!
+    expect(results.filter((r) => r.baselineSet)).toHaveLength(1)
+    const [ch] = await h.db.select({ b: channels.ordersBaselineRunId }).from(channels).where(eq(channels.id, site))
+    const firstRuns = new Set((await h.db.select().from(ordersRaw).where(eq(ordersRaw.channelId, site))).map((r) => r.firstRunId))
+    expect(firstRuns.size).toBe(1)
+    expect(ch!.b).toBe([...firstRuns][0])
   })
 })

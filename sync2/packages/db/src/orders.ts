@@ -1,4 +1,4 @@
-import { and, eq, gte, sql } from "drizzle-orm"
+import { and, eq, gte, isNull, sql } from "drizzle-orm"
 import type { OrderRowForPool } from "@sync2/domain"
 import type { Channel, OrderLifecycle } from "@sync2/shared"
 import type { Db } from "./client"
@@ -55,6 +55,22 @@ export async function upsertOrders(db: DbOrTx, channelId: number, rows: OrderUps
 }
 
 /**
+ * Площадку ещё ни разу не читали: нет её строк в `orders_raw` и ни один ingest не
+ * записал счётчик `<площадка>Orders`. Вторая проверка — только если первая не нашла строк.
+ */
+async function neverRead(tx: DbOrTx, channelId: number, code: Channel): Promise<boolean> {
+  const [hasRows] = await tx.select({ one: sql`1` }).from(ordersRaw).where(eq(ordersRaw.channelId, channelId)).limit(1)
+  if (hasRows) return false
+  const counter = `${code}Orders`
+  const [wasRead] = await tx
+    .select({ one: sql`1` })
+    .from(runs)
+    .where(and(eq(runs.job, "ingest"), sql`${runs.counters} ->> ${counter} is not null`))
+    .limit(1)
+  return wasRead === undefined
+}
+
+/**
  * Заказы площадки из прогона ingest — одной транзакцией с базовой точкой площадки
  * (`channels.orders_baseline_run_id`, этап 1.3c).
  *
@@ -67,6 +83,13 @@ export async function upsertOrders(db: DbOrTx, channelId: number, rows: OrderUps
  * холодный старт пула. Пустой первый ответ тоже ставит точку: следующий заказ
  * площадки — уже новый. Точка не сбрасывается: после отключения и повторного
  * подключения заказы за перерыв списываются как новые.
+ *
+ * Строка площадки в `channels` блокируется (`for update`) до конца транзакции: два
+ * параллельных первых ingest иначе оба увидели бы «точки нет», и второй, попавший
+ * со своими строками в ON CONFLICT (first_run_id остаётся от первого), перезаписал
+ * бы точку своим прогоном — заказы базового прогона перестали бы быть холодными.
+ * Второй ждёт первого и видит его точку; UPDATE ещё и ставит точку только поверх
+ * NULL — вторая страховка.
  */
 export async function ingestChannelOrders(
   db: Db,
@@ -77,20 +100,16 @@ export async function ingestChannelOrders(
       .select({ baseline: channels.ordersBaselineRunId })
       .from(channels)
       .where(eq(channels.id, args.channelId))
-    let first = channel !== undefined && channel.baseline === null
-    if (first) {
-      const [hasRows] = await tx.select({ one: sql`1` }).from(ordersRaw).where(eq(ordersRaw.channelId, args.channelId)).limit(1)
-      const counter = `${args.code}Orders`
-      const [wasRead] = await tx
-        .select({ one: sql`1` })
-        .from(runs)
-        .where(and(eq(runs.job, "ingest"), sql`${runs.counters} ->> ${counter} is not null`))
-        .limit(1)
-      first = hasRows === undefined && wasRead === undefined
-    }
+      .for("update")
+    const first = channel !== undefined && channel.baseline === null && (await neverRead(tx, args.channelId, args.code))
     const written = await upsertOrders(tx, args.channelId, args.rows, args.runId)
-    if (first) await tx.update(channels).set({ ordersBaselineRunId: args.runId }).where(eq(channels.id, args.channelId))
-    return { written, baselineSet: first }
+    if (!first) return { written, baselineSet: false }
+    const set = await tx
+      .update(channels)
+      .set({ ordersBaselineRunId: args.runId })
+      .where(and(eq(channels.id, args.channelId), isNull(channels.ordersBaselineRunId)))
+      .returning({ id: channels.id })
+    return { written, baselineSet: set.length > 0 }
   })
 }
 
