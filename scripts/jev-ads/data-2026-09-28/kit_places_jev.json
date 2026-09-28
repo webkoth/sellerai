@@ -1,0 +1,5620 @@
+[
+ {
+  "placement": "ru.yandex.weatherplugin",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 9,
+  "cost": 20.05,
+  "impr": 218,
+  "conv": 4,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "161.ru",
+  "kind": "unclear",
+  "conf": 0.48,
+  "clicks": 1,
+  "cost": 1.02,
+  "impr": 8,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "1begovoy.ru",
+  "kind": "content",
+  "conf": 0.41,
+  "clicks": 1,
+  "cost": 2.87,
+  "impr": 65,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "421.amdm.ru",
+  "kind": "unclear",
+  "conf": 0.76,
+  "clicks": 1,
+  "cost": 3.53,
+  "impr": 8,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "5-letter.ru",
+  "kind": "unclear",
+  "conf": 0.24,
+  "clicks": 1,
+  "cost": 16.53,
+  "impr": 16,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "59.ru",
+  "kind": "content",
+  "conf": 0.37,
+  "clicks": 2,
+  "cost": 19.2,
+  "impr": 29,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "72.ru",
+  "kind": "unclear",
+  "conf": 0.4,
+  "clicks": 1,
+  "cost": 23.83,
+  "impr": 26,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "74.ru",
+  "kind": "unclear",
+  "conf": 0.44,
+  "clicks": 1,
+  "cost": 1.06,
+  "impr": 94,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "adventure.party.real.life",
+  "kind": "unclear",
+  "conf": 0.58,
+  "clicks": 1,
+  "cost": 31.54,
+  "impr": 5,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "ai.character.app",
+  "kind": "unclear",
+  "conf": 0.67,
+  "clicks": 2,
+  "cost": 2.77,
+  "impr": 13,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ai.socialapps.speakmaster",
+  "kind": "unclear",
+  "conf": 0.58,
+  "clicks": 24,
+  "cost": 79.46,
+  "impr": 91,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "all-make.fun",
+  "kind": "game",
+  "conf": 0.54,
+  "clicks": 1,
+  "cost": 3.66,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "alternathistory.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 1.99,
+  "impr": 55,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "amurmedia.ru",
+  "kind": "content",
+  "conf": 0.43,
+  "clicks": 1,
+  "cost": 1.77,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "and.lhhpub.goodshunt",
+  "kind": "unclear",
+  "conf": 0.55,
+  "clicks": 1,
+  "cost": 5.35,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "anekdotov.net",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 1,
+  "cost": 31.38,
+  "impr": 16,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "audiokniga-one.com",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 1,
+  "cost": 1.65,
+  "impr": 46,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "audiokniga.one",
+  "kind": "content",
+  "conf": 0.97,
+  "clicks": 1,
+  "cost": 2.64,
+  "impr": 46,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "avidreaders.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 7,
+  "cost": 32.82,
+  "impr": 716,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "azurgames.idle.war",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 5.99,
+  "impr": 23,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ball.sort.puzzle.color.sorting.bubble.games",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 7,
+  "cost": 10.08,
+  "impr": 27,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "bank.yuga.ru",
+  "kind": "content",
+  "conf": 0.67,
+  "clicks": 1,
+  "cost": 1.84,
+  "impr": 33,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "bataysk-gorod.ru",
+  "kind": "content",
+  "conf": 0.74,
+  "clicks": 1,
+  "cost": 3.84,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "battime.ru",
+  "kind": "unclear",
+  "conf": 0.45,
+  "clicks": 1,
+  "cost": 4.7,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "baza-knig.net",
+  "kind": "content",
+  "conf": 0.97,
+  "clicks": 1,
+  "cost": 0.23,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "biblioteka-online.org",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 2,
+  "cost": 4.22,
+  "impr": 145,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "busti.me",
+  "kind": "unclear",
+  "conf": 0.74,
+  "clicks": 1,
+  "cost": 16.02,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "calculator888.ru",
+  "kind": "utility",
+  "conf": 0.77,
+  "clicks": 1,
+  "cost": 25.07,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "checko.ru",
+  "kind": "unclear",
+  "conf": 0.44,
+  "clicks": 1,
+  "cost": 1.2,
+  "impr": 42,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "chitat-knigi.online",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 1,
+  "cost": 7.76,
+  "impr": 13,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "click-or-die.ru",
+  "kind": "unclear",
+  "conf": 0.7,
+  "clicks": 3,
+  "cost": 45.58,
+  "impr": 33,
+  "conv": 3,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "cn.wps.moffice_eng",
+  "kind": "utility",
+  "conf": 0.73,
+  "clicks": 2,
+  "cost": 1.14,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.agedstudio.card.solitaire.klondike",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 6.89,
+  "impr": 15,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.agent.action",
+  "kind": "unclear",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 0.57,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.anoshenko.solitairesfree",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 21.35,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.anyreads.patephone",
+  "kind": "content",
+  "conf": 0.72,
+  "clicks": 2,
+  "cost": 9.7,
+  "impr": 66,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.awesome.puzzlehexasort",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.07,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.azurgames.goldminers",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 3.2,
+  "impr": 4,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.beautiful.bird",
+  "kind": "unclear",
+  "conf": 0.4,
+  "clicks": 1,
+  "cost": 2.47,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.beautiful.bird.lite",
+  "kind": "game",
+  "conf": 0.59,
+  "clicks": 3,
+  "cost": 8.66,
+  "impr": 4,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.belkatechnologies.clockmaker",
+  "kind": "game",
+  "conf": 0.33,
+  "clicks": 16,
+  "cost": 41.33,
+  "impr": 65,
+  "conv": 14,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.bigcake.android.classicdominoes",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 22.21,
+  "impr": 13,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.bigcake.android.mahjongmatch",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 13,
+  "cost": 32.21,
+  "impr": 35,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.block.juggle",
+  "kind": "game",
+  "conf": 0.95,
+  "clicks": 9,
+  "cost": 9.9,
+  "impr": 65,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.blockpuzzle.us.ios",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.64,
+  "impr": 5,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.camerasideas.instashot",
+  "kind": "utility",
+  "conf": 0.73,
+  "clicks": 1,
+  "cost": 0.66,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.chaloapps.roosterrudy",
+  "kind": "game",
+  "conf": 0.69,
+  "clicks": 1,
+  "cost": 1.39,
+  "impr": 12,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.changdu.ereader",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 1,
+  "cost": 2.04,
+  "impr": 17,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.changdu.rureader",
+  "kind": "content",
+  "conf": 0.96,
+  "clicks": 2,
+  "cost": 3.68,
+  "impr": 26,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.cleverapps.fairy",
+  "kind": "game",
+  "conf": 0.93,
+  "clicks": 1,
+  "cost": 0.31,
+  "impr": 11,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.cleverapps.wondermerge",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.61,
+  "impr": 9,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.cloudycastlegames.wordline",
+  "kind": "game",
+  "conf": 0.98,
+  "clicks": 2,
+  "cost": 1.95,
+  "impr": 24,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.cmyksoft.durak",
+  "kind": "game",
+  "conf": 0.97,
+  "clicks": 1,
+  "cost": 1.33,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.coloros.phonemanager",
+  "kind": "utility",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.34,
+  "impr": 13,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.cookie.match3.casual",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.0,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.crypt.gram.puzz",
+  "kind": "game",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 1.84,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.csasecurity.app",
+  "kind": "utility",
+  "conf": 0.63,
+  "clicks": 6,
+  "cost": 12.33,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.dmstudio.weather",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 0.14,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.dream.free.games.match3",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.31,
+  "impr": 7,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.dreamgames.royalmatch",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 12,
+  "cost": 21.56,
+  "impr": 61,
+  "conv": 18,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.Earthkwak.Platformer",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 11,
+  "cost": 7.33,
+  "impr": 30,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.easybrain.block.puzzle.games",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 6.87,
+  "impr": 4,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.easybrain.number.puzzle.game",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.89,
+  "impr": 4,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.easybrain.solitaire",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 6.82,
+  "impr": 4,
+  "conv": 2,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.easybrain.sudoku",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 9.94,
+  "impr": 8,
+  "conv": 0,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.easybrain.sudoku.android",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 6,
+  "cost": 16.03,
+  "impr": 38,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.edadeal.android",
+  "kind": "content",
+  "conf": 0.8,
+  "clicks": 13,
+  "cost": 191.89,
+  "impr": 559,
+  "conv": 8,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.europosit.pixelcoloring",
+  "kind": "game",
+  "conf": 0.88,
+  "clicks": 2,
+  "cost": 2.85,
+  "impr": 8,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fc.goods.sort.matching.puzzle.triplemaster",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 3.9,
+  "impr": 21,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fenomen.redhoodf2p",
+  "kind": "game",
+  "conf": 0.89,
+  "clicks": 4,
+  "cost": 5.34,
+  "impr": 22,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.firsttouchgames.dls7",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 1.14,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.flyingwhalegames.carout",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 3,
+  "cost": 10.17,
+  "impr": 19,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fugo.wow",
+  "kind": "unclear",
+  "conf": 0.44,
+  "clicks": 62,
+  "cost": 110.94,
+  "impr": 496,
+  "conv": 22,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fugo.wowguru",
+  "kind": "game",
+  "conf": 0.3,
+  "clicks": 2,
+  "cost": 3.93,
+  "impr": 14,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fungames.blockcraft",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 16,
+  "cost": 109.03,
+  "impr": 209,
+  "conv": 6,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.fusionmedia.investing",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 15.52,
+  "impr": 8,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.gamebrain.hexasort",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 6.32,
+  "impr": 4,
+  "conv": 4,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.gamovation.tileclub",
+  "kind": "game",
+  "conf": 0.98,
+  "clicks": 8,
+  "cost": 10.98,
+  "impr": 31,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.gg.citysecrets",
+  "kind": "content",
+  "conf": 0.23,
+  "clicks": 2,
+  "cost": 5.38,
+  "impr": 7,
+  "conv": 3,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.goods.sorting.games.triple.match3d.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.03,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.grandgames.magicsort",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 4.65,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.h8games.littlefarmstory",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.26,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.hitappsgames.wordsolitaire",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 51.38,
+  "impr": 26,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.htt.alpha.shooter.fps",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 2,
+  "cost": 6.76,
+  "impr": 69,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.huiwan.obbylockdownmi",
+  "kind": "game",
+  "conf": 0.5,
+  "clicks": 1,
+  "cost": 0.09,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.ig.block.buster",
+  "kind": "game",
+  "conf": 0.81,
+  "clicks": 1,
+  "cost": 90.2,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.imo.android.imoim",
+  "kind": "utility",
+  "conf": 0.37,
+  "clicks": 12,
+  "cost": 27.06,
+  "impr": 74,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.imo.android.imoimhd",
+  "kind": "utility",
+  "conf": 0.21,
+  "clicks": 12,
+  "cost": 34.24,
+  "impr": 45,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.inspiredsquare.jupiter",
+  "kind": "unclear",
+  "conf": 0.72,
+  "clicks": 1,
+  "cost": 0.86,
+  "impr": 9,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.JindoBlu.OfflineGames",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 2,
+  "cost": 0.89,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.kayac.ball_run",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 1.34,
+  "impr": 3,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.kiloo.subwaysurf",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 7,
+  "cost": 11.45,
+  "impr": 14,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.linkdesks.jewellegend",
+  "kind": "game",
+  "conf": 0.98,
+  "clicks": 4,
+  "cost": 4.95,
+  "impr": 91,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.LinkedSquad.SchoolBoyRunaway",
+  "kind": "game",
+  "conf": 0.94,
+  "clicks": 1,
+  "cost": 1.52,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.MadOut.BIG",
+  "kind": "game",
+  "conf": 0.93,
+  "clicks": 2,
+  "cost": 1.27,
+  "impr": 4,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.mandala.pattern.happy.paint.by.number.coloring.game",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.05,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.melon.drop.fruit.merge.master",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 48.74,
+  "impr": 7,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.merge.cooking.theme.restaurant.food",
+  "kind": "content",
+  "conf": 0.26,
+  "clicks": 1,
+  "cost": 0.97,
+  "impr": 8,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.mi.globalbrowser",
+  "kind": "utility",
+  "conf": 0.57,
+  "clicks": 1,
+  "cost": 1.32,
+  "impr": 24,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.minicraft.island.coin.adventure",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.01,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.miui.cleaner",
+  "kind": "utility",
+  "conf": 1.0,
+  "clicks": 16,
+  "cost": 35.87,
+  "impr": 78,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.miui.player",
+  "kind": "utility",
+  "conf": 0.31,
+  "clicks": 5,
+  "cost": 7.5,
+  "impr": 23,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.miui.videoplayer",
+  "kind": "utility",
+  "conf": 0.32,
+  "clicks": 17,
+  "cost": 40.31,
+  "impr": 304,
+  "conv": 11,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.musevia.hdwallpapers.gallery",
+  "kind": "utility",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 0.2,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "com.mystery.hidden.objects.find.clue.puzzle.games.free",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.47,
+  "impr": 1,
+  "conv": 2,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.nekki.shadowfight3",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 6.23,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.nektome.chatruletka.voice",
+  "kind": "content",
+  "conf": 0.36,
+  "clicks": 1,
+  "cost": 1.15,
+  "impr": 7,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.oakever.arrows",
+  "kind": "unclear",
+  "conf": 0.5,
+  "clicks": 15,
+  "cost": 116.77,
+  "impr": 95,
+  "conv": 13,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.oakever.meowdoku",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 2,
+  "cost": 14.42,
+  "impr": 39,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.oakever.tiletrip",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 54,
+  "cost": 84.18,
+  "impr": 369,
+  "conv": 60,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.android.sky.words",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 14,
+  "cost": 29.89,
+  "impr": 53,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.android.word.solitaire.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 4,
+  "cost": 10.24,
+  "impr": 10,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.games.android.fillwordsoffline",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 15,
+  "cost": 18.47,
+  "impr": 34,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.games.android.jigsaw.solitaire.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 8,
+  "cost": 73.69,
+  "impr": 31,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.games.android.sudokumaster",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 4,
+  "cost": 10.09,
+  "impr": 22,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.games.android.wordpizza",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 48,
+  "cost": 75.58,
+  "impr": 125,
+  "conv": 50,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.games.android.wordsearchsea",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 5,
+  "cost": 15.16,
+  "impr": 25,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.openmygame.magicwordsearch",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 20,
+  "cost": 22.38,
+  "impr": 107,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.orangeapps.piratetreasure",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 3,
+  "cost": 1.25,
+  "impr": 37,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.orangeapps.piratetreasures",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 4,
+  "cost": 6.53,
+  "impr": 12,
+  "conv": 6,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.herodash",
+  "kind": "game",
+  "conf": 0.98,
+  "clicks": 2,
+  "cost": 4.06,
+  "impr": 6,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.mytalkingangela2",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 18,
+  "cost": 38.72,
+  "impr": 35,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.mytalkingangelafree",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 5,
+  "cost": 18.96,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.mytalkingtom2",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 15,
+  "cost": 47.76,
+  "impr": 33,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.mytalkingtomfree",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 13,
+  "cost": 34.61,
+  "impr": 28,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.mytalkingtomfriends",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 17,
+  "cost": 55.1,
+  "impr": 29,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.outfit7.talkingtomgoldrun",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 9,
+  "cost": 34.31,
+  "impr": 27,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.pin.screw.color.nuts.bolts.spin.free.game",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 4,
+  "cost": 5.41,
+  "impr": 11,
+  "conv": 6,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.pingsecure.client.app",
+  "kind": "unclear",
+  "conf": 0.6,
+  "clicks": 1,
+  "cost": 8.38,
+  "impr": 41,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.piplnetwork.piplvpn",
+  "kind": "utility",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 12.53,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.pixel.art.coloring.color.number",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 8,
+  "cost": 13.62,
+  "impr": 180,
+  "conv": 8,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.play.merge.restyle.ru",
+  "kind": "game",
+  "conf": 0.85,
+  "clicks": 1,
+  "cost": 3.72,
+  "impr": 34,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.playstrom.dop3",
+  "kind": "game",
+  "conf": 0.49,
+  "clicks": 1,
+  "cost": 3.5,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.pronetis.ironball2",
+  "kind": "game",
+  "conf": 0.85,
+  "clicks": 18,
+  "cost": 91.91,
+  "impr": 86,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.puzzlegames.puzzlebrickslegend",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 4.23,
+  "impr": 13,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.reachjunction.card.game.solitaire",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 3.66,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.robtopx.geometrydashmeltdown",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.04,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.robtopx.geometryjumplite",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 16,
+  "cost": 9.56,
+  "impr": 34,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.s-g-i.Edadeal",
+  "kind": "content",
+  "conf": 0.59,
+  "clicks": 2,
+  "cost": 9.4,
+  "impr": 92,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.screw.puzzle.twist",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 7.19,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.screw3d.match.nuts.bolts.pin.jam.away.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 13,
+  "cost": 20.41,
+  "impr": 28,
+  "conv": 6,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.SimpleSandbox2",
+  "kind": "game",
+  "conf": 0.68,
+  "clicks": 1,
+  "cost": 0.04,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.skl.pyramid.quest.match3.tile.puzzle.games",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 18.06,
+  "impr": 9,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.sled.surfers.game",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 16.46,
+  "impr": 165,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.soccer.score.star",
+  "kind": "content",
+  "conf": 0.62,
+  "clicks": 5,
+  "cost": 9.46,
+  "impr": 7,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.sorting.games.match3d.goods.triple.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 3.65,
+  "impr": 25,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.soulcompany.bubbleshooter.relaxing",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 2.07,
+  "impr": 13,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.starplay.spider.fighter.openworld",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 5.46,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.superbox.aos.jewelhunter",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 1.42,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.tapblaze.pizzabusiness",
+  "kind": "unclear",
+  "conf": 0.34,
+  "clicks": 1,
+  "cost": 0.95,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.timebomb.gun.prank.simulator",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.05,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "com.tripledot.solitaire",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.61,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.tripledot.woodoku",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 4,
+  "cost": 11.39,
+  "impr": 12,
+  "conv": 8,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.ttterbagames.businesssimulator",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 2.39,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.tvf.anti.stress.relaxing.mini.games",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 7.26,
+  "impr": 5,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.uc.minigame.relax",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 3,
+  "cost": 18.79,
+  "impr": 187,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.vincentb.MobControl",
+  "kind": "utility",
+  "conf": 0.58,
+  "clicks": 1,
+  "cost": 0.41,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.visionstudio.tilevacation",
+  "kind": "game",
+  "conf": 0.72,
+  "clicks": 1,
+  "cost": 9.69,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.vitastudio.mahjong",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 96,
+  "cost": 347.47,
+  "impr": 1218,
+  "conv": 58,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.vk.vkclient",
+  "kind": "content",
+  "conf": 0.63,
+  "clicks": 3,
+  "cost": 64.4,
+  "impr": 163,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.vkontakte.android",
+  "kind": "content",
+  "conf": 0.79,
+  "clicks": 28,
+  "cost": 508.1,
+  "impr": 807,
+  "conv": 14,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.warrior.screw.gp",
+  "kind": "game",
+  "conf": 0.67,
+  "clicks": 1,
+  "cost": 0.08,
+  "impr": 19,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.wood.block.sudoku.puzzle.bm",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 6.62,
+  "impr": 4,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "com.wood.bolt.wordle.screw.nuts.puzzle",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 18,
+  "cost": 47.23,
+  "impr": 63,
+  "conv": 38,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.yolo.hiddenobjects",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 13,
+  "cost": 22.77,
+  "impr": 37,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "com.zm.watersort",
+  "kind": "game",
+  "conf": 0.89,
+  "clicks": 4,
+  "cost": 20.93,
+  "impr": 21,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "cont.ws",
+  "kind": "content",
+  "conf": 0.69,
+  "clicks": 1,
+  "cost": 6.15,
+  "impr": 192,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "daily.number.match.free.puzzle",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 12,
+  "cost": 16.61,
+  "impr": 36,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dating.ru",
+  "kind": "content",
+  "conf": 0.7,
+  "clicks": 1,
+  "cost": 10.97,
+  "impr": 47,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "deti-online.com",
+  "kind": "content",
+  "conf": 0.6,
+  "clicks": 2,
+  "cost": 24.4,
+  "impr": 69,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "digital.pinnaclewave.vpn.pangolin",
+  "kind": "utility",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 10.14,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dsp-betweenx.yandex.ru",
+  "kind": "unclear",
+  "conf": 0.55,
+  "clicks": 18,
+  "cost": 77.8,
+  "impr": 40,
+  "conv": 8,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dsp-minimob-ww.yandex.ru",
+  "kind": "unclear",
+  "conf": 0.55,
+  "clicks": 22,
+  "cost": 46.05,
+  "impr": 54,
+  "conv": 15,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dsp-mintagral.yandex.ru",
+  "kind": "unclear",
+  "conf": 0.54,
+  "clicks": 39,
+  "cost": 21.79,
+  "impr": 172,
+  "conv": 36,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dsp-unityads.yandex.ru",
+  "kind": "unclear",
+  "conf": 0.77,
+  "clicks": 1,
+  "cost": 2.33,
+  "impr": 69,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "dzen.ru",
+  "kind": "content",
+  "conf": 0.93,
+  "clicks": 149,
+  "cost": 1252.58,
+  "impr": 9585,
+  "conv": 119,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "e-booka.com",
+  "kind": "content",
+  "conf": 0.87,
+  "clicks": 1,
+  "cost": 0.19,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "e1.ru",
+  "kind": "unclear",
+  "conf": 0.5,
+  "clicks": 1,
+  "cost": 8.06,
+  "impr": 249,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "eadaily.com",
+  "kind": "content",
+  "conf": 0.73,
+  "clicks": 1,
+  "cost": 15.93,
+  "impr": 92,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "easy.sudoku.puzzle.solver.free",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 13,
+  "cost": 17.68,
+  "impr": 48,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ex.24smi.info",
+  "kind": "unclear",
+  "conf": 0.55,
+  "clicks": 2,
+  "cost": 7.54,
+  "impr": 81,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "f1news.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.75,
+  "impr": 19,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "fanat1k.ru",
+  "kind": "unclear",
+  "conf": 0.32,
+  "clicks": 1,
+  "cost": 7.33,
+  "impr": 29,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "fb2.top",
+  "kind": "unclear",
+  "conf": 0.87,
+  "clicks": 3,
+  "cost": 1.56,
+  "impr": 566,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "federal.tv",
+  "kind": "content",
+  "conf": 0.65,
+  "clicks": 1,
+  "cost": 11.13,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "finance.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 41.81,
+  "impr": 61,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "fontanka.ru",
+  "kind": "content",
+  "conf": 0.87,
+  "clicks": 2,
+  "cost": 23.82,
+  "impr": 237,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "forum.awd.ru",
+  "kind": "content",
+  "conf": 0.74,
+  "clicks": 1,
+  "cost": 10.46,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "fotostrana.ru",
+  "kind": "content",
+  "conf": 0.79,
+  "clicks": 4,
+  "cost": 18.35,
+  "impr": 214,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "funvent.tilepark",
+  "kind": "game",
+  "conf": 0.87,
+  "clicks": 2,
+  "cost": 2.16,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "game.yandex.ru",
+  "kind": "game",
+  "conf": 0.99,
+  "clicks": 94,
+  "cost": 1826.51,
+  "impr": 22698,
+  "conv": 64,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "games.vaveda.militaryoverturn",
+  "kind": "game",
+  "conf": 0.9,
+  "clicks": 1,
+  "cost": 1.52,
+  "impr": 5,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "games.yandex.ru",
+  "kind": "game",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 15.37,
+  "impr": 14,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "gdz-raketa.ru",
+  "kind": "content",
+  "conf": 0.82,
+  "clicks": 7,
+  "cost": 66.58,
+  "impr": 937,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "gdz.ru",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 14,
+  "cost": 56.9,
+  "impr": 3680,
+  "conv": 14,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "geocult.ru",
+  "kind": "unclear",
+  "conf": 0.45,
+  "clicks": 1,
+  "cost": 10.07,
+  "impr": 6,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "gismeteo.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 10.47,
+  "impr": 351,
+  "conv": 2,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "glavnoe.life",
+  "kind": "content",
+  "conf": 0.6,
+  "clicks": 2,
+  "cost": 4.84,
+  "impr": 190,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "go.mail.ru",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 2,
+  "cost": 27.21,
+  "impr": 53,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "hero.claw.master",
+  "kind": "game",
+  "conf": 0.52,
+  "clicks": 1,
+  "cost": 50.35,
+  "impr": 6,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "hh.ru",
+  "kind": "content",
+  "conf": 0.89,
+  "clicks": 3,
+  "cost": 13.08,
+  "impr": 75,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "hibiny.ru",
+  "kind": "unclear",
+  "conf": 0.37,
+  "clicks": 3,
+  "cost": 26.95,
+  "impr": 49,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "hitmos.fm",
+  "kind": "content",
+  "conf": 0.69,
+  "clicks": 1,
+  "cost": 9.29,
+  "impr": 57,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "horo.mail.ru",
+  "kind": "content",
+  "conf": 0.9,
+  "clicks": 3,
+  "cost": 19.89,
+  "impr": 130,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ifreedom.su",
+  "kind": "unclear",
+  "conf": 0.67,
+  "clicks": 1,
+  "cost": 10.02,
+  "impr": 240,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "igrotok.com",
+  "kind": "game",
+  "conf": 0.76,
+  "clicks": 1,
+  "cost": 1.3,
+  "impr": 252,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "images.yandex.ru",
+  "kind": "content",
+  "conf": 0.96,
+  "clicks": 2,
+  "cost": 35.61,
+  "impr": 98,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "io.deveem.vpn",
+  "kind": "utility",
+  "conf": 1.0,
+  "clicks": 8,
+  "cost": 36.66,
+  "impr": 17,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "io.supercent.pizzaidle",
+  "kind": "game",
+  "conf": 0.75,
+  "clicks": 1,
+  "cost": 1.77,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "io.voodoo.holeio",
+  "kind": "game",
+  "conf": 0.84,
+  "clicks": 1,
+  "cost": 0.43,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "io.voodoo.paper2",
+  "kind": "game",
+  "conf": 0.38,
+  "clicks": 11,
+  "cost": 16.38,
+  "impr": 51,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "izib.uk",
+  "kind": "unclear",
+  "conf": 0.86,
+  "clicks": 1,
+  "cost": 24.92,
+  "impr": 15,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "jaomix.ru",
+  "kind": "unclear",
+  "conf": 0.61,
+  "clicks": 1,
+  "cost": 1.5,
+  "impr": 232,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "jigsaw.puzzle.game.banana",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 8.44,
+  "impr": 27,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "kidultlovin.word.zen",
+  "kind": "unclear",
+  "conf": 0.51,
+  "clicks": 15,
+  "cost": 36.75,
+  "impr": 92,
+  "conv": 20,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "kino-teatr.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 14.68,
+  "impr": 20,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "kinonews.ru",
+  "kind": "content",
+  "conf": 0.96,
+  "clicks": 1,
+  "cost": 107.45,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "klops.ru",
+  "kind": "content",
+  "conf": 0.73,
+  "clicks": 2,
+  "cost": 3.47,
+  "impr": 74,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "kniga-online.com",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 6,
+  "cost": 7.7,
+  "impr": 879,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "knigavuhe.org",
+  "kind": "content",
+  "conf": 0.34,
+  "clicks": 2,
+  "cost": 32.48,
+  "impr": 248,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "knijky.ru",
+  "kind": "content",
+  "conf": 0.9,
+  "clicks": 1,
+  "cost": 0.1,
+  "impr": 12,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "kp.ru",
+  "kind": "content",
+  "conf": 0.88,
+  "clicks": 1,
+  "cost": 14.48,
+  "impr": 33,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "labnovel.ru",
+  "kind": "content",
+  "conf": 0.38,
+  "clicks": 1,
+  "cost": 3.76,
+  "impr": 17,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "lady.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 6.74,
+  "impr": 54,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "lenta.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 2,
+  "cost": 6.8,
+  "impr": 112,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "lgz.ru",
+  "kind": "unclear",
+  "conf": 0.53,
+  "clicks": 2,
+  "cost": 19.4,
+  "impr": 10,
+  "conv": 2,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "libcat.ru",
+  "kind": "content",
+  "conf": 0.72,
+  "clicks": 2,
+  "cost": 17.51,
+  "impr": 211,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "libking.ru",
+  "kind": "content",
+  "conf": 0.79,
+  "clicks": 1,
+  "cost": 0.3,
+  "impr": 76,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "limehd.ru",
+  "kind": "unclear",
+  "conf": 0.71,
+  "clicks": 1,
+  "cost": 1.95,
+  "impr": 6,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "limehd.ru.ctv",
+  "kind": "unclear",
+  "conf": 0.71,
+  "clicks": 1,
+  "cost": 4.51,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "lines-98.ru",
+  "kind": "unclear",
+  "conf": 0.67,
+  "clicks": 1,
+  "cost": 26.53,
+  "impr": 20,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "litboom.ru",
+  "kind": "unclear",
+  "conf": 0.45,
+  "clicks": 1,
+  "cost": 0.17,
+  "impr": 270,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "litfond.net",
+  "kind": "unclear",
+  "conf": 0.29,
+  "clicks": 3,
+  "cost": 16.69,
+  "impr": 250,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "litlife.club",
+  "kind": "content",
+  "conf": 0.46,
+  "clicks": 3,
+  "cost": 4.5,
+  "impr": 378,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "litmir.club",
+  "kind": "unclear",
+  "conf": 0.82,
+  "clicks": 4,
+  "cost": 17.89,
+  "impr": 429,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "llibre.ru",
+  "kind": "content",
+  "conf": 0.83,
+  "clicks": 7,
+  "cost": 50.4,
+  "impr": 763,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "logic-games.spb.ru",
+  "kind": "game",
+  "conf": 0.93,
+  "clicks": 4,
+  "cost": 5.95,
+  "impr": 52,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "loppipoppi.dominoes",
+  "kind": "game",
+  "conf": 0.97,
+  "clicks": 3,
+  "cost": 4.2,
+  "impr": 7,
+  "conv": 6,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "lovepdf.ru",
+  "kind": "utility",
+  "conf": 0.94,
+  "clicks": 2,
+  "cost": 10.56,
+  "impr": 11,
+  "conv": 2,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "m.images.yandex.ru",
+  "kind": "content",
+  "conf": 0.53,
+  "clicks": 1,
+  "cost": 4.82,
+  "impr": 29,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "m.kp.ru",
+  "kind": "content",
+  "conf": 0.63,
+  "clicks": 1,
+  "cost": 4.1,
+  "impr": 51,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "m.ok.ru",
+  "kind": "content",
+  "conf": 0.71,
+  "clicks": 1,
+  "cost": 21.5,
+  "impr": 5,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "m.pogoda.yandex.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 6.23,
+  "impr": 272,
+  "conv": 2,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "m.video.yandex.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 18.07,
+  "impr": 39,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 14,
+  "cost": 297.46,
+  "impr": 854,
+  "conv": 8,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mail.yandex.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 10,
+  "cost": 50.91,
+  "impr": 943,
+  "conv": 9,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mamba.ru",
+  "kind": "content",
+  "conf": 0.79,
+  "clicks": 1,
+  "cost": 5.43,
+  "impr": 42,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "manga-shi.org",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 14.18,
+  "impr": 26,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mangabuff.ru",
+  "kind": "content",
+  "conf": 0.93,
+  "clicks": 2,
+  "cost": 5.99,
+  "impr": 191,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "maximonline.ru",
+  "kind": "content",
+  "conf": 0.81,
+  "clicks": 1,
+  "cost": 1.93,
+  "impr": 93,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "minigames.mail.ru",
+  "kind": "game",
+  "conf": 0.75,
+  "clicks": 5,
+  "cost": 86.1,
+  "impr": 194,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mintmanga.com",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 1,
+  "cost": 0.83,
+  "impr": 8,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mir-chitki.ru",
+  "kind": "unclear",
+  "conf": 0.58,
+  "clicks": 1,
+  "cost": 0.4,
+  "impr": 90,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mirtesen.ru",
+  "kind": "unclear",
+  "conf": 0.44,
+  "clicks": 4,
+  "cost": 4.66,
+  "impr": 199,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mixnews.lv",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 32.13,
+  "impr": 254,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mk.ru",
+  "kind": "content",
+  "conf": 0.75,
+  "clicks": 4,
+  "cost": 90.41,
+  "impr": 133,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mult-fan.tv",
+  "kind": "content",
+  "conf": 0.44,
+  "clicks": 1,
+  "cost": 12.82,
+  "impr": 51,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "my.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 5,
+  "cost": 43.41,
+  "impr": 281,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "mydoramalive.com",
+  "kind": "game",
+  "conf": 0.28,
+  "clicks": 1,
+  "cost": 4.87,
+  "impr": 29,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "news-kharkov.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 28.26,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "news.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 18.49,
+  "impr": 60,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "news.rambler.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 7.01,
+  "impr": 69,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "news.sportbox.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.74,
+  "impr": 56,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ngs24.ru",
+  "kind": "unclear",
+  "conf": 0.62,
+  "clicks": 1,
+  "cost": 0.49,
+  "impr": 19,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "nonograms.ru",
+  "kind": "game",
+  "conf": 0.97,
+  "clicks": 3,
+  "cost": 20.85,
+  "impr": 26,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ntv.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 2.03,
+  "impr": 47,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "officelife.media",
+  "kind": "content",
+  "conf": 0.74,
+  "clicks": 1,
+  "cost": 3.7,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "ok.ru",
+  "kind": "content",
+  "conf": 0.85,
+  "clicks": 10,
+  "cost": 79.71,
+  "impr": 615,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "oka.fm",
+  "kind": "unclear",
+  "conf": 0.54,
+  "clicks": 1,
+  "cost": 14.68,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "online-red.fm",
+  "kind": "unclear",
+  "conf": 0.62,
+  "clicks": 1,
+  "cost": 5.29,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "onlinereads.net",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 0.73,
+  "impr": 14,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "org.aastudio.games.longnards",
+  "kind": "game",
+  "conf": 0.96,
+  "clicks": 3,
+  "cost": 2.08,
+  "impr": 18,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "osnmedia.ru",
+  "kind": "content",
+  "conf": 0.8,
+  "clicks": 1,
+  "cost": 13.63,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "our-news.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 5.72,
+  "impr": 19,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "overclockers.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 53.88,
+  "impr": 16,
+  "conv": 2,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ovkuse.ru",
+  "kind": "unclear",
+  "conf": 0.62,
+  "clicks": 1,
+  "cost": 9.22,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ozersk74.ru",
+  "kind": "unclear",
+  "conf": 0.52,
+  "clicks": 1,
+  "cost": 7.81,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "pasyans.ru",
+  "kind": "content",
+  "conf": 0.54,
+  "clicks": 1,
+  "cost": 1.51,
+  "impr": 18,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "peopletalk.ru",
+  "kind": "content",
+  "conf": 0.76,
+  "clicks": 1,
+  "cost": 9.84,
+  "impr": 11,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "pikabu.ru",
+  "kind": "content",
+  "conf": 0.92,
+  "clicks": 10,
+  "cost": 40.17,
+  "impr": 1403,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "pogoda.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 24.75,
+  "impr": 40,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "pogoda.yandex.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 3,
+  "cost": 41.49,
+  "impr": 277,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "povar.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 0.64,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "pozdravok.com",
+  "kind": "unclear",
+  "conf": 0.68,
+  "clicks": 1,
+  "cost": 31.51,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "primpogoda.ru",
+  "kind": "content",
+  "conf": 0.82,
+  "clicks": 1,
+  "cost": 2.94,
+  "impr": 9,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "progorod43.ru",
+  "kind": "content",
+  "conf": 0.78,
+  "clicks": 1,
+  "cost": 16.93,
+  "impr": 63,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "programma-peredach.com",
+  "kind": "content",
+  "conf": 0.67,
+  "clicks": 1,
+  "cost": 10.87,
+  "impr": 36,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "psytests.org",
+  "kind": "content",
+  "conf": 0.89,
+  "clicks": 1,
+  "cost": 32.62,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "radiopotok.ru",
+  "kind": "content",
+  "conf": 0.33,
+  "clicks": 1,
+  "cost": 10.43,
+  "impr": 5,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rambler.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 5.03,
+  "impr": 27,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ranobelib.me",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 2.88,
+  "impr": 66,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "razlozhi.ru",
+  "kind": "unclear",
+  "conf": 0.3,
+  "clicks": 8,
+  "cost": 38.55,
+  "impr": 1017,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rb.rbook.club",
+  "kind": "unclear",
+  "conf": 0.62,
+  "clicks": 7,
+  "cost": 8.74,
+  "impr": 5215,
+  "conv": 5,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "readli.net",
+  "kind": "unclear",
+  "conf": 0.31,
+  "clicks": 3,
+  "cost": 11.02,
+  "impr": 1321,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ren.tv",
+  "kind": "content",
+  "conf": 0.6,
+  "clicks": 1,
+  "cost": 0.13,
+  "impr": 25,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "romanika.online",
+  "kind": "unclear",
+  "conf": 0.54,
+  "clicks": 2,
+  "cost": 4.01,
+  "impr": 171,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rp5.ru",
+  "kind": "unclear",
+  "conf": 0.59,
+  "clicks": 1,
+  "cost": 19.28,
+  "impr": 13,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.beru.android",
+  "kind": "content",
+  "conf": 0.9,
+  "clicks": 2,
+  "cost": 31.04,
+  "impr": 153,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.litres.android.readfree",
+  "kind": "content",
+  "conf": 0.94,
+  "clicks": 1,
+  "cost": 0.25,
+  "impr": 25,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.mamba.client",
+  "kind": "unclear",
+  "conf": 0.54,
+  "clicks": 1,
+  "cost": 7.27,
+  "impr": 26,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.mamba.mambaclient",
+  "kind": "unclear",
+  "conf": 0.46,
+  "clicks": 1,
+  "cost": 7.03,
+  "impr": 6,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.odnoklassniki.iphone",
+  "kind": "content",
+  "conf": 0.77,
+  "clicks": 1,
+  "cost": 8.72,
+  "impr": 27,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.ok.android",
+  "kind": "unclear",
+  "conf": 0.53,
+  "clicks": 11,
+  "cost": 312.08,
+  "impr": 368,
+  "conv": 9,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.pikabu.android",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 4.41,
+  "impr": 16,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.ria.ria",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 4,
+  "cost": 71.49,
+  "impr": 104,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.rp5.rp5weatherhorizontal",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 11.25,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.skillcap.dominoes",
+  "kind": "game",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 0.07,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "ru.yandex.blue.market",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 78.9,
+  "impr": 61,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.yandex.games",
+  "kind": "game",
+  "conf": 0.96,
+  "clicks": 2,
+  "cost": 188.7,
+  "impr": 17,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.yandex.mail",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 9.2,
+  "impr": 23,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.yandex.mobile",
+  "kind": "content",
+  "conf": 0.88,
+  "clicks": 1,
+  "cost": 9.33,
+  "impr": 78,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.yandex.mobile.weather",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 14.05,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ru.zen.android",
+  "kind": "unclear",
+  "conf": 0.25,
+  "clicks": 7,
+  "cost": 51.81,
+  "impr": 487,
+  "conv": 6,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rus.hitmotop.com",
+  "kind": "unclear",
+  "conf": 0.27,
+  "clicks": 2,
+  "cost": 12.71,
+  "impr": 332,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "russia-tv.online",
+  "kind": "content",
+  "conf": 0.88,
+  "clicks": 1,
+  "cost": 41.77,
+  "impr": 22,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "russian7.ru",
+  "kind": "unclear",
+  "conf": 0.55,
+  "clicks": 2,
+  "cost": 16.09,
+  "impr": 46,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rusvesna.su",
+  "kind": "content",
+  "conf": 0.52,
+  "clicks": 1,
+  "cost": 2.33,
+  "impr": 162,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "rutoki.com",
+  "kind": "unclear",
+  "conf": 0.8,
+  "clicks": 1,
+  "cost": 4.24,
+  "impr": 2,
+  "conv": 0,
+  "groups": [
+   "Коллекционные метеориты"
+  ]
+ },
+ {
+  "placement": "s3.gamepush.com",
+  "kind": "game",
+  "conf": 0.65,
+  "clicks": 1,
+  "cost": 17.11,
+  "impr": 48,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "science.mail.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 8.55,
+  "impr": 34,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sdamgia.ru",
+  "kind": "content",
+  "conf": 0.94,
+  "clicks": 1,
+  "cost": 8.45,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sdelayhod.ru",
+  "kind": "unclear",
+  "conf": 0.78,
+  "clicks": 1,
+  "cost": 4.95,
+  "impr": 35,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "secret.private-booker.win",
+  "kind": "unclear",
+  "conf": 0.87,
+  "clicks": 1,
+  "cost": 6.5,
+  "impr": 9,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "shedevrum.ai",
+  "kind": "unclear",
+  "conf": 0.8,
+  "clicks": 1,
+  "cost": 3.46,
+  "impr": 4,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sibkray.ru",
+  "kind": "unclear",
+  "conf": 0.58,
+  "clicks": 2,
+  "cost": 25.88,
+  "impr": 17,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "slushkinvsem.ru",
+  "kind": "unclear",
+  "conf": 0.64,
+  "clicks": 1,
+  "cost": 3.8,
+  "impr": 62,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "smotret.tv",
+  "kind": "content",
+  "conf": 0.94,
+  "clicks": 1,
+  "cost": 3.88,
+  "impr": 296,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "snob.ru",
+  "kind": "content",
+  "conf": 0.5,
+  "clicks": 1,
+  "cost": 3.54,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "solitaire.patience.card.games.klondike.free",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.73,
+  "impr": 10,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sonnik-enigma.ru",
+  "kind": "content",
+  "conf": 0.96,
+  "clicks": 2,
+  "cost": 9.2,
+  "impr": 5,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sorting.games.goods.sort.triple.match3d.puzzle.stuff",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 4,
+  "cost": 6.8,
+  "impr": 25,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "spider.solitaire.card.games.free.no.ads.klondike.solitare.patience.king",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 6,
+  "cost": 7.82,
+  "impr": 10,
+  "conv": 2,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "spletnik.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 5.96,
+  "impr": 48,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sport5.by",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 5.49,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sports.kz",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 10.99,
+  "impr": 24,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "sportsdzen.ru",
+  "kind": "content",
+  "conf": 0.97,
+  "clicks": 1,
+  "cost": 76.91,
+  "impr": 96,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "tabor.ru",
+  "kind": "unclear",
+  "conf": 0.37,
+  "clicks": 1,
+  "cost": 13.57,
+  "impr": 24,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "tehnoomsk.ru",
+  "kind": "unclear",
+  "conf": 0.45,
+  "clicks": 2,
+  "cost": 12.8,
+  "impr": 8,
+  "conv": 2,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "telik.live",
+  "kind": "unclear",
+  "conf": 0.89,
+  "clicks": 1,
+  "cost": 33.16,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "teskin.jewels.planet",
+  "kind": "content",
+  "conf": 0.36,
+  "clicks": 13,
+  "cost": 7.33,
+  "impr": 57,
+  "conv": 10,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "top-radio.ru",
+  "kind": "content",
+  "conf": 0.63,
+  "clicks": 1,
+  "cost": 13.51,
+  "impr": 49,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "topcor.ru",
+  "kind": "unclear",
+  "conf": 0.59,
+  "clicks": 4,
+  "cost": 35.87,
+  "impr": 141,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "topwar.ru",
+  "kind": "content",
+  "conf": 0.5,
+  "clicks": 6,
+  "cost": 64.75,
+  "impr": 445,
+  "conv": 4,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "tragos.ru",
+  "kind": "unclear",
+  "conf": 0.45,
+  "clicks": 1,
+  "cost": 3.7,
+  "impr": 25,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "tv.mail.ru",
+  "kind": "content",
+  "conf": 0.97,
+  "clicks": 13,
+  "cost": 169.74,
+  "impr": 235,
+  "conv": 9,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "uknig.com",
+  "kind": "unclear",
+  "conf": 0.78,
+  "clicks": 2,
+  "cost": 1.74,
+  "impr": 30,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ura.news",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 3,
+  "cost": 24.15,
+  "impr": 141,
+  "conv": 3,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "usolie.info",
+  "kind": "unclear",
+  "conf": 0.46,
+  "clicks": 3,
+  "cost": 35.15,
+  "impr": 85,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "vb.topbook.me",
+  "kind": "unclear",
+  "conf": 0.91,
+  "clicks": 1,
+  "cost": 1.36,
+  "impr": 871,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "vc.ru",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 4.6,
+  "impr": 2,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "vedomosti.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 8.24,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом"
+  ]
+ },
+ {
+  "placement": "vfokuse.mail.ru",
+  "kind": "content",
+  "conf": 0.91,
+  "clicks": 1,
+  "cost": 21.41,
+  "impr": 104,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "video.like",
+  "kind": "unclear",
+  "conf": 0.37,
+  "clicks": 98,
+  "cost": 93.33,
+  "impr": 1519,
+  "conv": 7,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "video.like.rustore",
+  "kind": "content",
+  "conf": 0.73,
+  "clicks": 1,
+  "cost": 1.94,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "video.yandex.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 10.02,
+  "impr": 156,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "vk.com",
+  "kind": "content",
+  "conf": 0.74,
+  "clicks": 3,
+  "cost": 52.29,
+  "impr": 41,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "vokrugsveta.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 23.22,
+  "impr": 20,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "wday.ru",
+  "kind": "content",
+  "conf": 0.76,
+  "clicks": 1,
+  "cost": 25.79,
+  "impr": 11,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "weathernews.com",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 9.55,
+  "impr": 10,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "wheelie.master.street.elite.bikegame",
+  "kind": "game",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 0.04,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита"
+  ]
+ },
+ {
+  "placement": "win.mail.ru",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 4,
+  "cost": 18.96,
+  "impr": 1999,
+  "conv": 3,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "world.Deep.corp",
+  "kind": "unclear",
+  "conf": 0.9,
+  "clicks": 1,
+  "cost": 2.15,
+  "impr": 1,
+  "conv": 1,
+  "groups": [
+   "Необычный подарок мужчине"
+  ]
+ },
+ {
+  "placement": "www.anekdot.ru",
+  "kind": "content",
+  "conf": 0.99,
+  "clicks": 1,
+  "cost": 9.03,
+  "impr": 70,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.bazaar.ru",
+  "kind": "content",
+  "conf": 0.95,
+  "clicks": 1,
+  "cost": 0.09,
+  "impr": 9,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.center-pss.ru",
+  "kind": "unclear",
+  "conf": 0.74,
+  "clicks": 1,
+  "cost": 3.01,
+  "impr": 3,
+  "conv": 1,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.hi-fi.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 13.55,
+  "impr": 18,
+  "conv": 1,
+  "groups": [
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.ixbt.com",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 11.75,
+  "impr": 119,
+  "conv": 1,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.kinoafisha.spb.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 1,
+  "cost": 25.95,
+  "impr": 20,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.min2win.ru",
+  "kind": "game",
+  "conf": 0.39,
+  "clicks": 2,
+  "cost": 12.62,
+  "impr": 19,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.popcornnews.ru",
+  "kind": "content",
+  "conf": 0.96,
+  "clicks": 1,
+  "cost": 8.77,
+  "impr": 38,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.pravda.ru",
+  "kind": "content",
+  "conf": 1.0,
+  "clicks": 2,
+  "cost": 29.47,
+  "impr": 28,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.svpressa.ru",
+  "kind": "content",
+  "conf": 0.55,
+  "clicks": 1,
+  "cost": 11.78,
+  "impr": 51,
+  "conv": 1,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "www.top-page.ru",
+  "kind": "unclear",
+  "conf": 0.83,
+  "clicks": 1,
+  "cost": 13.32,
+  "impr": 6,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ya-turbo.ru",
+  "kind": "unclear",
+  "conf": 0.42,
+  "clicks": 1,
+  "cost": 3.44,
+  "impr": 14,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "ya.ru",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 16,
+  "cost": 289.42,
+  "impr": 1225,
+  "conv": 14,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "yandex.ru",
+  "kind": "content",
+  "conf": 0.98,
+  "clicks": 3,
+  "cost": 57.84,
+  "impr": 183,
+  "conv": 2,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "yandex.ru/rythm",
+  "kind": "content",
+  "conf": 0.42,
+  "clicks": 1,
+  "cost": 13.5,
+  "impr": 11,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "yaplakal.com",
+  "kind": "content",
+  "conf": 0.4,
+  "clicks": 3,
+  "cost": 21.97,
+  "impr": 1074,
+  "conv": 3,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "zr.ru",
+  "kind": "content",
+  "conf": 0.34,
+  "clicks": 1,
+  "cost": 7.21,
+  "impr": 3,
+  "conv": 0,
+  "groups": [
+   "Браслеты и подвески с метеоритом",
+   "Необычный подарок мужчине",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "нелапша.рф",
+  "kind": "content",
+  "conf": 0.42,
+  "clicks": 1,
+  "cost": 3.53,
+  "impr": 7,
+  "conv": 0,
+  "groups": [
+   "Амулеты из метеорита",
+   "Браслеты и подвески с метеоритом",
+   "Коллекционные метеориты",
+   "Часы с метеоритом"
+  ]
+ },
+ {
+  "placement": "стофактов.рф",
+  "kind": "content",
+  "conf": 0.69,
+  "clicks": 1,
+  "cost": 10.0,
+  "impr": 1,
+  "conv": 0,
+  "groups": [
+   "Часы с метеоритом"
+  ]
+ }
+]
