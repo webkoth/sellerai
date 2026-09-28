@@ -151,6 +151,77 @@ describe("writeWbStocks", () => {
     expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "PUT"])
   })
 
+  it("409 с data[]: названная позиция — отказ с кодом WB, остальные применены той же пачкой — применено", async () => {
+    const wb = fakeWb(
+      { "111": { chrtId: 7001, amount: 3 }, "222": { chrtId: 7002, amount: 1 } },
+      {
+        onPut: (body, store) => {
+          applyPut(store, body, new Set([7002]))
+          return new Response(JSON.stringify([{ code: "CargoWarehouseRestrictionMGT", message: "склад", data: [{ sku: "222", chrtId: 7002, amount: 0 }] }]), {
+            status: 409,
+          })
+        },
+      },
+    )
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2), op("222", "7002", 1, 0)])
+    expect(r.map((x) => [x.barcode, x.ok, x.uncertain ?? false])).toEqual([
+      ["111", true, false],
+      ["222", false, false],
+    ])
+    expect(r[1]!.error).toMatch(/WB: CargoWarehouseRestrictionMGT/)
+    expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "POST"])
+  })
+
+  it("409 с data[], ничего не применено — названная позиция отказана, остальные — один повтор без неё", async () => {
+    const wb = fakeWb(
+      { "111": { chrtId: 7001, amount: 3 }, "222": { chrtId: 7002, amount: 1 } },
+      {
+        onPut: (body, store, call) => {
+          if (call === 1) return new Response(JSON.stringify([{ code: "NotFound", message: "x", data: [{ sku: "", chrtId: 7002, amount: 0 }] }]), { status: 409 })
+          applyPut(store, body)
+          return new Response(null, { status: 204 })
+        },
+      },
+    )
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2), op("222", "7002", 1, 0)])
+    expect(r.map((x) => [x.barcode, x.ok])).toEqual([
+      ["222", false],
+      ["111", true],
+    ])
+    expect(wb.calls.filter((c) => c.method === "PUT").map((c) => c.body)).toEqual([
+      { stocks: [{ chrtId: 7001, amount: 2 }, { chrtId: 7002, amount: 0 }] },
+      { stocks: [{ chrtId: 7001, amount: 2 }] },
+    ])
+  })
+
+  it("повтор после 409 — только один: второй 409 — отказ без нового повтора", async () => {
+    const wb = fakeWb(
+      { "111": { chrtId: 7001, amount: 3 }, "222": { chrtId: 7002, amount: 1 } },
+      {
+        onPut: (_body, _store, call) =>
+          new Response(JSON.stringify([{ code: "NotFound", message: "x", data: [{ sku: call === 1 ? "222" : "111", amount: 0 }] }]), { status: 409 }),
+      },
+    )
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2), op("222", "7002", 1, 0)])
+    expect(r.every((x) => !x.ok && !x.uncertain)).toBe(true)
+    expect(wb.calls.filter((c) => c.method === "PUT")).toHaveLength(2)
+  })
+
+  it("409 без data[] — отказ пачке, без повтора", async () => {
+    const wb = fakeWb({ "111": { chrtId: 7001, amount: 3 }, "222": { chrtId: 7002, amount: 1 } }, { putStatus: 409 })
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2), op("222", "7002", 1, 0)])
+    expect(r.every((x) => !x.ok && !x.uncertain)).toBe(true)
+    expect(wb.calls.filter((c) => c.method === "PUT")).toHaveLength(1)
+  })
+
+  it("chrtId в ответе чтения WB расходится с каталогом — отказ позиции до записи", async () => {
+    const wb = fakeWb({ "111": { chrtId: 9999, amount: 3 }, "222": { chrtId: 7002, amount: 1 } })
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2), op("222", "7002", 1, 0)])
+    expect(r[0]).toMatchObject({ barcode: "111", ok: false, uncertain: false, error: expect.stringContaining("chrtId расходится с WB") })
+    expect(r[1]).toMatchObject({ barcode: "222", ok: true })
+    expect(wb.calls[1]!.body).toEqual({ stocks: [{ chrtId: 7002, amount: 0 }] })
+  })
+
   it("без chrtId или с нечисловым — отказ до сети", async () => {
     const wb = fakeWb({})
     const r = await writeWbStocks(cfg, [op("111", null, 3, 2), op("222", "abc", 1, 0)])

@@ -36,11 +36,39 @@ export interface WbStockWriterConfig {
   verifyDelayMs?: number
 }
 
-/** Остаток по штрихкодам на складе; строк с нулём WB не отдаёт — отсутствие строки = 0. */
-async function readAmounts(cfg: WbStockWriterConfig, barcodes: string[]): Promise<Map<string, number>> {
-  const out = new Map<string, number>()
+/**
+ * Остаток по штрихкодам на складе и chrtId, которым WB отвечает за штрихкод; строк с нулём WB не
+ * отдаёт — отсутствие строки = 0 (и chrtId неизвестен).
+ */
+async function readRows(cfg: WbStockWriterConfig, barcodes: string[]): Promise<Map<string, { amount: number; chrtId: number | null }>> {
+  const out = new Map<string, { amount: number; chrtId: number | null }>()
   for (const row of await fetchFbsStocks(cfg.token, cfg.warehouseId, barcodes)) {
-    if (row.sku) out.set(row.sku, Math.max(0, row.amount ?? 0))
+    if (row.sku) out.set(row.sku, { amount: Math.max(0, row.amount ?? 0), chrtId: row.chrtId ?? null })
+  }
+  return out
+}
+
+async function readAmounts(cfg: WbStockWriterConfig, barcodes: string[]): Promise<Map<string, number>> {
+  return new Map([...(await readRows(cfg, barcodes))].map(([barcode, r]) => [barcode, r.amount]))
+}
+
+/**
+ * Позиции, названные в теле 409 (`StocksWarehouseError`: `[{ code, message, data: [{ sku, chrtId, amount }] }]`):
+ * штрихкод → код ошибки. Совпадение по chrtId или по штрихкоду (`sku`). Не 409 или без data — пусто.
+ */
+function namedInWbError(e: unknown, batch: readonly Keyed[]): Map<string, string> {
+  const out = new Map<string, string>()
+  if (!(e instanceof PlatformApiError) || e.status !== 409 || !Array.isArray(e.body)) return out
+  for (const err of e.body as Array<{ code?: unknown; data?: unknown }>) {
+    if (!Array.isArray(err?.data)) continue
+    const code = typeof err.code === "string" && err.code ? err.code : "ошибка позиции"
+    for (const d of err.data as Array<{ sku?: unknown; chrtId?: unknown }>) {
+      for (const x of batch) {
+        if ((typeof d?.chrtId === "number" && d.chrtId === x.chrtId) || (typeof d?.sku === "string" && d.sku !== "" && d.sku === x.op.barcode)) {
+          out.set(x.op.barcode, code)
+        }
+      }
+    }
   }
   return out
 }
@@ -70,17 +98,26 @@ export async function writeWbStocks(cfg: WbStockWriterConfig, ops: WriteOp[]): P
   }
   if (withChrt.length === 0) return results
 
-  let current: Map<string, number>
+  let current: Map<string, { amount: number; chrtId: number | null }>
   try {
-    current = await readAmounts(cfg, withChrt.map((x) => x.op.barcode))
+    current = await readRows(cfg, withChrt.map((x) => x.op.barcode))
   } catch (e) {
     for (const x of withChrt) results.push(failed(x.op, `WB: остаток перед записью не прочитан — ${errorText(e)}`))
     return results
   }
   const toWrite: Array<{ op: WriteOp; chrtId: number }> = []
   for (const x of withChrt) {
-    const now = current.get(x.op.barcode) ?? 0
-    if (x.op.before !== null && now !== x.op.before) {
+    const row = current.get(x.op.barcode)
+    const now = row?.amount ?? 0
+    if (row && row.chrtId !== null && row.chrtId !== x.chrtId) {
+      // Каталог (products.wb_chrt_id) устарел или штрихкод переехал в другой размер: запись по нашему
+      // chrtId ушла бы в чужой размер.
+      results.push(
+        failed(x.op, `WB: chrtId расходится с WB (в каталоге ${x.chrtId}, на складе ${row.chrtId}) — запись не делается до обновления каталога`, {
+          response: { currentChrtId: row.chrtId, currentAmount: now },
+        }),
+      )
+    } else if (x.op.before !== null && now !== x.op.before) {
       results.push(
         failed(x.op, `WB: остаток изменился после снимка (было ${x.op.before}, сейчас ${now}) — запись отложена до следующего прогона`, {
           response: { currentAmount: now },
@@ -91,7 +128,7 @@ export async function writeWbStocks(cfg: WbStockWriterConfig, ops: WriteOp[]): P
     }
   }
 
-  for (const batch of chunk(toWrite, WB_STOCKS_PUT_MAX)) results.push(...(await putAndVerify(cfg, batch)))
+  for (const batch of chunk(toWrite, WB_STOCKS_PUT_MAX)) results.push(...(await putAndVerify(cfg, batch, true)))
   return results
 }
 
@@ -100,8 +137,12 @@ type Keyed = { op: WriteOp; chrtId: number }
 /** Чистый лимит: площадка отказала до применения, и ни одна попытка не могла дойти — читать незачем. */
 const isPureRateLimit = (e: unknown) => e instanceof RateLimitError && !e.mayHaveBeenDelivered
 
-/** Одна пачка: PUT → пауза → проверочное чтение → итог по каждой позиции (см. writeWbStocks, шаг 3). */
-async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[]): Promise<SendResult[]> {
+/**
+ * Одна пачка: PUT → пауза → проверочное чтение → итог по каждой позиции (см. writeWbStocks, шаг 3).
+ * 409 с названными позициями (data[]): им — отказ с кодом WB, неприменённым остальным — ОДИН повтор
+ * без них (`retryWithoutNamed`): одна плохая позиция не должна держать всю площадку каждый тик.
+ */
+async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[], retryWithoutNamed: boolean): Promise<SendResult[]> {
   let putError: unknown = null
   try {
     await requestJsonOrNull("wb", `${MARKETPLACE}/api/v3/stocks/${cfg.warehouseId}`, {
@@ -133,17 +174,30 @@ async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[]): Promise<S
     )
   }
 
-  return batch.map((x) => {
+  const named = namedInWbError(putError, batch)
+  const results: SendResult[] = []
+  const retry: Keyed[] = []
+  for (const x of batch) {
     const got = after.get(x.op.barcode) ?? 0
-    if (got === x.op.after) return succeeded(x.op, { chrtId: x.chrtId, amount: got })
-    if (putError === null) {
-      return failed(x.op, `WB: после записи на складе ${got}, ожидалось ${x.op.after}`, { uncertain: true, response: { chrtId: x.chrtId, amount: got } })
+    if (got === x.op.after) {
+      results.push(succeeded(x.op, { chrtId: x.chrtId, amount: got }))
+    } else if (putError === null) {
+      results.push(failed(x.op, `WB: после записи на складе ${got}, ожидалось ${x.op.after}`, { uncertain: true, response: { chrtId: x.chrtId, amount: got } }))
+    } else if (got === x.op.before) {
+      // Ошибка PUT, на складе прежнее число — запись не применилась: отказ, итог известен.
+      const code = named.get(x.op.barcode)
+      if (code !== undefined) results.push(failed(x.op, `WB: ${code} — ${rejectedText}`, { response: errorBody }))
+      else if (retryWithoutNamed && named.size > 0) retry.push(x)
+      else results.push(failed(x.op, rejectedText, { response: errorBody }))
+    } else {
+      results.push(
+        failed(x.op, `${rejectedText}; после ошибки на складе ${got} (было ${x.op.before}, ожидалось ${x.op.after})`, {
+          uncertain: true,
+          response: errorBody,
+        }),
+      )
     }
-    // Ошибка PUT, на складе прежнее число — запись не применилась: отказ, итог известен.
-    if (got === x.op.before) return failed(x.op, rejectedText, { response: errorBody })
-    return failed(x.op, `${rejectedText}; после ошибки на складе ${got} (было ${x.op.before}, ожидалось ${x.op.after})`, {
-      uncertain: true,
-      response: errorBody,
-    })
-  })
+  }
+  if (retry.length > 0) results.push(...(await putAndVerify(cfg, retry, false)))
+  return results
 }
