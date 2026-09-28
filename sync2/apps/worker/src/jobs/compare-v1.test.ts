@@ -34,10 +34,16 @@ const extra = (over: Partial<SummaryExtra> = {}): SummaryExtra => ({
   lastPoolRecalcAt: "2026-09-27T11:50:00.000Z",
   recentOrderBarcodes: new Set(),
   suspectedDoubleCounts: 0,
+  siteDiff: { barcodes: 0, rows: 0 },
   ...over,
 })
 
 describe("formatComparison", () => {
+  it("расхождение витрины сайта с пулом — отдельной строкой", () => {
+    const text = formatComparison({ same: 1, diff: [], onlyV1: [], onlyV2: [] }, extra({ siteDiff: { barcodes: 3, rows: 18 } }))
+    expect(text).toContain("Сайт ↔ пул за сутки (витрина не меняется, записи off; баркодов/строк): 3/18")
+  })
+
   it("короткая сводка для Telegram", () => {
     const text = formatComparison({ same: 80, diff: [{ barcode: "B", v1: 3, v2: 1 }], onlyV1: [], onlyV2: [] }, extra())
     expect(text).toContain("совпадает 80 из 81")

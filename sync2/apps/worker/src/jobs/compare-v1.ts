@@ -103,6 +103,8 @@ export interface SummaryExtra {
   /** Баркоды с заказом/отменой зеркала за последние DOUBLE_COUNT_WINDOW_MINUTES — пометка у строк diff. */
   recentOrderBarcodes: ReadonlySet<string>
   suspectedDoubleCounts: number
+  /** Расхождение витрины сайта с пулом за сутки: план сайта в журнале с mode = 'off' (этап 1.3c). */
+  siteDiff: PlannedWrites
 }
 
 function poolLine(recalcAt: string | null, now: Date): string {
@@ -132,6 +134,7 @@ export function formatComparison(r: ComparisonResult, extra: SummaryExtra): stri
     `Только у нового (${r.onlyV2.length}): ${formatList(r.onlyV2.map((i) => `${i.barcode} (${i.v2})`))}`,
     `Подозрение на двойной счёт: ${extra.suspectedDoubleCounts}`,
     `План записей за сутки (dry-run, баркодов/строк): Ozon ${plan("ozon")}, ЯМ ${plan("ym")}, KIT ${plan("kit")}`,
+    `Сайт ↔ пул за сутки (витрина не меняется, записи off; баркодов/строк): ${extra.siteDiff.barcodes}/${extra.siteDiff.rows}`,
     poolLine(extra.lastPoolRecalcAt, extra.now),
     `Упавших прогонов за сутки: ${extra.failedRuns}, зависших (running > ${STUCK_RUN_MS / 60_000} мин): ${extra.stuckRuns}`,
   ].join("\n")
@@ -177,7 +180,7 @@ export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier:
   const since = ago(COMPARE_WINDOW_MS)
   // Леджер — до запросов к базе: нет леджера — нет и сверки.
   const ledger = readLedger(deps.ledgerPath)
-  const [{ items }, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts] = await Promise.all([
+  const [{ items }, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts, offPlanned] = await Promise.all([
     loadPoolState(db),
     countFailedRunsSince(db, since),
     countStuckRunsSince(db, since, ago(STUCK_RUN_MS)),
@@ -185,10 +188,11 @@ export async function runCompareV1(deps: { db: Db; ledgerPath: string; notifier:
     lastRunWithCounterAt(db, "pool", "events"),
     mirrorOrderBarcodesSince(db, ago(DOUBLE_COUNT_WINDOW_MINUTES * 60_000)),
     countSuspectedDoubleCounts(db, since),
+    plannedWritesSince(db, since, ["off"]),
   ])
 
   const result = comparePools(items.map((i) => ({ barcode: i.barcode, base: i.base })), ledger)
-  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts })
+  const text = formatComparison(result, { now, failedRuns, stuckRuns, planned, lastPoolRecalcAt, recentOrderBarcodes, suspectedDoubleCounts, siteDiff: offPlanned.site })
   if (!(await deps.notifier.send(text))) throw new Error("сводка сверки не доставлена в Telegram (бот не настроен или Telegram отказал)")
   return {
     same: result.same,

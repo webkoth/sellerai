@@ -188,7 +188,8 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
   - «Подозрение на двойной счёт: N» — сигналы WB за сутки, которым ≤40 мин раньше предшествовал заказ/отмена
     зеркала по тому же баркоду (`countSuspectedDoubleCounts`, `packages/db/src/compare-query.ts`) — метрика приёмки.
     Окно одно — `DOUBLE_COUNT_WINDOW_MINUTES`; заказы холодного старта (delta 0) не считаются ни там, ни там;
-  - план записей за сутки — разные баркоды и строки `writes` по площадке, только `mode = 'dry-run'`;
+  - план записей за сутки — разные баркоды и строки `writes` по площадке, только `mode = 'dry-run'`; план сайта
+    (`mode = 'off'`) — отдельной строкой «Сайт ↔ пул»;
   - «Пул пересчитан: …» (МСК) — начало последнего завершённого `pool`, у которого в счётчиках есть `events`
     (`partial` из-за предохранителя плана или ошибок записи пул пересчитал, `partial` с `noFreshWb` — нет),
     и `⚠️ пул не пересчитывался N ч`, если дольше часа;
@@ -212,3 +213,23 @@ kit  | заказов: 2  (open=0, shipped=0,  cancelled_before_ship=2, returned
   `failed`) → 1; `partial` — штатная работа, а не авария → 0.
 - Локальная проверка на пустой базе без ключей площадок: после `npm run cli -- seed-channels`
   `npm run cli -- pool` → `partial`, `noFreshWb: 1`, код 0 (без `seed-channels` — `failed`, код 1).
+
+## Сайт — служебный API (этап 1.3c)
+
+- Адаптер `packages/platforms/src/site/`: `GET /api/internal/orders?since=` и `GET /api/internal/stocks` сайта
+  kotelnikovartifact.ru (репозиторий `kotelnikovartifact`), `Authorization: Bearer $SITE_API_TOKEN` — это
+  `INTERNAL_API_TOKEN` из `.env` сайта. Подключается в `ingest` и `probe`, только если задан `SITE_API_TOKEN`
+  (не короче 32 символов); `SITE_API_URL` — по умолчанию `https://kotelnikovartifact.ru`, только https (кроме localhost).
+- Жизненный цикл: у сайта один статус `new` → `open`; любой другой → `returned` (отмены владелец возвращает через WB).
+  `truncated` в ответе заказов — ошибка адаптера (`ingest` → `partial`), а не частичный список.
+- Снимок: строка на каждый штрихкод каталога сайта, нули включены; штрихкод не из каталога WB — в `siteSkipped`.
+  `source` — откуда витрина берёт остаток: `wb` (1.3c) или `pool` (после 1.4); `probe` его печатает.
+- `pool` планирует сайт отдельным вызовом `planStockWrites` со своими пределами — счётчики `sitePlanned`, `siteStale`,
+  `siteAborted_<причина>` (+ `partial` с текстом); план Ozon/ЯМ/KIT от сайта не зависит. Снимков сайта нет вовсе
+  (сайт не подключён) — счётчиков сайта нет, `pool` ведёт себя как до 1.3c. `channels.write_mode` сайта —
+  `off`: строки плана пишутся в `writes` с `mode = 'off'` — это расхождение витрины с пулом. В сводке `compare-v1` —
+  строка «Сайт ↔ пул за сутки»; прежняя строка плана считает только `dry-run`.
+- Заказ сайта в режиме WB `external`: старый синк его не знает и WB не списывает, поэтому сигнал WB через
+  `WB_SETTLE_MINUTES` вернёт единицу в пул, если владелец не снял её на WB руками. В 1.4 заказ сайта уйдёт на WB сам.
+- Запись `putSiteStocks` (`PUT /api/internal/stocks`, абсолютные значения, пачками по 5000) есть, но к `pool` не
+  подключена: отправитель — `noSender` до 1.4.
