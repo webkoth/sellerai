@@ -24,6 +24,7 @@ describe("loadChannelsConfig", () => {
       ym: { apiKey: "ym", businessId: "191766894", campaignId: "149197829", warehouseIds: [2369574] },
       kit: { token: "kit", warehouseId: "01980d4c-1b53-7aa1-ab23-1b7c23604704" },
       site: null,
+      siteError: null,
     })
   })
   it("несколько складов ЯМ через запятую", () => {
@@ -67,15 +68,26 @@ describe("loadChannelsConfig", () => {
     it("свой адрес — без завершающего слэша", () => {
       expect(loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "https://staging.example.ru/" }).site?.baseUrl).toBe("https://staging.example.ru")
     })
+    // Ошибка конфига сайта не роняет конфиг целиком: сайт пропускается, текст — в siteError,
+    // обязательные площадки работают (ingest уходит в partial с этим текстом).
+    const broken = (patch: Record<string, string>) => {
+      const c = loadChannelsConfig({ ...env, SITE_API_TOKEN: token, ...patch })
+      expect(c.site).toBeNull()
+      expect(c.kit.token).toBe("kit")
+      return c.siteError
+    }
     it("http — только для localhost: токен уходит в заголовке", () => {
-      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "http://kotelnikovartifact.ru" })).toThrow(/SITE_API_URL/)
+      expect(broken({ SITE_API_URL: "http://kotelnikovartifact.ru" })).toMatch(/SITE_API_URL/)
       expect(loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "http://localhost:3050" }).site?.baseUrl).toBe("http://localhost:3050")
     })
     it("не URL — ошибка с именем переменной", () => {
-      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: token, SITE_API_URL: "kotelnikovartifact" })).toThrow(/SITE_API_URL/)
+      expect(broken({ SITE_API_URL: "kotelnikovartifact" })).toMatch(/SITE_API_URL/)
     })
     it("токен короче 32 символов — ошибка", () => {
-      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: "short" })).toThrow(/SITE_API_TOKEN/)
+      expect(broken({ SITE_API_TOKEN: "short" })).toMatch(/SITE_API_TOKEN/)
+    })
+    it("ошибка ключа обязательной площадки по-прежнему роняет конфиг", () => {
+      expect(() => loadChannelsConfig({ ...env, SITE_API_TOKEN: token, WB_API_TOKEN: "" })).toThrow(/WB_API_TOKEN/)
     })
   })
 })

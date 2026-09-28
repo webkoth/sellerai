@@ -27,6 +27,12 @@ export interface ChannelsConfig {
   ym: { apiKey: string; businessId: string; campaignId: string; warehouseIds: number[] }
   kit: { token: string; warehouseId: string }
   site: SiteChannelConfig | null
+  /**
+   * Конфиг сайта задан, но битый (не URL, http, короткий токен): сайт пропускается,
+   * текст — здесь. Сайт необязателен, и его ошибка не роняет ingest обязательных
+   * площадок — ingest уходит в partial с этим текстом.
+   */
+  siteError: string | null
 }
 
 function required(env: Record<string, string | undefined>, name: string): string {
@@ -60,7 +66,8 @@ function requiredWarehouseIds(env: Record<string, string | undefined>, name: str
 /**
  * Сайт подключается, только если задан SITE_API_TOKEN (= INTERNAL_API_TOKEN
  * сайта). Токен уходит в заголовке, поэтому адрес — только https (кроме
- * localhost для разработки); короткий токен — ошибка, а не тихое отключение.
+ * localhost для разработки); короткий токен — ошибка, а не тихое отключение
+ * (её ловит loadChannelsConfig и кладёт в siteError).
  */
 function optionalSite(env: Record<string, string | undefined>): SiteChannelConfig | null {
   const token = env.SITE_API_TOKEN?.trim()
@@ -79,6 +86,13 @@ function optionalSite(env: Record<string, string | undefined>): SiteChannelConfi
 }
 
 export function loadChannelsConfig(env: Record<string, string | undefined>): ChannelsConfig {
+  let site: SiteChannelConfig | null = null
+  let siteError: string | null = null
+  try {
+    site = optionalSite(env)
+  } catch (e) {
+    siteError = e instanceof Error ? e.message : String(e)
+  }
   return {
     wb: { token: required(env, "WB_API_TOKEN") },
     ozon: { clientId: required(env, "OZON_CLIENT_ID"), apiKey: required(env, "OZON_API_TOKEN") },
@@ -89,6 +103,7 @@ export function loadChannelsConfig(env: Record<string, string | undefined>): Cha
       warehouseIds: requiredWarehouseIds(env, "YM_WAREHOUSE_IDS"),
     },
     kit: { token: required(env, "YAKIT_API_TOKEN"), warehouseId: required(env, "KIT_WAREHOUSE_ID") },
-    site: optionalSite(env),
+    site,
+    siteError,
   }
 }

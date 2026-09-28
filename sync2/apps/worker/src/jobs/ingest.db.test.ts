@@ -32,7 +32,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
    * берётся из прошлых прогонов в базе. У каждого прогона своя минута: снимок уникален
    * по паре «площадка + момент».
    */
-  const ingest = (catalog: WbCatalogEntry[] | Error, opts: { mirrorsFail?: boolean; acceptCatalog?: boolean } = {}) => {
+  const ingest = (catalog: WbCatalogEntry[] | Error, opts: { mirrorsFail?: boolean; acceptCatalog?: boolean; configErrors?: string[] } = {}) => {
     const at = new Date(Date.parse("2026-09-27T10:00:00.000Z") + ++n * 60_000)
     return withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
       const r = await runIngest({
@@ -44,6 +44,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
         adapters: {
           wb: { ...fake("wb", [order("W1")]), fetchCatalog: async () => (catalog instanceof Error ? Promise.reject(catalog) : catalog) },
           mirrors: () => [fake("ozon", [order("O1"), order("O0", 0)], opts.mirrorsFail), fake("kit", [order("K1")])],
+          ...(opts.configErrors ? { configErrors: opts.configErrors } : {}),
         },
       })
       return { status: r.status, counters: r.counters, error: r.errors.length ? r.errors.join("; ") : undefined }
@@ -123,5 +124,12 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     const r = await ingest([], { acceptCatalog: true })
     expect(r).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 0, catalogForced: 1 } })
     expect(await accepted()).toBe(0)
+  })
+
+  it("битый конфиг сайта — partial с текстом, обязательные площадки записаны", async () => {
+    const r = await ingest(cat(10), { configErrors: ["сайт пропущен: SITE_API_TOKEN короче 32 символов"] })
+    expect(r.status).toBe("partial")
+    expect(r.error).toContain("сайт пропущен: SITE_API_TOKEN")
+    expect(r.counters).toMatchObject({ wbCatalogAccepted: 10, ozonOrders: 1, kitOrders: 1, kitStock: 1 })
   })
 })

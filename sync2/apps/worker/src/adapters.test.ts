@@ -25,5 +25,11 @@ describe("buildAdapters", () => {
   })
   it("с токеном сайта — сайт пятой площадкой", () => {
     expect(channels({ ...env, SITE_API_TOKEN: "s".repeat(64) })).toEqual(["ozon", "ym", "kit", "site"])
+    expect(buildAdapters(loadChannelsConfig({ ...env, SITE_API_TOKEN: "s".repeat(64) })).configErrors).toEqual([])
+  })
+  it("битый конфиг сайта — сайт пропущен, ошибка в configErrors, зеркала на месте", () => {
+    const e = { ...env, SITE_API_TOKEN: "short" }
+    expect(channels(e)).toEqual(["ozon", "ym", "kit"])
+    expect(buildAdapters(loadChannelsConfig(e)).configErrors).toEqual([expect.stringMatching(/^сайт пропущен: SITE_API_TOKEN/)])
   })
 })

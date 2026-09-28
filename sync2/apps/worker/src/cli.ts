@@ -133,7 +133,10 @@ async function runProbe(env: NodeJS.ProcessEnv): Promise<number> {
   channels.push({ channel: "kit", adapter: createKitAdapter(config.kit, wbIndex) })
   // Сайт — пятая площадка (этап 1.3c), только при заданном SITE_API_TOKEN.
   if (config.site) channels.push({ channel: "site", adapter: createSiteAdapter(config.site, wbIndex) })
-  else console.log("site | пропущен: SITE_API_TOKEN не задан")
+  else if (config.siteError) {
+    console.log(`site | ОШИБКА конфига, пропущен: ${config.siteError}`)
+    exitCode = 1
+  } else console.log("site | пропущен: SITE_API_TOKEN не задан")
 
   const skippedByChannel = new Map<string, string[]>()
   for (const { channel, adapter } of channels) {

@@ -79,6 +79,8 @@ export async function runIngest(deps: {
   }
   counters[CATALOG_ACCEPTED_KEY] = catalog.length
 
+  // Битый конфиг необязательной площадки (сайта) — она пропущена, остальные читаются.
+  errors.push(...(deps.adapters.configErrors ?? []))
   const all: ChannelAdapter[] = [deps.adapters.wb, ...deps.adapters.mirrors(buildWbCatalogIndex(catalog))]
   for (const a of all) {
     const ch = channels.get(a.channel)
