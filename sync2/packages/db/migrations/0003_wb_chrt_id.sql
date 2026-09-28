@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD COLUMN "wb_chrt_id" bigint;

@@ -61,6 +61,8 @@ export const products = pgTable("products", {
   nmId: bigint("nm_id", { mode: "number" }),
   title: text("title").notNull().default(""),
   wbSubject: text("wb_subject"),
+  /** chrtId размера WB — ключ записи остатка на склад продавца (этап 1.4); null — каталог его не дал. */
+  wbChrtId: bigint("wb_chrt_id", { mode: "number" }),
   updatedAt: ts("updated_at").notNull().defaultNow(),
 })
 

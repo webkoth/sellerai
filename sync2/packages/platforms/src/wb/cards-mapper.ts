@@ -34,7 +34,15 @@ export function mapCards(items: WbCardListItem[]): WbCatalogEntry[] {
       for (const barcode of size.skus ?? []) {
         const trimmed = barcode?.trim()
         if (!trimmed) continue
-        result.push({ nmId: card.nmID ?? null, barcode: trimmed, vendorCode, title, subject })
+        result.push({
+          nmId: card.nmID ?? null,
+          barcode: trimmed,
+          vendorCode,
+          title,
+          subject,
+          // chrtId размера — ключ записи остатка WB (этап 1.4); у всех штрихкодов размера один.
+          ...(typeof size.chrtID === "number" ? { chrtId: size.chrtID } : {}),
+        })
       }
     }
   }

@@ -272,6 +272,7 @@ export async function fetchFbsStocks(
  * Одна карточка перечня, `POST .../content/v2/get/cards/list`. Только поля,
  * нужные каталогу WB (штрихкод, артикул, название, предмет) — фото
  * и `subjectID` (нужен был только для сопоставления с тарифами) убраны.
+ * `sizes[].chrtID` — ключ записи остатка (этап 1.4).
  */
 export interface WbCardListItem {
   nmID: number | null
@@ -280,7 +281,7 @@ export interface WbCardListItem {
   title?: string | null
   /** Предмет (категория) — `subjectName`, проверено фикстурой. */
   subjectName?: string | null
-  sizes?: Array<{ skus?: string[] | null }> | null
+  sizes?: Array<{ chrtID?: number | null; skus?: string[] | null }> | null
 }
 
 interface WbCardsListCursor {
