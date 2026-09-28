@@ -12,11 +12,11 @@ import {
   type WriteStats,
 } from "@sync2/db"
 import { aggregateStockByBarcode } from "@sync2/domain"
-import { CHANNELS, type Channel, type NormalizedStock } from "@sync2/shared"
+import { CHANNELS, CHANNEL_LABELS, type Channel, type NormalizedStock } from "@sync2/shared"
 import type { Notifier } from "../notify"
 import { COMPARE_WINDOW_MS, MAX_TELEGRAM_TEXT, STUCK_RUN_MS, formatMsk } from "./compare-v1"
 
-const LABEL: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
+const LABEL = CHANNEL_LABELS
 const MAX_LIST = 10
 const TRUNCATED_MARK = "\n… (сводка обрезана)"
 

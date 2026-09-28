@@ -1,4 +1,4 @@
-import { CHANNELS, type Channel } from "@sync2/shared"
+import { CHANNELS, CHANNEL_LABELS } from "@sync2/shared"
 import type { RunOutcome } from "./run"
 
 type DoneStatus = RunOutcome["status"]
@@ -45,7 +45,6 @@ export function decideNotification(input: {
 /** Запись площадки не проходит столько прогонов pool подряд — предупреждение (≈15 мин при тике раз в 5 минут). */
 export const WRITE_FAIL_ALERT_RUNS = 3
 
-const CHANNEL_LABEL: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
 
 /** «3 тика», «5 тиков», «72 тика» — для текста уведомления. */
 function ticks(n: number): string {
@@ -70,14 +69,14 @@ export function writeFailureAlerts(prev: Record<string, unknown> | null, cur: Re
     if (runsNow > 0) {
       if (runsNow === WRITE_FAIL_ALERT_RUNS || (runsNow > WRITE_FAIL_ALERT_RUNS && runsNow % REMIND_EVERY_RUNS === 0)) {
         out.push(
-          `⚠️ sync2 pool: площадка ${CHANNEL_LABEL[c]} — запись не проходит ${ticks(runsNow)} подряд (ошибок в последнем прогоне: ${cur[`${c}WriteFailed`] ?? 0}); подробности — plan ${c}`,
+          `⚠️ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись не проходит ${ticks(runsNow)} подряд (ошибок в последнем прогоне: ${cur[`${c}WriteFailed`] ?? 0}); подробности — plan ${c}`,
         )
       }
       continue
     }
     const before = prev?.[`${c}WriteFailedRuns`]
     if (typeof before === "number" && before >= WRITE_FAIL_ALERT_RUNS) {
-      out.push(`✅ sync2 pool: площадка ${CHANNEL_LABEL[c]} — запись снова проходит (серия ошибок была ${ticks(before)})`)
+      out.push(`✅ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись снова проходит (серия ошибок была ${ticks(before)})`)
     }
   }
   return out

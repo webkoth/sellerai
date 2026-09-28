@@ -10,6 +10,9 @@ export const CHANNEL_TITLES: Record<Channel, string> = {
   site: "kotelnikovartifact.ru",
 }
 
+/** Короткие подписи площадок для уведомлений, ошибок прогонов и сводок (этап 1.4). */
+export const CHANNEL_LABELS: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
+
 export function isChannel(value: string): value is Channel {
   return (CHANNELS as readonly string[]).includes(value)
 }

@@ -27,7 +27,7 @@ import {
   type WbWriteResult,
 } from "@sync2/domain"
 import { WriteJournalError, effectiveMode, executeWrites, failed, type SendResult, type Sender, type WriteOp, type WriteOutcome } from "@sync2/platforms"
-import { CHANNELS, errorText, type Channel, type NormalizedStock, type WriteMode } from "@sync2/shared"
+import { CHANNELS, CHANNEL_LABELS, errorText, type Channel, type NormalizedStock, type WriteMode } from "@sync2/shared"
 import { ORDERS_WINDOW_DAYS } from "./ingest"
 
 /** Снимок старше этого в план не берётся: цель считалась бы от устаревшего остатка площадки. */
@@ -51,7 +51,7 @@ const SITE = "site" as const
  * уведомление шлёт переход ingest в partial. Здесь — только счётчик mirrorOrdersFailed.
  */
 const ORDER_CHANNELS = ["ozon", "ym", "kit", "site"] as const
-const LABEL: Record<Channel, string> = { wb: "WB", ozon: "Ozon", ym: "ЯМ", kit: "KIT", site: "сайт" }
+const LABEL = CHANNEL_LABELS
 /** Порядок записи: WB первым — окно между перечитыванием остатка WB и записью короче, фиксация WB раньше. */
 const WRITE_ORDER: readonly Channel[] = ["wb", "ozon", "ym", "kit", "site"]
 
@@ -110,8 +110,6 @@ export function foreignWarehouses(stocks: NormalizedStock[], warehouseId: number
   return [...new Set(stocks.map((s) => s.warehouse ?? "без склада"))].filter((w) => w !== own).sort()
 }
 
-/** Склады WB в снимке, кроме склада записи (см. foreignWarehouses). */
-export const wbForeignWarehouses = foreignWarehouses
 
 /**
  * WB-позиции без ключа записи (chrtId) отказываются здесь, до отправителя: причина в журнале —
