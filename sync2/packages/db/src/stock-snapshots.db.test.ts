@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import type { NormalizedStock } from "@sync2/shared"
 import { seedChannels } from "./channels-seed"
 import { channels } from "./schema"
-import { insertStockSnapshot, latestStockSnapshots } from "./stock-snapshots"
+import { channelsWithSnapshotSince, insertStockSnapshot, latestStockSnapshots } from "./stock-snapshots"
 import { TEST_DATABASE_URL, freshTestDb, insertRun } from "./test-db"
 
 const RUN = "00000000-0000-4000-8000-0000000000c1"
@@ -30,5 +30,11 @@ describe.skipIf(!TEST_DATABASE_URL)("снимки остатков", () => {
     expect(latest.get(wb)).toEqual({ takenAt: "2026-09-26T10:30:00.000Z", stocks: [s("A", 2)] })
     expect(latest.get(kit)).toEqual({ takenAt: "2026-09-26T10:05:00.000Z", stocks: [] })
     expect(latest.has(ids.get("ozon")!)).toBe(false)
+  })
+
+  it("площадки со снимком не раньше момента — по коду", async () => {
+    expect([...(await channelsWithSnapshotSince(h.db, "2026-09-26T10:04:00.000Z"))].sort()).toEqual(["kit", "wb"])
+    expect([...(await channelsWithSnapshotSince(h.db, "2026-09-26T10:10:00.000Z"))]).toEqual(["wb"])
+    expect(await channelsWithSnapshotSince(h.db, "2026-09-27T00:00:00.000Z")).toEqual(new Set())
   })
 })

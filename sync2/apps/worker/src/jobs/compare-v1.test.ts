@@ -41,7 +41,13 @@ const extra = (over: Partial<SummaryExtra> = {}): SummaryExtra => ({
 describe("formatComparison", () => {
   it("расхождение витрины сайта с пулом — отдельной строкой", () => {
     const text = formatComparison({ same: 1, diff: [], onlyV1: [], onlyV2: [] }, extra({ siteDiff: { barcodes: 3, rows: 18 } }))
-    expect(text).toContain("Сайт ↔ пул за сутки (витрина не меняется, записи off; баркодов/строк): 3/18")
+    expect(text).toContain("Сайт ↔ пул за сутки (витрина не меняется, записи off/dry-run; баркодов/строк): 3/18")
+  })
+
+  it("сайт не подключён (ни снимков, ни строк за сутки) — так и написано, а не 0/0", () => {
+    const text = formatComparison({ same: 1, diff: [], onlyV1: [], onlyV2: [] }, extra({ siteDiff: null }))
+    expect(text).toContain("Сайт ↔ пул за сутки: не подключён")
+    expect(text).not.toContain("баркодов/строк): 0/0")
   })
 
   it("короткая сводка для Telegram", () => {
