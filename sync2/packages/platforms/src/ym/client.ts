@@ -257,6 +257,40 @@ export async function fetchYmStocks(credentials: YmCredentials): Promise<YmWareh
   return all
 }
 
+interface YmCampaignOffersResponse {
+  status: string
+  result?: {
+    paging?: { nextPageToken?: string | null } | null
+    offers?: Array<{ offerId?: string | null }> | null
+  } | null
+}
+
+const CAMPAIGN_OFFERS_PAGE_LIMIT = 200
+
+/**
+ * Все офферы магазина, `POST /v2/campaigns/{campaignId}/offers`. Нужны снимку: оффер, которому остаток
+ * ни разу не выставляли (статус NO_STOCKS), в `/offers/stocks` не приходит вовсе — без него синк не
+ * узнал бы о карточке и никогда не выставил бы ей остаток (урок старого синка 04.09.2026: 11 живых
+ * офферов с ценами «потерялись» так же).
+ */
+export async function fetchYmCampaignOfferIds(credentials: YmCredentials): Promise<string[]> {
+  const ids: string[] = []
+  let pageToken: string | undefined
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const body = await requestJson<YmCampaignOffersResponse>(
+      "ym",
+      pagedUrl(`/v2/campaigns/${credentials.campaignId}/offers`, CAMPAIGN_OFFERS_PAGE_LIMIT, pageToken),
+      { ...ymAuth(credentials), method: "POST", body: {} },
+    )
+    const offers = body.result?.offers ?? []
+    for (const o of offers) if (o.offerId) ids.push(o.offerId)
+    const next = body.result?.paging?.nextPageToken ?? undefined
+    if (!next || next === pageToken || offers.length === 0) break
+    pageToken = next
+  }
+  return ids
+}
+
 // ── Каталог: штрихкоды ───────────────────────────────────────────────────
 
 interface YmOfferMapping {

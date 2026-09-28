@@ -113,6 +113,7 @@ describe("createYmAdapter", () => {
           { offer: { offerId: "NO-BC", barcodes: [] }, mapping: {} },
         ] },
       }),
+      "/v2/campaigns/222/offers": () => ({ status: "OK", result: { paging: {}, offers: [{ offerId: "A" }, { offerId: "NO-BC" }] } }),
     })
     const wbIndex = buildWbCatalogIndex([{ barcode: "2051508626795", vendorCode: "A", nmId: null, title: "", subject: null }])
 
@@ -120,5 +121,19 @@ describe("createYmAdapter", () => {
 
     expect(stocks).toEqual([expect.objectContaining({ barcode: "2051508626795", externalSku: "A", quantity: 1, warehouse: "7" })])
     expect(skippedNoWbBarcode).toEqual(["NO-BC"])
+  })
+
+  it("fetchStocks: оффер магазина без записи остатка (NO_STOCKS) — нулевая строка на складе магазина", async () => {
+    routeFetch({
+      "/v2/campaigns/222/offers/stocks": () => ({ status: "OK", result: { paging: {}, warehouses: [] } }),
+      "/v2/campaigns/222/offers": () => ({ status: "OK", result: { paging: {}, offers: [{ offerId: "A" }] } }),
+      "/v2/businesses/111/offer-mappings": () => ({
+        status: "OK",
+        result: { paging: {}, offerMappings: [{ offer: { offerId: "A", barcodes: ["2051508626795"] } }] },
+      }),
+    })
+    const wbIndex = buildWbCatalogIndex([{ barcode: "2051508626795", vendorCode: "A", nmId: null, title: "", subject: null }])
+    const { stocks } = await createYmAdapter(CREDS, wbIndex, [7]).fetchStocks()
+    expect(stocks).toEqual([expect.objectContaining({ barcode: "2051508626795", externalSku: "A", quantity: 0, warehouse: "7" })])
   })
 })
