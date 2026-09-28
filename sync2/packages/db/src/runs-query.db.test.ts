@@ -136,6 +136,16 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     expect(await counterStreak(h.db, "streak-job", "ozonWriteFailed")).toBe(0)
   })
 
+  it("серия с условием: прогоны без счётчика-условия пропускаются, а не обрывают серию", async () => {
+    await run("streak-cond", "c1f1", "2026-09-18T10:00:00.000Z", "partial", { kitWriteAttempted: 1, kitWriteFailed: 1 })
+    await run("streak-cond", "c1f2", "2026-09-18T10:05:00.000Z", "partial", { noFreshWb: 1 })
+    await run("streak-cond", "c1f3", "2026-09-18T10:10:00.000Z", "partial", { kitWriteAttempted: 1, kitWriteFailed: 1 })
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed")).toBe(1)
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed", "kitWriteAttempted")).toBe(2)
+    await run("streak-cond", "c1f4", "2026-09-18T10:15:00.000Z", "ok", { kitWriteAttempted: 1 })
+    expect(await counterStreak(h.db, "streak-cond", "kitWriteFailed", "kitWriteAttempted")).toBe(0)
+  })
+
   it("зависшие прогоны: running старше порога в окне; свежий running и закрытые — нет", async () => {
     await run("hang", "b1", "2026-09-27T09:00:00.000Z", "running")
     await run("hang", "b2", "2026-09-27T11:50:00.000Z", "running")

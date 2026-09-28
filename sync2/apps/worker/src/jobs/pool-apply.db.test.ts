@@ -372,8 +372,15 @@ describe.skipIf(!TEST_DATABASE_URL)("runPool — серия неудачных �
     expect((await tick("00", failing())).counters).toMatchObject({ kitWriteFailed: 1, kitWriteFailedRuns: 1 })
     expect((await tick("05", failing())).counters).toMatchObject({ kitWriteFailed: 1, kitWriteFailedRuns: 2 })
     expect((await tick("10", failing())).counters).toMatchObject({ kitWriteFailedRuns: 3 })
-    const ok = await tick("15", okSend())
+    // Ранний выход pool (снимок WB устарел) — записи не было: серию не обрывает и не продолжает.
+    const early = await poolRun("2026-09-28T13:40:00.000Z", failing())
+    expect(early.counters).toMatchObject({ noFreshWb: 1 })
+    expect((await tick("45", failing())).counters).toMatchObject({ kitWriteFailed: 1, kitWriteFailedRuns: 4, kitWriteAttempted: 1 })
+    const ok = await tick("50", okSend())
     expect(ok.counters).not.toHaveProperty("kitWriteFailed")
     expect(ok.counters).not.toHaveProperty("kitWriteFailedRuns")
+    expect(ok.counters).toMatchObject({ kitWriteAttempted: 1, kitWriteRecoveredAfter: 4 })
+    // Следующая удачная запись — серии уже нет.
+    expect((await tick("55", okSend())).counters).not.toHaveProperty("kitWriteRecoveredAfter")
   })
 })

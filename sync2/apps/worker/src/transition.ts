@@ -56,27 +56,25 @@ function ticks(n: number): string {
 }
 
 /**
- * Уведомления «площадка X: запись не проходит N тиков подряд» по счётчикам pool
- * (`<площадка>WriteFailed`, `<площадка>WriteFailedRuns`, ревью 3–6, I2). Статус pool сам этого не
- * покажет: он уже partial по другой причине, и смены статуса нет. Серия дошла до
- * WRITE_FAIL_ALERT_RUNS — предупреждение, дальше — напоминание каждые REMIND_EVERY_RUNS прогонов;
- * серия от порога кончилась — «снова проходит». Чистая функция: prev — счётчики прошлого pool.
+ * Уведомления «площадка X: запись не проходит N тиков подряд» по счётчикам прогона pool
+ * (`<площадка>WriteFailed`, серия `<площадка>WriteFailedRuns`, `<площадка>WriteRecoveredAfter`; ревью 3–6, I2).
+ * Статус pool сам этого не покажет: он уже partial по другой причине, и смены статуса нет. Серия дошла до
+ * WRITE_FAIL_ALERT_RUNS — предупреждение, дальше — напоминание каждые REMIND_EVERY_RUNS прогонов; запись
+ * прошла после серии от порога — «снова проходит». Серию и «снова проходит» pool считает только по
+ * прогонам с попыткой записи площадки: ранний выход (noFreshWb) их не трогает. Чистая функция.
  */
-export function writeFailureAlerts(prev: Record<string, unknown> | null, cur: Record<string, number>): string[] {
+export function writeFailureAlerts(cur: Record<string, number>): string[] {
   const out: string[] = []
   for (const c of CHANNELS) {
     const runsNow = cur[`${c}WriteFailedRuns`] ?? 0
-    if (runsNow > 0) {
-      if (runsNow === WRITE_FAIL_ALERT_RUNS || (runsNow > WRITE_FAIL_ALERT_RUNS && runsNow % REMIND_EVERY_RUNS === 0)) {
-        out.push(
-          `⚠️ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись не проходит ${ticks(runsNow)} подряд (ошибок в последнем прогоне: ${cur[`${c}WriteFailed`] ?? 0}); подробности — plan ${c}`,
-        )
-      }
-      continue
+    if (runsNow === WRITE_FAIL_ALERT_RUNS || (runsNow > WRITE_FAIL_ALERT_RUNS && runsNow % REMIND_EVERY_RUNS === 0)) {
+      out.push(
+        `⚠️ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись не проходит ${ticks(runsNow)} подряд (ошибок в последнем прогоне: ${cur[`${c}WriteFailed`] ?? 0}); подробности — plan ${c}`,
+      )
     }
-    const before = prev?.[`${c}WriteFailedRuns`]
-    if (typeof before === "number" && before >= WRITE_FAIL_ALERT_RUNS) {
-      out.push(`✅ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись снова проходит (серия ошибок была ${ticks(before)})`)
+    const recovered = cur[`${c}WriteRecoveredAfter`] ?? 0
+    if (recovered >= WRITE_FAIL_ALERT_RUNS) {
+      out.push(`✅ sync2 pool: площадка ${CHANNEL_LABELS[c]} — запись снова проходит (серия ошибок была ${ticks(recovered)})`)
     }
   }
   return out

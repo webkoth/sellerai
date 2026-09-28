@@ -41,19 +41,26 @@ const STREAK_SCAN_RUNS = 1000
 /**
  * Серия: сколько последних завершённых (ok/partial) прогонов джобы подряд несут счётчик key > 0 —
  * от самого последнего назад до первого без него. failed (счётчиков нет — прогон упал) и running
- * серию не прерывают и не считаются. Для «запись площадки не проходит N тиков подряд» (этап 1.4).
+ * серию не прерывают и не считаются. `onlyWhen` — счётчик-условие: прогоны, где его нет (или он 0),
+ * пропускаются — ни считаются, ни обрывают серию (ранний выход pool без попытки записи). Для
+ * «запись площадки не проходит N тиков подряд» (этап 1.4).
  */
-export async function counterStreak(db: Db, job: string, key: string): Promise<number> {
+export async function counterStreak(db: Db, job: string, key: string, onlyWhen?: string): Promise<number> {
   const rows = await db
     .select({ counters: runs.counters })
     .from(runs)
     .where(and(eq(runs.job, job), inArray(runs.status, ["ok", "partial"])))
     .orderBy(desc(runs.startedAt))
     .limit(STREAK_SCAN_RUNS)
+  const positive = (counters: Record<string, unknown> | null, k: string) => {
+    const v = counters?.[k]
+    return typeof v === "number" && v > 0
+  }
   let n = 0
   for (const r of rows) {
-    const v = (r.counters as Record<string, unknown> | null)?.[key]
-    if (typeof v !== "number" || v <= 0) break
+    const counters = r.counters as Record<string, unknown> | null
+    if (onlyWhen !== undefined && !positive(counters, onlyWhen)) continue
+    if (!positive(counters, key)) break
     n++
   }
   return n

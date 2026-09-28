@@ -40,19 +40,20 @@ describe("describeOutcome", () => {
 describe("writeFailureAlerts — запись площадки не проходит N тиков подряд", () => {
   it("серия дошла до порога — предупреждение; дальше — напоминание раз в REMIND_EVERY_RUNS; между — молчим", () => {
     expect(WRITE_FAIL_ALERT_RUNS).toBe(3)
-    expect(writeFailureAlerts({ kitWriteFailedRuns: 2 }, { kitWriteFailed: 1, kitWriteFailedRuns: 3 })).toEqual([
+    expect(writeFailureAlerts({ kitWriteFailed: 1, kitWriteFailedRuns: 3 })).toEqual([
       "⚠️ sync2 pool: площадка KIT — запись не проходит 3 тика подряд (ошибок в последнем прогоне: 1); подробности — plan kit",
     ])
-    expect(writeFailureAlerts({}, { ozonWriteFailed: 1, ozonWriteFailedRuns: 2 })).toEqual([])
-    expect(writeFailureAlerts({}, { ozonWriteFailed: 1, ozonWriteFailedRuns: 4 })).toEqual([])
-    expect(writeFailureAlerts({}, { wbWriteFailed: 2, wbWriteFailedRuns: REMIND_EVERY_RUNS })).toEqual([
+    expect(writeFailureAlerts({ ozonWriteFailed: 1, ozonWriteFailedRuns: 2 })).toEqual([])
+    expect(writeFailureAlerts({ ozonWriteFailed: 1, ozonWriteFailedRuns: 4 })).toEqual([])
+    expect(writeFailureAlerts({ wbWriteFailed: 2, wbWriteFailedRuns: REMIND_EVERY_RUNS })).toEqual([
       `⚠️ sync2 pool: площадка WB — запись не проходит ${REMIND_EVERY_RUNS} тика подряд (ошибок в последнем прогоне: 2); подробности — plan wb`,
     ])
   })
 
-  it("после серии от порога запись прошла — «снова проходит»; короткая серия — молча", () => {
-    expect(writeFailureAlerts({ ymWriteFailedRuns: 5 }, { ymApplied: 3 })).toEqual(["✅ sync2 pool: площадка ЯМ — запись снова проходит (серия ошибок была 5 тиков)"])
-    expect(writeFailureAlerts({ ymWriteFailedRuns: 2 }, {})).toEqual([])
-    expect(writeFailureAlerts(null, {})).toEqual([])
+  it("запись снова прошла после серии от порога — «снова проходит»; короткая серия и прогон без попытки записи — молча", () => {
+    expect(writeFailureAlerts({ ymWriteAttempted: 3, ymWriteRecoveredAfter: 5 })).toEqual(["✅ sync2 pool: площадка ЯМ — запись снова проходит (серия ошибок была 5 тиков)"])
+    expect(writeFailureAlerts({ ymWriteAttempted: 1, ymWriteRecoveredAfter: 2 })).toEqual([])
+    // Ранний выход pool (noFreshWb, coldStartRefused): записи не было — ни серии, ни «снова проходит».
+    expect(writeFailureAlerts({ noFreshWb: 1 })).toEqual([])
   })
 })

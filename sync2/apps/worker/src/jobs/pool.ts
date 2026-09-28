@@ -383,10 +383,18 @@ export async function runPool(deps: PoolDeps): Promise<PoolJobResult> {
     if (applied > 0) counters[`${c}Applied`] = applied
     // Запись площадки не проходит (отказ или итог неизвестен) — счётчик и длина серии прогонов подряд:
     // по ней CLI шлёт «площадка X: запись не проходит N тиков подряд» (transition.ts, writeFailureAlerts).
+    // Серия считается только по прогонам, где запись площадки реально пыталась (`WriteAttempted`):
+    // ранний выход pool (noFreshWb, coldStartRefused) её не обрывает и не даёт «снова проходит».
+    const attempted = outcomes.filter((o) => o.channel === c && o.mode === "apply").length
+    if (attempted === 0) continue
+    counters[`${c}WriteAttempted`] = attempted
     const writeFailed = outcomes.filter((o) => o.channel === c && o.mode === "apply" && o.error !== null).length
+    const before = await counterStreak(db, "pool", `${c}WriteFailed`, `${c}WriteAttempted`)
     if (writeFailed > 0) {
       counters[`${c}WriteFailed`] = writeFailed
-      counters[`${c}WriteFailedRuns`] = (await counterStreak(db, "pool", `${c}WriteFailed`)) + 1
+      counters[`${c}WriteFailedRuns`] = before + 1
+    } else if (before > 0) {
+      counters[`${c}WriteRecoveredAfter`] = before
     }
   }
 
