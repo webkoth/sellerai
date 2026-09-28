@@ -213,6 +213,10 @@ export const writes = pgTable(
     applied: boolean("applied").notNull(),
     response: jsonb("response"),
     error: text("error"),
+    /** Итог записи неизвестен (сеть, 5xx, проверка чтением не сошлась) — запись могла примениться; не путать с отказом (этап 1.4). */
+    uncertain: boolean("uncertain").notNull().default(false),
+    /** Ключ товара на площадке, по которому шла запись (chrtId WB, offer_id Ozon, offerId ЯМ, id варианта KIT). */
+    externalSku: text("external_sku"),
     createdAt: ts("created_at").notNull().defaultNow(),
   },
   (t) => [

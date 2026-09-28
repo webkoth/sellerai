@@ -34,17 +34,17 @@ describe.skipIf(!TEST_DATABASE_URL)("runs-query: сводка compare-v1 и ст
     const ids = await loadChannels(h.db)
     const record = drizzleWriteStore(h.db, runId, ids)
     await record([
-      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
-      { channel: "ozon", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null },
-      { channel: "kit", barcode: "A", field: "stock", before: 3, after: 2, mode: "dry-run", applied: false, response: null, error: null },
+      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
+      { channel: "ozon", barcode: "B", field: "stock", before: 1, after: 0, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
+      { channel: "kit", barcode: "A", field: "stock", before: 3, after: 2, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
       // Режим off — не план dry-run, в сводку не попадает.
-      { channel: "ym", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null },
+      { channel: "ym", barcode: "A", field: "stock", before: 3, after: 2, mode: "off", applied: false, response: null, error: null, uncertain: false, externalSku: null },
     ])
     // Тот же баркод в следующем прогоне (план держится, пока зеркало не выровняли) — строк больше, баркодов столько же.
     const runId2 = "00000000-0000-4000-8000-0000000000f6"
     await insertRun(h.db, runId2)
     await drizzleWriteStore(h.db, runId2, ids)([
-      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null },
+      { channel: "ozon", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null },
     ])
     const planned = await plannedWritesSince(h.db, "2026-09-01T00:00:00.000Z")
     expect(planned).toMatchObject({

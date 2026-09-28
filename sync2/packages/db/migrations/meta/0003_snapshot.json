@@ -1,5 +1,5 @@
 {
-  "id": "22e18ca8-f12a-4609-b724-089032b66008",
+  "id": "12fc4018-b58b-4f0d-b4f7-c74a7b9e80c6",
   "prevId": "53dd0222-036d-405e-b296-eb282b8f0493",
   "version": "7",
   "dialect": "postgresql",
@@ -950,6 +950,19 @@
         },
         "error": {
           "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "uncertain": {
+          "name": "uncertain",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "external_sku": {
+          "name": "external_sku",
           "type": "text",
           "primaryKey": false,
           "notNull": false

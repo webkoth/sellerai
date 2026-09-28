@@ -37,7 +37,7 @@ describe.skipIf(!TEST_DATABASE_URL)("хранилище этапа 1.3b", () => 
     await insertRun(h.db, runId)
     const record = drizzleWriteStore(h.db, runId, await loadChannels(h.db))
     await record([])
-    await record([{ channel: "kit", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null }])
+    await record([{ channel: "kit", barcode: "A", field: "stock", before: 2, after: 1, mode: "dry-run", applied: false, response: null, error: null, uncertain: false, externalSku: null }])
     const rows = await h.db.select().from(writes)
     expect(rows).toHaveLength(1)
     expect(rows[0]).toMatchObject({ barcode: "A", before: 2, after: 1, mode: "dry-run", applied: false })
