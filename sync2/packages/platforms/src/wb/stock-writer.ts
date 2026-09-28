@@ -16,6 +16,12 @@ export const WB_STOCKS_PUT_MAX = 1000
  * 1,5 с — наблюдаемого запаздывания нет, это запас; тик длится десятки секунд, пауза в нём незаметна.
  */
 const WB_VERIFY_DELAY_MS = 1_500
+/**
+ * Пауза перед ВТОРЫМ проверочным чтением — только для позиций, которые первое чтение не решило (не целевое
+ * число после 204, прежнее после 5xx/таймаута, иное): «итог неизвестен» ставится лишь после него. 5 с —
+ * запас на распространение остатка внутри WB; позиций таких единицы, тик длится десятки секунд.
+ */
+const WB_VERIFY_RETRY_DELAY_MS = 5_000
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -27,6 +33,8 @@ export interface WbStockWriterConfig {
   retryDelaysMs?: number[]
   /** Только для тестов: пауза перед проверочным чтением (по умолчанию WB_VERIFY_DELAY_MS). */
   verifyDelayMs?: number
+  /** Только для тестов: пауза перед вторым проверочным чтением (по умолчанию WB_VERIFY_RETRY_DELAY_MS). */
+  verifyRetryDelayMs?: number
 }
 
 /**
@@ -75,10 +83,13 @@ function namedInWbError(e: unknown, batch: readonly Keyed[]): Map<string, string
  * 2. PUT `{ stocks: [{ chrtId, amount }] }` пачками по 1000 — ключ chrtId, а не sku: спецификация
  *    отклоняет sku (`SKUUploadDisabled`), а неверные имена полей WB принимает ответом 204 без записи;
  * 3. проверить чтением (после короткой паузы): «применено» — только если на складе целевое число.
- *    204 без записи и расхождение после записи — «итог неизвестен» (applyWbWriteOutcomes возьмёт
- *    max(база, факт)). После ЛЮБОЙ ошибки PUT, кроме чистого лимита (429 без признаков доставки),
- *    — тоже проверочное чтение, решение по каждой позиции: целевое число — применено (ответ потерян
- *    или WB применил часть пачки, 409 не говорит, что с остальными); прежнее — отказ; иное — неизвестно.
+ *    После ЛЮБОЙ ошибки PUT, кроме чистого лимита (429 без признаков доставки), — тоже проверочное
+ *    чтение: целевое число — применено (ответ потерян или WB применил часть пачки, 409 не говорит, что
+ *    с остальными). «Отказ» — только прежнее число после ошибки, которая точно не дошла (4xx/409 без
+ *    признака доставки): после 5xx/таймаута WB может применить запись позже, и «отказ» дал бы фантом
+ *    (applyWbWriteOutcomes доверился бы факту, а поздняя запись на росте подняла бы WB выше пула).
+ *    Всё нерешённое (204 без целевого числа, прежнее после 5xx/таймаута, иное) — второе чтение через
+ *    WB_VERIFY_RETRY_DELAY_MS: целевое — применено, иначе «итог неизвестен» (max(база, факт)).
  */
 export async function writeWbStocks(cfg: WbStockWriterConfig, ops: WriteOp[]): Promise<SendResult[]> {
   const { valid, rejected } = splitByKey(ops, (o) => o.externalSku)
@@ -169,29 +180,47 @@ async function putAndVerify(cfg: WbStockWriterConfig, batch: Keyed[], retryWitho
   }
 
   const named = namedInWbError(putError, batch)
+  // Ошибка, которая точно не дошла (4xx/409 без признака доставки): прежнее число — отказ.
+  const surelyRejected = putError !== null && !isUncertain(putError)
   const results: SendResult[] = []
   const retry: Keyed[] = []
+  const unresolved: Keyed[] = []
   for (const x of batch) {
     const got = after.get(x.op.barcode) ?? 0
     if (got === x.op.after) {
       results.push(succeeded(x.op, { chrtId: x.chrtId, amount: got }))
-    } else if (putError === null) {
-      results.push(failed(x.op, `WB: после записи на складе ${got}, ожидалось ${x.op.after}`, { uncertain: true, response: { chrtId: x.chrtId, amount: got } }))
-    } else if (got === x.op.before) {
-      // Ошибка PUT, на складе прежнее число — запись не применилась: отказ, итог известен.
+    } else if (surelyRejected && got === x.op.before) {
       const code = named.get(x.op.barcode)
       if (code !== undefined) results.push(failed(x.op, `WB: ${code} — ${rejectedText}`, { response: errorBody }))
+      // Повтор без названных: остаток позиции только что перечитан этим же проверочным чтением
+      // (got === before) — окно затирания продажи между чтением и повтором минимально.
       else if (retryWithoutNamed && named.size > 0) retry.push(x)
       else results.push(failed(x.op, rejectedText, { response: errorBody }))
     } else {
-      results.push(
-        failed(x.op, `${rejectedText}; после ошибки на складе ${got} (было ${x.op.before}, ожидалось ${x.op.after})`, {
-          uncertain: true,
-          response: errorBody,
-        }),
-      )
+      unresolved.push(x)
     }
   }
+  if (unresolved.length > 0) results.push(...(await verifyAgain(cfg, unresolved, putError, rejectedText, errorBody)))
   if (retry.length > 0) results.push(...(await putAndVerify(cfg, retry, false)))
   return results
+}
+
+/** Второе проверочное чтение позиций, которые первое не решило: целевое число — применено, иначе — неизвестно. */
+async function verifyAgain(cfg: WbStockWriterConfig, batch: Keyed[], putError: unknown, rejectedText: string, errorBody: unknown): Promise<SendResult[]> {
+  await sleep(cfg.verifyRetryDelayMs ?? WB_VERIFY_RETRY_DELAY_MS)
+  const describe = (x: Keyed, got: number | "?") =>
+    putError === null
+      ? `WB: после записи на складе ${got}, ожидалось ${x.op.after}`
+      : `${rejectedText}; после ошибки на складе ${got} (было ${x.op.before}, ожидалось ${x.op.after})`
+  let again: Map<string, number>
+  try {
+    again = await readAmounts(cfg, batch.map((x) => x.op.barcode))
+  } catch (e) {
+    return batch.map((x) => failed(x.op, `${describe(x, "?")}; второе проверочное чтение не удалось — ${errorText(e)}`, { uncertain: true, response: errorBody }))
+  }
+  return batch.map((x) => {
+    const got = again.get(x.op.barcode) ?? 0
+    if (got === x.op.after) return succeeded(x.op, { chrtId: x.chrtId, amount: got })
+    return failed(x.op, describe(x, got), { uncertain: true, response: putError === null ? { chrtId: x.chrtId, amount: got } : errorBody })
+  })
 }

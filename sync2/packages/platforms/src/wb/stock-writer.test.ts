@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import type { WriteOp } from "../writer"
 import { writeWbStocks } from "./stock-writer"
 
-const cfg = { token: "t", warehouseId: 1408913, retryDelaysMs: [0], verifyDelayMs: 0 }
+const cfg = { token: "t", warehouseId: 1408913, retryDelaysMs: [0], verifyDelayMs: 0, verifyRetryDelayMs: 0 }
 const URL_STOCKS = "https://marketplace-api.wildberries.ru/api/v3/stocks/1408913"
 const op = (barcode: string, chrtId: string | null, before: number, after: number): WriteOp => ({
   channel: "wb",
@@ -28,17 +28,30 @@ const applyPut = (store: Store, body: PutBody, skip: ReadonlySet<number> = new S
 }
 function fakeWb(
   initial: Record<string, { chrtId: number; amount: number }>,
-  opts: { putStatus?: number; ignorePut?: boolean; onPut?: (body: PutBody, store: Store, call: number) => Response } = {},
+  opts: {
+    putStatus?: number
+    ignorePut?: boolean
+    onPut?: (body: PutBody, store: Store, call: number) => Response
+    /** Тело PUT применяется не сразу, а перед этим по счёту POST-чтением (запаздывание WB). */
+    applyOnRead?: number
+  } = {},
 ) {
   const store: Store = new Map(Object.entries(initial))
   const calls: Array<{ method: string; body: unknown }> = []
   let puts = 0
+  let reads = 0
+  let delayed: PutBody | null = null
   const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
     const method = init?.method ?? "GET"
     const body: unknown = init?.body ? JSON.parse(String(init.body)) : null
     calls.push({ method, body })
     if (url !== URL_STOCKS) throw new Error(`неожиданный адрес ${url}`)
     if (method === "POST") {
+      reads++
+      if (delayed && opts.applyOnRead !== undefined && reads >= opts.applyOnRead) {
+        applyPut(store, delayed)
+        delayed = null
+      }
       const skus = (body as { skus: string[] }).skus
       const stocks = skus
         .filter((sku) => (store.get(sku)?.amount ?? 0) > 0)
@@ -46,9 +59,10 @@ function fakeWb(
       return new Response(JSON.stringify({ stocks }), { status: 200 })
     }
     puts++
+    if (opts.applyOnRead !== undefined) delayed = body as PutBody
     if (opts.onPut) return opts.onPut(body as PutBody, store, puts)
     if (opts.putStatus !== undefined) return new Response(JSON.stringify([{ code: "NotFound", message: "not found" }]), { status: opts.putStatus })
-    if (!opts.ignorePut) applyPut(store, body as PutBody)
+    if (!opts.ignorePut && opts.applyOnRead === undefined) applyPut(store, body as PutBody)
     return new Response(null, { status: 204 })
   })
   vi.stubGlobal("fetch", fetchMock)
@@ -79,10 +93,17 @@ describe("writeWbStocks", () => {
     expect(wb.calls[1]!.body).toEqual({ stocks: [{ chrtId: 7002, amount: 4 }] })
   })
 
-  it("WB ответил 204, а остаток не изменился — итог неизвестен", async () => {
-    fakeWb({ "111": { chrtId: 7001, amount: 3 } }, { ignorePut: true })
+  it("WB ответил 204, а остаток не изменился и во втором чтении — итог неизвестен", async () => {
+    const wb = fakeWb({ "111": { chrtId: 7001, amount: 3 } }, { ignorePut: true })
     const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2)])
     expect(r[0]).toMatchObject({ ok: false, uncertain: true, error: expect.stringContaining("после записи на складе 3, ожидалось 2") })
+    expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "POST", "POST"])
+  })
+
+  it("WB применил запись не сразу — второе проверочное чтение: применено", async () => {
+    fakeWb({ "111": { chrtId: 7001, amount: 3 } }, { applyOnRead: 3 })
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2)])
+    expect(r[0]).toMatchObject({ ok: true, response: { chrtId: 7001, amount: 2 } })
   })
 
   it("409 — проверочное чтение: на складе прежнее число — отказ без неопределённости, тело ответа — в журнал", async () => {
@@ -92,11 +113,23 @@ describe("writeWbStocks", () => {
     expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "POST"])
   })
 
-  it("5xx после повторов, а на складе прежнее — отказ: проверочное чтение сняло неопределённость", async () => {
+  it("5xx после повторов, а на складе прежнее и во втором чтении — итог неизвестен: WB может применить позже", async () => {
     const wb = fakeWb({ "111": { chrtId: 7001, amount: 3 } }, { putStatus: 500 })
     const r = await writeWbStocks(cfg, [op("111", "7001", 3, 2)])
-    expect(r[0]).toMatchObject({ ok: false, uncertain: false })
-    expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "PUT", "POST"])
+    expect(r[0]).toMatchObject({ ok: false, uncertain: true })
+    expect(wb.calls.map((c) => c.method)).toEqual(["POST", "PUT", "PUT", "POST", "POST"])
+  })
+
+  it("рост после 5xx: WB применил позже — не отказ (иначе фантом в пуле), а по второму чтению — применено", async () => {
+    fakeWb(
+      { "111": { chrtId: 7001, amount: 3 } },
+      {
+        applyOnRead: 3,
+        onPut: () => new Response("oops", { status: 502 }),
+      },
+    )
+    const r = await writeWbStocks(cfg, [op("111", "7001", 3, 5)])
+    expect(r[0]).toMatchObject({ ok: true, response: { chrtId: 7001, amount: 5 } })
   })
 
   it("5xx, но запись применилась (ответ потерян) — проверочное чтение: применено", async () => {
