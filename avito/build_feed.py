@@ -12,7 +12,7 @@
 
 Запуск: python3 avito/build_feed.py --base-url https://<хост>/<путь> [--out avito/out]
 """
-import argparse, io, json, math, os, re, statistics, urllib.request
+import argparse, hashlib, io, json, math, os, re, statistics, urllib.request
 from xml.sax.saxutils import escape
 
 from PIL import Image
@@ -153,6 +153,7 @@ def main():
     price_by_size = {sz["sizeID"]: sz["discountedPrice"] for p in prices for sz in p["sizes"]}
 
     ads, skipped = [], []
+    seen_photos = {}  # хеш первого фото → nmID: Авито блокирует повтор («Товар уже продаётся»)
     for c in cards:
         in_stock = [(sz, sum(amount.get(s, 0) for s in sz.get("skus", []))) for sz in c.get("sizes", [])]
         in_stock = [(sz, n) for sz, n in in_stock if n > 0]
@@ -181,6 +182,12 @@ def main():
             name = f"{c['nmID']}-{i}.jpg"
             to_jpeg(ph["big"], os.path.join(args.out, "img", name))
             imgs.append(f"{base}/img/{name}")
+        first = hashlib.md5(open(os.path.join(args.out, "img", f"{c['nmID']}-1.jpg"), "rb").read()).hexdigest()
+        if first in seen_photos:
+            skipped.append({"nmID": c["nmID"], "title": c["title"],
+                            "why": f"те же фото, что у {seen_photos[first]}: дубль карточки WB"})
+            continue
+        seen_photos[first] = c["nmID"]
 
         desc = (c.get("description") or c["title"]).strip()
         sizes = [sz.get("techSize") for sz, _ in in_stock if sz.get("techSize") not in (None, "0", "")]
