@@ -1,0 +1,2334 @@
+[
+ {
+  "slug": "kollektsionirovanie",
+  "path": "Хобби и отдых / Коллекционирование",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "kollektsionirovanie_drugoe",
+  "path": "Хобби и отдых / Коллекционирование / Другое",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kollektsionirovanie_drugoe.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Другое"
+   ]
+  }
+ },
+ {
+  "slug": "banknoty",
+  "path": "Хобби и отдых / Коллекционирование / Банкноты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/banknoty.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Банкноты"
+   ],
+   "ProductType": [
+    "Акция",
+    "Банкнота",
+    "Облигация",
+    "Сувенирная купюра",
+    "Шуточная купюра"
+   ]
+  }
+ },
+ {
+  "slug": "bilety",
+  "path": "Хобби и отдых / Коллекционирование / Билеты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/bilety.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Билеты"
+   ]
+  }
+ },
+ {
+  "slug": "veshi_znamenitostei_avtografy",
+  "path": "Хобби и отдых / Коллекционирование / Вещи знаменитостей, автографы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/veshi_znamenitostei_avtografy.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Вещи знаменитостей, автографы"
+   ]
+  }
+ },
+ {
+  "slug": "voennye_veshi",
+  "path": "Хобби и отдых / Коллекционирование / Военные вещи",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/voennye_veshi.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Военные вещи"
+   ]
+  }
+ },
+ {
+  "slug": "dokumenty",
+  "path": "Хобби и отдых / Коллекционирование / Документы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/dokumenty.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Документы"
+   ]
+  }
+ },
+ {
+  "slug": "zhetony_medali_znachki",
+  "path": "Хобби и отдых / Коллекционирование / Жетоны, медали, значки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/zhetony_medali_znachki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Жетоны, медали, значки"
+   ]
+  }
+ },
+ {
+  "slug": "igry",
+  "path": "Хобби и отдых / Коллекционирование / Игры",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/igry.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Игры"
+   ]
+  }
+ },
+ {
+  "slug": "kalendari",
+  "path": "Хобби и отдых / Коллекционирование / Календари",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kalendari.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Календари"
+   ]
+  }
+ },
+ {
+  "slug": "kinder_syurpriz",
+  "path": "Хобби и отдых / Коллекционирование / Киндер-сюрприз",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kinder_syurpriz.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Киндер-сюрприз"
+   ]
+  }
+ },
+ {
+  "slug": "makety_oruzhiya",
+  "path": "Хобби и отдых / Коллекционирование / Макеты оружия",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/makety_oruzhiya.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Макеты оружия"
+   ]
+  }
+ },
+ {
+  "slug": "konverty_i_pochtovye_kartochki",
+  "path": "Хобби и отдых / Коллекционирование / Конверты и почтовые карточки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/konverty_i_pochtovye_kartochki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Конверты и почтовые карточки"
+   ]
+  }
+ },
+ {
+  "slug": "marki",
+  "path": "Хобби и отдых / Коллекционирование / Марки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/marki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Марки"
+   ]
+  }
+ },
+ {
+  "slug": "modeli__figurki__kukly_",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "modeli_2303483",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "avtomobili_kollektsionirovanie",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Автомобили",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/avtomobili_kollektsionirovanie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Автомобили"
+   ]
+  }
+ },
+ {
+  "slug": "korabli_i_lodki",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Корабли и лодки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/korabli_i_lodki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Корабли и лодки"
+   ]
+  }
+ },
+ {
+  "slug": "spectekhnika",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Спецтехника",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/spectekhnika.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Спецтехника"
+   ]
+  }
+ },
+ {
+  "slug": "voennaya_tekhnika",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Военная техника",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/voennaya_tekhnika.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Военная техника"
+   ]
+  }
+ },
+ {
+  "slug": "radioupravlyaemye_modeli",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Радиоуправляемые модели",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/radioupravlyaemye_modeli.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Радиоуправляемые модели"
+   ]
+  }
+ },
+ {
+  "slug": "dioramy_i_rumboksy",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Диорамы и румбоксы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/dioramy_i_rumboksy.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Диорамы и румбоксы"
+   ]
+  }
+ },
+ {
+  "slug": "soldatiki",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Солдатики",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/soldatiki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Солдатики"
+   ]
+  }
+ },
+ {
+  "slug": "zheleznaya_doroga",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Железная дорога",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/zheleznaya_doroga.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Железная дорога"
+   ]
+  }
+ },
+ {
+  "slug": "motocikly_kollektsionirovanie",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Мотоциклы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/motocikly_kollektsionirovanie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Мотоциклы"
+   ]
+  }
+ },
+ {
+  "slug": "gorodskoi_transport",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Городской транспорт",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/gorodskoi_transport.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Городской транспорт"
+   ]
+  }
+ },
+ {
+  "slug": "zapchasti_kollektsionirovanie",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Запчасти",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/zapchasti_kollektsionirovanie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Запчасти"
+   ]
+  }
+ },
+ {
+  "slug": "aviaciya_i_kosmos",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Модели / Авиация и космос",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/aviaciya_i_kosmos.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Модели"
+   ],
+   "ProductType": [
+    "Авиация и космос"
+   ]
+  }
+ },
+ {
+  "slug": "figurki_i_statuetki_2303484",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Фигурки и статуэтки",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "figurki",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Фигурки и статуэтки / Фигурки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/figurki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Фигурки и статуэтки"
+   ],
+   "ProductType": [
+    "Фигурки"
+   ]
+  }
+ },
+ {
+  "slug": "statuetki_i_skulptury",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Фигурки и статуэтки / Статуэтки и скульптуры",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/statuetki_i_skulptury.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Фигурки и статуэтки"
+   ],
+   "ProductType": [
+    "Статуэтки и скульптуры"
+   ]
+  }
+ },
+ {
+  "slug": "miniatyury",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Фигурки и статуэтки / Миниатюры",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/miniatyury.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Фигурки и статуэтки"
+   ],
+   "ProductType": [
+    "Миниатюры"
+   ]
+  }
+ },
+ {
+  "slug": "kukly_kollekcionnye_2303485",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Куклы коллекционные",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kukly_kollekcionnye_2303485.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Куклы коллекционные"
+   ]
+  }
+ },
+ {
+  "slug": "drugoe_2303486",
+  "path": "Хобби и отдых / Коллекционирование / Модели, фигурки, куклы / Другое",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/drugoe_2303486.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Модели, фигурки, куклы"
+   ],
+   "GoodsSubType": [
+    "Другое"
+   ]
+  }
+ },
+ {
+  "slug": "monety",
+  "path": "Хобби и отдых / Коллекционирование / Монеты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/monety.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Монеты"
+   ]
+  }
+ },
+ {
+  "slug": "otkrytki",
+  "path": "Хобби и отдых / Коллекционирование / Открытки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/otkrytki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Открытки"
+   ]
+  }
+ },
+ {
+  "slug": "plastikovye_kartochki",
+  "path": "Хобби и отдых / Коллекционирование / Пластиковые карточки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/plastikovye_kartochki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Пластиковые карточки"
+   ]
+  }
+ },
+ {
+  "slug": "pepelnicy_zazhigalki",
+  "path": "Хобби и отдых / Коллекционирование / Пепельницы, зажигалки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/pepelnicy_zazhigalki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Пепельницы, зажигалки"
+   ]
+  }
+ },
+ {
+  "slug": "sportivnye_kartochki",
+  "path": "Хобби и отдых / Коллекционирование / Спортивные карточки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/sportivnye_kartochki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Спортивные карточки"
+   ]
+  }
+ },
+ {
+  "slug": "fotografii_pisma",
+  "path": "Хобби и отдых / Коллекционирование / Фотографии, письма",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/fotografii_pisma.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Фотографии, письма"
+   ]
+  }
+ },
+ {
+  "slug": "etiketki_butylki_probki",
+  "path": "Хобби и отдых / Коллекционирование / Этикетки, бутылки, пробки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/etiketki_butylki_probki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Price",
+   "Category",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Этикетки, бутылки, пробки"
+   ]
+  }
+ },
+ {
+  "slug": "kartiny",
+  "path": "Хобби и отдых / Коллекционирование / Картины",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "zhivopis_i_grafika",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Живопись и графика",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/zhivopis_i_grafika.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Живопись и графика"
+   ]
+  }
+ },
+ {
+  "slug": "postery_i_plakaty",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Постеры и плакаты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/postery_i_plakaty.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Постеры и плакаты"
+   ]
+  }
+ },
+ {
+  "slug": "mozaiki_vyshivki_gobeleny",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Мозаики, вышивки, гобелены",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/mozaiki_vyshivki_gobeleny.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Мозаики, вышивки, гобелены"
+   ]
+  }
+ },
+ {
+  "slug": "religioznoe_iskusstvo",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Религиозное искусство",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/religioznoe_iskusstvo.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Религиозное искусство"
+   ]
+  }
+ },
+ {
+  "slug": "tovary_dlya_tvorchestva",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Товары для творчества",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/tovary_dlya_tvorchestva.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Товары для творчества"
+   ]
+  }
+ },
+ {
+  "slug": "interernye_kartiny",
+  "path": "Хобби и отдых / Коллекционирование / Картины / Интерьерные картины",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/interernye_kartiny.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Картины"
+   ],
+   "GoodsSubType": [
+    "Интерьерные картины"
+   ]
+  }
+ },
+ {
+  "slug": "gramplastinki",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "cd_diski_gram",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки / CD диски",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/cd_diski_gram.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Грампластинки"
+   ],
+   "GoodsSubType": [
+    "CD диски"
+   ]
+  }
+ },
+ {
+  "slug": "audiokassety_gram",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки / Аудиокассеты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/audiokassety_gram.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Грампластинки"
+   ],
+   "GoodsSubType": [
+    "Аудиокассеты"
+   ]
+  }
+ },
+ {
+  "slug": "aksessuary_gram",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки / Аксессуары",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/aksessuary_gram.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Грампластинки"
+   ],
+   "GoodsSubType": [
+    "Аксессуары"
+   ]
+  }
+ },
+ {
+  "slug": "vinilovye_plastinki",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки / Виниловые пластинки",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/vinilovye_plastinki.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Грампластинки"
+   ],
+   "GoodsSubType": [
+    "Виниловые пластинки"
+   ]
+  }
+ },
+ {
+  "slug": "proigryvateli_vinila",
+  "path": "Хобби и отдых / Коллекционирование / Грампластинки / Проигрыватели винила",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/proigryvateli_vinila.json",
+  "required": [
+   "Id",
+   "Address",
+   "Title",
+   "Description",
+   "Images",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Коллекционирование"
+   ],
+   "GoodsType": [
+    "Грампластинки"
+   ],
+   "GoodsSubType": [
+    "Проигрыватели винила"
+   ]
+  }
+ },
+ {
+  "slug": "chasy_i_ukrashenija",
+  "path": "Личные вещи / Часы и украшения",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "casy",
+  "path": "Личные вещи / Часы и украшения / Часы",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "narucnye_ili_karmannye",
+  "path": "Личные вещи / Часы и украшения / Часы / Наручные или карманные",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/narucnye_ili_karmannye.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "ProductType",
+   "ProductSubType",
+   "Gender",
+   "Mechanism",
+   "StrapType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Часы"
+   ],
+   "ProductType": [
+    "Наручные или карманные"
+   ]
+  }
+ },
+ {
+  "slug": "dlia_interera",
+  "path": "Личные вещи / Часы и украшения / Часы / Для интерьера",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/dlia_interera.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "ProductType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Часы"
+   ],
+   "ProductType": [
+    "Для интерьера"
+   ]
+  }
+ },
+ {
+  "slug": "iuvelirnye_izdeliia",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "kolca_i_perstni",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Кольца и перстни",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kolca_i_perstni.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "Material",
+   "InsertStone",
+   "NumberStone",
+   "Gender"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Кольца и перстни"
+   ]
+  }
+ },
+ {
+  "slug": "sergi",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Серьги",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/sergi.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "Material",
+   "InsertStone",
+   "NumberStone"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Серьги"
+   ]
+  }
+ },
+ {
+  "slug": "kulony_i_podveski",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Кулоны и подвески",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kulony_i_podveski.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "Material",
+   "InsertStone",
+   "NumberStone"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Кулоны и подвески"
+   ]
+  }
+ },
+ {
+  "slug": "braslety",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Браслеты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/braslety.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "Material",
+   "InsertStone",
+   "NumberStone",
+   "Gender"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Браслеты"
+   ]
+  }
+ },
+ {
+  "slug": "cepi",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Цепи",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/cepi.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "Brand",
+   "Color",
+   "Material",
+   "InsertStone",
+   "NumberStone",
+   "Gender"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Цепи"
+   ]
+  }
+ },
+ {
+  "slug": "kole",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Колье",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kole.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Колье"
+   ]
+  }
+ },
+ {
+  "slug": "sarmy",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Шармы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/sarmy.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Шармы"
+   ]
+  }
+ },
+ {
+  "slug": "brosi",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Броши",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/brosi.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Броши"
+   ]
+  }
+ },
+ {
+  "slug": "komplekty",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Комплекты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/komplekty.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Комплекты"
+   ]
+  }
+ },
+ {
+  "slug": "religioznye_izdeliia",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Религиозные изделия",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/religioznye_izdeliia.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Религиозные изделия"
+   ]
+  }
+ },
+ {
+  "slug": "drugoe_1288005",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Другое",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/drugoe_1288005.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Другое"
+   ]
+  }
+ },
+ {
+  "slug": "pirsing",
+  "path": "Личные вещи / Часы и украшения / Ювелирные изделия / Пирсинг",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/pirsing.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Ювелирные изделия"
+   ],
+   "GoodsSubType": [
+    "Пирсинг"
+   ]
+  }
+ },
+ {
+  "slug": "bizuteriia",
+  "path": "Личные вещи / Часы и украшения / Бижутерия",
+  "leaf": false,
+  "status": 400,
+  "note": "400: не лист дерева, поля отдаются только для конечных узлов"
+ },
+ {
+  "slug": "sergi_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Серьги",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/sergi_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Серьги"
+   ]
+  }
+ },
+ {
+  "slug": "braslety_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Браслеты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/braslety_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Браслеты"
+   ]
+  }
+ },
+ {
+  "slug": "kole_i_busy_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Колье и бусы",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kole_i_busy_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Колье и бусы"
+   ]
+  }
+ },
+ {
+  "slug": "broshi_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Броши",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/broshi_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Броши"
+   ]
+  }
+ },
+ {
+  "slug": "kolca_i_perstni_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Кольца и перстни",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kolca_i_perstni_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Кольца и перстни"
+   ]
+  }
+ },
+ {
+  "slug": "kulony_i_podveski_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Кулоны и подвески",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/kulony_i_podveski_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Кулоны и подвески"
+   ]
+  }
+ },
+ {
+  "slug": "komplekty_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Комплекты",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/komplekty_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Комплекты"
+   ]
+  }
+ },
+ {
+  "slug": "cepi_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Цепи",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/cepi_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Цепи"
+   ]
+  }
+ },
+ {
+  "slug": "chokery_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Чокеры",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/chokery_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Чокеры"
+   ]
+  }
+ },
+ {
+  "slug": "drugoe_bijouterie",
+  "path": "Личные вещи / Часы и украшения / Бижутерия / Другое",
+  "leaf": true,
+  "status": 200,
+  "file": "autoload-fields/drugoe_bijouterie.json",
+  "required": [
+   "Id",
+   "Address",
+   "Images",
+   "ImageUrls",
+   "Title",
+   "Description",
+   "Category",
+   "Price",
+   "GoodsType",
+   "AdType",
+   "Condition",
+   "GoodsSubType"
+  ],
+  "values": {
+   "Category": [
+    "Часы и украшения"
+   ],
+   "GoodsType": [
+    "Бижутерия"
+   ],
+   "GoodsSubType": [
+    "Другое"
+   ]
+  }
+ }
+]

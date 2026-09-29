@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StyleValues>
+	<Style>Реализм</Style>
+	<Style>Академизм</Style>
+	<Style>Классицизм</Style>
+	<Style>Неоклассицизм</Style>
+	<Style>Барокко</Style>
+	<Style>Рококо</Style>
+	<Style>Ренессанс</Style>
+	<Style>Романтизм</Style>
+	<Style>Прерафаэлитизм</Style>
+	<Style>Импрессионизм</Style>
+	<Style>Постимпрессионизм</Style>
+	<Style>Экспрессионизм</Style>
+	<Style>Модерн</Style>
+	<Style>Символизм</Style>
+	<Style>Фовизм</Style>
+	<Style>Кубизм</Style>
+	<Style>Футуризм</Style>
+	<Style>Авангард</Style>
+	<Style>Супрематизм</Style>
+	<Style>Конструктивизм</Style>
+	<Style>Абстракционизм</Style>
+	<Style>Сюрреализм</Style>
+	<Style>Поп-арт</Style>
+	<Style>Гиперреализм</Style>
+	<Style>Минимализм</Style>
+	<Style>Примитивизм</Style>
+	<Style>Концептуализм</Style>
+	<Style>Фигуративное искусство</Style>
+</StyleValues>

@@ -18,6 +18,7 @@
 | | `wildberries/13-finances.yaml` | Финансы: отчёт о реализации, баланс |
 | **Ozon** | `ozon/swagger_ozon.json` | Полный Swagger Ozon Seller API |
 | **Яндекс.Маркет** | `yandex-market/openapi.yaml` | Полный OpenAPI Я.Маркет Partner API |
+| **Авито** | `avito/<slug>.json` (26 шт.), `avito/README.md` | Все спеки каталога API Авито (29.09.2026): автозагрузка, объявления, заказы, доставка, остатки, мессенджер, продвижение, отзывы и др. Дерево категорий автозагрузки и поля фида для «Часы и украшения» и «Коллекционирование» (`avito/autoload-fields/`). Начинать с `avito/README.md` |
 | — | `README-source.md` | Исходный сводный README из Hubmarket |
 
 ## ⚠️ Практические находки (проверено на боевых вызовах 16.06.2026)
@@ -29,7 +30,7 @@
 - **Воронка продаж — БЕСПЛАТНА** (базовая, до 365 дней): `POST https://seller-analytics-api.wildberries.ru/api/analytics/v3/sales-funnel/products` (тело: `selectedPeriod`/`pastPeriod` {start,end} + `nmIds`). Поля ответа: `openCount → cartCount → orderCount → buyoutCount` + `conversions`.
   - ⛔ Устаревший путь `/api/v2/nm-report/detail` отдаёт **404** — не использовать (в т.ч. в `mcp/wb-mcp` старый путь).
   - **Джем нужен ТОЛЬКО** для CSV-истории до года (`DETAIL_HISTORY_REPORT`/`GROUPED_HISTORY_REPORT`). Для оптимизации рекламы/воронки Джем НЕ требуется.
-- **Отчёт о реализации:** `GET /api/v5/supplier/reportDetailByPeriod` (statistics-api), пагинация по `rrdid`. Реклама списывается строкой «Удержание / WB Продвижение» (deduction).
+- **Отчёт о реализации:** ~~`GET /api/v5/supplier/reportDetailByPeriod`~~ — **с сентября 2026 отдаёт 404 «method is deprecated»** (проверено 29.09). Замена: `POST https://finance-api.wildberries.ru/api/finance/v1/sales-reports/detailed`, тело `{dateFrom, dateTo, limit, rrdId}`, поля в camelCase (`docTypeName`, `retailPriceWithDisc`, `forPay`, `spp`). Лимит базового токена — 2 запроса в сутки. У строк «Продажа» с ценой 0 (служебные) `spp` = 0 — для медианы СПП брать только `retailPriceWithDisc > 0`. Реклама списывается строкой «Удержание / WB Продвижение» (deduction).
 
 ### Ozon
 - Финансы: `POST /v3/finance/transaction/totals` (агрегаты) и `/v3/finance/transaction/list` — **период ≤ 1 месяц**. Заголовки `Client-Id` + `Api-Key`.

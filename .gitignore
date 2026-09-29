@@ -38,3 +38,6 @@ __pycache__/
 # ===== Сырой футаж (файлы >100 МБ — GitHub их не принимает) =====
 remotionvideo/public/footage/*.mov
 remotionvideo/public/footage/*.wav
+
+# Фид Авито: сборка и фото
+/avito/out/

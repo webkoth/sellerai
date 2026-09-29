@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MaterialValues>
+	<Material>Металл</Material>
+	<Material>Латунь</Material>
+	<Material>Сталь</Material>
+	<Material>Медь</Material>
+	<Material>Бисер</Material>
+	<Material>Керамика</Material>
+	<Material>Стекло</Material>
+	<Material>Бижутерный сплав</Material>
+	<Material>Нержавеющая сталь</Material>
+	<Material>Кожа</Material>
+	<Material>Медицинская сталь</Material>
+	<Material>Эпоксидная смола</Material>
+	<Material>Цинковый сплав</Material>
+	<Material>Мельхиор</Material>
+	<Material>Акрил</Material>
+	<Material>Титан</Material>
+	<Material>Пластик</Material>
+	<Material>Дерево</Material>
+	<Material>Бронза</Material>
+	<Material>Глина</Material>
+	<Material>Вольфрам</Material>
+	<Material>Олово</Material>
+</MaterialValues>

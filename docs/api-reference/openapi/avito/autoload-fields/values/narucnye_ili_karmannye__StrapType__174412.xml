@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StrapTypeValues>
+	<StrapType>Алюминий</StrapType>
+	<StrapType>Атласный</StrapType>
+	<StrapType>Бронзовый</StrapType>
+	<StrapType>Вольфрамовый сплав</StrapType>
+	<StrapType>Джинсовый</StrapType>
+	<StrapType>Замшевый</StrapType>
+	<StrapType>Каучуковый</StrapType>
+	<StrapType>Керамический</StrapType>
+	<StrapType>Кожаный</StrapType>
+	<StrapType>Миланский</StrapType>
+	<StrapType>Нейлоновый</StrapType>
+	<StrapType>Пластиковый</StrapType>
+	<StrapType>Полиуретановый</StrapType>
+	<StrapType>Резиновый</StrapType>
+	<StrapType>Серебро</StrapType>
+	<StrapType>Силикон</StrapType>
+	<StrapType>Сталь</StrapType>
+	<StrapType>Текстиль</StrapType>
+	<StrapType>Титан</StrapType>
+	<StrapType>Экокожа</StrapType>
+	<StrapType>Дерево</StrapType>
+	<StrapType>Другой</StrapType>
+	<StrapType>Искусственная кожа</StrapType>
+	<StrapType>Комбинированный</StrapType>
+	<StrapType>Латунь</StrapType>
+	<StrapType>Металлический сплав</StrapType>
+	<StrapType>Полимер</StrapType>
+	<StrapType>Золото</StrapType>
+	<StrapType>Браслет</StrapType>
+</StrapTypeValues>
