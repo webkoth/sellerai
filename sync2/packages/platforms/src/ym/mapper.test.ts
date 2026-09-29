@@ -13,7 +13,7 @@ import ordersFixture from "./fixtures/orders-sample.json" with { type: "json" }
 import stocksFixture from "./fixtures/stocks-sample.json" with { type: "json" }
 import mappingsFixture from "./fixtures/offer-mappings-sample.json" with { type: "json" }
 import type { YmOrder, YmWarehouseStocks } from "./client"
-import { mapYmOrders, mapYmStocks, stockCount, unitPriceMinor, withOffersWithoutStock } from "./mapper"
+import { mapYmOrders, mapYmStocks, reservedCount, stockCount, unitPriceMinor, withOffersWithoutStock } from "./mapper"
 import { ymLifecycle } from "./lifecycle"
 
 const orders = (ordersFixture as { orders: YmOrder[] }).orders
@@ -186,14 +186,32 @@ describe("stockCount — какой тип остатка считать кол�
     expect(stockCount([{ type: "FIT", count: 3 }, { type: "AVAILABLE", count: 2 }])).toBe(2)
   })
 
-  it("иначе FIT", () => {
+  it("иначе FIT без резерва: FIT — «доступен для продажи или уже зарезервирован», FREEZE — резерв", () => {
     expect(stockCount([{ type: "FIT", count: 3 }, { type: "DEFECT", count: 1 }])).toBe(3)
+    expect(stockCount([{ type: "FIT", count: 3 }, { type: "FREEZE", count: 1 }])).toBe(2)
+  })
+
+  it("живой случай 29.09 (оффер 38259864653534, заказ 62411188290 в доставке): FIT 1, FREEZE 1 — доступно 0", () => {
+    expect(stockCount([{ type: "FIT", count: 1 }, { type: "FREEZE", count: 1 }])).toBe(0)
+  })
+
+  it("резерв больше FIT — не ниже нуля; AVAILABLE главнее разности", () => {
+    expect(stockCount([{ type: "FIT", count: 1 }, { type: "FREEZE", count: 2 }])).toBe(0)
+    expect(stockCount([{ type: "FIT", count: 3 }, { type: "FREEZE", count: 1 }, { type: "AVAILABLE", count: 1 }])).toBe(1)
   })
 
   it("ни того, ни другого — ноль", () => {
     expect(stockCount([{ type: "DEFECT", count: 1 }])).toBe(0)
     expect(stockCount([])).toBe(0)
     expect(stockCount(null)).toBe(0)
+  })
+})
+
+describe("reservedCount — резерв под заказы (FREEZE)", () => {
+  it("FREEZE, если есть, иначе 0", () => {
+    expect(reservedCount([{ type: "FIT", count: 1 }, { type: "FREEZE", count: 1 }])).toBe(1)
+    expect(reservedCount([{ type: "FIT", count: 1 }])).toBe(0)
+    expect(reservedCount(null)).toBe(0)
   })
 })
 
@@ -275,6 +293,17 @@ describe("mapYmStocks — правила", () => {
   it("количество не ниже нуля", () => {
     const { stocks } = mapYmStocks([{ warehouseId: 1, offers: [{ offerId: "A", stocks: [{ type: "AVAILABLE", count: -1 }] }] }], barcodes, wbIndex, [1])
     expect(stocks[0]?.quantity).toBe(0)
+  })
+
+  it("FIT 1, FREEZE 1 — строка снимка с доступным 0, резерв 1 в raw.reserved", () => {
+    const { stocks } = mapYmStocks(
+      [{ warehouseId: 1, offers: [{ offerId: "A", stocks: [{ type: "FIT", count: 1 }, { type: "FREEZE", count: 1 }] }] }],
+      barcodes,
+      wbIndex,
+      [1],
+    )
+    expect(stocks).toEqual([expect.objectContaining({ barcode: "2051508626795", quantity: 0 })])
+    expect(stocks[0]?.raw).toMatchObject({ reserved: 1, offerId: "A" })
   })
 
   it("raw несёт товар и идентификатор склада", () => {

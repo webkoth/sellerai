@@ -15,3 +15,4 @@ export { writeYmStocks, ymStocksBody, type YmStockWriterConfig } from "./ym/stoc
 export { writeKitStocks, type KitStockWriterConfig } from "./kit/stock-writer"
 export { SITE_UNKNOWN_BARCODE, writeSiteStocks } from "./site/stock-writer"
 export { fetchYmBarcodes, fetchYmOfferStock, type YmCredentials, type YmStockEntry } from "./ym/client"
+export { mapYmStocks, reservedCount as ymReservedCount, stockCount as ymAvailableCount } from "./ym/mapper"
