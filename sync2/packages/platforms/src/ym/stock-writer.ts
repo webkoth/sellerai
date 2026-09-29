@@ -98,7 +98,15 @@ async function sendBatch(cfg: YmStockWriterConfig, batch: Keyed[], updatedAt: st
 }
 
 /**
- * `count` — доступный остаток, как FIT в снимке (ym/mapper.ts).
+ * `count` — цель пула как есть: свободный остаток БЕЗ резерва, резерв FREEZE не прибавляется.
+ * Документация PUT v2/campaigns/{campaignId}/offers/stocks, `UpdateStockItemDTO.count`: «Количество
+ * доступного товара» (https://yandex.ru/dev/market/partner-api/doc/ru/reference/stocks/updateStocks#entity-UpdateStockItemDTO);
+ * Справка «Как управлять остатками» (https://yandex.ru/support/marketplace/ru/assortment/operations/stocks#count):
+ * «В остатках нужно передавать количество свободных для новых заказов товаров», после заказа —
+ * «Передавайте только количество товаров, доступное для продажи»; «Для моделей FBS и Экспресс: не
+ * снимает резерв, пока заказ не будет доставлен». Резерв Маркет держит сам, поэтому после записи 0
+ * при резерве 1 чтение отдаёт FIT 1, FREEZE 1 (FIT = свободный + резерв) — это не отказ записи.
+ * Снимок сравнивается с целью тем же свободным остатком (ym/mapper.ts, stockCount).
  * Данные в каталоге ЯМ обновляются до нескольких минут: «применено» здесь — «принято» (ответ со
  * status OK); что остаток встал, показывает следующий снимок (drift). 400, называющий офферы, — им
  * отказ, остальным — один повтор без них.

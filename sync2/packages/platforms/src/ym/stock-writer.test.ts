@@ -44,6 +44,12 @@ describe("writeYmStocks", () => {
     expect(ymStocksBody([{ offerId: "JW-A", count: 3 }], cfg.warehouseId, "2026-09-28T10:00:00.000Z")).toEqual(sentBody)
   })
 
+  it("count — цель пула как есть, без резерва: пул 2 при FREEZE 1 — count 2 (документация: «Количество доступного товара»)", async () => {
+    const fetchMock = stub(() => json({ status: "OK" }))
+    await writeYmStocks(cfg, [{ ...op("A", "JW-A", 2), before: 1 }])
+    expect(JSON.parse(String(fetchMock.mock.calls[0]![1]?.body)).skus[0].items[0].count).toBe(2)
+  })
+
   it("notUpdatedOfferIds — отказ этих позиций", async () => {
     stub(() => json({ status: "OK", result: { notUpdatedOfferIds: ["JW-B"] } }))
     const r = await writeYmStocks(cfg, [op("A", "JW-A", 2), op("B", "JW-B", 1)])
