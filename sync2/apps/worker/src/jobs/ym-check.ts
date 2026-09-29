@@ -1,5 +1,16 @@
 import { drizzleWriteStore, loadChannels, type Db } from "@sync2/db"
-import { executeWrites, fetchYmBarcodes, fetchYmOfferStock, writeYmStocks, ymStocksBody, type WriteOp, type YmStockEntry, type YmStockWriterConfig } from "@sync2/platforms"
+import {
+  executeWrites,
+  fetchYmBarcodes,
+  fetchYmOfferStock,
+  writeYmStocks,
+  ymAvailableCount,
+  ymReservedCount,
+  ymStocksBody,
+  type WriteOp,
+  type YmStockEntry,
+  type YmStockWriterConfig,
+} from "@sync2/platforms"
 import { CHANNELS, type Channel, type WriteMode } from "@sync2/shared"
 
 export interface YmCheckResult {
@@ -10,13 +21,19 @@ export interface YmCheckResult {
   error?: string
 }
 
-/** Остаток, который пишет отправитель ЯМ (`type: "FIT"`), — его и перезаписываем тем же числом. */
-const fitCount = (entries: YmStockEntry[] | null): number | null => entries?.find((e) => e.type === "FIT")?.count ?? null
+/**
+ * Свободный остаток — то, что пишет отправитель ЯМ: `count` в PUT offers/stocks — «Количество доступного
+ * товара» (https://yandex.ru/dev/market/partner-api/doc/ru/reference/stocks/updateStocks#entity-UpdateStockItemDTO).
+ * Не FIT: FIT включает резерв FREEZE (ym/mapper.ts, stockCount) — записав FIT обратно, проверка прибавила
+ * бы резерв к витрине. Нет ни FIT, ни AVAILABLE — оффера на складе нет (null).
+ */
+const availableCount = (entries: YmStockEntry[] | null): number | null =>
+  entries?.some((e) => e.type === "FIT" || e.type === "AVAILABLE") ? ymAvailableCount(entries) : null
 
 /**
  * Живая проверка тела записи ЯМ на одном оффере перед шагом B (решение владельца 28.09, п. 6).
- * Без confirm — только чтение: текущий остаток (FIT) оффера на складе записи и тело запроса, которое
- * соберёт `ymStocksBody` (то же, что уйдёт в сеть: `writeYmStocks` собирает его той же функцией с тем же
+ * Без confirm — только чтение: текущий свободный остаток оффера (без резерва FREEZE) на складе записи и
+ * тело запроса, которое соберёт `ymStocksBody` (то же, что уйдёт в сеть: `writeYmStocks` собирает его той же функцией с тем же
  * моментом `now`). С confirm — запись ТОГО ЖЕ числа через `writeYmStocks` (остаток не меняется), чтение
  * обратно; успех — status OK и прочитанное число не изменилось. Запись идёт через executeWrites с режимом
  * ЯМ apply только для этой команды (площадка до шага B в dry-run; глобальный SYNC_WRITE_MODE главнее) —
@@ -33,12 +50,14 @@ export async function runYmCheck(deps: {
   print: (line: string) => void
 }): Promise<YmCheckResult> {
   const { cfg, offerId, print } = deps
-  const current = fitCount(await fetchYmOfferStock(cfg, offerId, cfg.warehouseId))
+  const entries = await fetchYmOfferStock(cfg, offerId, cfg.warehouseId)
+  const current = availableCount(entries)
   if (current === null) {
-    return { code: 2, status: "partial", counters: {}, error: `ЯМ: оффер ${offerId} не найден на складе записи ${cfg.warehouseId} (нет записи остатка FIT) — проверять нечего` }
+    return { code: 2, status: "partial", counters: {}, error: `ЯМ: оффер ${offerId} не найден на складе записи ${cfg.warehouseId} (нет записи остатка FIT/AVAILABLE) — проверять нечего` }
   }
   const now = deps.now()
-  print(`ЯМ ${offerId}: склад ${cfg.warehouseId}, остаток сейчас ${current}; тело записи (ymStocksBody):`)
+  const reserved = ymReservedCount(entries)
+  print(`ЯМ ${offerId}: склад ${cfg.warehouseId}, остаток сейчас ${current}${reserved > 0 ? ` (резерв ${reserved})` : ""}; тело записи (ymStocksBody):`)
   print(JSON.stringify(ymStocksBody([{ offerId, count: current }], cfg.warehouseId, now.toISOString())))
   const counters: Record<string, number> = { current }
   if (!deps.confirm) {
@@ -59,7 +78,7 @@ export async function runYmCheck(deps: {
     record: drizzleWriteStore(deps.db, deps.runId, await loadChannels(deps.db)),
   })
   const status = (outcome?.response as { status?: unknown } | null)?.status
-  const readBack = fitCount(await fetchYmOfferStock(cfg, offerId, cfg.warehouseId))
+  const readBack = availableCount(await fetchYmOfferStock(cfg, offerId, cfg.warehouseId))
   counters.applied = outcome?.applied ? 1 : 0
   if (readBack !== null) counters.readBack = readBack
   print(`итог: ${outcome?.applied ? `status ${String(status ?? "OK")}` : `ошибка: ${outcome?.error ?? "нет итога"}`}, прочитано ${readBack ?? "—"}`)

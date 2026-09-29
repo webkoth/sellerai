@@ -9,7 +9,14 @@ const NOW = new Date("2026-09-28T15:00:00.000Z")
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status })
 
 /** ЯМ в памяти: чтение остатков (фильтр offerIds), каталог штрихкодов, запись. `putResponse` — ответ на PUT. */
-function fakeYm(initial: Record<string, number>, opts: { putResponse?: () => Response; afterPut?: (store: Map<string, number>) => void } = {}) {
+/**
+ * `store` — свободный остаток оффера. `reserve` — резерв под заказы: у такого оффера ЯМ отдаёт, как на
+ * проде 29.09, FIT = свободный + резерв и FREEZE = резерв, без AVAILABLE; PUT пишет свободный остаток.
+ */
+function fakeYm(
+  initial: Record<string, number>,
+  opts: { putResponse?: () => Response; afterPut?: (store: Map<string, number>) => void; reserve?: Record<string, number> } = {},
+) {
   const store = new Map(Object.entries(initial))
   const puts: unknown[] = []
   const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
@@ -17,7 +24,17 @@ function fakeYm(initial: Record<string, number>, opts: { putResponse?: () => Res
     const body: unknown = init?.body ? JSON.parse(String(init.body)) : null
     if (path === "/v2/campaigns/222/offers/stocks" && init?.method === "POST") {
       const ids = (body as { offerIds: string[] }).offerIds
-      const offers = ids.filter((id) => store.has(id)).map((offerId) => ({ offerId, stocks: [{ type: "FIT", count: store.get(offerId) }, { type: "AVAILABLE", count: store.get(offerId) }] }))
+      const offers = ids
+        .filter((id) => store.has(id))
+        .map((offerId) => {
+          const free = store.get(offerId)!
+          const frozen = opts.reserve?.[offerId]
+          const stocks =
+            frozen === undefined
+              ? [{ type: "FIT", count: free }, { type: "AVAILABLE", count: free }]
+              : [{ type: "FIT", count: free + frozen }, { type: "FREEZE", count: frozen }]
+          return { offerId, stocks }
+        })
       return json({ status: "OK", result: { warehouses: [{ warehouseId: 2369574, offers }] } })
     }
     if (path === "/v2/businesses/111/offer-mappings") {
@@ -77,6 +94,14 @@ describe.skipIf(!TEST_DATABASE_URL)("runYmCheck — живая проверка 
     const rows = await h.db.select().from(writes).where(eq(writes.runId, id))
     const ymId = (await loadChannels(h.db)).get("ym")!.id
     expect(rows.map((w) => [w.channelId, w.barcode, w.externalSku, w.before, w.after, w.mode, w.applied])).toEqual([[ymId, "2042353656495", "JW-A", 2, 2, "apply", true]])
+  })
+
+  it("резерв (FIT 1, FREEZE 1, без AVAILABLE): текущий — свободный 0, пишется 0, а не FIT 1 (иначе +1 к витрине)", async () => {
+    const ym = fakeYm({ "JW-A": 0 }, { reserve: { "JW-A": 1 } })
+    const { r, lines } = await check("JW-A", true)
+    expect(r).toMatchObject({ code: 0, status: "ok", counters: { current: 0, readBack: 0, applied: 1 } })
+    expect(ym.puts).toEqual([{ skus: [{ sku: "JW-A", warehouseId: 2369574, items: [{ count: 0, type: "FIT", updatedAt: "2026-09-28T15:00:00.000Z" }] }] }])
+    expect(lines.join("\n")).toMatch(/остаток сейчас 0 \(резерв 1\)/)
   })
 
   it("прочитанное после записи число изменилось — код 1", async () => {
