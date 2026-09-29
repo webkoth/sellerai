@@ -436,7 +436,7 @@ describe("fetchFbsStocks", () => {
 })
 
 describe("fetchAllCards", () => {
-  it("отправляет POST на content-api с телом settings.cursor.limit=100 и filter.withPhoto=-1", async () => {
+  it("отправляет POST на content-api с телом sort.ascending=true, settings.cursor.limit=100 и filter.withPhoto=-1", async () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ cards: [], cursor: { total: 0 } }))
     vi.stubGlobal("fetch", fetchMock)
 
@@ -447,7 +447,7 @@ describe("fetchAllCards", () => {
     expect(String(url)).toBe("https://content-api.wildberries.ru/content/v2/get/cards/list")
     expect(init.method).toBe("POST")
     expect(requestBody(fetchMock, 0)).toEqual({
-      settings: { cursor: { limit: 100 }, filter: { withPhoto: -1 } },
+      settings: { sort: { ascending: true }, cursor: { limit: 100 }, filter: { withPhoto: -1 } },
     })
   })
 
@@ -482,6 +482,7 @@ describe("fetchAllCards", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2)
     expect(requestBody(fetchMock, 1)).toEqual({
       settings: {
+        sort: { ascending: true },
         cursor: { limit: 100, updatedAt: "2026-08-01T10:00:00Z", nmID: 99 },
         filter: { withPhoto: -1 },
       },
@@ -536,7 +537,45 @@ describe("fetchAllCards", () => {
     const result = await fetchAllCards("token")
 
     expect(fetchMock).toHaveBeenCalledTimes(2)
-    expect(result).toHaveLength(200)
+    // Вторая страница повторила те же nmID — дедуп оставил по одной карточке.
+    expect(result).toHaveLength(100)
+  })
+
+  it("карточка, изменённая во время листания, приходит дважды — остаётся одна, последняя версия (инцидент 29.09)", async () => {
+    // По возрастанию updatedAt изменённая карточка уезжает в конец перечня: её увидим
+    // повторно на последней странице. Дедуп по nmID — последняя версия выигрывает.
+    const firstPage = Array.from({ length: 100 }, (_, i) =>
+      wbCard({ nmID: i, vendorCode: `v${i}`, sizes: [{ skus: [String(i)] }] }),
+    )
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        jsonResponse({ cards: firstPage, cursor: { total: 100, updatedAt: "2026-09-29T13:50:00Z", nmID: 99 } }),
+      )
+      .mockResolvedValueOnce(
+        jsonResponse({
+          cards: [
+            wbCard({ nmID: 100, vendorCode: "v100", sizes: [{ skus: ["100"] }] }),
+            wbCard({ nmID: 5, vendorCode: "v5-new", sizes: [{ skus: ["5"] }] }),
+          ],
+          cursor: { total: 2, updatedAt: "2026-09-29T13:51:00Z", nmID: 5 },
+        }),
+      )
+    vi.stubGlobal("fetch", fetchMock)
+
+    const result = await fetchAllCards("token")
+
+    expect(result).toHaveLength(101)
+    expect(result.filter((c) => c.nmID === 5)).toEqual([wbCard({ nmID: 5, vendorCode: "v5-new", sizes: [{ skus: ["5"] }] })])
+  })
+
+  it("карточки без nmID не схлопываются дедупом — ключа нет, отбрасывать нечего", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse({ cards: [wbCard({ nmID: null }), wbCard({ nmID: null })], cursor: { total: 2 } }),
+    )
+    vi.stubGlobal("fetch", fetchMock)
+
+    expect(await fetchAllCards("token")).toHaveLength(2)
   })
 
   it("потолок страниц: не крутится дольше него, даже если площадка честно продвигает курсор", async () => {

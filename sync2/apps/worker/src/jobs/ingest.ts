@@ -1,5 +1,15 @@
-import { ingestChannelOrders, insertStockSnapshot, lastCounter, loadChannels, upsertProducts, type Db, type OrderUpsert } from "@sync2/db"
-import { buildWbCatalogIndex, errorText, type ChannelOrder } from "@sync2/shared"
+import {
+  ingestChannelOrders,
+  insertStockSnapshot,
+  lastCounter,
+  latestStockSnapshots,
+  loadChannels,
+  upsertProducts,
+  type Db,
+  type OrderUpsert,
+} from "@sync2/db"
+import { aggregateStockByBarcode } from "@sync2/domain"
+import { buildWbCatalogIndex, errorText, type ChannelOrder, type NormalizedStock, type WbCatalogEntry } from "@sync2/shared"
 import type { ChannelAdapter } from "@sync2/platforms"
 import type { Adapters } from "../adapters"
 import type { Logger } from "../log"
@@ -21,6 +31,60 @@ export const CATALOG_ACCEPTED_KEY = "wbCatalogAccepted"
 export const ACCEPT_CATALOG_HINT =
   "cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ingest --accept-catalog"
 
+/**
+ * Пауза перед повтором чтения каталога, не прошедшего ворота. Выпадение при листании
+ * (29.09) — следствие массового изменения карточек; оно кратковременно (каталог
+ * вернулся уже к следующему тику через 5 минут), и полминуты дают ему закончиться.
+ * Цена — полминуты к тику только при отказе; тик ограничен `timeout 9m` в кроне,
+ * лимит «Контента» (100 запросов/мин) на 5 страниц каталога не давит.
+ */
+export const CATALOG_RETRY_DELAY_MS = 30_000
+
+const defaultSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
+/** Сколько пропавших штрихкодов перечислять в тексте отказа — остальные числом. */
+const MISSING_LIST_LIMIT = 10
+
+export interface CatalogVerdict {
+  /** Причины отказа; пусто — каталог прошёл ворота. */
+  reasons: string[]
+  /** Штрихкоды с остатком > 0 в последнем снимке WB, которых нет в каталоге. */
+  missingInStock: string[]
+}
+
+/**
+ * Ворота каталога WB. Отказ, если каталог: пуст (у живого магазина это сбой чтения,
+ * принять его — обнулить эталон и все зеркала); короче MIN_CATALOG_SHARE прошлого
+ * принятого; или потерял хотя бы один штрихкод, у которого в последнем снимке WB
+ * остаток > 0 (сумма по складам). Последнее — инцидент 29.09: 386 из 421 прошло долю
+ * (91,7 %), а снимок WB строится по каталогу, и 35 пропавших штрихкодов прочитались
+ * бы как 0 на всех зеркалах. Пропажа штрихкода с нулевым остатком ничего не обнуляет —
+ * её судит только доля.
+ */
+export function checkCatalog(p: {
+  catalog: WbCatalogEntry[]
+  previousAccepted: number | null
+  lastWbStocks: NormalizedStock[] | null
+}): CatalogVerdict {
+  const { catalog, previousAccepted } = p
+  if (catalog.length === 0) return { reasons: ["каталог WB пуст"], missingInStock: [] }
+  const reasons: string[] = []
+  const present = new Set(catalog.map((e) => e.barcode))
+  const missingInStock = [...aggregateStockByBarcode(p.lastWbStocks ?? [])]
+    .filter(([barcode, s]) => s.quantity > 0 && !present.has(barcode))
+    .map(([barcode]) => barcode)
+    .sort()
+  if (missingInStock.length > 0) {
+    const shown = missingInStock.slice(0, MISSING_LIST_LIMIT).join(", ")
+    const more = missingInStock.length > MISSING_LIST_LIMIT ? ` и ещё ${missingInStock.length - MISSING_LIST_LIMIT}` : ""
+    reasons.push(`из каталога WB пропали штрихкоды с остатком > 0 в последнем снимке WB — ${missingInStock.length} шт.: ${shown}${more}`)
+  }
+  if (previousAccepted !== null && catalog.length < previousAccepted * MIN_CATALOG_SHARE) {
+    reasons.push(`каталог WB ${catalog.length} при прошлом принятом ${previousAccepted} (меньше ${MIN_CATALOG_SHARE * 100}%)`)
+  }
+  return { reasons, missingInStock }
+}
+
 export interface IngestResult {
   status: "ok" | "partial"
   counters: Record<string, number>
@@ -39,10 +103,12 @@ const toUpsert = (o: ChannelOrder): OrderUpsert => ({
 
 /**
  * Заказы и остатки всех площадок в базу. Каталог WB — ворота: не получен — джоба падает
- * (без индекса остатки зеркал не сопоставить); пуст или короче MIN_CATALOG_SHARE
- * последнего принятого — пишутся только товары, снимки и заказы зеркал пропускаются. Настоящую
- * усадку каталога принимает `acceptCatalog` (`--accept-catalog` в cli) — без проверки
- * доли, с предупреждением в лог. Сбой отдельной площадки не роняет остальные.
+ * (без индекса остатки зеркал не сопоставить); не прошёл `checkCatalog` — после паузы
+ * CATALOG_RETRY_DELAY_MS читается ещё раз мимо кэша адаптера, и ворота судят повтор;
+ * не прошёл и повтор (или повтор упал) — пишутся только товары, снимки и заказы зеркал
+ * пропускаются. Настоящую усадку каталога принимает `acceptCatalog` (`--accept-catalog`
+ * в cli) — без ворот и повтора, с предупреждением в лог. Сбой отдельной площадки не
+ * роняет остальные.
  */
 export async function runIngest(deps: {
   db: Db
@@ -51,6 +117,8 @@ export async function runIngest(deps: {
   adapters: Adapters
   acceptCatalog: boolean
   log: Logger
+  /** Пауза перед повтором чтения каталога; в тестах — без ожидания. */
+  sleep?: (ms: number) => Promise<void>
 }): Promise<IngestResult> {
   const { db, runId } = deps
   const counters: Record<string, number> = {}
@@ -59,23 +127,45 @@ export async function runIngest(deps: {
   const channels = await loadChannels(db)
   const previous = await lastCounter(db, "ingest", CATALOG_ACCEPTED_KEY)
 
-  const catalog = await deps.adapters.wb.fetchCatalog()
+  // Эталон остатка — последний снимок WB: его пишет только прогон с принятым каталогом.
+  const wbChannel = channels.get("wb")
+  const lastWbStocks = wbChannel ? ((await latestStockSnapshots(db)).get(wbChannel.id)?.stocks ?? null) : null
+
+  const judge = (catalog: WbCatalogEntry[]) => checkCatalog({ catalog, previousAccepted: previous, lastWbStocks })
+  let catalog = await deps.adapters.wb.fetchCatalog()
+  let verdict = judge(catalog)
+  let retryNote = ""
+  let retryFailed = false
+  if (verdict.reasons.length > 0 && !deps.acceptCatalog) {
+    counters.catalogRetried = 1
+    deps.log.warn({ wbCatalog: catalog.length, reasons: verdict.reasons }, "каталог WB не прошёл ворота — повтор чтения")
+    await (deps.sleep ?? defaultSleep)(CATALOG_RETRY_DELAY_MS)
+    try {
+      catalog = await deps.adapters.wb.fetchCatalog({ fresh: true })
+      verdict = judge(catalog)
+      retryNote = "повтор чтения каталога не помог"
+    } catch (e) {
+      // Не failed: пул блокирует запись по catalogRejected последнего ok/partial ingest,
+      // а failed-прогон он не видит и взял бы счётчики прошлого принятого.
+      retryFailed = true
+      retryNote = `повтор чтения каталога упал: ${errorText(e)}`
+    }
+  }
   counters.wbCatalog = catalog.length
   await upsertProducts(db, catalog)
-  // Пустой каталог отклоняется всегда, даже без эталона: у живого магазина это сбой
-  // чтения WB, и принять его значит обнулить эталон и все зеркала.
-  const empty = catalog.length === 0
-  const shrunk = empty || (previous !== null && catalog.length < previous * MIN_CATALOG_SHARE)
-  if (shrunk && !deps.acceptCatalog) {
+  const rejected = verdict.reasons.length > 0 || retryFailed
+  if (verdict.missingInStock.length > 0) counters.catalogMissingInStock = verdict.missingInStock.length
+  if (rejected && !deps.acceptCatalog) {
     counters.catalogRejected = 1
-    const why = empty
-      ? "каталог WB пуст"
-      : `каталог WB ${catalog.length} при прошлом принятом ${previous} (меньше ${MIN_CATALOG_SHARE * 100}%)`
+    const why = [...verdict.reasons, retryNote].filter(Boolean).join("; ")
     return { status: "partial", counters, errors: [`${why} — снимки и заказы зеркал пропущены; если это правда: ${ACCEPT_CATALOG_HINT}`] }
   }
   if (deps.acceptCatalog) {
-    deps.log.warn({ wbCatalog: catalog.length, previousAccepted: previous }, "каталог WB принят без проверки доли (--accept-catalog)")
-    if (shrunk) counters.catalogForced = 1
+    deps.log.warn(
+      { wbCatalog: catalog.length, previousAccepted: previous, missingInStock: verdict.missingInStock.length },
+      "каталог WB принят без проверки ворот (--accept-catalog)",
+    )
+    if (rejected) counters.catalogForced = 1
   }
   counters[CATALOG_ACCEPTED_KEY] = catalog.length
 

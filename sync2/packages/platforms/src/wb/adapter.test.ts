@@ -231,4 +231,37 @@ describe("createWbAdapter — fetchStocks", () => {
     expect(cardsListCalls).toBe(1)
     expect(catalog).toEqual([{ nmId: 1, barcode: "111", vendorCode: "v", title: "v", subject: null }])
   })
+
+  it("fetchCatalog({ fresh: true }) читает каталог заново, и fetchStocks спрашивает остатки уже по новому (повтор ворот ingest)", async () => {
+    const reads = [
+      [{ nmID: 1, vendorCode: "v", sizes: [{ skus: ["111"] }] }],
+      [{ nmID: 1, vendorCode: "v", sizes: [{ skus: ["111"] }] }, { nmID: 2, vendorCode: "w", sizes: [{ skus: ["222"] }] }],
+    ]
+    let cardsListCalls = 0
+    const stockBodies: unknown[] = []
+    const fetchMock = vi.fn((input: string | URL, init?: RequestInit) => {
+      const { pathname } = new URL(String(input))
+      if (pathname === "/api/v3/warehouses") {
+        return Promise.resolve(jsonResponse([{ id: 1408913, name: "Склад", officeId: null }]))
+      }
+      if (pathname === "/content/v2/get/cards/list") {
+        const cards = reads[Math.min(cardsListCalls++, reads.length - 1)]
+        return Promise.resolve(jsonResponse({ cards, cursor: { total: cards!.length } }))
+      }
+      if (pathname === "/api/v3/stocks/1408913") {
+        stockBodies.push(JSON.parse(String(init?.body)))
+        return Promise.resolve(jsonResponse({ stocks: [] }))
+      }
+      throw new Error(`неожиданный URL в тесте: ${pathname}`)
+    })
+    vi.stubGlobal("fetch", fetchMock)
+
+    const adapter = createWbAdapter("token")
+    expect(await adapter.fetchCatalog()).toHaveLength(1)
+    expect(await adapter.fetchCatalog({ fresh: true })).toHaveLength(2)
+    await adapter.fetchStocks()
+
+    expect(cardsListCalls).toBe(2)
+    expect(stockBodies).toEqual([{ skus: ["111", "222"] }])
+  })
 })
