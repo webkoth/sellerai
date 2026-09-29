@@ -10,7 +10,8 @@ import type { WbCatalogEntry, WbCatalogIndex } from "@sync2/shared"
 import type { ChannelsConfig } from "./channels-config"
 
 export interface Adapters {
-  wb: ChannelAdapter & { fetchCatalog(): Promise<WbCatalogEntry[]> }
+  /** `fresh` — перечитать каталог мимо кэша адаптера (повтор ворот каталога в ingest). */
+  wb: ChannelAdapter & { fetchCatalog(opts?: { fresh?: boolean }): Promise<WbCatalogEntry[]> }
   /** Зеркала строятся от индекса каталога WB этого же прогона. */
   mirrors(index: WbCatalogIndex): ChannelAdapter[]
   /** Необязательные площадки, пропущенные из-за битого конфига, — текстом; ingest уходит в partial. Нет — ошибок нет. */

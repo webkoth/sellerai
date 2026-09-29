@@ -17,7 +17,7 @@ import { mapFbsOrders, mapFbsStocks } from "./mapper"
 
 export function createWbAdapter(
   token: string,
-): ChannelAdapter & { fetchCatalog(): Promise<WbCatalogEntry[]> } {
+): ChannelAdapter & { fetchCatalog(opts?: { fresh?: boolean }): Promise<WbCatalogEntry[]> } {
   // Каталог кэшируется на экземпляр адаптера: `fetchStocks` нужны штрихкоды
   // каталога, чтобы синтезировать нулевые строки, а внутри одного прогона
   // `probe` каталог и так запрашивается один раз через `fetchCatalog` — второй
@@ -108,8 +108,13 @@ export function createWbAdapter(
    * Каталог продавца — по одной строке на штрихкод. `fetchAllCards` отдаёт
    * все страницы одним массивом, а `mapCards` — чистое пораздельное
    * разворачивание карточки в её штрихкоды.
+   *
+   * `fresh` — прочитать заново мимо кэша (повтор ворот каталога в ingest). Новый
+   * каталог заменяет кэш: `fetchStocks` спросит остатки уже по нему — снимок WB
+   * строится по тому каталогу, который прошёл ворота.
    */
-  async function fetchCatalog(): Promise<WbCatalogEntry[]> {
+  async function fetchCatalog(opts?: { fresh?: boolean }): Promise<WbCatalogEntry[]> {
+    if (opts?.fresh) catalogPromise = null
     return loadCatalog()
   }
 

@@ -5,7 +5,7 @@ import type { ChannelAdapter } from "@sync2/platforms"
 import type { ChannelOrder, NormalizedStock, WbCatalogEntry } from "@sync2/shared"
 import { createLogger } from "../log"
 import { withRun } from "../run"
-import { runIngest } from "./ingest"
+import { CATALOG_RETRY_DELAY_MS, runIngest } from "./ingest"
 
 const cat = (n: number): WbCatalogEntry[] =>
   Array.from({ length: n }, (_, i) => ({ barcode: `B${i}`, vendorCode: `V${i}`, nmId: i, title: "", subject: null }))
@@ -41,6 +41,7 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
         runId: ctx.runId,
         log: ctx.log,
         acceptCatalog: opts.acceptCatalog ?? false,
+        sleep: async () => undefined,
         adapters: {
           wb: { ...fake("wb", [order("W1")]), fetchCatalog: async () => (catalog instanceof Error ? Promise.reject(catalog) : catalog) },
           mirrors: () => [
@@ -174,27 +175,32 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest: пропажа штрихкод�
   const without = (...barcodes: string[]) => cat(20).filter((e) => !barcodes.includes(e.barcode))
 
   /** reads — ответы fetchCatalog по порядку; последний повторяется на все дальнейшие чтения. */
-  const ingest = (reads: Array<WbCatalogEntry[] | Error>, opts: { acceptCatalog?: boolean } = {}) => {
+  const ingest = async (reads: Array<WbCatalogEntry[] | Error>, opts: { acceptCatalog?: boolean } = {}) => {
     const at = new Date(Date.parse("2026-09-29T13:00:00.000Z") + ++n * 60_000)
     let call = 0
-    const fetchCatalog = async () => {
+    const fresh: boolean[] = []
+    const sleeps: number[] = []
+    const fetchCatalog = async (o?: { fresh?: boolean }) => {
+      fresh.push(o?.fresh ?? false)
       const r = reads[Math.min(call++, reads.length - 1)]!
       return r instanceof Error ? Promise.reject(r) : r
     }
-    return withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
+    const outcome = await withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
       const r = await runIngest({
         db: h.db,
         now: () => at,
         runId: ctx.runId,
         log: ctx.log,
         acceptCatalog: opts.acceptCatalog ?? false,
+        sleep: async (ms: number) => void sleeps.push(ms),
         adapters: {
           wb: { ...fake("wb", []), fetchStocks: async () => ({ stocks: wbStocks, skippedNoWbBarcode: [] }), fetchCatalog },
           mirrors: () => [fake("ozon", [])],
         },
       })
-      return { status: r.status, counters: r.counters, error: r.errors.length ? r.errors.join("; ") : undefined, reads: call }
+      return { status: r.status, counters: r.counters, error: r.errors.length ? r.errors.join("; ") : undefined }
     })
+    return { ...outcome, fresh, sleeps }
   }
   const accepted = () => lastCounter(h.db, "ingest", "wbCatalogAccepted")
 
@@ -207,8 +213,13 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest: пропажа штрихкод�
     const r = await ingest([without("B2")])
     expect(r).toMatchObject({ status: "partial", counters: { wbCatalog: 19, catalogRejected: 1, catalogMissingInStock: 1 } })
     expect(r.counters).not.toHaveProperty("wbCatalogAccepted")
-    expect(r.error).toMatch(/пропали штрихкоды с остатком > 0 в последнем снимке WB — 1 шт\.: B2 —/)
+    expect(r.error).toMatch(/пропали штрихкоды с остатком > 0 в последнем снимке WB — 1 шт\.: B2; /)
     expect(r.error).toContain("ingest --accept-catalog")
+    // Повтор чтения не исправил: одно ожидание, второе чтение — мимо кэша адаптера.
+    expect(r.error).toMatch(/повтор чтения каталога не помог/)
+    expect(r.counters).toMatchObject({ catalogRetried: 1 })
+    expect(r.fresh).toEqual([false, true])
+    expect(r.sleeps).toEqual([CATALOG_RETRY_DELAY_MS])
     expect(await accepted()).toBe(20)
     // Снимок WB не перезаписан коротким каталогом.
     expect(await latestStockSnapshots(h.db)).toEqual(snapshotsBefore)
@@ -218,12 +229,41 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest: пропажа штрихкод�
     const r = await ingest([without("B1")])
     expect(r).toMatchObject({ status: "ok", counters: { wbCatalog: 19, wbCatalogAccepted: 19 } })
     expect(r.counters).not.toHaveProperty("catalogRejected")
+    // Прошёл с первого чтения — повтора нет.
+    expect(r.counters).not.toHaveProperty("catalogRetried")
+    expect(r.fresh).toEqual([false])
+    expect(r.sleeps).toEqual([])
   })
 
-  it("--accept-catalog: пропажа штрихкода с остатком принята, catalogForced", async () => {
-    const r = await ingest([without("B1", "B2")], { acceptCatalog: true })
+  it("повтор чтения исправил — принято по каталогу повтора, снимки пишутся", async () => {
+    const r = await ingest([without("B2"), cat(20)])
+    expect(r).toMatchObject({ status: "ok", counters: { wbCatalog: 20, wbCatalogAccepted: 20, catalogRetried: 1 } })
+    expect(r.counters).not.toHaveProperty("catalogRejected")
+    expect(r.counters).not.toHaveProperty("catalogMissingInStock")
+    expect(r.fresh).toEqual([false, true])
+    expect(r.counters).toMatchObject({ wbStock: 4, ozonStock: 1 })
+    expect(await accepted()).toBe(20)
+  })
+
+  it("пустой каталог, повтор вернул полный — принято", async () => {
+    const r = await ingest([[], cat(20)])
+    expect(r).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 20, catalogRetried: 1 } })
+  })
+
+  it("повтор чтения упал — отклонено (partial), а не failed: пулу нужен catalogRejected", async () => {
+    const r = await ingest([without("B2"), new Error("wb: 429")])
+    expect(r).toMatchObject({ status: "partial", counters: { catalogRejected: 1, catalogRetried: 1, wbCatalog: 19 } })
+    expect(r.error).toMatch(/повтор чтения каталога упал: wb: 429/)
+    expect(r.error).toContain("ingest --accept-catalog")
+    expect(await accepted()).toBe(20)
+  })
+
+  it("--accept-catalog: пропажа штрихкода с остатком принята без повтора, catalogForced", async () => {
+    const r = await ingest([without("B1", "B2"), cat(20)], { acceptCatalog: true })
     expect(r).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 18, catalogForced: 1 } })
     expect(r.counters).not.toHaveProperty("catalogRejected")
+    expect(r.counters).not.toHaveProperty("catalogRetried")
+    expect(r.fresh).toEqual([false])
     expect(await accepted()).toBe(18)
   })
 })

@@ -56,7 +56,7 @@ const USAGE = `sync2 <команда>
   probe                  живое чтение площадок (WB, Ozon, ЯМ, KIT; сайт — если задан SITE_API_TOKEN) без базы и записи
   ingest [--accept-catalog]
                          каталог WB, заказы и снимки остатков всех площадок в базу;
-                         --accept-catalog — принять каталог WB без проверки усадки (усадка настоящая)
+                         --accept-catalog — принять каталог WB без ворот (усадка или пропажа товара в наличии настоящая)
   pool                   пересчёт пула и запись на площадки по режимам channels
   tick [--accept-catalog]
                          ingest, затем pool (pool — если ingest не failed)
@@ -73,7 +73,7 @@ const USAGE = `sync2 <команда>
                          с --confirm — запись того же остатка и чтение обратно (перед шагом B этапа 1.4)
   prune                  ретенция: writes off/dry-run > 14 дн, apply > 90 дн; снимки > 7 дн (кроме последнего)`
 
-/** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки доли. */
+/** Ручной обход ворот каталога WB в ingest (и tick): принять каталог без проверки ворот. */
 const ACCEPT_CATALOG_FLAG = "--accept-catalog"
 /** Подтверждение необратимого шага (этап 1.4): write-mode … apply, site-push-all. */
 const CONFIRM_FLAG = "--confirm"

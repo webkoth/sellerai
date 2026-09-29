@@ -31,6 +31,17 @@ export const CATALOG_ACCEPTED_KEY = "wbCatalogAccepted"
 export const ACCEPT_CATALOG_HINT =
   "cd /opt/sync2 && flock /tmp/sync2.lock node_modules/.bin/tsx --env-file=.env apps/worker/src/cli.ts ingest --accept-catalog"
 
+/**
+ * Пауза перед повтором чтения каталога, не прошедшего ворота. Выпадение при листании
+ * (29.09) — следствие массового изменения карточек; оно кратковременно (каталог
+ * вернулся уже к следующему тику через 5 минут), и полминуты дают ему закончиться.
+ * Цена — полминуты к тику только при отказе; тик ограничен `timeout 9m` в кроне,
+ * лимит «Контента» (100 запросов/мин) на 5 страниц каталога не давит.
+ */
+export const CATALOG_RETRY_DELAY_MS = 30_000
+
+const defaultSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
 /** Сколько пропавших штрихкодов перечислять в тексте отказа — остальные числом. */
 const MISSING_LIST_LIMIT = 10
 
@@ -92,10 +103,12 @@ const toUpsert = (o: ChannelOrder): OrderUpsert => ({
 
 /**
  * Заказы и остатки всех площадок в базу. Каталог WB — ворота: не получен — джоба падает
- * (без индекса остатки зеркал не сопоставить); не прошёл `checkCatalog` — пишутся только
- * товары, снимки и заказы зеркал пропускаются. Настоящую усадку каталога принимает
- * `acceptCatalog` (`--accept-catalog` в cli) — без ворот, с предупреждением в лог.
- * Сбой отдельной площадки не роняет остальные.
+ * (без индекса остатки зеркал не сопоставить); не прошёл `checkCatalog` — после паузы
+ * CATALOG_RETRY_DELAY_MS читается ещё раз мимо кэша адаптера, и ворота судят повтор;
+ * не прошёл и повтор (или повтор упал) — пишутся только товары, снимки и заказы зеркал
+ * пропускаются. Настоящую усадку каталога принимает `acceptCatalog` (`--accept-catalog`
+ * в cli) — без ворот и повтора, с предупреждением в лог. Сбой отдельной площадки не
+ * роняет остальные.
  */
 export async function runIngest(deps: {
   db: Db
@@ -104,6 +117,8 @@ export async function runIngest(deps: {
   adapters: Adapters
   acceptCatalog: boolean
   log: Logger
+  /** Пауза перед повтором чтения каталога; в тестах — без ожидания. */
+  sleep?: (ms: number) => Promise<void>
 }): Promise<IngestResult> {
   const { db, runId } = deps
   const counters: Record<string, number> = {}
@@ -116,15 +131,33 @@ export async function runIngest(deps: {
   const wbChannel = channels.get("wb")
   const lastWbStocks = wbChannel ? ((await latestStockSnapshots(db)).get(wbChannel.id)?.stocks ?? null) : null
 
-  const catalog = await deps.adapters.wb.fetchCatalog()
+  const judge = (catalog: WbCatalogEntry[]) => checkCatalog({ catalog, previousAccepted: previous, lastWbStocks })
+  let catalog = await deps.adapters.wb.fetchCatalog()
+  let verdict = judge(catalog)
+  let retryNote = ""
+  let retryFailed = false
+  if (verdict.reasons.length > 0 && !deps.acceptCatalog) {
+    counters.catalogRetried = 1
+    deps.log.warn({ wbCatalog: catalog.length, reasons: verdict.reasons }, "каталог WB не прошёл ворота — повтор чтения")
+    await (deps.sleep ?? defaultSleep)(CATALOG_RETRY_DELAY_MS)
+    try {
+      catalog = await deps.adapters.wb.fetchCatalog({ fresh: true })
+      verdict = judge(catalog)
+      retryNote = "повтор чтения каталога не помог"
+    } catch (e) {
+      // Не failed: пул блокирует запись по catalogRejected последнего ok/partial ingest,
+      // а failed-прогон он не видит и взял бы счётчики прошлого принятого.
+      retryFailed = true
+      retryNote = `повтор чтения каталога упал: ${errorText(e)}`
+    }
+  }
   counters.wbCatalog = catalog.length
   await upsertProducts(db, catalog)
-  const verdict = checkCatalog({ catalog, previousAccepted: previous, lastWbStocks })
-  const rejected = verdict.reasons.length > 0
+  const rejected = verdict.reasons.length > 0 || retryFailed
   if (verdict.missingInStock.length > 0) counters.catalogMissingInStock = verdict.missingInStock.length
   if (rejected && !deps.acceptCatalog) {
     counters.catalogRejected = 1
-    const why = verdict.reasons.join("; ")
+    const why = [...verdict.reasons, retryNote].filter(Boolean).join("; ")
     return { status: "partial", counters, errors: [`${why} — снимки и заказы зеркал пропущены; если это правда: ${ACCEPT_CATALOG_HINT}`] }
   }
   if (deps.acceptCatalog) {
