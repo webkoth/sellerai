@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest"
 import { countProducts, drizzleRunStore, lastCounter, latestStockSnapshots, loadChannels, loadOrdersSince, seedChannels } from "@sync2/db"
 import { TEST_DATABASE_URL, freshTestDb } from "@sync2/db/test-db"
 import type { ChannelAdapter } from "@sync2/platforms"
-import type { ChannelOrder, WbCatalogEntry } from "@sync2/shared"
+import type { ChannelOrder, NormalizedStock, WbCatalogEntry } from "@sync2/shared"
 import { createLogger } from "../log"
 import { withRun } from "../run"
 import { runIngest } from "./ingest"
@@ -145,5 +145,85 @@ describe.skipIf(!TEST_DATABASE_URL)("runIngest", () => {
     expect(r.counters).not.toHaveProperty("kitOrdersFailed")
     const w = await ingest(cat(10), { site: "wb", acceptCatalog: true })
     expect(w.counters).toMatchObject({ siteSourcePool: 0 })
+  })
+})
+
+/**
+ * Ворота каталога по остатку (инцидент 29.09, 13:51 UTC): каталог 386 из 421 прошёл
+ * проверку доли (91,7 %), и снимок WB, построенный по каталогу, прочитал 35 пропавших
+ * штрихкодов как 0. Эталон остатка — последний снимок WB в базе: его пишет только
+ * прогон с принятым каталогом.
+ */
+describe.skipIf(!TEST_DATABASE_URL)("runIngest: пропажа штрихкодов с остатком", () => {
+  let h: Awaited<ReturnType<typeof freshTestDb>>
+  let n = 0
+  const log = createLogger("error", { write: () => undefined })
+  beforeAll(async () => {
+    h = await freshTestDb()
+    await seedChannels(h.db)
+  })
+  afterAll(async () => h?.close())
+
+  // Остаток WB: B0 — 2, B1 — 0, B2 — 1 на втором складе из двух (сумма по складам > 0).
+  const wbStocks: NormalizedStock[] = [
+    { barcode: "B0", externalSku: "V0", quantity: 2, warehouse: "1" },
+    { barcode: "B1", externalSku: "V1", quantity: 0, warehouse: "1" },
+    { barcode: "B2", externalSku: "V2", quantity: 0, warehouse: "1" },
+    { barcode: "B2", externalSku: "V2", quantity: 1, warehouse: "2" },
+  ]
+  const without = (...barcodes: string[]) => cat(20).filter((e) => !barcodes.includes(e.barcode))
+
+  /** reads — ответы fetchCatalog по порядку; последний повторяется на все дальнейшие чтения. */
+  const ingest = (reads: Array<WbCatalogEntry[] | Error>, opts: { acceptCatalog?: boolean } = {}) => {
+    const at = new Date(Date.parse("2026-09-29T13:00:00.000Z") + ++n * 60_000)
+    let call = 0
+    const fetchCatalog = async () => {
+      const r = reads[Math.min(call++, reads.length - 1)]!
+      return r instanceof Error ? Promise.reject(r) : r
+    }
+    return withRun("ingest", { store: drizzleRunStore(h.db), log, writeMode: "dry-run", now: () => at }, async (ctx) => {
+      const r = await runIngest({
+        db: h.db,
+        now: () => at,
+        runId: ctx.runId,
+        log: ctx.log,
+        acceptCatalog: opts.acceptCatalog ?? false,
+        adapters: {
+          wb: { ...fake("wb", []), fetchStocks: async () => ({ stocks: wbStocks, skippedNoWbBarcode: [] }), fetchCatalog },
+          mirrors: () => [fake("ozon", [])],
+        },
+      })
+      return { status: r.status, counters: r.counters, error: r.errors.length ? r.errors.join("; ") : undefined, reads: call }
+    })
+  }
+  const accepted = () => lastCounter(h.db, "ingest", "wbCatalogAccepted")
+
+  it("первый каталог принят: снимка WB ещё нет — сравнивать не с чем", async () => {
+    expect(await ingest([cat(20)])).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 20 } })
+  })
+
+  it("нет одного штрихкода с остатком > 0 при доле 95% — отклонено, снимки не пишутся, подсказка про --accept-catalog", async () => {
+    const snapshotsBefore = await latestStockSnapshots(h.db)
+    const r = await ingest([without("B2")])
+    expect(r).toMatchObject({ status: "partial", counters: { wbCatalog: 19, catalogRejected: 1, catalogMissingInStock: 1 } })
+    expect(r.counters).not.toHaveProperty("wbCatalogAccepted")
+    expect(r.error).toMatch(/пропали штрихкоды с остатком > 0 в последнем снимке WB — 1 шт\.: B2 —/)
+    expect(r.error).toContain("ingest --accept-catalog")
+    expect(await accepted()).toBe(20)
+    // Снимок WB не перезаписан коротким каталогом.
+    expect(await latestStockSnapshots(h.db)).toEqual(snapshotsBefore)
+  })
+
+  it("нет штрихкода с остатком 0 при доле > 90% — принято", async () => {
+    const r = await ingest([without("B1")])
+    expect(r).toMatchObject({ status: "ok", counters: { wbCatalog: 19, wbCatalogAccepted: 19 } })
+    expect(r.counters).not.toHaveProperty("catalogRejected")
+  })
+
+  it("--accept-catalog: пропажа штрихкода с остатком принята, catalogForced", async () => {
+    const r = await ingest([without("B1", "B2")], { acceptCatalog: true })
+    expect(r).toMatchObject({ status: "ok", counters: { wbCatalogAccepted: 18, catalogForced: 1 } })
+    expect(r.counters).not.toHaveProperty("catalogRejected")
+    expect(await accepted()).toBe(18)
   })
 })
