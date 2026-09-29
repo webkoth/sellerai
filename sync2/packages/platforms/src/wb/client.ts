@@ -317,11 +317,14 @@ export async function fetchCardsPage(
 ): Promise<WbCardsListResponse | null> {
   const body: {
     settings: {
+      sort: { ascending: boolean }
       cursor: { limit: number; updatedAt?: string; nmID?: number }
       filter: { withPhoto: number }
     }
   } = {
     settings: {
+      // По возрастанию updatedAt — см. «Выпадение при листании» у fetchAllCards.
+      sort: { ascending: true },
       cursor: cursor
         ? { limit: CARDS_LIST_PAGE_LIMIT, updatedAt: cursor.updatedAt, nmID: cursor.nmID }
         : { limit: CARDS_LIST_PAGE_LIMIT },
@@ -362,6 +365,21 @@ const CARDS_LIST_MAX_PAGES = 1000
  *    итерации, а не потолком страниц.
  * 3. `CARDS_LIST_MAX_PAGES` — потолок на случай площадки, которая курсор
  *    честно продвигает, но перечень не заканчивает никогда.
+ *
+ * Выпадение при листании (инцидент 29.09.2026, 13:51 UTC: 386 штрихкодов из 421).
+ * Курсор — место в перечне, отсортированном по `updatedAt`. Раньше сортировка не
+ * задавалась, а по спецификации она по умолчанию УБЫВАЮЩАЯ (`sort.ascending=false`):
+ * карточка, изменённая посреди листания, уезжала в начало перечня — за курсор — и в
+ * эту выгрузку не попадала вовсе. Поэтому `sort.ascending=true` (так и велит
+ * спецификация для пагинации, 02-products.yaml): изменённая карточка уезжает в конец,
+ * то есть ВПЕРЕДИ курсора, и будет прочитана. Цена — карточка, уже прочитанная и потом
+ * изменённая, придёт второй раз: дедуп по `nmID`, последняя версия выигрывает.
+ *
+ * Сверить собранное с общим числом карточек нельзя: `cursor.total` в ответе — число
+ * карточек ЭТОЙ страницы («Количество возвращённых карточек товаров»), а не всего
+ * кабинета, и метода «сколько всего карточек» у «Контента» нет. Поэтому последний
+ * рубеж против неполного каталога — ворота ingest (доля от принятого и пропажа
+ * штрихкодов с остатком, apps/worker/src/jobs/ingest.ts), а не проверка здесь.
  */
 export async function fetchAllCards(token: string): Promise<WbCardListItem[]> {
   const all: WbCardListItem[] = []
@@ -384,5 +402,28 @@ export async function fetchAllCards(token: string): Promise<WbCardListItem[]> {
     cursor = { updatedAt: nextUpdatedAt, nmID: nextNmID }
   }
 
-  return all
+  return dedupeByNmId(all)
+}
+
+/**
+ * Одна карточка на `nmID`, последняя версия выигрывает, порядок — по первому появлению.
+ * Карточка без `nmID` остаётся как есть: ключа нет — считать её повтором не на чем.
+ */
+function dedupeByNmId(cards: WbCardListItem[]): WbCardListItem[] {
+  const byNmId = new Map<number, number>()
+  const result: WbCardListItem[] = []
+  for (const card of cards) {
+    if (card.nmID == null) {
+      result.push(card)
+      continue
+    }
+    const at = byNmId.get(card.nmID)
+    if (at === undefined) {
+      byNmId.set(card.nmID, result.length)
+      result.push(card)
+    } else {
+      result[at] = card
+    }
+  }
+  return result
 }
