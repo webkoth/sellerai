@@ -83,17 +83,31 @@ export function mapYmOrders(orders: YmOrder[], barcodes: BarcodeByOffer, wbIndex
 }
 
 /**
- * Количество из записей остатка одного товара на одном складе.
- * `AVAILABLE` — доступно к заказу; если его нет, `FIT` — годный к продаже.
- * У товаров FBS оба типа присутствуют одновременно с равным количеством.
- * Прочие типы (брак, карантин, утилизация) к продаже не относятся.
+ * Доступное к продаже количество из записей остатка одного товара на одном складе.
+ *
+ * Официальная документация, POST v2/campaigns/{campaignId}/offers/stocks, `WarehouseStockType`
+ * (https://yandex.ru/dev/market/partner-api/doc/ru/reference/stocks/getStocks#entity-WarehouseStockType):
+ * «`AVAILABLE` … — товар, доступный для продажи»; «`FIT` (соответствует типу «Годный») — товар,
+ * который доступен для продажи или уже зарезервирован»; «`FREEZE` — товар, который
+ * зарезервирован для заказов».
+ *
+ * Значит FIT включает резерв: `AVAILABLE`, если есть; иначе `max(0, FIT − FREEZE)`. Живой случай
+ * 29.09: оффер 38259864653534 со склада 2369574 отдавал FIT 1 и FREEZE 1 без AVAILABLE (единица под
+ * заказом 62411188290 в доставке — FBS не снимает резерв до доставки), свободно 0; счёт по FIT давал
+ * 1 и ложную строку плана `1 → 0` каждый прогон. Прочие типы (брак, карантин, утилизация) к продаже
+ * не относятся.
  */
 export function stockCount(entries: YmStockEntry[] | null | undefined): number {
   const list = entries ?? []
   const available = list.find((entry) => entry.type === "AVAILABLE")
   if (available) return available.count
   const fit = list.find((entry) => entry.type === "FIT")
-  return fit ? fit.count : 0
+  return fit ? Math.max(0, fit.count - reservedCount(list)) : 0
+}
+
+/** Резерв под заказы — `FREEZE` (см. `stockCount`); нет записи — 0. */
+export function reservedCount(entries: YmStockEntry[] | null | undefined): number {
+  return (entries ?? []).find((entry) => entry.type === "FREEZE")?.count ?? 0
 }
 
 /**
@@ -108,7 +122,8 @@ export function stockCount(entries: YmStockEntry[] | null | undefined): number {
  * по offerId — один товар может встретиться на нескольких складах магазина),
  * строка не создаётся: без ключа каталога товар стал бы «сиротой». Товар со
  * штрихкодом, но без записей остатка на складе, даёт строку с нулём —
- * «выставлен и пуст», не пропуск. `quantity` приводится к `Math.max(0, …)`
+ * «выставлен и пуст», не пропуск. `quantity` — доступное к продаже (`stockCount`: без резерва
+ * FREEZE, который лежит в `raw.reserved`), приводится к `Math.max(0, …)`
  * (контракт снимка, п.3), хотя у ЯМ отрицательных значений не наблюдалось.
  */
 export function mapYmStocks(
@@ -138,7 +153,8 @@ export function mapYmStocks(
         externalSku: offer.offerId,
         quantity: Math.max(0, stockCount(offer.stocks)),
         warehouse: String(warehouse.warehouseId),
-        raw: { warehouseId: warehouse.warehouseId, ...offer },
+        // `reserved` — FREEZE этого оффера на складе: в `quantity` он уже не входит (stockCount).
+        raw: { warehouseId: warehouse.warehouseId, ...offer, reserved: reservedCount(offer.stocks) },
       })
     }
   }
