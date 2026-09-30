@@ -3700,3 +3700,7 @@ JW-NB-AGT-M-0047 (старый синк списал размер `…1293`, syn
 `site-push-all --confirm`: 421/421; сайт: `STOCK_SOURCE=pool` (копия `.env` — `/root/kotelnika-env.bak-1-4A`), `pm2 reload`,
 `stock:recalc-pool` changed 0, `agg_mismatch` 0, видимых 80 из 389, `/catalog` 200; `write-mode site apply --confirm`, тик:
 `siteSourcePool 1`, `sitePlanned 0`. Режимы: site apply, wb/ozon/ym/kit dry-run.
+
+**Тестовый заказ шага A (30.09):** ORD-UDQP6WDS (сайт, «Синергия» размер 20, штрихкод 2042770600729) в 11:53 UTC → тик 11:56:
+заказ сайта `open`, пул 3 → 2, запись на сайт 3 → 2 (applied), WB/KIT — план в dry-run. WB не менялся (заказ тестовый) → 12:21
+`wb_signal +1` (settle 20 мин), пул 2 → 3, сайт 2 → 3. Путь «заказ сайта → витрина» и «сигнал WB → витрина» проверены вживую.
