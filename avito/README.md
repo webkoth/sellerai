@@ -9,6 +9,9 @@ python3 avito/wb_collect.py                                  # WB → data/cache
 python3 avito/build_feed.py --base-url https://<хост>/<путь>  # → avito/out/feed.xml, img/, report.json
 ```
 
+Выкладка на сервер — в `hubmarket:/var/www/feeds/avito/`. **Подпапку `ai-photos/` не трогать:** там ИИ-кадры 30.09.2026,
+на эти ссылки опираются карточки Ozon и Маркета. При `rsync --delete` из `avito/out/` — только с `--exclude ai-photos/`.
+
 Кэш не обновляется сам: чтобы взять свежие остатки или цены, удалить нужный `data/cache/avito/wb_<шаг>.json`.
 Цены WB у базового токена — 1 запрос на окно, его же занимают серверы синка: сборщик ждёт по 65 с на 429.
 
