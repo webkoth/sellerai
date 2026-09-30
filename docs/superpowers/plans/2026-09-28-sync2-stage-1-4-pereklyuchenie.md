@@ -3689,3 +3689,14 @@ sync2 `11d0eb5` в main: unit 538, db 123.
 все, `wbPlanned 0`, `ozonPlanned`/`ymPlanned` 3 (многоразмерные), `kitPlanned`/`sitePlanned` 0; `ingest partial` 2 раза —
 WB `/api/v3/orders` 500 (сбой WB, как утром), на пул не влияет; память available 932 МБ. `drift`: WB 0/421, Ozon 3/81, ЯМ 3/83
 (ровно многоразмерные), KIT 0/393, сайт 0/421.
+
+**Приёмка перед шагом A (30.09.2026, 07:32 UTC):** за 48 ч `pool` ok 552, `ingest` ok 543 / partial 9 (WB заказы 500 ×7, лимит WB ×1,
+каталог WB 126/421 ×1 — ворота отклонили; правка каталога выложена 29.09), failed 0, зависших 0. `compare-v1` 30.09: 148
+совпадает, 0 расхождений, «подозрение на двойной счёт» 2 — оба заказы, которые старый синк обработал неверно: ЯМ 62411188290
+(Манджушри, старый синк пропустил — бизнес-эндпоинт ЯМ отдаёт свежие заказы с задержкой) и Ozon 78683305-0049 по многоразмерной
+JW-NB-AGT-M-0047 (старый синк списал размер `…1293`, sync2 — `…6495`). `drift`: WB 0/421, KIT 0, сайт 0, Ozon/ЯМ 3 (многоразмерные).
+
+**Шаг A (30.09.2026, 07:34–07:38 UTC) — выполнен.** `SYNC_WRITE_MODE=apply` (копия `.env` — `logs/.env.bak-1-4A`);
+`site-push-all --confirm`: 421/421; сайт: `STOCK_SOURCE=pool` (копия `.env` — `/root/kotelnika-env.bak-1-4A`), `pm2 reload`,
+`stock:recalc-pool` changed 0, `agg_mismatch` 0, видимых 80 из 389, `/catalog` 200; `write-mode site apply --confirm`, тик:
+`siteSourcePool 1`, `sitePlanned 0`. Режимы: site apply, wb/ozon/ym/kit dry-run.
